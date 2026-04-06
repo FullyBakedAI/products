@@ -22,9 +22,9 @@ Each product gets its own top-level folder (e.g. `Modulo/`). Inside each:
 
 Strategic decisions, methodology, architecture patterns, and design system rules live in the **OpenClaw workspace** at `~/workspace/`. This is the single source of truth. Before starting any product work, read:
 
-1. **`~/workspace/CLAUDE.md`** — methodology rules, product names, architecture principles, build pipeline
-2. **`~/workspace/Platform/BakeKit/Decisions/`** — all ADRs (component stack, design language, config-driven products, etc.)
-3. **`~/workspace/Framework/`** — Fully Baked methodology patterns (the "how we build" playbook)
+1. **`~/workspace/Platform/Docs/design-quality-brief.md`** — **READ FIRST.** Design principles, visual quality standards, token compliance rules, accessibility requirements. This is what "good" looks like.
+2. **`~/workspace/CLAUDE.md`** — methodology rules, product names, architecture principles, build pipeline
+3. **`~/workspace/Platform/BakeKit/Decisions/`** — all ADRs (component stack, design language, config-driven products, etc.)
 4. **`~/workspace/Platform/Docs/building-on-bakekit.md`** — how to build products on BakeKit
 
 These files are updated by the strategy/QA side of the operation. When they change, the rules change. Always read the current versions — don't cache assumptions from previous sessions.
