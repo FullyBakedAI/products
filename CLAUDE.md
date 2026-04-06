@@ -18,6 +18,19 @@ Each product gets its own top-level folder (e.g. `Modulo/`). Inside each:
 - No auto-sync hooks — manual git only
 - This repo is NOT the OpenClaw workspace — never symlink or merge them
 
+## Strategic Context — READ BEFORE BUILDING
+
+Strategic decisions, methodology, architecture patterns, and design system rules live in the **OpenClaw workspace** at `~/workspace/`. This is the single source of truth. Before starting any product work, read:
+
+1. **`~/workspace/CLAUDE.md`** — methodology rules, product names, architecture principles, build pipeline
+2. **`~/workspace/Platform/BakeKit/Decisions/`** — all ADRs (component stack, design language, config-driven products, etc.)
+3. **`~/workspace/Framework/`** — Fully Baked methodology patterns (the "how we build" playbook)
+4. **`~/workspace/Platform/Docs/building-on-bakekit.md`** — how to build products on BakeKit
+
+These files are updated by the strategy/QA side of the operation. When they change, the rules change. Always read the current versions — don't cache assumptions from previous sessions.
+
+**Do not duplicate strategic content into this repo.** If you need to reference a decision, point to the workspace file. If you think a decision is missing or wrong, flag it — don't create a local override.
+
 ## For Frank
 
 Product files live at `~/products` on the Mac Studio. Reference them read-only — don't commit from agent sessions.

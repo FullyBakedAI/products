@@ -4,11 +4,11 @@
 Cross-chain DeFi platform. "One vault, every chain." This is BakedUX's first external client engagement — it proves the Fully Baked methodology on a real product.
 
 ## Build Pipeline — Follow Exactly
-Read these before building anything:
-- `Platform/BakeKit/Decisions/ADR-001-agentic-build-pipeline.md`
-- `Framework/Patterns/agentic-build-loop.md`
-- `Platform/Docs/building-on-bakekit.md`
-- `Platform/Comms/kickoffs/2026-04-03-modulo.md`
+Read these from the **OpenClaw workspace** (`~/workspace/`) before building anything:
+- `~/workspace/Platform/BakeKit/Decisions/ADR-001-agentic-build-pipeline.md`
+- `~/workspace/Framework/Patterns/agentic-build-loop.md`
+- `~/workspace/Platform/Docs/building-on-bakekit.md`
+- `~/workspace/Platform/Comms/kickoffs/2026-04-03-modulo.md`
 
 ## The 5-Stage Build Loop
 1. **Mise en Place** — Extract tokens from Figma into `Platform/BakeKit/Tokens/modulo/tokens.css` using `--bk-*` CSS custom properties. Download ALL assets (icons, logos, images) to `Media/Assets/modulo/` as real files from Figma. **Hard gate:** if any asset fails or is zero bytes, stop immediately. No hand-drawn substitutes. Ever.
@@ -18,16 +18,19 @@ Read these before building anything:
 5. **Human Gate** — Present structured QA output to Ant for review.
 
 ## File Locations
+All paths below are in the **OpenClaw workspace** (`~/workspace/`):
 | What | Where |
 |------|-------|
-| Screen demos | `Platform/BakeKit/System/demos/modulo/` |
-| Tokens | `Platform/BakeKit/Tokens/modulo/` |
-| Assets (icons, images) | `Media/Assets/modulo/` |
-| QA reports | `Media/QA/modulo/` |
-| This project brief | `Platform/Comms/kickoffs/2026-04-03-modulo.md` |
+| Screen demos | `~/workspace/Platform/BakeKit/System/demos/modulo/` |
+| Tokens | `~/workspace/Platform/BakeKit/Tokens/modulo/` |
+| Assets (icons, images) | `~/workspace/Media/Assets/modulo/` |
+| QA reports | `~/workspace/Media/QA/modulo/` |
+| Kickoff brief | `~/workspace/Platform/Comms/kickoffs/2026-04-03-modulo.md` |
 
-## Repo
-Everything lives in the `FullyBakedAI/workspace` repo, `main` branch. Do not create separate repos for Modulo.
+## Repos
+- **Product files** (briefs, personas, discovery, prototypes) live here in `~/products/Modulo/`
+- **Built artifacts** (tokens, demos, components, assets) live in `~/workspace/` — the `FullyBakedAI/workspace` repo, `main` branch
+- Do not create separate repos for Modulo
 
 ## Component Stack
 ```
@@ -37,7 +40,7 @@ BakeKit token skin (--bk-* CSS variables)
     ↓ wraps
 React ARIA primitives (accessibility, keyboard, focus)
 ```
-See `Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
+See `~/workspace/Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
 
 ## Key Rules
 - **Tokens first** — never build before extracting tokens
