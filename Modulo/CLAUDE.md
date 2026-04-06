@@ -94,40 +94,20 @@ See `~/workspace/Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
 - **File key:** rTAg5ODay1ac1ZZBq8lYwr
 - **Starting node:** 2078-6541
 
-## Figma MCP Workflow — Follow This Exactly
+## How You Receive Build Instructions
 
-You have two Figma MCP tools. Use them in this order:
+You will NOT interact with Figma directly. Frank (the orchestrator) handles spec extraction and asset downloads before you start.
 
-### Step 1: Extract data (values, structure)
-Use **`mcp__figma__get_figma_data`** to get the real design data:
-- Call it on the starting node to get the full structure
-- Extract: hex colors, font families, font sizes, font weights, line heights, letter spacing, border radii, spacing/padding values, opacity values
-- This gives you REAL values — do not guess or approximate from screenshots
+**You will receive:**
+1. A **structured spec file** with exact values — colours (hex), spacing (px), typography (font/size/weight), layout, hierarchy
+2. **Downloaded assets** in `Prototype/assets/` — real SVGs and PNGs from Figma
+3. A **reference screenshot** of the Figma design
 
-### Step 2: Normalise into tokens
-Take the extracted values and normalise into `--bk-*` tokens:
-- Consolidate near-duplicate colors (e.g. `#131420` and `#13141f` → pick one)
-- Round spacing to a consistent scale (4/8/12/16/20/24/32/48)
-- Standardise font sizes into a type scale
-- Write these to `~/workspace/Platform/BakeKit/Tokens/modulo/tokens.css`
-
-### Step 3: Download real assets
-Use **`mcp__figma__download_figma_images`** for:
-- Every icon in the design → download as SVG
-- Every logo/brand mark → download as SVG
-- Complex illustrations → download as PNG
-- Save to `~/workspace/Media/Assets/modulo/`
-- **NEVER hand-draw an SVG substitute.** If download fails, stop and report it.
-
-### Step 4: Build from tokens and assets only
-- Import the tokens CSS file
-- Reference only `var(--bk-*)` values in all styles
-- Use only downloaded assets for icons and images
-- If a value isn't in your tokens, add it to tokens first, then reference it
+**Your job:** Build HTML/CSS that exactly matches the spec values. Not approximately. Exactly. Every hex colour, every font size, every spacing value comes from the spec. If a value isn't in the spec, ask — do not guess.
 
 ### Common mistake
-Do NOT: look at a downloaded image/screenshot and guess the colors, fonts, and spacing.
-DO: use `get_figma_data` to extract the actual values from the Figma JSON.
+Do NOT: look at a reference screenshot and guess the colors, fonts, and spacing.
+DO: read the spec file and use the exact values provided.
 
 ## Design Context
 - Dark-first UI (DeFi standard)
