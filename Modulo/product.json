@@ -1,0 +1,141 @@
+{
+  "name": "Modulo",
+  "description": "Cross-chain DeFi wallet. One vault, every chain.",
+  "type": "mobile-app",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "figma": {
+    "fileKey": "rTAg5ODay1ac1ZZBq8lYwr",
+    "canvas": "2078-6541",
+    "canvasName": "Mobile"
+  },
+  "theme": {
+    "mode": "dark-first",
+    "font": "Inter",
+    "fontWeights": [400, 500, 600, 700]
+  },
+  "screens": {
+    "home": {
+      "file": "home-screen.html",
+      "figmaFrame": "2091-8253",
+      "figmaMobileFrame": "2091-8254",
+      "type": "full",
+      "hasBottomNav": true,
+      "description": "Portfolio overview, token list, action buttons, earn card"
+    },
+    "receive": {
+      "file": "receive-screen.html",
+      "figmaFrame": "2091-8010",
+      "figmaMobileFrame": "2091-8011",
+      "figmaScreen": "2091-8013",
+      "type": "sheet",
+      "hasDragHandle": true,
+      "description": "Receive crypto sheet — address card, QR code, network pills, exchange buttons"
+    },
+    "swap": {
+      "file": "swap-screen.html",
+      "figmaFrame": "2091-8609",
+      "figmaMobileFrame": "2091-8610",
+      "type": "full",
+      "hasBottomNav": false,
+      "description": "Swap screen — pay/receive cards, percentage pills, keypad, CTA"
+    },
+    "swap-select": {
+      "file": "swap-select-screen.html",
+      "figmaFrame": "2091-8498",
+      "figmaMobileFrame": "2091-8499",
+      "type": "sheet",
+      "hasDragHandle": true,
+      "description": "Token selection sheet — search field, token list with balances"
+    },
+    "send": {
+      "file": "send-screen.html",
+      "figmaFrame": "2091-8793",
+      "figmaMobileFrame": "2091-8794",
+      "figmaScreen": "2091-8796",
+      "type": "sheet",
+      "hasDragHandle": true,
+      "description": "Send sheet — search field, recent contacts list"
+    },
+    "explore": {
+      "file": "explore-screen.html",
+      "figmaFrame": "2091-9115",
+      "figmaMobileFrame": "2091-9116",
+      "type": "full",
+      "hasBottomNav": true,
+      "description": "Explore/search — favourites cards, chain filters, top tokens list"
+    }
+  },
+  "sharedComponents": [
+    {
+      "name": "status-bar",
+      "description": "iOS status bar — time, signal, wifi, battery",
+      "usedBy": ["all"]
+    },
+    {
+      "name": "bottom-nav",
+      "description": "4-button nav bar — home, search, activity, swap (purple circle)",
+      "usedBy": ["home", "explore"]
+    },
+    {
+      "name": "drag-handle",
+      "description": "Sheet pull indicator — 32×4 pill centered",
+      "usedBy": ["send", "receive", "swap-select"]
+    },
+    {
+      "name": "search-field",
+      "description": "Search input — 48.5px, 14px radius, icon + placeholder",
+      "usedBy": ["explore", "send", "swap-select"]
+    },
+    {
+      "name": "pill",
+      "description": "Network/chain filter pill — 37.5px, full radius, icon + label",
+      "usedBy": ["explore", "receive"]
+    },
+    {
+      "name": "pct-pill",
+      "description": "Percentage preset pill — 37.5px, 14px radius",
+      "usedBy": ["swap"]
+    },
+    {
+      "name": "avatar-badge",
+      "description": "40px avatar with 17×17 Modulo badge overlay",
+      "usedBy": ["send", "receive"]
+    },
+    {
+      "name": "select-token-cta",
+      "description": "Purple pill CTA — 41px, full radius",
+      "usedBy": ["swap"]
+    },
+    {
+      "name": "bottom-cta",
+      "description": "Full-width action button — 58px, 16px radius",
+      "usedBy": ["swap"]
+    },
+    {
+      "name": "primary-btn",
+      "description": "Gradient action button — 56px, gradient + glow",
+      "usedBy": ["receive"]
+    }
+  ],
+  "buildPipeline": {
+    "order": [
+      "1. Extract shared components from Figma (depth 5+) for each component in sharedComponents",
+      "2. Generate shared.css with all tokens + verified component specs",
+      "3. Download all icon/asset SVGs from Figma using mcp__figma__download_figma_images",
+      "4. Build each screen importing shared.css",
+      "5. Take Playwright screenshots to self-verify",
+      "6. Push for Frank to run visual QA"
+    ],
+    "rules": [
+      "Every screen imports shared.css — no duplicate token definitions",
+      "Shared components use classes from shared.css — never redefine inline",
+      "All assets downloaded from Figma — never approximated or hand-drawn",
+      "Verify SVG content after download — check it renders the intended shape",
+      "Drill to depth 5+ for component extraction — depth 3 misses leaf nodes",
+      "Screen-specific styles only in the screen's <style> block"
+    ]
+  }
+}

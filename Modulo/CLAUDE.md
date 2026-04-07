@@ -1,116 +1,86 @@
-# Modulo — Client Engagement
+# Modulo — Build Instructions
 
 ## What is Modulo
-Cross-chain DeFi platform. "One vault, every chain." This is BakedUX's first external client engagement — it proves the Fully Baked methodology on a real product.
+Cross-chain DeFi wallet. "One vault, every chain." BakedUX's first client engagement.
 
-## Goal
-The deliverable is a **working product front-end**, not a prototype. Build real, functional UI that can connect to any data source.
+## Before You Build ANYTHING
+1. Read `~/workspace/Framework/Docs/decision-log.md` — validated lessons. If it says something doesn't work, don't try it.
+2. Read `product.json` in this directory — it has all Figma node IDs, screen list, component specs, and build rules.
 
-### Data Architecture
+## Build Pipeline — Follow This Order
+
+### Step 0: Read the product config
+```bash
+cat ~/products/Modulo/product.json
 ```
-UI Layer (BakeKit + React ARIA components)
-    ↓ consumes
-Data Adapter Layer (typed interfaces)
-    ↓ connects to
-Any backend: REST API, GraphQL, WebSocket, mock data, local JSON
-```
+This file defines: Figma file key, every screen's node ID, shared components list, and build rules.
 
-- **Define typed data interfaces** for every data need (vaults, positions, chains, prices, transactions)
-- **Build UI against mock data** that conforms to those interfaces
-- **Each data source gets its own adapter** — swap backends without touching UI
-- **Works offline with mocks** — development and demos don't need a live backend
-- This adapter pattern is reusable across all BakeKit products
+### Step 1: Extract shared components from Figma
+For EACH component listed in `product.json → sharedComponents`, drill into Figma at depth 5+ to get exact specs:
+- Use `mcp__figma__get_figma_data` with the relevant screen's `figmaMobileFrame` node ID
+- Extract: height, padding, border-radius, background, border, font-size, font-weight, color, icon size, gap
+- Do NOT approximate. Do NOT guess. Read the actual Figma node values.
 
-## Build Pipeline — Follow Exactly
-Read these from the **OpenClaw workspace** (`~/workspace/`) before building anything:
-- **`~/workspace/Platform/Docs/design-quality-brief.md`** — what "good" looks like. Design principles, visual standards, token compliance, accessibility. **Read this first.**
-- `~/workspace/Platform/BakeKit/Decisions/ADR-001-agentic-build-pipeline.md`
-- `~/workspace/Platform/Docs/building-on-bakekit.md`
-- `~/workspace/Platform/Comms/kickoffs/2026-04-03-modulo.md`
+### Step 2: Generate `shared.css`
+Create `Prototype-v2/shared.css` containing:
+- **All design tokens** as CSS custom properties (`:root { --bk-* }`)
+- **All shared components** as CSS classes with Figma-verified values
+- Every screen will `<link rel="stylesheet" href="shared.css">` — no duplicated tokens or component styles in screen files
 
-## The Build Progression — ONE STEP AT A TIME
+### Step 3: Download all assets from Figma
+- Use `mcp__figma__download_figma_images` for every icon, logo, avatar, chart, and brand mark
+- Save to `Prototype-v2/assets/`
+- **Verify each asset after download** — open the SVG and check it contains the intended shape, not a text glyph or wrong node export
+- Common mistake: exporting a text node instead of its parent group gives you a raw letter glyph, not an icon
 
-Each step is a separate task. Do NOT jump ahead. Do NOT combine steps. Complete the current step, push, and stop.
-
-| Step | Name | What to do | Status |
-|------|------|-----------|--------|
-| 1 | **Mise en Place** | Extract tokens from Figma via `get_figma_data`. Normalise into `--bk-*` tokens. Download all assets via `download_figma_images`. | DONE |
-| 2 | **Prototype** | Build screens as static HTML/CSS that visually matches the Figma design intent. Use only extracted tokens and downloaded assets. This is about VISUAL FIDELITY — matching the design, not adding features. | **← CURRENT** |
-| 3 | **Extract** | Harvest the token system from the working prototype — colours, spacing, type scale, radii, shadows, component patterns. Formalise into a clean BakeKit token set. | WAITING |
-| 4 | **Componentise** | Identify repeating patterns, build as React ARIA + BakeKit components with typed data interfaces and mock data adapters. | WAITING |
-| 5 | **Assemble** | Rebuild screens using the real components. This becomes the working front-end. | WAITING |
-
-### CURRENT STEP: Prototype
-
-**Your ONLY job right now:** build static HTML/CSS screens that faithfully represent the Figma design.
-
-- Match the visual design from Figma — layout, colours, typography, spacing, hierarchy
-- Use only `--bk-*` tokens and real downloaded assets
+### Step 4: Build each screen
+- Each screen is a standalone HTML file importing `shared.css`
+- Screen-specific styles go in an inline `<style>` block — only styles unique to that screen
+- Use only `--bk-*` tokens and shared component classes — never hardcode colours or repeated component styles
 - Populate with realistic mock data (not empty shells)
-- Do NOT add features, onboarding flows, or functionality not in the Figma
-- Do NOT address persona review feedback — that comes later
-- Do NOT build React components — that's step 4
-- Do NOT build data adapters — that's step 4
-- Ignore the product brief's feature wishlist — you are matching the DESIGN, not implementing the PRODUCT
+- Add proper ARIA attributes and semantic HTML
+- Wire navigation between screens (`<a href="...">`)
 
-### After each build stage
-- **Commit and push both repos** — push `~/products` (prototypes, docs) AND `~/workspace` (tokens, assets, components). The QA pipeline watches for pushes and runs automatically. If you don't push, QA doesn't happen.
+### Step 5: Self-verify
+- Take Playwright screenshots of all screens: `npx playwright screenshot --viewport-size="500,900" "http://localhost:PORT/screen.html" /tmp/screen.png`
+- Visually inspect each screenshot — do elements match your Figma extraction?
+- Check all asset references resolve (no broken images)
+- Check navigation links point to valid files
+
+### Step 6: Push
+- Commit and push both repos (`~/products` and `~/workspace`)
+- Frank will automatically detect the push and run visual QA with gemma4
+
+## What NOT To Do
+- Do NOT build React components (that's step 4 of the engagement, not now)
+- Do NOT add features, onboarding, or functionality not visible in the Figma
+- Do NOT create data adapters or typed interfaces (that's later)
+- Do NOT run `evaluate.py`, `persona-review.py`, or any Ollama script — you don't have local models, Frank handles QA
+- Do NOT approximate icons or SVGs — always download from Figma
+- Do NOT define tokens or component styles in individual screen files — they belong in `shared.css`
 
 ## File Locations
-All paths below are in the **OpenClaw workspace** (`~/workspace/`):
 | What | Where |
 |------|-------|
-| Screen demos | `~/workspace/Platform/BakeKit/System/demos/modulo/` |
-| Tokens | `~/workspace/Platform/BakeKit/Tokens/modulo/` |
-| Assets (icons, images) | `~/workspace/Media/Assets/modulo/` |
-| QA reports | `~/workspace/Media/QA/modulo/` |
-| Kickoff brief | `~/workspace/Platform/Comms/kickoffs/2026-04-03-modulo.md` |
+| Product config | `~/products/Modulo/product.json` |
+| Prototype screens | `~/products/Modulo/Prototype-v2/` |
+| Shared CSS | `~/products/Modulo/Prototype-v2/shared.css` |
+| Downloaded assets | `~/products/Modulo/Prototype-v2/assets/` |
+| Decision log | `~/workspace/Framework/Docs/decision-log.md` |
+| Extract script | `~/workspace/Platform/Scripts/extract-components.py` |
 
-## Repos
-- **Product files** (briefs, personas, discovery, prototypes) live here in `~/products/Modulo/`
-- **Built artifacts** (tokens, demos, components, assets) live in `~/workspace/` — the `FullyBakedAI/workspace` repo, `main` branch
-- Do not create separate repos for Modulo
+## Figma Access
+You have direct access to Figma via MCP tools:
+- `mcp__figma__get_figma_data` — read node trees, layouts, styles, typography
+- `mcp__figma__download_figma_images` — download assets as SVG/PNG
 
-## Component Stack
-```
-Product screens (Modulo UI)
-    ↓ consumes
-BakeKit token skin (--bk-* CSS variables)
-    ↓ wraps
-React ARIA primitives (accessibility, keyboard, focus)
-```
-See `~/workspace/Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
+**File key:** `rTAg5ODay1ac1ZZBq8lYwr`
+**Canvas node:** `2078-6541`
 
-## Key Rules
-- **Tokens first** — never build before extracting tokens
-- **Assets are real** — download from Figma, never approximate
-- **Never self-evaluate** — builder and reviewer are always separate
-- **No hardcoded values** — all visual properties via `--bk-*` variables
-- **Figma is a sketch** — extract intent into a coherent system, don't pixel-match every detail
-- **Document as you build** — every pattern discovered feeds back to BakeKit and the Framework
-
-## Figma File
-- **URL:** https://www.figma.com/design/rTAg5ODay1ac1ZZBq8lYwr/First-steps?node-id=2078-6541
-- **File key:** rTAg5ODay1ac1ZZBq8lYwr
-- **Starting node:** 2078-6541
-
-## How You Receive Build Instructions
-
-You will NOT interact with Figma directly. Frank (the orchestrator) handles spec extraction and asset downloads before you start.
-
-**You will receive:**
-1. A **structured spec file** with exact values — colours (hex), spacing (px), typography (font/size/weight), layout, hierarchy
-2. **Downloaded assets** in `Prototype/assets/` — real SVGs and PNGs from Figma
-3. A **reference screenshot** of the Figma design
-
-**Your job:** Build HTML/CSS that exactly matches the spec values. Not approximately. Exactly. Every hex colour, every font size, every spacing value comes from the spec. If a value isn't in the spec, ask — do not guess.
-
-### Common mistake
-Do NOT: look at a reference screenshot and guess the colors, fonts, and spacing.
-DO: read the spec file and use the exact values provided.
+Screen node IDs are in `product.json → screens → [name] → figmaMobileFrame`.
 
 ## Design Context
-- Dark-first UI (DeFi standard)
-- Data-heavy, financial precision required
-- Mobile-first, responsive
-- WCAG 2.1 AA minimum accessibility
+- Dark-first UI, mobile-first (390×844 viewport)
+- WCAG 2.1 AA minimum
+- Font: Inter (400, 500, 600, 700)
+- All values via `--bk-*` CSS custom properties
