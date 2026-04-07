@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Modulo — Explore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="modulo-shared.css">
+  <style>
+    /* ── Explore Screen Overrides ───────────────────────────────────────── */
+    .scroll-content { padding-top: 8px; }
+    .search-field { margin: 0 16px 16px; }
+
+    /* ── Favourites ─────────────────────────────────────────────────────── */
+    .fav-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .fav-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+    }
+
+    .fav-header button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+    }
+
+    .fav-header img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .fav-cards {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px;
+      margin-bottom: 16px;
+    }
+
+    .fav-card {
+      flex: 1;
+      height: 151px;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 16px;
+      padding: 17px 17px 1px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .fav-card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fav-card-top img {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+
+    .fav-card-top span {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .fav-sparkline {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .fav-sparkline img {
+      width: 100%;
+      height: 32px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .fav-card-bottom {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .fav-price {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .fav-change {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .fav-change.positive { color: var(--bk-success); }
+    .fav-change.negative { color: var(--bk-error); }
+
+    /* ── Top Tokens Header ──────────────────────────────────────────────── */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .top-label {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .volume-dropdown {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-secondary);
+    }
+
+    /* ── Chain Filters ──────────────────────────────────────────────────── */
+    .chain-filters {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .chain-filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── Token List ─────────────────────────────────────────────────────── */
+    .token-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .token-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      gap: 10px;
+      height: 56px;
+    }
+
+    .token-rank {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .token-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .token-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .token-name {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .token-volume {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-secondary);
+    }
+
+    .token-values {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .token-price {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .token-change {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .token-change.positive { color: var(--bk-success); }
+    .token-change.negative { color: var(--bk-error); }
+
+    /* Active search tab — no dot indicator per Figma */
+  </style>
+</head>
+<body>
+
+  <div class="phone" role="main" aria-label="Modulo explore screen">
+
+    <!-- ── Status Bar ────────────────────────────────────────────────── -->
+    <div class="status-bar" aria-hidden="true">
+      <span class="status-time">9:41</span>
+      <div class="status-right">
+        <div class="signal-bars">
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+        </div>
+        <img src="assets/icon-wifi.svg" alt="" width="16" height="12">
+        <div class="battery">
+          <div class="battery-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Scrollable Content ────────────────────────────────────────── -->
+    <div class="scroll-content">
+
+      <!-- Search Field -->
+      <div class="search-field" role="search" aria-label="Search tokens">
+        <img src="assets/icon-search.svg" alt="">
+        <span>Token name or address</span>
+      </div>
+
+      <!-- Favourites -->
+      <div class="fav-header">
+        <span class="fav-label">Favourites</span>
+        <button aria-label="More options">
+          <img src="assets/icon-more.svg" alt="">
+        </button>
+      </div>
+
+      <div class="fav-cards" role="group" aria-label="Favourite tokens">
+        <!-- ETH Card -->
+        <div class="fav-card">
+          <div class="fav-card-top">
+            <img src="assets/token-eth.svg" alt="">
+            <span>ETH</span>
+          </div>
+          <div class="fav-sparkline" aria-hidden="true">
+            <img src="assets/explore-sparkline-eth.svg" alt="">
+          </div>
+          <div class="fav-card-bottom">
+            <span class="fav-price">$2,450.78</span>
+            <span class="fav-change positive">+4.42%</span>
+          </div>
+        </div>
+
+        <!-- BTC Card -->
+        <div class="fav-card">
+          <div class="fav-card-top">
+            <img src="assets/token-btc.svg" alt="">
+            <span>BTC</span>
+          </div>
+          <div class="fav-sparkline" aria-hidden="true">
+            <img src="assets/explore-sparkline-btc.svg" alt="">
+          </div>
+          <div class="fav-card-bottom">
+            <span class="fav-price">$88,421</span>
+            <span class="fav-change positive">+2.14%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Tokens Header -->
+      <div class="top-header">
+        <span class="top-label">Top tokens</span>
+        <span class="volume-dropdown">Volume &#9662;</span>
+      </div>
+
+      <!-- Chain Filters -->
+      <div class="chain-filters" role="group" aria-label="Chain filter">
+        <button class="chain-pill active" aria-pressed="true">All</button>
+        <button class="chain-pill" aria-pressed="false">Ethereum</button>
+        <button class="chain-pill" aria-pressed="false">Arbitrum</button>
+        <button class="chain-pill" aria-pressed="false">Base</button>
+        <button class="chain-pill" aria-pressed="false">Optimism</button>
+      </div>
+
+      <!-- Token List -->
+      <div class="token-list" role="list" aria-label="Top tokens by volume">
+
+        <div class="token-row" role="listitem">
+          <span class="token-rank">1</span>
+          <img class="token-icon" src="assets/token-usdc.svg" alt="USD Coin">
+          <div class="token-info">
+            <div class="token-name">USD Coin</div>
+            <div class="token-volume">$514M Vol</div>
+          </div>
+          <div class="token-values" aria-label="USD Coin: $1.00, -0.38%">
+            <div class="token-price">$1.00</div>
+            <div class="token-change negative">-0.38%</div>
+          </div>
+        </div>
+
+        <div class="token-row" role="listitem">
+          <span class="token-rank">2</span>
+          <img class="token-icon" src="assets/token-eth.svg" alt="Ethereum">
+          <div class="token-info">
+            <div class="token-name">Ethereum</div>
+            <div class="token-volume">$480M Vol</div>
+          </div>
+          <div class="token-values" aria-label="Ethereum: $2,450.78, +4.42%">
+            <div class="token-price">$2,450.78</div>
+            <div class="token-change positive">+4.42%</div>
+          </div>
+        </div>
+
+        <div class="token-row" role="listitem">
+          <span class="token-rank">3</span>
+          <img class="token-icon" src="assets/token-usdt.svg" alt="Tether">
+          <div class="token-info">
+            <div class="token-name">Tether</div>
+            <div class="token-volume">$398M Vol</div>
+          </div>
+          <div class="token-values" aria-label="Tether: $1.00, +0.01%">
+            <div class="token-price">$1.00</div>
+            <div class="token-change positive">+0.01%</div>
+          </div>
+        </div>
+
+        <div class="token-row" role="listitem">
+          <span class="token-rank">4</span>
+          <img class="token-icon" src="assets/token-btc.svg" alt="Wrapped Bitcoin">
+          <div class="token-info">
+            <div class="token-name">Wrapped Bitcoin</div>
+            <div class="token-volume">$244M Vol</div>
+          </div>
+          <div class="token-values" aria-label="Wrapped Bitcoin: $88,421.33, +2.14%">
+            <div class="token-price">$88,421.33</div>
+            <div class="token-change positive">+2.14%</div>
+          </div>
+        </div>
+
+        <div class="token-row" role="listitem">
+          <span class="token-rank">5</span>
+          <img class="token-icon" src="assets/token-sol.svg" alt="Solana">
+          <div class="token-info">
+            <div class="token-name">Solana</div>
+            <div class="token-volume">$220M Vol</div>
+          </div>
+          <div class="token-values" aria-label="Solana: $165.42, -1.82%">
+            <div class="token-price">$165.42</div>
+            <div class="token-change negative">-1.82%</div>
+          </div>
+        </div>
+
+      </div><!-- /.token-list -->
+
+    </div><!-- /.scroll-content -->
+
+    <!-- ── Bottom Navigation ──────────────────────────────────────────── -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <a href="home-screen.html" class="nav-btn" aria-label="Home">
+        <img src="assets/icon-nav-home.svg" alt="">
+      </a>
+      <a href="explore-screen.html" class="nav-btn active" aria-label="Search" aria-current="page">
+        <img src="assets/icon-nav-search.svg" alt="">
+      </a>
+      <button class="nav-btn" aria-label="Activity">
+        <img src="assets/icon-nav-activity.svg" alt="">
+      </button>
+      <a href="swap-screen.html" class="nav-btn nav-btn-swap" aria-label="Swap">
+        <img src="assets/icon-nav-swap.svg" alt="">
+      </a>
+    </nav>
+
+  </div><!-- /.phone -->
+
+</body>
+</html>

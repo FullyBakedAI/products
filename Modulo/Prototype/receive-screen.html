@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Modulo — Receive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="modulo-shared.css">
+  <style>
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .screen-header {
+      text-align: center;
+      padding: 16px 20px 0;
+    }
+
+    .screen-title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .screen-subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-secondary);
+      margin-top: 6px;
+    }
+
+    /* ── Address Card — Figma: 350×76.5, at x:20 ───────────────────────── */
+    .address-card {
+      margin: 16px 20px 0;
+      background: linear-gradient(135deg, var(--bk-bg-card) 0%, var(--bk-bg-card-alt) 100%);
+      border: 1px solid var(--bk-border-card);
+      border-radius: 16px;
+      padding: 17px 17px 1px;
+      min-height: 76.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .address-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .address-text .address-name {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .address-text .address-hash {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+    }
+
+    .address-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .address-actions button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+    }
+
+    .address-actions img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    /* ── QR Code — Figma: 390×203, centered ─────────────────────────────── */
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 20px 0;
+    }
+
+    .qr-box {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-box img {
+      width: 203px;
+      height: 203px;
+      display: block;
+    }
+
+    /* ── Supported Networks — Figma: padding 0 20px ─────────────────────── */
+    .networks-section {
+      margin: 20px 20px 0;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .network-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Exchange Buttons — Figma: padding 0 20px ──────────────────────── */
+    .exchange-section {
+      margin: 20px 20px 0;
+    }
+
+    .exchange-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .exchange-btn {
+      width: 100%;
+      height: 48px;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--bk-text-primary);
+    }
+
+    .exchange-btn:focus-visible {
+      outline: 2px solid var(--bk-brand-primary);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone" role="main" aria-label="Modulo receive screen">
+
+    <!-- ── Status Bar ────────────────────────────────────────────────── -->
+    <div class="status-bar" aria-hidden="true">
+      <span class="status-time">9:41</span>
+      <div class="status-right">
+        <div class="signal-bars">
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+        </div>
+        <img src="assets/icon-wifi.svg" alt="" width="16" height="12">
+        <div class="battery">
+          <div class="battery-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Drag Handle (sheet indicator from Figma) ──────────────────── -->
+    <div class="drag-handle" aria-hidden="true">
+      <div class="drag-handle-pill"></div>
+    </div>
+
+    <!-- ── Scrollable Content ────────────────────────────────────────── -->
+    <div class="scroll-content">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <h1 class="screen-title">Receive crypto</h1>
+        <p class="screen-subtitle">Share your address or QR code to receive crypto</p>
+      </div>
+
+      <!-- Address Card -->
+      <div class="address-card" role="region" aria-label="Wallet address">
+        <div class="address-left">
+          <div class="avatar-wrap">
+            <img class="avatar" src="assets/wallet-avatar.svg" alt="Wallet avatar">
+            <img class="modulo-badge" src="assets/icon-modulo-badge.svg" alt="Modulo">
+          </div>
+          <div class="address-text">
+            <div class="address-name">modulo.eth</div>
+            <div class="address-hash">0x7f3e...9A14</div>
+          </div>
+        </div>
+        <div class="address-actions">
+          <button aria-label="Copy address">
+            <img src="assets/icon-copy.svg" alt="">
+          </button>
+          <button aria-label="Share address">
+            <img src="assets/icon-share.svg" alt="">
+          </button>
+        </div>
+      </div>
+
+      <!-- QR Code -->
+      <div class="qr-container" role="img" aria-label="QR code for wallet address">
+        <div class="qr-box">
+          <img src="assets/qr-code.svg" alt="QR code">
+        </div>
+      </div>
+
+      <!-- Supported Networks -->
+      <div class="networks-section">
+        <div class="section-label">Supported networks</div>
+        <div class="network-pills" role="list" aria-label="Supported networks">
+          <div class="pill" role="listitem">
+            <img src="assets/network-ethereum.svg" alt="">
+            <span>Ethereum</span>
+          </div>
+          <div class="pill" role="listitem">
+            <img src="assets/network-arbitrum.svg" alt="">
+            <span>Arbitrum</span>
+          </div>
+          <div class="pill" role="listitem">
+            <img src="assets/network-base.svg" alt="">
+            <span>Base</span>
+          </div>
+          <div class="pill" role="listitem">
+            <img src="assets/network-optimism.svg" alt="">
+            <span>Optimism</span>
+          </div>
+          <div class="pill" role="listitem">
+            <img src="assets/network-polygon.svg" alt="">
+            <span>Polygon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fund from Exchange -->
+      <div class="exchange-section">
+        <div class="section-label">Fund from an exchange</div>
+        <div class="exchange-list">
+          <button class="exchange-btn">Coinbase</button>
+          <button class="exchange-btn">Binance</button>
+          <button class="exchange-btn">Kraken</button>
+          <button class="exchange-btn">Another wallet</button>
+        </div>
+      </div>
+
+    </div><!-- /.scroll-content -->
+
+    <!-- Done Button — fixed at bottom, always visible -->
+    <a href="home-screen.html" class="primary-btn" role="button" aria-label="Done">Done</a>
+
+  </div><!-- /.phone -->
+
+</body>
+</html>

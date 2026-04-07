@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Modulo — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="modulo-shared.css">
+  <style>
+    /* ── Scroll Content Override ────────────────────────────────────────── */
+    .scroll-content { padding-top: 8px; }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .header {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 29px 0 20px;
+      flex-shrink: 0;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 93px;
+      height: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .header-actions button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+    }
+
+    .header-actions img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    /* ── Portfolio Card ─────────────────────────────────────────────────── */
+    .portfolio-card {
+      margin: 0 15.5px 16px;
+      height: 166px;
+      border-radius: 16px;
+      border: 1px solid var(--bk-border-card);
+      background: linear-gradient(135deg, var(--bk-bg-card) 0%, var(--bk-bg-card-alt) 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 17px 16px 0;
+    }
+
+    .portfolio-chart {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .portfolio-chart img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .portfolio-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portfolio-label {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--bk-text-muted);
+    }
+
+    .time-periods {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .time-btn {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.5;
+      padding: 2px 7px;
+      border-radius: 10px;
+      color: var(--bk-text-muted);
+      background: transparent;
+      min-height: 22.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .time-btn.active {
+      background: var(--bk-brand-primary);
+      color: var(--bk-text-primary);
+    }
+
+    .portfolio-value {
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      margin-top: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portfolio-dollars {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: -0.03125em;
+      color: var(--bk-text-primary);
+    }
+
+    .portfolio-cents {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+      opacity: 0.4;
+    }
+
+    .portfolio-gain {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portfolio-gain img {
+      width: 8px;
+      height: 8px;
+      display: block;
+    }
+
+    .gain-text {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-success);
+    }
+
+    /* ── Action Buttons ─────────────────────────────────────────────────── */
+    .action-row {
+      display: flex;
+      padding: 0 16px;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      flex: 1;
+      height: 70.5px;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 13px 0;
+    }
+
+    .action-btn:focus-visible {
+      outline: 2px solid var(--bk-brand-primary);
+      outline-offset: 2px;
+    }
+
+    .action-btn img {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    .action-label {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-secondary);
+    }
+
+    /* ── Tabs ───────────────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+    }
+
+    .tab {
+      font-size: 15px;
+      line-height: 1.5;
+      padding-bottom: 8px;
+      position: relative;
+      color: var(--bk-text-muted);
+      font-weight: 400;
+    }
+
+    .tab.active {
+      font-weight: 600;
+      color: var(--bk-text-primary);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--bk-brand-primary);
+      border-radius: 1px;
+    }
+
+    .tab:focus-visible {
+      outline: 2px solid var(--bk-brand-primary);
+      outline-offset: 2px;
+    }
+
+    /* ── Token List ─────────────────────────────────────────────────────── */
+    .token-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .token-row {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      gap: 12px;
+      min-height: 73.5px;
+    }
+
+    .token-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .token-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .token-name {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .token-amount {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+      opacity: 0.7;
+    }
+
+    .token-values {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .token-usd {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .token-change {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-success);
+    }
+
+    .token-change.negative {
+      color: var(--bk-error);
+    }
+
+    /* ── Earn Card ──────────────────────────────────────────────────────── */
+    .earn-card {
+      margin: 16px 20px 20px;
+      height: 87px;
+      background: var(--bk-earn-card-bg);
+      border: 1px solid var(--bk-earn-card-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .earn-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-brand-primary);
+    }
+
+    .earn-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .earn-value {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+    }
+
+    .earn-unit {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--bk-text-secondary);
+      opacity: 0.7;
+    }
+
+    .earn-btn {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--bk-text-primary);
+      background: var(--bk-brand-primary);
+      border-radius: 14px;
+      padding: 10px 16px;
+      min-width: 77px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .earn-btn:focus-visible {
+      outline: 2px solid var(--bk-text-primary);
+      outline-offset: 2px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="phone" role="main" aria-label="Modulo home screen">
+
+    <!-- ── Status Bar ────────────────────────────────────────────────── -->
+    <div class="status-bar" aria-hidden="true">
+      <span class="status-time">9:41</span>
+      <div class="status-right">
+        <div class="signal-bars">
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+          <div class="signal-bar"></div>
+        </div>
+        <img src="assets/icon-wifi.svg" alt="" width="16" height="12">
+        <div class="battery">
+          <div class="battery-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Header ───────────────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-logo">
+        <img src="assets/logo-modulo.svg" alt="Modulo" width="93" height="18">
+      </div>
+      <div class="header-actions">
+        <button aria-label="Notifications">
+          <img src="assets/icon-notification.svg" alt="" width="16" height="16">
+        </button>
+        <button aria-label="Settings">
+          <img src="assets/icon-settings.svg" alt="" width="16" height="16">
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Scrollable Content ────────────────────────────────────────── -->
+    <div class="scroll-content">
+
+      <!-- Portfolio Card -->
+      <section class="portfolio-card" aria-labelledby="portfolio-heading">
+        <div class="portfolio-chart" aria-hidden="true">
+          <img src="assets/chart-line.svg" alt="">
+        </div>
+
+        <div class="portfolio-header">
+          <span class="portfolio-label" id="portfolio-heading">Portfolio</span>
+          <div class="time-periods" role="group" aria-label="Time period selector">
+            <button class="time-btn active" aria-pressed="true">1D</button>
+            <button class="time-btn" aria-pressed="false">1W</button>
+            <button class="time-btn" aria-pressed="false">1M</button>
+            <button class="time-btn" aria-pressed="false">1Y</button>
+          </div>
+        </div>
+
+        <div class="portfolio-value" aria-label="Portfolio total value: $12,847.53">
+          <span class="portfolio-dollars" aria-hidden="true">$12,847</span>
+          <span class="portfolio-cents" aria-hidden="true">.53</span>
+        </div>
+
+        <div class="portfolio-gain" aria-label="Today's gain: $623.11 (5.08%)">
+          <img src="assets/icon-gain-arrow.svg" alt="">
+          <span class="gain-text">$623.11 (5.08%)</span>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="action-row" role="group" aria-label="Quick actions">
+        <a href="swap-screen.html" class="action-btn" aria-label="Swap tokens">
+          <img src="assets/icon-action-swap.svg" alt="">
+          <span class="action-label">Swap</span>
+        </a>
+        <button class="action-btn" aria-label="Buy tokens">
+          <img src="assets/icon-action-buy.svg" alt="">
+          <span class="action-label">Buy</span>
+        </button>
+        <a href="send-screen.html" class="action-btn" aria-label="Send tokens">
+          <img src="assets/icon-action-send.svg" alt="">
+          <span class="action-label">Send</span>
+        </a>
+        <a href="receive-screen.html" class="action-btn" aria-label="Receive tokens">
+          <img src="assets/icon-action-receive.svg" alt="">
+          <span class="action-label">Receive</span>
+        </a>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist">
+        <button
+          class="tab active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="token-panel"
+          id="tab-tokens"
+        >Tokens</button>
+        <button
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          id="tab-nfts"
+        >NFTs</button>
+      </div>
+
+      <!-- Token List -->
+      <div
+        class="token-list"
+        role="tabpanel"
+        id="token-panel"
+        aria-labelledby="tab-tokens"
+      >
+
+        <div class="token-row">
+          <img class="token-icon" src="assets/token-usdc.svg" alt="USD Coin">
+          <div class="token-info">
+            <div class="token-name">USD Coin</div>
+            <div class="token-amount">5,342.9824 USDC</div>
+          </div>
+          <div class="token-values" aria-label="USD Coin value: $5,342.98, change: +0.00%">
+            <div class="token-usd">$5,342.98</div>
+            <div class="token-change">+0.00%</div>
+          </div>
+        </div>
+
+        <div class="token-row">
+          <img class="token-icon" src="assets/token-btc.svg" alt="Bitcoin">
+          <div class="token-info">
+            <div class="token-name">Bitcoin</div>
+            <div class="token-amount">0.0574 BTC</div>
+          </div>
+          <div class="token-values" aria-label="Bitcoin value: $5,616.88, change: +2.14%">
+            <div class="token-usd">$5,616.88</div>
+            <div class="token-change">+2.14%</div>
+          </div>
+        </div>
+
+        <div class="token-row">
+          <img class="token-icon" src="assets/token-eth.svg" alt="Ethereum">
+          <div class="token-info">
+            <div class="token-name">Ethereum</div>
+            <div class="token-amount">1.1421 ETH</div>
+          </div>
+          <div class="token-values" aria-label="Ethereum value: $4,412.82, change: +4.38%">
+            <div class="token-usd">$4,412.82</div>
+            <div class="token-change">+4.38%</div>
+          </div>
+        </div>
+
+        <div class="token-row">
+          <img class="token-icon" src="assets/token-sol.svg" alt="Solana">
+          <div class="token-info">
+            <div class="token-name">Solana</div>
+            <div class="token-amount">17.4352 SOL</div>
+          </div>
+          <div class="token-values" aria-label="Solana value: $4,228.38, change: -1.82%">
+            <div class="token-usd">$4,228.38</div>
+            <div class="token-change negative">-1.82%</div>
+          </div>
+        </div>
+
+        <div class="token-row">
+          <img class="token-icon" src="assets/token-usdt.svg" alt="Tether">
+          <div class="token-info">
+            <div class="token-name">Tether</div>
+            <div class="token-amount">3,398.7553 USDT</div>
+          </div>
+          <div class="token-values" aria-label="Tether value: $3,398.75, change: +0.00%">
+            <div class="token-usd">$3,398.75</div>
+            <div class="token-change">+0.00%</div>
+          </div>
+        </div>
+
+      </div><!-- /.token-list -->
+
+      <!-- Earn Card -->
+      <div class="earn-card" role="region" aria-label="Earn — Annual Yield Accrual">
+        <div>
+          <div class="earn-label">Annual Yield Accrual</div>
+          <div class="earn-value-row">
+            <span class="earn-value">0.00</span>
+            <span class="earn-unit">k USD</span>
+          </div>
+        </div>
+        <button class="earn-btn" aria-label="Go to Earn">Earn →</button>
+      </div>
+
+    </div><!-- /.scroll-content -->
+
+    <!-- ── Bottom Navigation ──────────────────────────────────────────── -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-btn" aria-label="Home" aria-current="page">
+        <img src="assets/icon-nav-home.svg" alt="">
+      </button>
+      <a href="explore-screen.html" class="nav-btn" aria-label="Search">
+        <img src="assets/icon-nav-search.svg" alt="">
+      </a>
+      <button class="nav-btn" aria-label="Activity">
+        <img src="assets/icon-nav-activity.svg" alt="">
+      </button>
+      <a href="swap-screen.html" class="nav-btn nav-btn-swap" aria-label="Swap">
+        <img src="assets/icon-nav-swap.svg" alt="">
+      </a>
+    </nav>
+
+  </div><!-- /.phone -->
+
+  <script>
+    // Time range button switching
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.time-btn').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+      });
+    });
+  </script>
+
+</body>
+</html>
