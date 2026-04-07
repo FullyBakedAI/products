@@ -51,6 +51,8 @@ Use for main screens (home, explore, activity).
       <a class="nav-btn" aria-label="Profile"><img src="assets/icon-nav-profile.svg" alt=""></a>
     </nav>
   </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
 ```
@@ -581,6 +583,43 @@ Centred QR code with token icon overlay. Used on receive screen.
 
 ---
 
+## Icons (Lucide)
+
+All screens include Lucide via CDN. Icons respond to BakeKit tokens for size, stroke weight, and colour. Browse the full library at https://lucide.dev/icons.
+
+```html
+<!-- Basic usage -->
+<i data-lucide="arrow-right"></i>
+<i data-lucide="wallet"></i>
+<i data-lucide="settings"></i>
+
+<!-- Custom size (overrides --bk-icon-size) -->
+<i data-lucide="bell" style="--bk-icon-size: 24px;"></i>
+
+<!-- Custom colour -->
+<i data-lucide="trending-up" style="color: var(--bk-success);"></i>
+<i data-lucide="alert-circle" style="color: var(--bk-error);"></i>
+<i data-lucide="zap" style="color: var(--bk-brand-primary);"></i>
+
+<!-- Lighter stroke -->
+<i data-lucide="shield-check" style="--bk-icon-stroke: 1;"></i>
+
+<!-- In a button -->
+<button style="display:flex; align-items:center; gap:8px; color:var(--bk-text-primary);">
+  <i data-lucide="send"></i>
+  <span>Send</span>
+</button>
+```
+
+**Common icons for DeFi UI:** `wallet`, `repeat` (swap), `send`, `arrow-down-left` (receive), `shield-check` (security), `trending-up`/`trending-down` (gains/losses), `qr-code`, `copy`, `share-2`, `settings`, `bell`, `search`, `filter`, `layers` (chains), `lock`/`unlock`, `zap` (gas).
+
+**Token defaults** (in `modulo-shared.css`):
+- `--bk-icon-size: 20px`
+- `--bk-icon-stroke: 1.75`
+- `--bk-icon-color: currentColor`
+
+---
+
 ## Quick Recipe: New Screen
 
 1. Copy the **Shell** (full screen or sheet)
@@ -589,3 +628,4 @@ Centred QR code with token icon overlay. Used on receive screen.
 4. Add screen-specific styles in the `<style>` block — only what's unique
 5. Save as `new-screen-name.html`
 6. All tokens come from `modulo-shared.css` — never hardcode colours
+7. Icons: use `<i data-lucide="icon-name"></i>` — browse at https://lucide.dev/icons

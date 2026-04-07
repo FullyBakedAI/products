@@ -66,6 +66,7 @@ Create `Prototype-v2/shared.css` containing:
 | Prototype screens | `~/products/Modulo/Prototype-v2/` |
 | Shared CSS | `~/products/Modulo/Prototype-v2/shared.css` |
 | Component snippets | `~/products/Modulo/Prototype/SNIPPETS.md` |
+| Design system page | `~/products/Modulo/Prototype/design-system.html` |
 | Downloaded assets | `~/products/Modulo/Prototype-v2/assets/` |
 | Decision log | `~/workspace/Framework/Docs/decision-log.md` |
 | Extract script | `~/workspace/Platform/Scripts/extract-components.py` |
@@ -76,9 +77,11 @@ Create `Prototype-v2/shared.css` containing:
 To build a new screen:
 1. Copy a shell (full screen or sheet) from SNIPPETS.md
 2. Drop in components from the snippet library
-3. Add only screen-specific styles in the `<style>` block
-4. Save as `Prototype/new-screen-name.html`
-5. Never hardcode colours — always use `--bk-*` tokens
+3. Use Lucide icons: `<i data-lucide="icon-name"></i>` (browse at https://lucide.dev/icons)
+4. Add only screen-specific styles in the `<style>` block
+5. Save as `Prototype/new-screen-name.html`
+6. Never hardcode colours — always use `--bk-*` tokens
+7. Include Lucide script before `</body>`: `<script src="https://unpkg.com/lucide@latest"></script><script>lucide.createIcons();</script>`
 
 ## Figma Access
 You have direct access to Figma via MCP tools:
@@ -94,4 +97,5 @@ Screen node IDs are in `product.json → screens → [name] → figmaMobileFrame
 - Dark-first UI, mobile-first (390×844 viewport)
 - WCAG 2.1 AA minimum
 - Font: Inter (400, 500, 600, 700)
+- Icons: Lucide (via CDN), configured by `--bk-icon-size`, `--bk-icon-stroke`, `--bk-icon-color`
 - All values via `--bk-*` CSS custom properties

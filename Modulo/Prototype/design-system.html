@@ -41,8 +41,20 @@
       --bk-pill-bg:          #2A2A3E;
       --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
       --bk-earn-card-border: rgba(88, 75, 235, 0.2);
+      /* Icons (Lucide) */
+      --bk-icon-size:        20px;
+      --bk-icon-stroke:      1.75;
+      --bk-icon-color:       currentColor;
       /* Typography */
       --bk-font:             'Inter', sans-serif;
+    }
+
+    .lucide {
+      width: var(--bk-icon-size);
+      height: var(--bk-icon-size);
+      stroke-width: var(--bk-icon-stroke);
+      color: var(--bk-icon-color);
+      flex-shrink: 0;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -623,6 +635,9 @@
         <a class="ds-nav-link" href="#navigation" data-section="navigation">Navigation</a>
         <a class="ds-nav-link" href="#sheets" data-section="sheets">Sheets</a>
         <a class="ds-nav-link" href="#avatars" data-section="avatars">Avatars</a>
+        <a class="ds-nav-link" href="#icons" data-section="icons">Icons</a>
+        <a class="ds-nav-link" href="#charts" data-section="charts">Charts</a>
+        <a class="ds-nav-link" href="#grids" data-section="grids">Data Grids</a>
       </div>
 
       <div class="ds-nav-group">
@@ -1079,6 +1094,146 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- ICONS (Lucide)                                              -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="icons" data-search="icon lucide glyph symbol arrow chevron">
+        <h2 class="ds-section-title">Icons</h2>
+        <p class="ds-section-desc">Powered by <a href="https://lucide.dev" style="color:var(--bk-brand-primary);">Lucide</a>. All icons respond to BakeKit tokens. Search below or browse <a href="https://lucide.dev/icons" style="color:var(--bk-brand-primary);">the full library</a>.</p>
+
+        <!-- Icon Controls -->
+        <div style="display:flex; gap:16px; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap;">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:500;color:var(--bk-text-muted);margin-bottom:6px;">Size</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="range" id="icon-size" min="12" max="48" value="20" style="width:120px;accent-color:var(--bk-brand-primary);">
+              <span id="icon-size-val" style="font-size:12px;color:var(--bk-text-secondary);font-family:'SF Mono',monospace;min-width:36px;">20px</span>
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:500;color:var(--bk-text-muted);margin-bottom:6px;">Stroke</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="range" id="icon-stroke" min="0.5" max="3" step="0.25" value="1.75" style="width:120px;accent-color:var(--bk-brand-primary);">
+              <span id="icon-stroke-val" style="font-size:12px;color:var(--bk-text-secondary);font-family:'SF Mono',monospace;min-width:36px;">1.75</span>
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:500;color:var(--bk-text-muted);margin-bottom:6px;">Colour</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="color" id="icon-color" value="#F5F5F6" style="width:36px;height:36px;border:1px solid var(--bk-border-subtle);border-radius:8px;background:none;cursor:pointer;padding:2px;">
+              <select id="icon-color-preset" style="height:36px;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);border-radius:8px;color:var(--bk-text-primary);font-size:12px;padding:0 8px;font-family:inherit;">
+                <option value="#F5F5F6">Primary</option>
+                <option value="#B3B2B8">Secondary</option>
+                <option value="#87878C">Muted</option>
+                <option value="#584BEB">Brand</option>
+                <option value="#22C55E">Success</option>
+                <option value="#F04348">Error</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Icon Search -->
+        <input type="text" id="icon-search" placeholder="Search icons... (e.g. arrow, wallet, settings, chart)" style="width:100%;max-width:400px;height:40px;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);border-radius:10px;padding:0 14px;color:var(--bk-text-primary);font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;" autocomplete="off">
+
+        <!-- Icon Grid -->
+        <div id="icon-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(88px, 1fr));gap:4px;"></div>
+
+        <p id="icon-count" style="font-size:12px;color:var(--bk-text-muted);margin-top:16px;"></p>
+
+        <!-- Usage Examples -->
+        <div class="ds-subsection" style="margin-top:32px;">
+          <h3 class="ds-subsection-title">Usage in Prototypes</h3>
+          <div class="ds-preview">
+            <div class="ds-preview-label">HTML (add script tag + use data-lucide)</div>
+            <pre style="background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);border-radius:8px;padding:12px;font-size:12px;color:var(--bk-text-secondary);font-family:'SF Mono','Fira Code',monospace;overflow-x:auto;line-height:1.6;white-space:pre;">&lt;!-- Add before &lt;/body&gt; --&gt;
+&lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;
+&lt;script&gt;lucide.createIcons();&lt;/script&gt;
+
+&lt;!-- Use anywhere --&gt;
+&lt;i data-lucide="arrow-right"&gt;&lt;/i&gt;
+&lt;i data-lucide="wallet" style="--bk-icon-size:24px;"&gt;&lt;/i&gt;
+&lt;i data-lucide="settings" style="color:var(--bk-brand-primary);"&gt;&lt;/i&gt;
+
+&lt;!-- Override stroke weight --&gt;
+&lt;i data-lucide="bell" style="--bk-icon-stroke:1;"&gt;&lt;/i&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CHARTS                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="charts" data-search="chart graph candlestick line bar pie data visualization trading">
+        <h2 class="ds-section-title">Charts</h2>
+        <p class="ds-section-desc">Financial charts via <a href="https://tradingview.github.io/lightweight-charts/" style="color:var(--bk-brand-primary);">Lightweight Charts</a> (TradingView). General charts via <a href="https://www.chartjs.org" style="color:var(--bk-brand-primary);">Chart.js</a>. All themed by BakeKit tokens.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Candlestick Chart (Lightweight Charts)</div>
+          <div class="ds-preview-desc">Financial price chart with OHLC data. Colours bound to --bk-success / --bk-error.</div>
+          <div id="candlestick-chart" style="height:300px;border-radius:8px;overflow:hidden;"></div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Area Chart (Lightweight Charts)</div>
+          <div class="ds-preview-desc">Portfolio performance sparkline. Gradient fill from --bk-brand-primary.</div>
+          <div id="area-chart" style="height:200px;border-radius:8px;overflow:hidden;"></div>
+        </div>
+
+        <div class="ds-preview" style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:280px;">
+            <div class="ds-preview-label">Doughnut (Chart.js)</div>
+            <div class="ds-preview-desc">Portfolio allocation breakdown.</div>
+            <canvas id="doughnut-chart" style="max-height:220px;"></canvas>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <div class="ds-preview-label">Bar Chart (Chart.js)</div>
+            <div class="ds-preview-desc">Volume or staking rewards by period.</div>
+            <canvas id="bar-chart" style="max-height:220px;"></canvas>
+          </div>
+        </div>
+
+        <div class="ds-subsection" style="margin-top:24px;">
+          <h3 class="ds-subsection-title">Token Integration</h3>
+          <pre style="background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);border-radius:8px;padding:12px;font-size:12px;color:var(--bk-text-secondary);font-family:'SF Mono','Fira Code',monospace;overflow-x:auto;line-height:1.6;white-space:pre;">/* Charts read BakeKit tokens via JS */
+const styles = getComputedStyle(document.documentElement);
+const brandColor = styles.getPropertyValue('--bk-brand-primary').trim();
+const successColor = styles.getPropertyValue('--bk-success').trim();
+const errorColor = styles.getPropertyValue('--bk-error').trim();
+const bgColor = styles.getPropertyValue('--bk-bg-base').trim();
+const textColor = styles.getPropertyValue('--bk-text-muted').trim();
+
+/* Lightweight Charts */
+chart.applyOptions({
+  layout: { background: { color: bgColor }, textColor },
+});</pre>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- DATA GRID                                                   -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="grids" data-search="grid table data sort filter tanstack column row">
+        <h2 class="ds-section-title">Data Grids</h2>
+        <p class="ds-section-desc">Powered by <a href="https://tanstack.com/table" style="color:var(--bk-brand-primary);">TanStack Table</a> (headless). BakeKit provides all styling via tokens.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Token Holdings Table</div>
+          <div class="ds-preview-desc">Sortable columns, token-styled rows. Click headers to sort.</div>
+          <table id="ds-grid" style="width:100%;border-collapse:collapse;max-width:500px;">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:600;color:var(--bk-text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--bk-border-subtle);cursor:pointer;" onclick="sortGrid(0)">Token <span class="sort-arrow"></span></th>
+                <th style="text-align:right;padding:10px 12px;font-size:11px;font-weight:600;color:var(--bk-text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--bk-border-subtle);cursor:pointer;" onclick="sortGrid(1)">Price <span class="sort-arrow"></span></th>
+                <th style="text-align:right;padding:10px 12px;font-size:11px;font-weight:600;color:var(--bk-text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--bk-border-subtle);cursor:pointer;" onclick="sortGrid(2)">24h <span class="sort-arrow"></span></th>
+                <th style="text-align:right;padding:10px 12px;font-size:11px;font-weight:600;color:var(--bk-text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--bk-border-subtle);cursor:pointer;" onclick="sortGrid(3)">Holdings <span class="sort-arrow"></span></th>
+              </tr>
+            </thead>
+            <tbody id="grid-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
       <!-- EXPORT                                                      -->
       <!-- ═══════════════════════════════════════════════════════════ -->
       <section class="ds-section" id="export" data-search="export css download copy save">
@@ -1322,6 +1477,10 @@
         });
         css += '\n';
       });
+      css += `  /* Icons (Lucide) */\n`;
+      css += `  --bk-icon-size:        ${document.getElementById('icon-size')?.value || '20'}px;\n`;
+      css += `  --bk-icon-stroke:      ${document.getElementById('icon-stroke')?.value || '1.75'};\n`;
+      css += `  --bk-icon-color:       ${document.getElementById('icon-color')?.value || 'currentColor'};\n\n`;
       css += `  /* Typography */\n`;
       css += `  --bk-font:             'Inter', sans-serif;\n`;
       css += '}\n';
@@ -1408,6 +1567,334 @@
 
     // ── Init ────────────────────────────────────────────────────────
     updateCSSOutput();
+  </script>
+
+  <!-- ── Lucide Icons ──────────────────────────────────────────────── -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lightweight-charts@4/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script>
+    // ── Curated icon set for DeFi / fintech / product UI ────────────
+    // Full library at https://lucide.dev/icons — add any icon name here
+    const ICON_SET = [
+      // Navigation & Actions
+      'arrow-left', 'arrow-right', 'arrow-up', 'arrow-down',
+      'arrow-up-right', 'arrow-down-left', 'arrow-left-right',
+      'chevron-left', 'chevron-right', 'chevron-up', 'chevron-down',
+      'x', 'plus', 'minus', 'check', 'menu', 'more-horizontal', 'more-vertical',
+      'external-link', 'corner-up-right',
+      // Finance & Wallet
+      'wallet', 'credit-card', 'banknote', 'coins', 'piggy-bank',
+      'receipt', 'landmark', 'vault', 'hand-coins', 'circle-dollar-sign',
+      'trending-up', 'trending-down', 'bar-chart-3', 'line-chart', 'candlestick-chart',
+      'percent', 'calculator', 'scale',
+      // Crypto / DeFi specific
+      'repeat', 'shuffle', 'git-compare', 'split', 'merge',
+      'layers', 'blocks', 'boxes', 'package', 'cube',
+      'link', 'link-2', 'unlink', 'lock', 'unlock', 'shield', 'shield-check',
+      'key', 'fingerprint', 'scan', 'qr-code',
+      // Communication
+      'bell', 'bell-ring', 'mail', 'message-circle', 'message-square',
+      'send', 'share', 'share-2', 'copy', 'clipboard',
+      // User & Identity
+      'user', 'user-circle', 'users', 'contact', 'badge-check',
+      'circle-user', 'user-plus',
+      // Settings & System
+      'settings', 'sliders-horizontal', 'toggle-left', 'toggle-right',
+      'filter', 'sort-asc', 'sort-desc', 'search',
+      'eye', 'eye-off', 'info', 'help-circle', 'alert-triangle', 'alert-circle',
+      // Media & UI
+      'image', 'camera', 'download', 'upload', 'file', 'folder',
+      'star', 'heart', 'bookmark', 'flag', 'tag', 'hash',
+      'clock', 'calendar', 'timer', 'history', 'refresh-cw', 'rotate-cw',
+      // Network & Connectivity
+      'globe', 'wifi', 'signal', 'zap', 'activity',
+      'server', 'database', 'hard-drive', 'cpu', 'cloud',
+      // Shapes & Misc
+      'circle', 'square', 'triangle', 'hexagon', 'octagon',
+      'grip-vertical', 'grip-horizontal', 'move',
+    ];
+
+    const iconGrid = document.getElementById('icon-grid');
+    const iconSearch = document.getElementById('icon-search');
+    const iconSizeSlider = document.getElementById('icon-size');
+    const iconStrokeSlider = document.getElementById('icon-stroke');
+    const iconColorPicker = document.getElementById('icon-color');
+    const iconColorPreset = document.getElementById('icon-color-preset');
+    const iconCount = document.getElementById('icon-count');
+
+    function renderIcons(filter = '') {
+      const filtered = filter
+        ? ICON_SET.filter(name => name.includes(filter.toLowerCase().replace(/\s+/g, '-')))
+        : ICON_SET;
+
+      iconGrid.innerHTML = filtered.map(name => `
+        <div class="icon-cell" data-name="${name}" title="${name}" onclick="copyIconName('${name}')"
+             style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;
+                    border-radius:10px;cursor:pointer;transition:background 0.1s;"
+             onmouseover="this.style.background='var(--bk-bg-card)'"
+             onmouseout="this.style.background='transparent'">
+          <i data-lucide="${name}"></i>
+          <span style="font-size:10px;color:var(--bk-text-muted);text-align:center;word-break:break-all;line-height:1.3;">${name}</span>
+        </div>
+      `).join('');
+
+      iconCount.textContent = `${filtered.length} of ${ICON_SET.length} icons shown`;
+
+      // Re-init Lucide for new elements
+      if (window.lucide) {
+        lucide.createIcons();
+        applyIconStyles();
+      }
+    }
+
+    function applyIconStyles() {
+      const size = iconSizeSlider.value + 'px';
+      const stroke = iconStrokeSlider.value;
+      const color = iconColorPicker.value;
+
+      document.querySelectorAll('#icon-grid .lucide').forEach(el => {
+        el.style.width = size;
+        el.style.height = size;
+        el.setAttribute('stroke-width', stroke);
+        el.style.color = color;
+      });
+
+      document.getElementById('icon-size-val').textContent = size;
+      document.getElementById('icon-stroke-val').textContent = stroke;
+    }
+
+    function copyIconName(name) {
+      const html = `<i data-lucide="${name}"></i>`;
+      navigator.clipboard.writeText(html).then(() => {
+        showToast(`Copied: ${html}`);
+      });
+    }
+
+    // ── Event Listeners ─────────────────────────────────────────────
+    iconSearch.addEventListener('input', () => renderIcons(iconSearch.value));
+    iconSizeSlider.addEventListener('input', applyIconStyles);
+    iconStrokeSlider.addEventListener('input', applyIconStyles);
+
+    iconColorPicker.addEventListener('input', () => {
+      applyIconStyles();
+      // Update preset dropdown if it matches
+      const val = iconColorPicker.value.toUpperCase();
+      const opts = iconColorPreset.options;
+      let matched = false;
+      for (let i = 0; i < opts.length; i++) {
+        if (opts[i].value.toUpperCase() === val) {
+          iconColorPreset.selectedIndex = i;
+          matched = true;
+          break;
+        }
+      }
+    });
+
+    iconColorPreset.addEventListener('change', () => {
+      iconColorPicker.value = iconColorPreset.value;
+      applyIconStyles();
+    });
+
+    // ── Init Icons ──────────────────────────────────────────────────
+    // Wait for Lucide to load
+    function initIcons() {
+      if (window.lucide) {
+        renderIcons();
+      } else {
+        setTimeout(initIcons, 100);
+      }
+    }
+    initIcons();
+
+    // ══════════════════════════════════════════════════════════════════
+    // Charts (Lightweight Charts + Chart.js)
+    // ══════════════════════════════════════════════════════════════════
+    function initCharts() {
+      if (!window.LightweightCharts || !window.Chart) {
+        setTimeout(initCharts, 200);
+        return;
+      }
+
+      const cs = getComputedStyle(document.documentElement);
+      const brandPrimary = cs.getPropertyValue('--bk-brand-primary').trim();
+      const success = cs.getPropertyValue('--bk-success').trim();
+      const error = cs.getPropertyValue('--bk-error').trim();
+      const bgBase = cs.getPropertyValue('--bk-bg-base').trim();
+      const bgCard = cs.getPropertyValue('--bk-bg-card').trim();
+      const textMuted = cs.getPropertyValue('--bk-text-muted').trim();
+      const textSecondary = cs.getPropertyValue('--bk-text-secondary').trim();
+      const borderSubtle = cs.getPropertyValue('--bk-border-subtle').trim();
+
+      // ── Candlestick Chart ───────────────────────────────────────
+      const candleEl = document.getElementById('candlestick-chart');
+      if (candleEl) {
+        const chart1 = LightweightCharts.createChart(candleEl, {
+          layout: { background: { color: bgBase }, textColor: textMuted, fontFamily: 'Inter' },
+          grid: { vertLines: { color: borderSubtle }, horzLines: { color: borderSubtle } },
+          crosshair: { mode: 0 },
+          rightPriceScale: { borderColor: borderSubtle },
+          timeScale: { borderColor: borderSubtle },
+        });
+        const candleSeries = chart1.addSeries(LightweightCharts.CandlestickSeries, {
+          upColor: success, downColor: error,
+          borderUpColor: success, borderDownColor: error,
+          wickUpColor: success, wickDownColor: error,
+        });
+        // Sample ETH data
+        const now = Math.floor(Date.now() / 1000);
+        const day = 86400;
+        const candleData = [];
+        let price = 3200;
+        for (let i = 60; i >= 0; i--) {
+          const open = price + (Math.random() - 0.48) * 80;
+          const close = open + (Math.random() - 0.45) * 100;
+          const high = Math.max(open, close) + Math.random() * 40;
+          const low = Math.min(open, close) - Math.random() * 40;
+          candleData.push({ time: now - i * day, open, high, low, close });
+          price = close;
+        }
+        candleSeries.setData(candleData);
+        chart1.timeScale().fitContent();
+      }
+
+      // ── Area Chart ──────────────────────────────────────────────
+      const areaEl = document.getElementById('area-chart');
+      if (areaEl) {
+        const chart2 = LightweightCharts.createChart(areaEl, {
+          layout: { background: { color: bgBase }, textColor: textMuted, fontFamily: 'Inter' },
+          grid: { vertLines: { visible: false }, horzLines: { color: borderSubtle } },
+          rightPriceScale: { borderColor: borderSubtle },
+          timeScale: { borderColor: borderSubtle },
+          handleScroll: false,
+          handleScale: false,
+        });
+        const areaSeries = chart2.addSeries(LightweightCharts.AreaSeries, {
+          topColor: brandPrimary + '40',
+          bottomColor: brandPrimary + '05',
+          lineColor: brandPrimary,
+          lineWidth: 2,
+        });
+        const now2 = Math.floor(Date.now() / 1000);
+        const areaData = [];
+        let val = 10000;
+        for (let i = 90; i >= 0; i--) {
+          val += (Math.random() - 0.47) * 200;
+          areaData.push({ time: now2 - i * day, value: Math.max(val, 5000) });
+        }
+        areaSeries.setData(areaData);
+        chart2.timeScale().fitContent();
+      }
+
+      // ── Doughnut Chart (Chart.js) ───────────────────────────────
+      const doughnutEl = document.getElementById('doughnut-chart');
+      if (doughnutEl) {
+        new Chart(doughnutEl, {
+          type: 'doughnut',
+          data: {
+            labels: ['ETH', 'BTC', 'USDC', 'SOL', 'USDT'],
+            datasets: [{
+              data: [38, 30, 15, 10, 7],
+              backgroundColor: [brandPrimary, success, '#3B82F6', '#F59E0B', textMuted],
+              borderColor: bgCard,
+              borderWidth: 2,
+            }]
+          },
+          options: {
+            responsive: true,
+            cutout: '65%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: textSecondary, font: { family: 'Inter', size: 12 }, padding: 16, usePointStyle: true, pointStyleWidth: 8 }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Bar Chart (Chart.js) ────────────────────────────────────
+      const barEl = document.getElementById('bar-chart');
+      if (barEl) {
+        new Chart(barEl, {
+          type: 'bar',
+          data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+              label: 'Volume ($K)',
+              data: [42, 58, 35, 71, 48, 63, 55],
+              backgroundColor: brandPrimary + '80',
+              borderColor: brandPrimary,
+              borderWidth: 1,
+              borderRadius: 4,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { grid: { color: borderSubtle }, ticks: { color: textMuted, font: { family: 'Inter', size: 11 } } },
+              y: { grid: { color: borderSubtle }, ticks: { color: textMuted, font: { family: 'Inter', size: 11 } } },
+            },
+            plugins: {
+              legend: { labels: { color: textSecondary, font: { family: 'Inter', size: 12 } } }
+            }
+          }
+        });
+      }
+    }
+
+    initCharts();
+
+    // ══════════════════════════════════════════════════════════════════
+    // Data Grid (demo with sort)
+    // ══════════════════════════════════════════════════════════════════
+    const GRID_DATA = [
+      { token: 'Ethereum', ticker: 'ETH', price: 3267.80, change: 2.41, holdings: 4893.80 },
+      { token: 'Bitcoin', ticker: 'BTC', price: 97842.10, change: 1.24, holdings: 4892.10 },
+      { token: 'USD Coin', ticker: 'USDC', price: 1.00, change: 0.01, holdings: 2500.00 },
+      { token: 'Solana', ticker: 'SOL', price: 178.45, change: -3.12, holdings: 892.25 },
+      { token: 'Tether', ticker: 'USDT', price: 1.00, change: 0.00, holdings: 500.00 },
+    ];
+
+    let gridSortCol = null;
+    let gridSortAsc = true;
+
+    function renderGrid() {
+      const tbody = document.getElementById('grid-body');
+      if (!tbody) return;
+
+      const sorted = [...GRID_DATA];
+      if (gridSortCol !== null) {
+        const keys = ['token', 'price', 'change', 'holdings'];
+        const key = keys[gridSortCol];
+        sorted.sort((a, b) => {
+          const av = typeof a[key] === 'string' ? a[key].toLowerCase() : a[key];
+          const bv = typeof b[key] === 'string' ? b[key].toLowerCase() : b[key];
+          return gridSortAsc ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+        });
+      }
+
+      tbody.innerHTML = sorted.map(row => `
+        <tr style="border-bottom:1px solid var(--bk-border-subtle);">
+          <td style="padding:12px;font-size:14px;font-weight:500;color:var(--bk-text-primary);">${row.token} <span style="font-size:12px;color:var(--bk-text-muted);font-weight:400;">${row.ticker}</span></td>
+          <td style="padding:12px;font-size:14px;text-align:right;color:var(--bk-text-primary);">$${row.price.toLocaleString('en-US', {minimumFractionDigits:2})}</td>
+          <td style="padding:12px;font-size:14px;text-align:right;color:${row.change > 0 ? 'var(--bk-success)' : row.change < 0 ? 'var(--bk-error)' : 'var(--bk-text-muted)'};">${row.change > 0 ? '+' : ''}${row.change.toFixed(2)}%</td>
+          <td style="padding:12px;font-size:14px;text-align:right;color:var(--bk-text-primary);">$${row.holdings.toLocaleString('en-US', {minimumFractionDigits:2})}</td>
+        </tr>
+      `).join('');
+    }
+
+    function sortGrid(col) {
+      if (gridSortCol === col) {
+        gridSortAsc = !gridSortAsc;
+      } else {
+        gridSortCol = col;
+        gridSortAsc = true;
+      }
+      renderGrid();
+    }
+
+    renderGrid();
   </script>
 </body>
 </html>

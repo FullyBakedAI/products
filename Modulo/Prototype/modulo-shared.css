@@ -47,8 +47,23 @@
   --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
   --bk-earn-card-border: rgba(88, 75, 235, 0.2);
 
+  /* Icons (Lucide) */
+  --bk-icon-size:        20px;
+  --bk-icon-stroke:      1.75;
+  --bk-icon-color:       currentColor;
+
   /* Typography */
   --bk-font:             'Inter', sans-serif;
+}
+
+/* ── Lucide Icon Defaults ──────────────────────────────────────────── */
+/* All Lucide icons inherit from these tokens. Override per-context. */
+.lucide {
+  width: var(--bk-icon-size);
+  height: var(--bk-icon-size);
+  stroke-width: var(--bk-icon-stroke);
+  color: var(--bk-icon-color);
+  flex-shrink: 0;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────────── */
