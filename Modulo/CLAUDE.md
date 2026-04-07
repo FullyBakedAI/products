@@ -65,9 +65,20 @@ Create `Prototype-v2/shared.css` containing:
 | Product config | `~/products/Modulo/product.json` |
 | Prototype screens | `~/products/Modulo/Prototype-v2/` |
 | Shared CSS | `~/products/Modulo/Prototype-v2/shared.css` |
+| Component snippets | `~/products/Modulo/Prototype/SNIPPETS.md` |
 | Downloaded assets | `~/products/Modulo/Prototype-v2/assets/` |
 | Decision log | `~/workspace/Framework/Docs/decision-log.md` |
 | Extract script | `~/workspace/Platform/Scripts/extract-components.py` |
+
+## Building New Screens (Experimentation Mode)
+**Read `Prototype/SNIPPETS.md` first.** It contains copy-paste HTML/CSS building blocks extracted from the 6 existing screens — shells, cards, token rows, contact rows, pills, buttons, tabs, and more. All use `modulo-shared.css` tokens.
+
+To build a new screen:
+1. Copy a shell (full screen or sheet) from SNIPPETS.md
+2. Drop in components from the snippet library
+3. Add only screen-specific styles in the `<style>` block
+4. Save as `Prototype/new-screen-name.html`
+5. Never hardcode colours — always use `--bk-*` tokens
 
 ## Figma Access
 You have direct access to Figma via MCP tools:

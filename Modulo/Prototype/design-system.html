@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── We inline the tokens here so the page is self-contained AND editable ── */
+    :root {
+      /* Surfaces */
+      --bk-bg-base:          #0D0E17;
+      --bk-bg-card:          #1A1A29;
+      --bk-bg-card-alt:      #1F1F33;
+      --bk-bg-nav:           #13141F;
+      --bk-bg-elevated:      #13141F;
+      --bk-bg-outer:         #0C0C0F;
+      /* Borders */
+      --bk-border-subtle:    #1E1F2E;
+      --bk-border-card:      rgba(45, 44, 74, 0.2);
+      --bk-border-pill:      rgba(45, 44, 74, 0.4);
+      --bk-border-active:    #584BEB;
+      --bk-border-search:    #2A2A3D;
+      --bk-border-row:       #181929;
+      /* Text */
+      --bk-text-primary:     #F5F5F6;
+      --bk-text-secondary:   #B3B2B8;
+      --bk-text-muted:       #87878C;
+      --bk-text-placeholder: rgba(245, 245, 246, 0.5);
+      /* Brand */
+      --bk-brand-primary:    #584BEB;
+      --bk-brand-dim:        rgba(88, 75, 235, 0.15);
+      --bk-brand-gradient:   linear-gradient(135deg, #584BEB 0%, #4A3DE0 100%);
+      /* Semantic */
+      --bk-success:          #22C55E;
+      --bk-error:            #F04348;
+      /* Special */
+      --bk-status-bar-dim:   #3A3B4E;
+      --bk-pill-bg:          #2A2A3E;
+      --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
+      --bk-earn-card-border: rgba(88, 75, 235, 0.2);
+      /* Typography */
+      --bk-font:             'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0C0C0F;
+      color: #F5F5F6;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* ── Layout Shell ────────────────────────────────────────────────── */
+    .ds-app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────────── */
+    .ds-sidebar {
+      width: 240px;
+      background: var(--bk-bg-base);
+      border-right: 1px solid var(--bk-border-subtle);
+      padding: 24px 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    .ds-sidebar h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--bk-brand-primary);
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .ds-sidebar .ds-subtitle {
+      font-size: 11px;
+      color: var(--bk-text-muted);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .ds-search {
+      width: 100%;
+      height: 36px;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 8px;
+      padding: 0 12px;
+      color: var(--bk-text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .ds-search:focus {
+      border-color: var(--bk-brand-primary);
+    }
+
+    .ds-search::placeholder {
+      color: var(--bk-text-muted);
+    }
+
+    .ds-nav-group {
+      margin-bottom: 16px;
+    }
+
+    .ds-nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--bk-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+      padding: 0 8px;
+    }
+
+    .ds-nav-link {
+      display: block;
+      padding: 6px 8px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--bk-text-secondary);
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.1s;
+    }
+
+    .ds-nav-link:hover {
+      background: var(--bk-bg-card);
+      color: var(--bk-text-primary);
+    }
+
+    .ds-nav-link.active {
+      background: var(--bk-brand-dim);
+      color: var(--bk-brand-primary);
+      font-weight: 500;
+    }
+
+    /* ── Main Content ────────────────────────────────────────────────── */
+    .ds-main {
+      flex: 1;
+      margin-left: 240px;
+      padding: 32px 40px 80px;
+      max-width: 960px;
+    }
+
+    .ds-section {
+      margin-bottom: 56px;
+    }
+
+    .ds-section[data-hidden] {
+      display: none;
+    }
+
+    .ds-section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--bk-text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .ds-section-desc {
+      font-size: 14px;
+      color: var(--bk-text-muted);
+      margin-bottom: 24px;
+    }
+
+    .ds-subsection {
+      margin-bottom: 32px;
+    }
+
+    .ds-subsection-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--bk-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    /* ── Colour Swatches ─────────────────────────────────────────────── */
+    .ds-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .ds-swatch {
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .ds-swatch:hover {
+      border-color: var(--bk-brand-primary);
+    }
+
+    .ds-swatch-color {
+      height: 56px;
+      position: relative;
+    }
+
+    .ds-swatch-info {
+      padding: 8px 10px;
+    }
+
+    .ds-swatch-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--bk-text-primary);
+      margin-bottom: 2px;
+      word-break: break-all;
+    }
+
+    .ds-swatch-value {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--bk-text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* ── Colour Editor Popover ────────────────────────────────────────── */
+    .ds-color-editor {
+      display: none;
+      position: fixed;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-active);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 100;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      min-width: 220px;
+    }
+
+    .ds-color-editor.visible { display: block; }
+
+    .ds-color-editor label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--bk-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .ds-color-editor .ds-editor-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .ds-color-editor input[type="color"] {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 8px;
+      background: none;
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .ds-color-editor input[type="text"] {
+      flex: 1;
+      height: 36px;
+      background: var(--bk-bg-base);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 8px;
+      padding: 0 10px;
+      color: var(--bk-text-primary);
+      font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      outline: none;
+    }
+
+    .ds-color-editor input[type="text"]:focus {
+      border-color: var(--bk-brand-primary);
+    }
+
+    /* ── Typography Samples ──────────────────────────────────────────── */
+    .ds-type-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--bk-border-subtle);
+    }
+
+    .ds-type-sample {
+      flex: 1;
+    }
+
+    .ds-type-meta {
+      font-size: 11px;
+      color: var(--bk-text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      text-align: right;
+      white-space: nowrap;
+      margin-left: 24px;
+    }
+
+    /* ── Component Preview ───────────────────────────────────────────── */
+    .ds-preview {
+      background: var(--bk-bg-base);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 12px;
+    }
+
+    .ds-preview-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--bk-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .ds-preview-desc {
+      font-size: 12px;
+      color: var(--bk-text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Component: reusable from shared.css ──────────────────────────── */
+    button { background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px; height: 37.5px; padding: 0 13px;
+      background: var(--bk-bg-elevated); border: 1px solid var(--bk-border-subtle);
+      border-radius: 9999px; font-size: 13px; font-weight: 400; color: var(--bk-text-secondary);
+    }
+    .pill img { width: 18px; height: 18px; }
+
+    .chain-pill {
+      display: inline-flex; align-items: center; height: 33.5px; padding: 0 12px;
+      background: var(--bk-bg-elevated); border: 1px solid var(--bk-border-subtle);
+      border-radius: 9999px; font-size: 13px; font-weight: 400; color: var(--bk-text-muted);
+    }
+
+    .chain-pill.active, .pill.active {
+      background: var(--bk-brand-primary); color: var(--bk-text-primary);
+      border-color: var(--bk-brand-primary); font-weight: 600;
+    }
+
+    .pct-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 37.5px; padding: 0 16px;
+      background: var(--bk-bg-elevated); border: 1px solid var(--bk-border-subtle);
+      border-radius: 14px; font-size: 13px; font-weight: 500; color: var(--bk-text-secondary);
+    }
+    .pct-pill.active {
+      background: var(--bk-brand-dim); border-color: var(--bk-brand-primary); color: var(--bk-brand-primary);
+    }
+
+    .search-field {
+      height: 48.5px; background: var(--bk-bg-card); border: 1px solid var(--bk-border-subtle);
+      border-radius: 14px; display: flex; align-items: center; padding: 0 16px; gap: 12px;
+      max-width: 358px;
+    }
+    .search-field span { font-size: 14px; color: var(--bk-text-muted); }
+
+    .select-token-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--bk-brand-primary); border: none; border-radius: 9999px;
+      padding: 0 20px; height: 41px; min-width: 124px;
+    }
+    .select-token-cta span { font-size: 14px; font-weight: 600; color: #fff; }
+
+    .bottom-cta {
+      width: 100%; max-width: 358px; height: 58px; border-radius: 16px;
+      font-size: 16px; font-weight: 600; text-align: center;
+      border: 1px solid var(--bk-border-subtle);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .bottom-cta.disabled { background: var(--bk-bg-elevated); color: var(--bk-text-muted); }
+    .bottom-cta.ready {
+      background: var(--bk-brand-primary); color: #fff; border-color: transparent;
+      box-shadow: 0 0 24px rgba(88, 75, 235, 0.3);
+    }
+
+    .primary-btn {
+      width: 100%; max-width: 358px; height: 56px;
+      background: var(--bk-brand-gradient);
+      box-shadow: 0 0 24px rgba(88, 75, 235, 0.3);
+      border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 600; color: var(--bk-text-primary);
+    }
+
+    .token-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bk-pill-bg); border: 1px solid var(--bk-border-pill);
+      border-radius: 20px; padding: 6px 10px 6px 6px;
+    }
+    .token-pill img { width: 24px; height: 24px; border-radius: 50%; }
+    .token-pill span { font-size: 14px; font-weight: 600; color: var(--bk-text-primary); }
+
+    .avatar-wrap {
+      position: relative; width: 40px; height: 40px; flex-shrink: 0; display: inline-block;
+    }
+    .avatar-wrap img.avatar { width: 40px; height: 40px; border-radius: 50%; }
+    .avatar-wrap .modulo-badge {
+      position: absolute; bottom: -2px; right: -2px; width: 17px; height: 17px;
+    }
+
+    .sheet-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; max-width: 390px;
+    }
+    .sheet-title { font-size: 18px; font-weight: 600; color: var(--bk-text-primary); }
+
+    .drag-handle { display: flex; justify-content: center; padding: 12px 0 0; }
+    .drag-handle-pill {
+      width: 32px; height: 4px; background: var(--bk-border-subtle); border-radius: 9999px;
+    }
+
+    .bottom-nav {
+      height: 71px; background: var(--bk-bg-nav); border-top: 1px solid var(--bk-border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; max-width: 390px;
+    }
+    .nav-btn {
+      display: flex; align-items: center; justify-content: center; width: 38px; height: 38px;
+    }
+    .nav-btn img { width: 22px; height: 22px; }
+    .nav-btn-swap {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--bk-brand-gradient);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn-swap img { width: 22px; height: 22px; }
+
+    .text-positive { color: var(--bk-success); }
+    .text-negative { color: var(--bk-error); }
+
+    /* ── Export Panel ─────────────────────────────────────────────────── */
+    .ds-export-bar {
+      position: fixed;
+      bottom: 0;
+      left: 240px;
+      right: 0;
+      background: var(--bk-bg-card);
+      border-top: 1px solid var(--bk-border-subtle);
+      padding: 12px 40px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .ds-export-bar.visible { display: flex; }
+
+    .ds-export-bar span {
+      font-size: 13px;
+      color: var(--bk-text-secondary);
+    }
+
+    .ds-export-bar .ds-changes {
+      color: var(--bk-brand-primary);
+      font-weight: 600;
+    }
+
+    .ds-export-btn {
+      height: 36px;
+      padding: 0 20px;
+      background: var(--bk-brand-primary);
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      margin-left: 8px;
+    }
+
+    .ds-export-btn:hover { opacity: 0.9; }
+
+    .ds-export-btn.secondary {
+      background: var(--bk-bg-elevated);
+      border: 1px solid var(--bk-border-subtle);
+      color: var(--bk-text-secondary);
+    }
+
+    /* ── Token Row (component preview) ───────────────────────────────── */
+    .token-row {
+      display: flex; align-items: center; gap: 16px; height: 76.5px;
+      border-bottom: 1px solid var(--bk-border-subtle); max-width: 358px;
+    }
+    .token-row:last-child { border-bottom: none; }
+    .token-row img.token-icon { width: 42px; height: 42px; flex-shrink: 0; }
+    .token-info { flex: 1; }
+    .token-name { font-size: 15px; font-weight: 500; color: var(--bk-text-primary); }
+    .token-amount { font-size: 12px; color: var(--bk-text-muted); opacity: 0.7; }
+    .token-value { text-align: right; }
+    .token-price { font-size: 15px; font-weight: 500; color: var(--bk-text-primary); }
+    .token-change { font-size: 12px; }
+
+    /* ── Card (component preview) ────────────────────────────────────── */
+    .card-preview {
+      background: linear-gradient(135deg, var(--bk-bg-card) 0%, var(--bk-bg-card-alt) 100%);
+      border: 1px solid var(--bk-border-card);
+      border-radius: 16px;
+      padding: 17px 16px;
+      max-width: 358px;
+    }
+
+    .earn-card-preview {
+      background: var(--bk-earn-card-bg);
+      border: 1px solid var(--bk-earn-card-border);
+      border-radius: 16px;
+      padding: 17px;
+      max-width: 358px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ── Spacing Scale ───────────────────────────────────────────────── */
+    .ds-spacing-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .ds-spacing-block {
+      background: var(--bk-brand-dim);
+      border: 1px solid var(--bk-brand-primary);
+      border-radius: 4px;
+      height: 24px;
+    }
+
+    .ds-spacing-label {
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--bk-text-muted);
+      min-width: 48px;
+    }
+
+    /* ── Figma Badge ─────────────────────────────────────────────────── */
+    .ds-figma-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--bk-text-muted);
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 24px;
+    }
+
+    .ds-figma-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Toast ────────────────────────────────────────────────────────── */
+    .ds-toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bk-brand-primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: all 0.2s;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    .ds-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="ds-app">
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="ds-sidebar">
+      <h1>Modulo</h1>
+      <div class="ds-subtitle">Design System</div>
+
+      <input type="text" class="ds-search" placeholder="Search tokens, components..." id="ds-search" autocomplete="off">
+
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Foundations</div>
+        <a class="ds-nav-link active" href="#colours" data-section="colours">Colours</a>
+        <a class="ds-nav-link" href="#typography" data-section="typography">Typography</a>
+        <a class="ds-nav-link" href="#spacing" data-section="spacing">Spacing</a>
+      </div>
+
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Components</div>
+        <a class="ds-nav-link" href="#pills" data-section="pills">Pills</a>
+        <a class="ds-nav-link" href="#buttons" data-section="buttons">Buttons</a>
+        <a class="ds-nav-link" href="#inputs" data-section="inputs">Inputs</a>
+        <a class="ds-nav-link" href="#cards" data-section="cards">Cards</a>
+        <a class="ds-nav-link" href="#lists" data-section="lists">Lists</a>
+        <a class="ds-nav-link" href="#navigation" data-section="navigation">Navigation</a>
+        <a class="ds-nav-link" href="#sheets" data-section="sheets">Sheets</a>
+        <a class="ds-nav-link" href="#avatars" data-section="avatars">Avatars</a>
+      </div>
+
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Tools</div>
+        <a class="ds-nav-link" href="#export" data-section="export">Export CSS</a>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ────────────────────────────────────────── -->
+    <main class="ds-main">
+
+      <div class="ds-figma-badge">
+        <svg viewBox="0 0 38 57" fill="none"><path d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" fill="#1ABCFE"/><path d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 0 1-19 0z" fill="#0ACF83"/><path d="M19 0v19h9.5a9.5 9.5 0 0 0 0-19H19z" fill="#FF7262"/><path d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" fill="#F24E1E"/><path d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" fill="#A259FF"/></svg>
+        Source: rTAg5ODay1ac1ZZBq8lYwr &mdash; verified 2026-04-07
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- COLOURS                                                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="colours" data-search="colours colors surfaces borders text brand semantic">
+        <h2 class="ds-section-title">Colours</h2>
+        <p class="ds-section-desc">Click any swatch to edit. Changes update every component on this page in real time.</p>
+
+        <div class="ds-subsection" data-search="surfaces background">
+          <h3 class="ds-subsection-title">Surfaces</h3>
+          <div class="ds-swatches" id="swatches-surfaces"></div>
+        </div>
+
+        <div class="ds-subsection" data-search="borders">
+          <h3 class="ds-subsection-title">Borders</h3>
+          <div class="ds-swatches" id="swatches-borders"></div>
+        </div>
+
+        <div class="ds-subsection" data-search="text typography">
+          <h3 class="ds-subsection-title">Text</h3>
+          <div class="ds-swatches" id="swatches-text"></div>
+        </div>
+
+        <div class="ds-subsection" data-search="brand primary gradient">
+          <h3 class="ds-subsection-title">Brand</h3>
+          <div class="ds-swatches" id="swatches-brand"></div>
+        </div>
+
+        <div class="ds-subsection" data-search="semantic success error status">
+          <h3 class="ds-subsection-title">Semantic</h3>
+          <div class="ds-swatches" id="swatches-semantic"></div>
+        </div>
+
+        <div class="ds-subsection" data-search="special pill earn status">
+          <h3 class="ds-subsection-title">Special</h3>
+          <div class="ds-swatches" id="swatches-special"></div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- TYPOGRAPHY                                                  -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="typography" data-search="typography type font text heading body label">
+        <h2 class="ds-section-title">Typography</h2>
+        <p class="ds-section-desc">All Inter. Weights 400-700. Line height 1.5 throughout.</p>
+
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:32px; font-weight:500; letter-spacing:-0.03em; color:var(--bk-text-primary);">$12,847<span style="font-size:18px; font-weight:400; color:var(--bk-text-secondary); opacity:0.4;">.52</span></div>
+          <div class="ds-type-meta">32/500 &minus;3% ls</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:22px; font-weight:700; color:var(--bk-text-primary);">4.2% APY</div>
+          <div class="ds-type-meta">22/700</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:20px; font-weight:600; color:var(--bk-text-primary);">Screen Title</div>
+          <div class="ds-type-meta">20/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:18px; font-weight:600; color:var(--bk-text-primary);">Sheet Title</div>
+          <div class="ds-type-meta">18/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:16px; font-weight:600; color:var(--bk-text-primary);">Button Label</div>
+          <div class="ds-type-meta">16/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:15px; font-weight:600; color:var(--bk-text-primary);">Active Tab</div>
+          <div class="ds-type-meta">15/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:15px; font-weight:500; color:var(--bk-text-primary);">Token Name</div>
+          <div class="ds-type-meta">15/500</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:15px; font-weight:400; color:var(--bk-text-muted);">Inactive Tab</div>
+          <div class="ds-type-meta">15/400</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:14px; font-weight:600; color:var(--bk-text-primary);">Status Bar</div>
+          <div class="ds-type-meta">14/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:14px; font-weight:400; color:var(--bk-text-muted);">Search Placeholder</div>
+          <div class="ds-type-meta">14/400</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:13px; font-weight:600; color:#fff;">Earn Button</div>
+          <div class="ds-type-meta">13/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:13px; font-weight:500; color:var(--bk-text-secondary);">Pill Text</div>
+          <div class="ds-type-meta">13/500</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:12px; font-weight:500; color:var(--bk-text-muted);">Section Label</div>
+          <div class="ds-type-meta">12/500</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:12px; font-weight:400; color:var(--bk-text-muted); opacity:0.7;">Token Amount</div>
+          <div class="ds-type-meta">12/400 0.7 op</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:12px; font-weight:400; color:var(--bk-success);">+2.41%</div>
+          <div class="ds-type-meta">12/400 success</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:11px; font-weight:600; color:var(--bk-text-primary);">Active Period</div>
+          <div class="ds-type-meta">11/600</div>
+        </div>
+        <div class="ds-type-row">
+          <div class="ds-type-sample" style="font-size:11px; font-weight:500; color:var(--bk-text-secondary);">Action Label</div>
+          <div class="ds-type-meta">11/500</div>
+        </div>
+        <div class="ds-type-row" style="border-bottom:none;">
+          <div class="ds-type-sample" style="font-size:11px; font-weight:500; color:var(--bk-text-muted); text-transform:uppercase; letter-spacing:0.07em;">PORTFOLIO</div>
+          <div class="ds-type-meta">11/500 upper 7% ls</div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- SPACING                                                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="spacing" data-search="spacing padding margin gap">
+        <h2 class="ds-section-title">Spacing</h2>
+        <p class="ds-section-desc">Common spacing values used across components. Extracted from Figma measurements.</p>
+
+        <div id="spacing-scale"></div>
+
+        <div class="ds-subsection" style="margin-top:24px;">
+          <h3 class="ds-subsection-title">Border Radius</h3>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;">
+            <div style="text-align:center;">
+              <div style="width:48px;height:48px;border:2px solid var(--bk-brand-primary);border-radius:8px;"></div>
+              <div style="font-size:11px;color:var(--bk-text-muted);margin-top:6px;">8px</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:48px;height:48px;border:2px solid var(--bk-brand-primary);border-radius:14px;"></div>
+              <div style="font-size:11px;color:var(--bk-text-muted);margin-top:6px;">14px</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:48px;height:48px;border:2px solid var(--bk-brand-primary);border-radius:16px;"></div>
+              <div style="font-size:11px;color:var(--bk-text-muted);margin-top:6px;">16px</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:48px;height:48px;border:2px solid var(--bk-brand-primary);border-radius:20px;"></div>
+              <div style="font-size:11px;color:var(--bk-text-muted);margin-top:6px;">20px</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:48px;height:48px;border:2px solid var(--bk-brand-primary);border-radius:9999px;"></div>
+              <div style="font-size:11px;color:var(--bk-text-muted);margin-top:6px;">full</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- PILLS                                                       -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="pills" data-search="pill chain filter network percentage tag badge">
+        <h2 class="ds-section-title">Pills</h2>
+        <p class="ds-section-desc">Three pill variants for different contexts.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Network Pills</div>
+          <div class="ds-preview-desc">Used on receive screen. Icon + text, 37.5px tall, full radius.</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="pill active"><img src="assets/network-ethereum.svg" alt=""> Ethereum</button>
+            <button class="pill"><img src="assets/network-polygon.svg" alt=""> Polygon</button>
+            <button class="pill"><img src="assets/network-arbitrum.svg" alt=""> Arbitrum</button>
+          </div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Chain Filter Pills</div>
+          <div class="ds-preview-desc">Used on explore screen. Text-only, 33.5px tall.</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="chain-pill active">All</button>
+            <button class="chain-pill">Ethereum</button>
+            <button class="chain-pill">Solana</button>
+            <button class="chain-pill">Polygon</button>
+            <button class="chain-pill">Base</button>
+          </div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Percentage Pills</div>
+          <div class="ds-preview-desc">Used on swap screen. 37.5px tall, 14px radius.</div>
+          <div style="display:flex; gap:8px; max-width:358px;">
+            <button class="pct-pill">25%</button>
+            <button class="pct-pill active">50%</button>
+            <button class="pct-pill">75%</button>
+            <button class="pct-pill">Max</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- BUTTONS                                                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="buttons" data-search="button cta action primary token select">
+        <h2 class="ds-section-title">Buttons</h2>
+        <p class="ds-section-desc">Action buttons and CTAs.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Select Token CTA</div>
+          <div class="ds-preview-desc">Pill shape, brand primary background. Used on swap screen.</div>
+          <button class="select-token-cta"><span>Select token</span></button>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Bottom CTA &mdash; Disabled</div>
+          <div class="ds-preview-desc">Full-width, 58px tall, muted state.</div>
+          <button class="bottom-cta disabled">Enter an amount</button>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Bottom CTA &mdash; Ready</div>
+          <div class="ds-preview-desc">Full-width, brand primary with glow.</div>
+          <button class="bottom-cta ready">Review Swap</button>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Primary Button</div>
+          <div class="ds-preview-desc">Gradient + glow. Used on receive screen.</div>
+          <button class="primary-btn">Done</button>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Quick Action Buttons</div>
+          <div class="ds-preview-desc">48px circle + 11px label. Used on home screen.</div>
+          <div style="display:flex; gap:24px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);display:flex;align-items:center;justify-content:center;"><img src="assets/icon-action-swap.svg" alt="" width="20" height="20"></div>
+              <span style="font-size:11px;font-weight:500;color:var(--bk-text-secondary);">Swap</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);display:flex;align-items:center;justify-content:center;"><img src="assets/icon-action-buy.svg" alt="" width="20" height="20"></div>
+              <span style="font-size:11px;font-weight:500;color:var(--bk-text-secondary);">Buy</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);display:flex;align-items:center;justify-content:center;"><img src="assets/icon-action-send.svg" alt="" width="20" height="20"></div>
+              <span style="font-size:11px;font-weight:500;color:var(--bk-text-secondary);">Send</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);display:flex;align-items:center;justify-content:center;"><img src="assets/icon-action-receive.svg" alt="" width="20" height="20"></div>
+              <span style="font-size:11px;font-weight:500;color:var(--bk-text-secondary);">Receive</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- INPUTS                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="inputs" data-search="input search field text token selector">
+        <h2 class="ds-section-title">Inputs</h2>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Search Field</div>
+          <div class="ds-preview-desc">48.5px tall, 14px radius. Used on explore, send, swap-select.</div>
+          <div class="search-field">
+            <img src="assets/icon-search.svg" alt="" width="16" height="16">
+            <span>Search tokens or addresses</span>
+          </div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Token Pill Selector</div>
+          <div class="ds-preview-desc">Inline token picker with chevron. Used on swap screen.</div>
+          <div style="display:flex; gap:12px;">
+            <div class="token-pill">
+              <img src="assets/token-eth.svg" alt="" width="24" height="24">
+              <span>ETH</span>
+              <img src="assets/icon-chevron-down.svg" alt="" width="12" height="12" style="opacity:0.5;">
+            </div>
+            <div class="token-pill">
+              <img src="assets/token-usdc.svg" alt="" width="24" height="24">
+              <span>USDC</span>
+              <img src="assets/icon-chevron-down.svg" alt="" width="12" height="12" style="opacity:0.5;">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CARDS                                                       -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="cards" data-search="card gradient portfolio earn promo favourite swap">
+        <h2 class="ds-section-title">Cards</h2>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Gradient Card</div>
+          <div class="ds-preview-desc">Base card pattern. 16px radius, gradient bg, card border.</div>
+          <div class="card-preview">
+            <div style="font-size:11px;font-weight:500;color:var(--bk-text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">PORTFOLIO</div>
+            <div style="font-size:32px;font-weight:500;color:var(--bk-text-primary);letter-spacing:-0.03em;">$12,847<span style="font-size:18px;font-weight:400;color:var(--bk-text-secondary);opacity:0.4;">.52</span></div>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:4px;">
+              <img src="assets/icon-gain-arrow.svg" alt="" width="8" height="8">
+              <span style="font-size:12px;color:var(--bk-success);">+$340.20 (2.72%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Earn / Promo Card</div>
+          <div class="ds-preview-desc">Purple-tinted. Brand accent card for promotions.</div>
+          <div class="earn-card-preview">
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--bk-brand-primary);margin-bottom:2px;">Staking Rewards</div>
+              <div style="font-size:22px;font-weight:700;color:var(--bk-text-primary);">4.2<span style="font-size:13px;font-weight:400;color:var(--bk-text-secondary);opacity:0.7;">% APY</span></div>
+            </div>
+            <button style="background:var(--bk-brand-primary);border:none;border-radius:9999px;padding:8px 20px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;">Earn</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- LISTS                                                       -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="lists" data-search="list row token contact address">
+        <h2 class="ds-section-title">Lists</h2>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Token Row</div>
+          <div class="ds-preview-desc">76.5px tall. Icon + name/amount + value/change. Used on home, swap-select.</div>
+          <div class="token-row">
+            <img class="token-icon" src="assets/token-eth.svg" alt="">
+            <div class="token-info">
+              <div class="token-name">Ethereum</div>
+              <div class="token-amount">1.4 ETH</div>
+            </div>
+            <div class="token-value">
+              <div class="token-price">$4,893.80</div>
+              <div class="token-change text-positive">+2.41%</div>
+            </div>
+          </div>
+          <div class="token-row">
+            <img class="token-icon" src="assets/token-btc.svg" alt="">
+            <div class="token-info">
+              <div class="token-name">Bitcoin</div>
+              <div class="token-amount">0.05 BTC</div>
+            </div>
+            <div class="token-value">
+              <div class="token-price">$4,892.10</div>
+              <div class="token-change text-positive">+1.24%</div>
+            </div>
+          </div>
+          <div class="token-row" style="border-bottom:none;">
+            <img class="token-icon" src="assets/token-usdc.svg" alt="">
+            <div class="token-info">
+              <div class="token-name">USD Coin</div>
+              <div class="token-amount">2,500 USDC</div>
+            </div>
+            <div class="token-value">
+              <div class="token-price">$2,500.00</div>
+              <div class="token-change" style="color:var(--bk-text-muted);">0.00%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Contact Row</div>
+          <div class="ds-preview-desc">77px tall. Avatar with badge + name/address. Used on send screen.</div>
+          <div style="display:flex; align-items:center; gap:16px; height:77px; border-bottom:1px solid var(--bk-border-row); max-width:358px;">
+            <div class="avatar-wrap">
+              <img class="avatar" src="assets/wallet-avatar.svg" alt="">
+              <img class="modulo-badge" src="assets/icon-ens-badge.svg" alt="">
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500;color:var(--bk-text-primary);">Alex Rivera</div>
+              <div style="font-size:12px;color:var(--bk-text-muted);">0x7F4e...3A91</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- NAVIGATION                                                  -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="navigation" data-search="navigation nav bar bottom tab">
+        <h2 class="ds-section-title">Navigation</h2>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Bottom Navigation Bar</div>
+          <div class="ds-preview-desc">71px tall, 5 items with central swap button.</div>
+          <nav class="bottom-nav">
+            <a class="nav-btn"><img src="assets/icon-nav-home.svg" alt="Home"></a>
+            <a class="nav-btn"><img src="assets/icon-nav-search.svg" alt="Explore"></a>
+            <a class="nav-btn nav-btn-swap"><img src="assets/icon-nav-swap.svg" alt="Swap"></a>
+            <a class="nav-btn"><img src="assets/icon-nav-activity.svg" alt="Activity"></a>
+            <a class="nav-btn"><img src="assets/icon-nav-home.svg" alt="Profile"></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- SHEETS                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="sheets" data-search="sheet modal overlay drag handle header close">
+        <h2 class="ds-section-title">Sheets</h2>
+        <p class="ds-section-desc">Modal overlays for actions (send, receive, swap-select).</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Sheet Header</div>
+          <div class="ds-preview-desc">Drag handle + title + close button.</div>
+          <div style="background:var(--bk-bg-base);border-radius:16px 16px 0 0;max-width:390px;overflow:hidden;">
+            <div class="drag-handle"><div class="drag-handle-pill"></div></div>
+            <div class="sheet-header">
+              <span class="sheet-title">Send To</span>
+              <button style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#87878C" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- AVATARS                                                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="avatars" data-search="avatar badge identity user wallet">
+        <h2 class="ds-section-title">Avatars</h2>
+
+        <div class="ds-preview">
+          <div class="ds-preview-label">Avatar with Badge</div>
+          <div class="ds-preview-desc">40px circle + 17px badge at bottom-right.</div>
+          <div style="display:flex; gap:24px;">
+            <div class="avatar-wrap">
+              <img class="avatar" src="assets/wallet-avatar.svg" alt="">
+              <img class="modulo-badge" src="assets/icon-modulo-badge.svg" alt="">
+            </div>
+            <div class="avatar-wrap">
+              <img class="avatar" src="assets/wallet-avatar.svg" alt="">
+              <img class="modulo-badge" src="assets/icon-ens-badge.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- EXPORT                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="ds-section" id="export" data-search="export css download copy save">
+        <h2 class="ds-section-title">Export</h2>
+        <p class="ds-section-desc">Copy the current token state to update <code>modulo-shared.css</code>.</p>
+
+        <div style="display:flex; gap:12px; margin-bottom:16px;">
+          <button class="ds-export-btn" onclick="copyCSS()">Copy :root CSS</button>
+          <button class="ds-export-btn secondary" onclick="resetTokens()">Reset to Defaults</button>
+        </div>
+
+        <pre id="css-output" style="background:var(--bk-bg-card);border:1px solid var(--bk-border-subtle);border-radius:12px;padding:16px;font-size:12px;color:var(--bk-text-secondary);font-family:'SF Mono','Fira Code',monospace;overflow-x:auto;white-space:pre;max-height:400px;overflow-y:auto;line-height:1.7;"></pre>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── Colour Editor Popover ────────────────────────────────────── -->
+  <div class="ds-color-editor" id="color-editor">
+    <label id="editor-label">--bk-bg-base</label>
+    <div class="ds-editor-row">
+      <input type="color" id="editor-picker" value="#0D0E17">
+      <input type="text" id="editor-text" value="#0D0E17">
+    </div>
+  </div>
+
+  <!-- ── Export Bar ───────────────────────────────────────────────── -->
+  <div class="ds-export-bar" id="export-bar">
+    <span><span class="ds-changes" id="change-count">0</span> token(s) modified</span>
+    <div>
+      <button class="ds-export-btn secondary" onclick="resetTokens()">Reset</button>
+      <button class="ds-export-btn" onclick="copyCSS()">Copy CSS</button>
+    </div>
+  </div>
+
+  <!-- ── Toast ────────────────────────────────────────────────────── -->
+  <div class="ds-toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    // ══════════════════════════════════════════════════════════════════
+    // Token Registry
+    // ══════════════════════════════════════════════════════════════════
+    const TOKEN_GROUPS = {
+      surfaces: [
+        { name: '--bk-bg-base',     default: '#0D0E17' },
+        { name: '--bk-bg-card',     default: '#1A1A29' },
+        { name: '--bk-bg-card-alt', default: '#1F1F33' },
+        { name: '--bk-bg-nav',      default: '#13141F' },
+        { name: '--bk-bg-elevated', default: '#13141F' },
+        { name: '--bk-bg-outer',    default: '#0C0C0F' },
+      ],
+      borders: [
+        { name: '--bk-border-subtle', default: '#1E1F2E' },
+        { name: '--bk-border-card',   default: 'rgba(45, 44, 74, 0.2)' },
+        { name: '--bk-border-pill',   default: 'rgba(45, 44, 74, 0.4)' },
+        { name: '--bk-border-active', default: '#584BEB' },
+        { name: '--bk-border-search', default: '#2A2A3D' },
+        { name: '--bk-border-row',    default: '#181929' },
+      ],
+      text: [
+        { name: '--bk-text-primary',     default: '#F5F5F6' },
+        { name: '--bk-text-secondary',   default: '#B3B2B8' },
+        { name: '--bk-text-muted',       default: '#87878C' },
+        { name: '--bk-text-placeholder', default: 'rgba(245, 245, 246, 0.5)' },
+      ],
+      brand: [
+        { name: '--bk-brand-primary', default: '#584BEB' },
+        { name: '--bk-brand-dim',     default: 'rgba(88, 75, 235, 0.15)' },
+      ],
+      semantic: [
+        { name: '--bk-success', default: '#22C55E' },
+        { name: '--bk-error',   default: '#F04348' },
+      ],
+      special: [
+        { name: '--bk-status-bar-dim',   default: '#3A3B4E' },
+        { name: '--bk-pill-bg',          default: '#2A2A3E' },
+        { name: '--bk-earn-card-bg',     default: 'rgba(88, 75, 235, 0.18)' },
+        { name: '--bk-earn-card-border', default: 'rgba(88, 75, 235, 0.2)' },
+      ],
+    };
+
+    const root = document.documentElement;
+    let changedTokens = {};
+
+    // ── Build Swatches ──────────────────────────────────────────────
+    Object.entries(TOKEN_GROUPS).forEach(([group, tokens]) => {
+      const container = document.getElementById(`swatches-${group}`);
+      if (!container) return;
+
+      tokens.forEach(token => {
+        const swatch = document.createElement('div');
+        swatch.className = 'ds-swatch';
+        swatch.dataset.token = token.name;
+        swatch.dataset.search = token.name.replace(/--bk-/g, '').replace(/-/g, ' ');
+
+        const computed = getComputedStyle(root).getPropertyValue(token.name).trim();
+
+        swatch.innerHTML = `
+          <div class="ds-swatch-color" style="background:${computed || token.default};"></div>
+          <div class="ds-swatch-info">
+            <div class="ds-swatch-name">${token.name}</div>
+            <div class="ds-swatch-value">${token.default}</div>
+          </div>
+        `;
+
+        swatch.addEventListener('click', (e) => openEditor(swatch, token, e));
+        container.appendChild(swatch);
+      });
+    });
+
+    // ── Build Spacing Scale ─────────────────────────────────────────
+    const spacingValues = [4, 6, 8, 12, 16, 20, 24, 32, 40];
+    const spacingContainer = document.getElementById('spacing-scale');
+    spacingValues.forEach(v => {
+      const row = document.createElement('div');
+      row.className = 'ds-spacing-row';
+      row.innerHTML = `
+        <div class="ds-spacing-label">${v}px</div>
+        <div class="ds-spacing-block" style="width:${v * 3}px;"></div>
+      `;
+      spacingContainer.appendChild(row);
+    });
+
+    // ── Colour Editor ───────────────────────────────────────────────
+    const editor = document.getElementById('color-editor');
+    const editorLabel = document.getElementById('editor-label');
+    const editorPicker = document.getElementById('editor-picker');
+    const editorText = document.getElementById('editor-text');
+    let activeToken = null;
+    let activeSwatch = null;
+
+    function rgbaToHex(rgba) {
+      // Try to parse rgba/rgb values for the color picker
+      const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      if (match) {
+        const r = parseInt(match[1]).toString(16).padStart(2, '0');
+        const g = parseInt(match[2]).toString(16).padStart(2, '0');
+        const b = parseInt(match[3]).toString(16).padStart(2, '0');
+        return `#${r}${g}${b}`;
+      }
+      return rgba;
+    }
+
+    function openEditor(swatch, token, e) {
+      e.stopPropagation();
+      activeToken = token;
+      activeSwatch = swatch;
+
+      const computed = getComputedStyle(root).getPropertyValue(token.name).trim();
+      const currentValue = changedTokens[token.name] || token.default;
+
+      editorLabel.textContent = token.name;
+      editorText.value = currentValue;
+
+      // Try to set color picker (only works with hex)
+      const hexVal = rgbaToHex(currentValue);
+      if (hexVal.match(/^#[0-9a-fA-F]{6}$/)) {
+        editorPicker.value = hexVal;
+      }
+
+      // Position near swatch
+      const rect = swatch.getBoundingClientRect();
+      editor.style.top = `${rect.bottom + 8}px`;
+      editor.style.left = `${Math.min(rect.left, window.innerWidth - 240)}px`;
+      editor.classList.add('visible');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!editor.contains(e.target) && !e.target.closest('.ds-swatch')) {
+        editor.classList.remove('visible');
+      }
+    });
+
+    editorPicker.addEventListener('input', () => {
+      editorText.value = editorPicker.value;
+      applyTokenChange(activeToken.name, editorPicker.value);
+    });
+
+    editorText.addEventListener('input', () => {
+      applyTokenChange(activeToken.name, editorText.value);
+      const hex = rgbaToHex(editorText.value);
+      if (hex.match(/^#[0-9a-fA-F]{6}$/)) {
+        editorPicker.value = hex;
+      }
+    });
+
+    function applyTokenChange(name, value) {
+      root.style.setProperty(name, value);
+      changedTokens[name] = value;
+
+      // Update swatch visuals
+      if (activeSwatch) {
+        activeSwatch.querySelector('.ds-swatch-color').style.background = value;
+        activeSwatch.querySelector('.ds-swatch-value').textContent = value;
+      }
+
+      updateExportBar();
+      updateCSSOutput();
+    }
+
+    function updateExportBar() {
+      const count = Object.keys(changedTokens).length;
+      document.getElementById('change-count').textContent = count;
+      document.getElementById('export-bar').classList.toggle('visible', count > 0);
+    }
+
+    // ── Reset ───────────────────────────────────────────────────────
+    function resetTokens() {
+      Object.entries(TOKEN_GROUPS).forEach(([group, tokens]) => {
+        tokens.forEach(token => {
+          root.style.setProperty(token.name, token.default);
+        });
+      });
+      changedTokens = {};
+      updateExportBar();
+      updateCSSOutput();
+
+      // Rebuild swatches to reset visuals
+      Object.entries(TOKEN_GROUPS).forEach(([group, tokens]) => {
+        const container = document.getElementById(`swatches-${group}`);
+        if (!container) return;
+        const swatches = container.querySelectorAll('.ds-swatch');
+        swatches.forEach((swatch, i) => {
+          swatch.querySelector('.ds-swatch-color').style.background = tokens[i].default;
+          swatch.querySelector('.ds-swatch-value').textContent = tokens[i].default;
+        });
+      });
+
+      showToast('Reset to defaults');
+    }
+
+    // ── Export ───────────────────────────────────────────────────────
+    function generateCSS() {
+      let css = ':root {\n';
+      Object.entries(TOKEN_GROUPS).forEach(([group, tokens]) => {
+        css += `  /* ${group.charAt(0).toUpperCase() + group.slice(1)} */\n`;
+        tokens.forEach(token => {
+          const val = changedTokens[token.name] || token.default;
+          const pad = 24 - token.name.length;
+          css += `  ${token.name}:${' '.repeat(Math.max(1, pad))}${val};\n`;
+        });
+        css += '\n';
+      });
+      css += `  /* Typography */\n`;
+      css += `  --bk-font:             'Inter', sans-serif;\n`;
+      css += '}\n';
+      return css;
+    }
+
+    function updateCSSOutput() {
+      const output = document.getElementById('css-output');
+      if (output) output.textContent = generateCSS();
+    }
+
+    function copyCSS() {
+      navigator.clipboard.writeText(generateCSS()).then(() => {
+        showToast('CSS copied to clipboard');
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ── Search ──────────────────────────────────────────────────────
+    const searchInput = document.getElementById('ds-search');
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      const sections = document.querySelectorAll('.ds-section');
+      const navLinks = document.querySelectorAll('.ds-nav-link');
+
+      if (!q) {
+        sections.forEach(s => s.removeAttribute('data-hidden'));
+        // Also show all swatches
+        document.querySelectorAll('.ds-swatch, .ds-preview, .ds-subsection, .ds-type-row, .ds-spacing-row').forEach(el => {
+          el.style.display = '';
+        });
+        return;
+      }
+
+      sections.forEach(section => {
+        const sectionSearch = (section.dataset.search || '') + ' ' + section.textContent.toLowerCase();
+        const match = q.split(' ').every(word => sectionSearch.includes(word));
+        if (match) {
+          section.removeAttribute('data-hidden');
+        } else {
+          section.setAttribute('data-hidden', '');
+        }
+      });
+
+      // Filter swatches within visible sections
+      document.querySelectorAll('.ds-swatch').forEach(swatch => {
+        const searchText = (swatch.dataset.search || '') + ' ' + (swatch.dataset.token || '');
+        swatch.style.display = searchText.includes(q) ? '' : 'none';
+      });
+    });
+
+    // ── Sidebar Navigation ──────────────────────────────────────────
+    document.querySelectorAll('.ds-nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        document.querySelectorAll('.ds-nav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        // Clear search when navigating
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+      });
+    });
+
+    // ── Scroll Spy ──────────────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          document.querySelectorAll('.ds-nav-link').forEach(l => {
+            l.classList.toggle('active', l.dataset.section === id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    document.querySelectorAll('.ds-section').forEach(section => {
+      observer.observe(section);
+    });
+
+    // ── Init ────────────────────────────────────────────────────────
+    updateCSSOutput();
+  </script>
+</body>
+</html>
