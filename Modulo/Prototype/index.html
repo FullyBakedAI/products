@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modulo Prototype</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0f;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+  .screens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #16161f;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    gap: 8px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  a:active { background: #1e1e2e; border-color: #5b5bff; }
+  .icon { font-size: 24px; }
+</style>
+</head>
+<body>
+  <h1>Modulo</h1>
+  <p>Prototype — April 2026</p>
+  <div class="screens">
+    <a href="home-screen.html"><span class="icon">🏠</span>Home</a>
+    <a href="explore-screen.html"><span class="icon">🔍</span>Explore</a>
+    <a href="swap-screen.html"><span class="icon">🔄</span>Swap</a>
+    <a href="swap-select-screen.html"><span class="icon">📋</span>Swap Select</a>
+    <a href="send-screen.html"><span class="icon">📤</span>Send</a>
+    <a href="receive-screen.html"><span class="icon">📥</span>Receive</a>
+  </div>
+</body>
+</html>

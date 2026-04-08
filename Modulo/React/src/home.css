@@ -1,0 +1,512 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   HomeScreen Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.home-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.home-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 29px 0 20px;
+  flex-shrink: 0;
+}
+
+.header-logo img {
+  display: block;
+  width: 93px;
+  height: 18px;
+}
+
+.home-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 0;
+}
+
+.icon-btn img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.icon-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+[data-rac] {
+  outline: none;
+}
+
+/* ── Portfolio Card ─────────────────────────────────────────────────── */
+.portfolio-card {
+  margin: 0 15.5px 16px;
+  height: 166px;
+  border-radius: 16px;
+  border: 1px solid var(--bk-border-card);
+  background: linear-gradient(135deg, var(--bk-bg-card) 0%, var(--bk-bg-card-alt) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 17px 16px 0;
+}
+
+.portfolio-chart {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.portfolio-chart img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portfolio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--bk-text-muted);
+}
+
+.time-periods {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.time-btn {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 2px 7px;
+  border-radius: 10px;
+  color: var(--bk-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  min-height: 22.5px;
+  display: flex;
+  align-items: center;
+}
+
+.time-btn.active {
+  background: var(--bk-brand-primary);
+  color: var(--bk-text-primary);
+}
+
+.time-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.portfolio-value {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  margin-top: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-dollars {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.03125em;
+  color: var(--bk-text-primary);
+}
+
+.portfolio-cents {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+  opacity: 0.4;
+}
+
+.portfolio-gain {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-gain img {
+  width: 8px;
+  height: 8px;
+  display: block;
+}
+
+.gain-text {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-success);
+}
+
+/* ── Action Buttons ─────────────────────────────────────────────────── */
+.action-row {
+  display: flex;
+  padding: 0 16px;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.action-btn {
+  flex: 1;
+  height: 70.5px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 13px 0;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  transition: background 0.15s ease;
+}
+
+.action-btn[data-hovered] {
+  background: var(--bk-bg-card-alt);
+}
+
+.action-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.action-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.action-label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 44px;
+  padding: 0 20px;
+  margin-bottom: 8px;
+}
+
+.tab {
+  font-size: 15px;
+  line-height: 1.5;
+  padding-bottom: 8px;
+  position: relative;
+  color: var(--bk-text-muted);
+  font-weight: 400;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+
+.tab.active {
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--bk-brand-primary);
+  border-radius: 1px;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Token List ─────────────────────────────────────────────────────── */
+.token-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Outer wrapper — clips the swipe reveal */
+.token-row-outer {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Swipe action buttons — sit behind the row */
+.token-swipe-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 180px;
+  display: flex;
+}
+
+.swipe-action {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  transition: filter 0.1s;
+}
+
+.swipe-action:hover { filter: brightness(1.1); }
+
+.swipe-earn { background: var(--bk-brand-primary); }
+.swipe-send { background: #4f6ef7; }
+.swipe-swap { background: #7c3aed; }
+
+/* Draggable row — solid background covers the actions */
+.token-row {
+  background: var(--bk-bg-base);
+  will-change: transform;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.token-row[data-dragging="true"],
+.token-row:active { cursor: grabbing; }
+
+/* Main content row (icon + info + values) */
+.token-row-main {
+  display: flex;
+  align-items: flex-start;
+  padding: 14px 20px 8px;
+  gap: 12px;
+}
+
+.token-icon-lg {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: block;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.token-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.token-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.token-name-text {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--bk-text-primary);
+}
+
+.token-amount {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--bk-text-muted);
+  opacity: 0.7;
+  margin-top: 1px;
+}
+
+.token-values {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.token-usd {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--bk-text-primary);
+}
+
+.token-yield-usd {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-brand-primary);
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.token-yield-usd-label {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.token-change {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--bk-success);
+  flex-shrink: 0;
+}
+
+.token-change.negative {
+  color: var(--bk-error);
+}
+
+/* Full-width yield bar — sits below the main row */
+.token-yield-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 13px;
+}
+
+.token-yield-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.token-yield-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--bk-brand-primary);
+  border-radius: 2px;
+  opacity: 0.65;
+}
+
+.token-yield-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--bk-brand-primary);
+  opacity: 0.75;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Earn Card ──────────────────────────────────────────────────────── */
+.earn-card {
+  margin: 16px 20px 20px;
+  height: 87px;
+  background: var(--bk-earn-card-bg);
+  border: 1px solid var(--bk-earn-card-border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.earn-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bk-brand-primary);
+}
+
+.earn-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.earn-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.earn-unit {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+  opacity: 0.7;
+}
+
+.earn-btn {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+  background: var(--bk-brand-primary);
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  min-width: 77px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+
+.earn-btn[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 2px;
+}

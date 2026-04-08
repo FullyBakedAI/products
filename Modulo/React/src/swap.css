@@ -1,0 +1,519 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Swap Screen Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   Layout from swap-screen-spec.md (Figma-extracted exact values).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Swap Screen wrapper (phone frame moved to App.jsx) ─────────────── */
+.swap-screen-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── Status Bar ─────────────────────────────────────────────────────── */
+.status-bar {
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  flex-shrink: 0;
+}
+
+.status-time {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signal-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.signal-bar {
+  width: 3px;
+  border-radius: 1px;
+}
+
+.signal-bar:nth-child(1) { height: 4px;  background: var(--bk-status-bar-dim); }
+.signal-bar:nth-child(2) { height: 6px;  background: var(--bk-status-bar-dim); }
+.signal-bar:nth-child(3) { height: 9px;  background: var(--bk-text-primary); }
+.signal-bar:nth-child(4) { height: 12px; background: var(--bk-text-primary); }
+
+.battery {
+  width: 24px;
+  height: 12px;
+  border: 1.5px solid var(--bk-text-primary);
+  border-radius: 3px;
+  position: relative;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.battery::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 5px;
+  background: var(--bk-text-primary);
+  border-radius: 0 1px 1px 0;
+}
+
+.battery-fill {
+  width: 75%;
+  height: 100%;
+  background: var(--bk-text-primary);
+  border-radius: 1px;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.swap-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 20px 20px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* React ARIA Button reset */
+.close-btn,
+.settings-btn,
+.swap-direction,
+.token-pill-btn,
+.select-token-cta-btn,
+.pct-pill-btn,
+.numpad-key-btn,
+.bottom-cta-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 0;
+  /* React ARIA adds data-pressed, data-focused etc — style via those */
+}
+
+/* Remove RAC default focus ring — we add our own */
+[data-rac] {
+  outline: none;
+}
+
+.close-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.close-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.swap-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+  white-space: nowrap;
+}
+
+.settings-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle) !important;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.settings-btn[data-hovered] {
+  background: var(--bk-bg-card);
+}
+
+.settings-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Swap Cards ─────────────────────────────────────────────────────── */
+.swap-cards {
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.swap-card {
+  background: linear-gradient(180deg, var(--bk-bg-card), var(--bk-bg-card-alt));
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pay-card     { height: 138px; }
+.receive-card { height: 114px; }
+
+.card-label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+.card-middle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 1;
+}
+
+/* ── Amount Display (aria textbox, not native input) ────────────────── */
+.swap-amount {
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--bk-text-primary);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.swap-amount.dimmed {
+  color: var(--bk-text-muted);
+  opacity: 0.4;
+}
+
+.amount-text {
+  /* holds the value */
+}
+
+.amount-cursor {
+  width: 1px;
+  height: 36px;
+  background: var(--bk-brand-primary);
+  opacity: 0.99;
+  flex-shrink: 0;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.99; }
+  50%       { opacity: 0; }
+}
+
+.card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--bk-text-secondary);
+  opacity: 0.7;
+  margin-top: 6px;
+}
+
+/* ── Token Pill ─────────────────────────────────────────────────────── */
+.token-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bk-pill-bg) !important;
+  border: 1px solid var(--bk-border-pill) !important;
+  border-radius: 20px !important;
+  padding: 6px 10px 6px 6px !important;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.token-pill-btn[data-hovered] {
+  background: var(--bk-bg-card) !important;
+}
+
+.token-pill-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.token-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.token-icon img,
+.token-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.token-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.token-chevron {
+  width: 13px;
+  height: 13px;
+  stroke: var(--bk-text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Select Token CTA ───────────────────────────────────────────────── */
+.select-token-cta-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--bk-brand-primary) !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 0 20px !important;
+  height: 41px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  min-width: 124px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  font-family: var(--bk-font);
+}
+
+.select-token-cta-btn[data-pressed] {
+  transform: scale(0.96);
+}
+
+.select-token-cta-btn[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Token appear animation ─────────────────────────────────────────── */
+@keyframes tokenAppear {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.token-pill-btn.appear {
+  animation: tokenAppear 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Swap Direction Button ──────────────────────────────────────────── */
+.swap-direction-row {
+  height: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+.swap-direction {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  background: var(--bk-bg-base) !important;
+  border: 1px solid var(--bk-border-subtle) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.swap-direction[data-hovered] {
+  background: var(--bk-pill-bg) !important;
+}
+
+.swap-direction[data-focused] {
+  outline: 2px solid var(--bk-brand-primary) !important;
+  outline-offset: 2px;
+}
+
+/* rotation handled by Framer Motion spring */
+
+/* ── Percentage Pills Row ────────────────────────────────────────────── */
+.pct-row {
+  display: flex;
+  gap: 8px;
+  padding: 16px 16px 0;
+  flex-shrink: 0;
+}
+
+.pct-pill-btn {
+  flex: 1;
+  height: 37.5px;
+  background: var(--bk-bg-elevated) !important;
+  border: 1px solid var(--bk-border-subtle) !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+  font-family: var(--bk-font);
+  transition: all 0.15s ease;
+}
+
+.pct-pill-btn[data-hovered] {
+  background: var(--bk-bg-card) !important;
+  color: var(--bk-text-primary);
+}
+
+.pct-pill-btn[data-pressed] {
+  background: var(--bk-bg-card) !important;
+}
+
+.pct-pill-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.pct-pill-btn.active {
+  background: var(--bk-brand-dim) !important;
+  border-color: var(--bk-brand-primary) !important;
+  color: var(--bk-brand-primary) !important;
+}
+
+/* ── Numpad ─────────────────────────────────────────────────────────── */
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 16px 24px 0;
+  flex: 1;
+}
+
+.numpad-key-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 74.13px;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--bk-text-primary);
+  background: transparent !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-family: var(--bk-font);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.numpad-key-btn[data-hovered] {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.numpad-key-btn[data-pressed] {
+  background: var(--bk-bg-card) !important;
+  transform: scale(0.88);
+}
+
+.numpad-key-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: -2px;
+}
+
+/* ── Bottom CTA ─────────────────────────────────────────────────────── */
+.bottom-cta-btn {
+  margin: 8px 16px 20px !important;
+  width: calc(100% - 32px) !important;
+  height: 58px;
+  border-radius: 16px !important;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid var(--bk-border-subtle) !important;
+  flex-shrink: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--bk-font);
+}
+
+.bottom-cta-btn.cta-disabled {
+  background: var(--bk-bg-elevated) !important;
+  color: var(--bk-text-muted);
+  cursor: default;
+}
+
+.bottom-cta-btn.cta-ready {
+  background: var(--bk-brand-primary) !important;
+  color: #fff;
+  border-color: transparent !important;
+  box-shadow: 0 0 24px rgba(88, 75, 235, 0.3);
+}
+
+.bottom-cta-btn.cta-ready[data-hovered] {
+  background: #6a5df0 !important;
+}
+
+.bottom-cta-btn[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Receive value flash animation ──────────────────────────────────── */
+@keyframes valueUpdate {
+  0%   { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.receive-flash {
+  animation: valueUpdate 0.2s ease-out forwards;
+}

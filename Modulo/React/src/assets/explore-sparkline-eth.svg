@@ -1,0 +1,10 @@
+<svg width="139" height="32" viewBox="0 0 139 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1 28 L12 24 L22 26 L32 20 L42 22 L52 16 L62 18 L72 12 L82 14 L92 8 L102 10 L112 5 L122 7 L132 3 L138 4" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M1 28 L12 24 L22 26 L32 20 L42 22 L52 16 L62 18 L72 12 L82 14 L92 8 L102 10 L112 5 L122 7 L132 3 L138 4 L138 32 L1 32 Z" fill="url(#ethGrad)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="ethGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#22C55E" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

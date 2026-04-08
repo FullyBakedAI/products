@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   ReceiveScreen Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.receive-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+[data-rac] {
+  outline: none;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.receive-header {
+  text-align: center;
+  padding: 16px 20px 0;
+}
+
+.receive-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.receive-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+  margin-top: 6px;
+}
+
+/* ── Address Card ───────────────────────────────────────────────────── */
+.address-card {
+  margin: 16px 20px 0;
+  background: linear-gradient(135deg, var(--bk-bg-card) 0%, var(--bk-bg-card-alt) 100%);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 16px;
+  padding: 17px 17px 1px;
+  min-height: 76.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.address-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* avatar-wrap, avatar, modulo-badge in shared.css */
+
+.address-text .address-name {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.address-text .address-hash {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-muted);
+}
+
+.address-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--bk-font);
+}
+
+.address-action-btn img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.address-action-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── QR Code ────────────────────────────────────────────────────────── */
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 20px 0;
+}
+
+.qr-box {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-box img {
+  width: 203px;
+  height: 203px;
+  display: block;
+}
+
+/* ── Networks ───────────────────────────────────────────────────────── */
+.networks-section {
+  margin: 20px 20px 0;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-muted);
+  margin-bottom: 10px;
+}
+
+.network-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* pill in shared.css */
+
+/* ── Exchange Buttons ───────────────────────────────────────────────── */
+.exchange-section {
+  margin: 20px 20px 0;
+}
+
+.exchange-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exchange-btn {
+  width: 100%;
+  height: 48px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--bk-text-primary);
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+
+.exchange-btn[data-hovered] {
+  background: var(--bk-bg-card-alt);
+}
+
+.exchange-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* primary-btn in shared.css */
