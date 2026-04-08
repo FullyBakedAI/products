@@ -14,7 +14,7 @@ import './home.css';
 
 import {
   Bell, Settings, TrendingUp, ArrowRightLeft,
-  Send, Download, Zap,
+  Send, Download, Zap, Landmark, SlidersHorizontal,
 } from 'lucide-react';
 import { useIconOverride } from './IconOverrideContext';
 
@@ -37,12 +37,14 @@ const TOKENS = [
 ];
 
 const MAX_YIELD   = Math.max(...TOKENS.map(t => t.yield));
-const ACTION_W    = 180; // 3 actions × 60px
+const ACTION_W    = 300; // 5 actions × 60px
 
 const SWIPE_ACTIONS = [
-  { id: 'earn', label: 'Earn',  Icon: Zap,              cls: 'swipe-earn' },
-  { id: 'send', label: 'Send',  Icon: Send,             cls: 'swipe-send' },
-  { id: 'swap', label: 'Swap',  Icon: ArrowRightLeft,   cls: 'swipe-swap' },
+  { id: 'stake',       label: 'Stake',       Icon: Zap,               cls: 'swipe-stake' },
+  { id: 'trade',       label: 'Trade',       Icon: TrendingUp,        cls: 'swipe-trade' },
+  { id: 'manage',      label: 'Manage',      Icon: SlidersHorizontal, cls: 'swipe-manage' },
+  { id: 'borrow-lend', label: 'Borrow/Lend', Icon: Landmark,          cls: 'swipe-borrow' },
+  { id: 'swap',        label: 'Swap',        Icon: ArrowRightLeft,    cls: 'swipe-swap' },
 ];
 
 function TokenRow({ t, index }) {

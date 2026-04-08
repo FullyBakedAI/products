@@ -291,7 +291,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: 180px;
+  width: 300px;
   display: flex;
 }
 
@@ -313,9 +313,11 @@
 
 .swipe-action:hover { filter: brightness(1.1); }
 
-.swipe-earn { background: var(--bk-brand-primary); }
-.swipe-send { background: #4f6ef7; }
-.swipe-swap { background: #7c3aed; }
+.swipe-stake  { background: var(--bk-brand-primary); }
+.swipe-trade  { background: #3b82f6; }
+.swipe-manage { background: #4f6ef7; }
+.swipe-borrow { background: #6d28d9; }
+.swipe-swap   { background: #7c3aed; }
 
 /* Draggable row — solid background covers the actions */
 .token-row {
