@@ -2122,6 +2122,82 @@
 .ds-showcase-action-btn:hover { opacity: 0.85; }
 .ds-showcase-fullscreen-btn { padding: 5px 8px; }
 
+/* ── Version toggle (V1 / V2 / Compare) ──────────────────────────────── */
+.ds-version-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--bk-bg-nav);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 8px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+.ds-version-tab {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: var(--bk-font, 'Inter', sans-serif);
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+.ds-version-tab:hover { color: var(--bk-text-secondary); }
+.ds-version-tab.active {
+  background: var(--bk-bg-card);
+  color: var(--bk-text-primary);
+}
+
+/* ── Compare mode layout ──────────────────────────────────────────────── */
+.ds-compare-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.ds-compare-screen-tabs {
+  margin-bottom: 0;
+}
+.ds-compare-phones-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+.ds-compare-phone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ds-compare-phone .ds-phone-outer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.ds-compare-phone .ds-phone-frame {
+  transform-origin: top center;
+  transform: scale(0.72);
+}
+.ds-compare-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  /* Offset upward to compensate for the scaled phone's whitespace */
+  margin-top: -128px;
+}
+
 /* ── Fullscreen prototype overlay ─────────────────────────────────────── */
 .ds-proto-fullscreen {
   position: fixed;

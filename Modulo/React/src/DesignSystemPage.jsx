@@ -30,6 +30,11 @@ import SwapSelectScreen from './SwapSelectScreen';
 import ExploreScreen from './ExploreScreen';
 import SendScreen from './SendScreen';
 import ReceiveScreen from './ReceiveScreen';
+import HomeScreenV1 from './v1/HomeScreenV1';
+import SwapScreenV1 from './v1/SwapScreenV1';
+import ExploreScreenV1 from './v1/ExploreScreenV1';
+import SendScreenV1 from './v1/SendScreenV1';
+import ReceiveScreenV1 from './v1/ReceiveScreenV1';
 import logoModulo from './assets/logo-modulo.svg';
 import './design-system-page.css';
 
@@ -128,6 +133,15 @@ const PREVIEW_ROUTES = [
   { path: '/receive',           element: <SwapProvider><ReceiveScreen /></SwapProvider> },
 ];
 
+const PREVIEW_ROUTES_V1 = [
+  { path: '/',                  element: <SwapProvider><HomeScreenV1 /></SwapProvider> },
+  { path: '/swap',              element: <SwapProvider><SwapScreenV1 /></SwapProvider> },
+  { path: '/swap/select/:side', element: <SwapProvider><SwapSelectScreen /></SwapProvider> },
+  { path: '/explore',           element: <SwapProvider><ExploreScreenV1 /></SwapProvider> },
+  { path: '/send',              element: <SwapProvider><SendScreenV1 /></SwapProvider> },
+  { path: '/receive',           element: <SwapProvider><ReceiveScreenV1 /></SwapProvider> },
+];
+
 const PREVIEW_SCREENS = [
   { label: 'Home',    path: '/' },
   { label: 'Swap',    path: '/swap' },
@@ -136,10 +150,10 @@ const PREVIEW_SCREENS = [
   { label: 'Receive', path: '/receive' },
 ];
 
-function PhonePreview({ screen }) {
+function PhonePreview({ screen, routes = PREVIEW_ROUTES }) {
   const router = useMemo(
-    () => createMemoryRouter(PREVIEW_ROUTES, { initialEntries: [screen] }),
-    [screen] // eslint-disable-line react-hooks/exhaustive-deps
+    () => createMemoryRouter(routes, { initialEntries: [screen] }),
+    [screen, routes] // eslint-disable-line react-hooks/exhaustive-deps
   );
   return (
     <div className="ds-phone-outer">
@@ -1303,6 +1317,7 @@ function StudioSection() {
   const [showThemes,   setShowThemes]   = useState(false);
   const [fullscreen,   setFullscreen]   = useState(false);
   const [selectedComp, setSelectedComp] = useState(null);
+  const [versionMode,  setVersionMode]  = useState('v2'); // 'v1' | 'v2' | 'compare'
 
   const brand  = getToken('--bk-brand-primary');
   const bgBase = getToken('--bk-bg-base');
@@ -1317,22 +1332,47 @@ function StudioSection() {
     return () => window.removeEventListener('keydown', onKey);
   }, [fullscreen]);
 
+  const VERSION_TABS = [
+    { id: 'v1',      label: 'V1' },
+    { id: 'v2',      label: 'V2' },
+    { id: 'compare', label: 'Compare' },
+  ];
+
+  const activeRoutes = versionMode === 'v1' ? PREVIEW_ROUTES_V1 : PREVIEW_ROUTES;
+
   const showcaseContent = (
     <>
       <div className="ds-showcase-glow" />
 
       <div className="ds-showcase-topbar">
-        <div className="ds-screen-tabs ds-screen-tabs-showcase">
-          {PREVIEW_SCREENS.map(s => (
+        {/* Screen tabs — hidden in compare mode (shown per-phone instead) */}
+        {versionMode !== 'compare' && (
+          <div className="ds-screen-tabs ds-screen-tabs-showcase">
+            {PREVIEW_SCREENS.map(s => (
+              <button
+                key={s.path}
+                className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
+                onClick={() => setActiveScreen(s.path)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Version toggle */}
+        <div className="ds-version-toggle">
+          {VERSION_TABS.map(v => (
             <button
-              key={s.path}
-              className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
-              onClick={() => setActiveScreen(s.path)}
+              key={v.id}
+              className={`ds-version-tab${versionMode === v.id ? ' active' : ''}`}
+              onClick={() => setVersionMode(v.id)}
             >
-              {s.label}
+              {v.label}
             </button>
           ))}
         </div>
+
         <div className="ds-showcase-actions">
           <button
             className="ds-showcase-action-btn ds-showcase-fullscreen-btn"
@@ -1348,20 +1388,48 @@ function StudioSection() {
         </div>
       </div>
 
-      <div className="ds-showcase-stage">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeScreen}
-            className="ds-showcase-phone"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.18 } }}
-            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-          >
-            <PhonePreview screen={activeScreen} />
-          </motion.div>
-        </AnimatePresence>
-
-      </div>
+      {versionMode === 'compare' ? (
+        /* ── Compare: two phones side by side ── */
+        <div className="ds-compare-stage">
+          {/* Screen tabs shared for compare mode */}
+          <div className="ds-screen-tabs ds-screen-tabs-showcase ds-compare-screen-tabs">
+            {PREVIEW_SCREENS.map(s => (
+              <button
+                key={s.path}
+                className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
+                onClick={() => setActiveScreen(s.path)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+          <div className="ds-compare-phones-row">
+            <div className="ds-compare-phone">
+              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES_V1} />
+              <div className="ds-compare-label">V1</div>
+            </div>
+            <div className="ds-compare-phone">
+              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES} />
+              <div className="ds-compare-label">V2</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* ── Single phone ── */
+        <div className="ds-showcase-stage">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${activeScreen}-${versionMode}`}
+              className="ds-showcase-phone"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.18 } }}
+              exit={{ opacity: 0, transition: { duration: 0.1 } }}
+            >
+              <PhonePreview screen={activeScreen} routes={activeRoutes} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
     </>
   );
 
