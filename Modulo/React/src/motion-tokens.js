@@ -8,6 +8,30 @@
  * Framer Motion animations use these JS tokens.
  *
  * To theme: import and spread-override, or replace this file entirely.
+ *
+ * ── Usage map ────────────────────────────────────────────────────────────────
+ *
+ *   motion.fade    → HomeScreen (main + stagger), ExploreScreen (main + stagger)
+ *   motion.modal   → SwapScreen, SendScreen, ReceiveScreen (full-screen modal entry)
+ *   motion.sheet   → bottom sheet overlays (token select, confirm sheets)
+ *   motion.spring  → swap arrow rotate, toggles, reversible state changes
+ *   motion.springTight → token pill appear, ReceiveScreen QR pop-in
+ *   motion.cta     → SwapScreen CTA label crossfade (AnimatePresence mode="wait")
+ *   motion.valueUpdate → portfolio value count-up, receive amount flash
+ *
+ * ── Pattern ──────────────────────────────────────────────────────────────────
+ *
+ *   Screen entry (fade):
+ *     initial={{ opacity: 0, y: 12 }}
+ *     animate={{ opacity: 1, y: 0, transition: m.fade.enter }}
+ *
+ *   Screen entry (modal):
+ *     initial={{ opacity: 0, y: m.modal.offsetEnter }}
+ *     animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
+ *     exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
+ *
+ *   Staggered children (add delay offset per index):
+ *     animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.06 + i * 0.05 } }}
  */
 
 export const motion = {

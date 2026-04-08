@@ -6,6 +6,11 @@
  * All colours via --bk-* CSS custom properties — no hardcoded hex.
  * Token state shared via SwapContext so SwapSelectScreen can update it.
  *
+ * Animations:
+ *   Screen entry — modal slide-up via motion-tokens.modal (y: 48 → 0, opacity 0 → 1)
+ *   Swap arrow   — rotate 180° on direction flip (motion-tokens.spring)
+ *   CTA label    — crossfade on text change (motion-tokens.cta, AnimatePresence mode="wait")
+ *
  * Spec: SPEC-swap-aria.md + ../Spec/swap-screen-spec.md
  */
 
@@ -253,7 +258,14 @@ export default function SwapScreen() {
   }
 
   return (
-    <div role="main" aria-label="Modulo swap screen" className="swap-screen-inner">
+    <motion.div
+      role="main"
+      aria-label="Modulo swap screen"
+      className="swap-screen-inner"
+      initial={{ opacity: 0, y: m.modal.offsetEnter }}
+      animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
+      exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
+    >
       <StatusBar />
 
       <SwapHeader onClose={() => navigate('/')} />
@@ -297,6 +309,6 @@ export default function SwapScreen() {
           </motion.span>
         </AnimatePresence>
       </Button>
-    </div>
+    </motion.div>
   );
 }

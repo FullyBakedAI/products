@@ -2,10 +2,16 @@
  * ReceiveScreen — receive crypto (full-screen modal)
  * Matches HTML prototype at ../Prototype/receive-screen.html
  * All colours via --bk-* tokens. All data mocked.
+ *
+ * Animations:
+ *   Screen entry — modal slide-up via motion-tokens.modal (y: 48 → 0, opacity 0 → 1)
+ *   Stagger      — header, address card, QR, networks, exchanges stagger in sequence
  */
 
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { motion as m } from './motion-tokens';
 import StatusBar from './StatusBar';
 import './receive.css';
 
@@ -33,7 +39,14 @@ export default function ReceiveScreen() {
   const navigate = useNavigate();
 
   return (
-    <main role="main" aria-label="Modulo receive screen" className="receive-screen">
+    <motion.main
+      role="main"
+      aria-label="Modulo receive screen"
+      className="receive-screen"
+      initial={{ opacity: 0, y: m.modal.offsetEnter }}
+      animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
+      exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
+    >
       <StatusBar />
 
       {/* Drag Handle */}
@@ -45,13 +58,23 @@ export default function ReceiveScreen() {
       <div className="scroll-content">
 
         {/* Header */}
-        <div className="receive-header">
+        <motion.div
+          className="receive-header"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.06 } }}
+        >
           <h1 className="receive-title">Receive crypto</h1>
           <p className="receive-subtitle">Share your address or QR code to receive crypto</p>
-        </div>
+        </motion.div>
 
         {/* Address Card */}
-        <div className="address-card" role="region" aria-label="Wallet address">
+        <motion.div
+          className="address-card"
+          role="region"
+          aria-label="Wallet address"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.10 } }}
+        >
           <div className="address-left">
             <div className="avatar-wrap">
               <img className="avatar" src={walletAvatar} alt="Wallet avatar" />
@@ -70,17 +93,27 @@ export default function ReceiveScreen() {
               <Share2 size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
         {/* QR Code */}
-        <div className="qr-container" role="img" aria-label="QR code for wallet address">
+        <motion.div
+          className="qr-container"
+          role="img"
+          aria-label="QR code for wallet address"
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1, transition: { ...m.springTight, delay: 0.14 } }}
+        >
           <div className="qr-box">
             <img src={qrCode} alt="QR code" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Supported Networks */}
-        <div className="networks-section">
+        <motion.div
+          className="networks-section"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.20 } }}
+        >
           <div className="section-label">Supported networks</div>
           <div className="network-pills" role="list" aria-label="Supported networks">
             {NETWORKS.map((n) => (
@@ -90,10 +123,14 @@ export default function ReceiveScreen() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Fund from Exchange */}
-        <div className="exchange-section">
+        <motion.div
+          className="exchange-section"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.26 } }}
+        >
           <div className="section-label">Fund from an exchange</div>
           <div className="exchange-list">
             {EXCHANGES.map((ex) => (
@@ -107,18 +144,23 @@ export default function ReceiveScreen() {
               </Button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>{/* /.scroll-content */}
 
       {/* Done Button */}
-      <Button
-        className="primary-btn"
-        aria-label="Done"
-        onPress={() => navigate('/')}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.30 } }}
       >
-        Done
-      </Button>
-    </main>
+        <Button
+          className="primary-btn"
+          aria-label="Done"
+          onPress={() => navigate('/')}
+        >
+          Done
+        </Button>
+      </motion.div>
+    </motion.main>
   );
 }
