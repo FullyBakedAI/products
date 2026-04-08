@@ -150,13 +150,13 @@ const PREVIEW_SCREENS = [
   { label: 'Receive', path: '/receive' },
 ];
 
-function PhonePreview({ screen, routes = PREVIEW_ROUTES }) {
+function PhonePreview({ screen, routes = PREVIEW_ROUTES, theme = 'dark' }) {
   const router = useMemo(
     () => createMemoryRouter(routes, { initialEntries: [screen] }),
     [screen, routes] // eslint-disable-line react-hooks/exhaustive-deps
   );
   return (
-    <div className="ds-phone-outer">
+    <div className={`ds-phone-outer${theme === 'light' ? ' theme-light' : ''}`}>
       <div className="phone ds-phone-frame">
         <RouterProvider router={router} />
       </div>
@@ -1313,11 +1313,12 @@ function AccordionGroup({ group, isOpen, onToggle }) {
 function StudioSection() {
   const { resetToDefaults, getToken } = useTokenOverride();
   const [openPanel,    setOpenPanel]    = useState('Brand');
-  const [activeScreen, setActiveScreen] = useState('/swap');
+  const [activeScreen, setActiveScreen] = useState('/');
   const [showThemes,   setShowThemes]   = useState(false);
   const [fullscreen,   setFullscreen]   = useState(false);
   const [selectedComp, setSelectedComp] = useState(null);
   const [versionMode,  setVersionMode]  = useState('v2'); // 'v1' | 'v2' | 'compare'
+  const [phoneTheme,   setPhoneTheme]   = useState('dark'); // 'dark' | 'light'
 
   const brand  = getToken('--bk-brand-primary');
   const bgBase = getToken('--bk-bg-base');
@@ -1374,6 +1375,26 @@ function StudioSection() {
         </div>
 
         <div className="ds-showcase-actions">
+          {/* Phone theme toggle */}
+          <div className="ds-phone-theme-toggle">
+            <button
+              className={`ds-phone-theme-btn${phoneTheme === 'dark' ? ' active' : ''}`}
+              onClick={() => setPhoneTheme('dark')}
+              title="Dark"
+              style={{ borderColor: border, color: phoneTheme === 'dark' ? brand : textM }}
+            >
+              <LucideIcons.Moon size={12} strokeWidth={2} />
+            </button>
+            <button
+              className={`ds-phone-theme-btn${phoneTheme === 'light' ? ' active' : ''}`}
+              onClick={() => setPhoneTheme('light')}
+              title="Light"
+              style={{ borderColor: border, color: phoneTheme === 'light' ? brand : textM }}
+            >
+              <LucideIcons.Sun size={12} strokeWidth={2} />
+            </button>
+          </div>
+          {/* Fullscreen button */}
           <button
             className="ds-showcase-action-btn ds-showcase-fullscreen-btn"
             onClick={() => setFullscreen(v => !v)}
@@ -1405,11 +1426,11 @@ function StudioSection() {
           </div>
           <div className="ds-compare-phones-row">
             <div className="ds-compare-phone">
-              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES_V1} />
+              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES_V1} theme={phoneTheme} />
               <div className="ds-compare-label">V1</div>
             </div>
             <div className="ds-compare-phone">
-              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES} />
+              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES} theme={phoneTheme} />
               <div className="ds-compare-label">V2</div>
             </div>
           </div>
@@ -1425,7 +1446,7 @@ function StudioSection() {
               animate={{ opacity: 1, y: 0, transition: { duration: 0.18 } }}
               exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-              <PhonePreview screen={activeScreen} routes={activeRoutes} />
+              <PhonePreview screen={activeScreen} routes={activeRoutes} theme={phoneTheme} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -2028,7 +2049,7 @@ TokenRow         — token list item (icon, name, amount, value, change)`;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function DesignSystemPage({ onBack }) {
-  const { overrides, hasDraft, draft, saveOverrides, discardChanges, loadBuiltinTheme, getToken } = useTokenOverride();
+  const { overrides, hasDraft, draft, saveOverrides, discardChanges, getToken } = useTokenOverride();
   const [activeSection, setActiveSection] = useState('brand');
   const overrideCount = Object.keys(overrides).length;
   const draftCount    = Object.keys(draft).length;
@@ -2057,23 +2078,6 @@ export default function DesignSystemPage({ onBack }) {
           <img src={logoModulo} alt="Modulo" height="15" style={{ opacity: 0.55 }} />
         </div>
         <div className="ds-header-right">
-          {/* Theme toggles — always visible */}
-          <div className="ds-builtin-themes">
-            {Object.keys(BUILTIN_THEMES).map(name => (
-              <button
-                key={name}
-                className="ds-builtin-theme-btn"
-                onClick={() => loadBuiltinTheme(name)}
-                title={`Switch to ${name} theme`}
-                style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}
-              >
-                {name === 'Dark'  && <LucideIcons.Moon  size={13} strokeWidth={2} />}
-                {name === 'Light' && <LucideIcons.Sun   size={13} strokeWidth={2} />}
-                {name}
-              </button>
-            ))}
-          </div>
-
           {/* Save bar — only when there are unsaved token changes */}
           <AnimatePresence>
             {hasDraft && (

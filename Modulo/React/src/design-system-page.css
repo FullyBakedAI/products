@@ -2460,3 +2460,26 @@
   transition: background 0.1s, border-color 0.1s, color 0.1s;
 }
 .ds-kit-option:hover { opacity: 0.8; }
+
+/* ── Phone theme toggle (in showcase topbar) ─────────────────────────── */
+.ds-phone-theme-toggle {
+  display: flex;
+  border: 1px solid;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ds-phone-theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  font-family: inherit;
+}
+.ds-phone-theme-btn.active {
+  background: rgba(255,255,255,0.08);
+}

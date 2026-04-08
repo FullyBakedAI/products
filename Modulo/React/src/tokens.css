@@ -57,6 +57,40 @@
   --bk-motion-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
+/* ── Light theme — apply to phone wrapper only ─────────────────────── */
+.theme-light {
+  --bk-bg-base:          #F5F5FA;
+  --bk-bg-card:          #FFFFFF;
+  --bk-bg-card-alt:      #F0F0F8;
+  --bk-bg-nav:           #FFFFFF;
+  --bk-bg-elevated:      #FFFFFF;
+  --bk-bg-outer:         #E8E8F0;
+
+  --bk-border-subtle:    #E2E3EC;
+  --bk-border-card:      rgba(0, 0, 0, 0.06);
+  --bk-border-pill:      rgba(0, 0, 0, 0.12);
+  --bk-border-active:    #584BEB;
+  --bk-border-search:    #D8D9E8;
+  --bk-border-row:       #EAEBF4;
+
+  --bk-text-primary:     #0D0E17;
+  --bk-text-secondary:   #4A4A58;
+  --bk-text-muted:       #6B6B75;
+  --bk-text-placeholder: rgba(13, 14, 23, 0.4);
+
+  --bk-brand-primary:    #584BEB;
+  --bk-brand-dim:        rgba(88, 75, 235, 0.10);
+  --bk-brand-gradient:   linear-gradient(135deg, #584BEB 0%, #4A3DE0 100%);
+
+  --bk-success:          #16A34A;
+  --bk-error:            #DC2626;
+
+  --bk-status-bar-dim:   #C8C9D8;
+  --bk-pill-bg:          #EBEBF8;
+  --bk-earn-card-bg:     rgba(88, 75, 235, 0.06);
+  --bk-earn-card-border: rgba(88, 75, 235, 0.15);
+}
+
 /* ── Global Reset ────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
