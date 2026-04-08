@@ -274,7 +274,7 @@
 
 .chain-pill.active {
   background: var(--bk-brand-primary);
-  color: var(--bk-text-primary);
+  color: #fff;
   border-color: var(--bk-brand-primary);
   font-weight: 600;
 }

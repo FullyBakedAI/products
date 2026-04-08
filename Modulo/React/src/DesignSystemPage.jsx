@@ -16,12 +16,13 @@
  * Route: rendered when hash === #/ds (outside HashRouter)
  */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from 'react-aria-components';
 import { SwapProvider } from './SwapContext';
 import { TOKEN_DEFINITIONS, TOKEN_GROUPS, BUILTIN_THEMES, useTokenOverride } from './TokenOverrideContext';
+import { useDevMode } from './DevModeContext';
 import { ICON_SLOTS, useIconOverride } from './IconOverrideContext';
 import * as LucideIcons from 'lucide-react';
 import HomeScreen from './HomeScreen';
@@ -46,7 +47,7 @@ const NAV_ITEMS = [
   { id: 'brand',  label: 'Brand',  icon: '◈' },
   { id: 'studio', label: 'Studio', icon: '⬡' },
   { id: 'rules',  label: 'Rules',  icon: '◎' },
-  { id: 'brief',  label: 'Brief',  icon: '⟡' },
+  { id: 'brief',  label: 'Agentic Guide',  icon: '⟡' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -150,15 +151,68 @@ const PREVIEW_SCREENS = [
   { label: 'Receive', path: '/receive' },
 ];
 
-function PhonePreview({ screen, routes = PREVIEW_ROUTES, theme = 'dark' }) {
+function PhonePreview({ screen, routes = PREVIEW_ROUTES, theme = 'dark', onInspect }) {
+  const { devMode } = useDevMode();
+  const frameRef = useRef(null);
+  const [highlight, setHighlight] = useState(null);
+
   const router = useMemo(
     () => createMemoryRouter(routes, { initialEntries: [screen] }),
     [screen, routes] // eslint-disable-line react-hooks/exhaustive-deps
   );
+
+  const handlePointerMove = useCallback((e) => {
+    if (!devMode || !frameRef.current) return;
+    e.currentTarget.style.pointerEvents = 'none';
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    e.currentTarget.style.pointerEvents = 'all';
+    let target = el;
+    while (target && target !== frameRef.current) {
+      if (target.dataset?.bkComponent) break;
+      target = target.parentElement;
+    }
+    if (target?.dataset?.bkComponent) {
+      const frameRect = frameRef.current.getBoundingClientRect();
+      const elRect = target.getBoundingClientRect();
+      setHighlight({
+        top: elRect.top - frameRect.top,
+        left: elRect.left - frameRect.left,
+        width: elRect.width,
+        height: elRect.height,
+        label: target.dataset.bkComponent,
+      });
+    } else {
+      setHighlight(null);
+    }
+  }, [devMode]);
+
+  const handleClick = useCallback((e) => {
+    if (!devMode || !highlight) return;
+    e.preventDefault();
+    onInspect?.(highlight.label);
+  }, [devMode, highlight, onInspect]);
+
   return (
     <div className={`ds-phone-outer${theme === 'light' ? ' theme-light' : ''}`}>
-      <div className="phone ds-phone-frame">
+      <div ref={frameRef} className={`phone ds-phone-frame${devMode ? ' ds-phone-inspect-mode' : ''}`}>
         <RouterProvider router={router} />
+        {devMode && (
+          <div
+            className="ds-inspect-overlay"
+            onPointerMove={handlePointerMove}
+            onPointerLeave={() => setHighlight(null)}
+            onClick={handleClick}
+          >
+            {highlight && (
+              <div
+                className="ds-inspect-highlight"
+                style={{ top: highlight.top, left: highlight.left, width: highlight.width, height: highlight.height }}
+              >
+                <span className="ds-inspect-label">{highlight.label}</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -382,102 +436,136 @@ const COMPONENT_REGISTRY = [
     description: 'The primary interactive element across the product. Built on React ARIA Button for full keyboard navigation, focus management, and screen reader support. Supports four visual variants and three interactive states.',
     usage: 'One primary button per screen. Ghost and secondary variants for supporting actions. Destructive variant requires a confirmation step before executing.',
     notes: 'Minimum 44px touch target enforced via CSS. Always label with an imperative verb (Swap, Send, Confirm). Never disable a button without communicating why.',
+    tokens: ['--bk-brand-primary', '--bk-bg-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-secondary'],
+    jsx: `import { Button } from 'react-aria-components';\n\n<Button className="action-btn">\n  Label\n</Button>`,
   },
   {
     id: 'toast', group: 'Feedback', name: 'Toast',
     description: 'Non-blocking status messages that appear at the top of the screen. Three types: success (transaction confirmed), pending (waiting for chain), error (transaction failed or rejected).',
     usage: 'Fire after any async operation completes. Auto-dismiss after 3.2 seconds. Stack if multiple fire simultaneously.',
     notes: 'Copy must be specific — say what happened. Never use for warnings requiring action; use a modal instead.',
+    tokens: ['--bk-bg-elevated', '--bk-border-subtle', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary'],
+    jsx: `import { toast } from 'sonner';\n\ntoast.success('Transaction confirmed');`,
   },
   {
     id: 'bottom-sheet', group: 'Feedback', name: 'Bottom sheet',
     description: 'Modal overlay that slides up from the bottom using a spring animation. Used for token selection, contextual detail panels, and lightweight confirmations.',
     usage: 'Token selection, contextual detail panels, lightweight confirmations.',
     notes: 'Maximum 60% viewport height on mobile. Always include a close affordance. Tapping the backdrop dismisses.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'skeleton', group: 'Feedback', name: 'Skeleton loader',
     description: 'Structure-preserving placeholder shown while data loads. Shimmer animation signals active loading state. Prevents layout shift when content arrives.',
     usage: 'Use instead of spinners. Match the skeleton shape to the content it stands in for.',
     notes: 'Escalate to an error state if data has not arrived after 3 seconds. Never show a skeleton indefinitely.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'badge', group: 'Feedback', name: 'Status badge',
     description: 'Inline status indicator for transaction and portfolio states. Colour-coded: success green, brand purple for pending, error red.',
     usage: 'Transaction lists, confirmation screens, activity feeds.',
     notes: 'Text should be a noun (Confirmed, Pending, Failed), not a verb. Never use for navigation or actions.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'input', group: 'Forms', name: 'Input field',
     description: 'Text input with focus, error, and disabled states. Border colour and box shadow communicate state without relying on colour alone.',
     usage: 'Wallet addresses, search fields, name inputs. Use token pill for amount inputs.',
     notes: 'Always pair with a visible label. Inline validation only after first blur — not on every keystroke.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'token-pill', group: 'Forms', name: 'Token pill',
     description: 'Token selector chip showing icon, symbol, and a chevron dropdown affordance. Used inside swap cards and amount inputs to let users select which token they are working with.',
     usage: 'Anywhere the user selects a specific token. Tapping opens a bottom sheet with the full token list.',
     notes: 'Token icon from official source — never approximate with Lucide icons. Always show symbol, never full name.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'pct-pills', group: 'Forms', name: 'Percentage pills',
     description: 'Preset amount selectors (25%, 50%, 75%, Max). Allow quick entry without using the keyboard. Active pill highlighted in brand colour.',
     usage: 'Below amount inputs in Swap and Send screens only.',
     notes: 'Max must calculate from available balance in real time. Never hardcode a value.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'token-card', group: 'Cards', name: 'Token card',
     description: 'Portfolio row showing token icon, name, balance, current USD value, and 24h change. The primary data unit of the portfolio list.',
     usage: 'Home screen portfolio list. Tapping drills into token detail.',
     notes: 'Positive change in success green. Negative in error red. Zero or undefined in muted text.',
+    tokens: ['--bk-bg-base', '--bk-text-primary', '--bk-text-muted', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-border-subtle'],
+    jsx: `<div className="token-row-outer">\n  {/* token row content */}\n</div>`,
   },
   {
     id: 'swap-card', group: 'Cards', name: 'Swap card',
     description: 'The pay/receive surface in the swap flow. Shows amount (large numeral), selected token (pill), and fiat equivalent. Two instances stack with the direction toggle between them.',
     usage: 'Swap screen only. Always appear as a pair.',
     notes: 'Amount accepts numeric input only. USD equivalent updates on every keystroke. Never round the displayed amount.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'bottom-nav', group: 'Navigation', name: 'Bottom nav',
     description: 'Four-item navigation bar anchored to the bottom of the viewport. Active item in brand colour with filled icon weight. Icons configurable via Icon Slots in the Tokens panel.',
     usage: 'Persistent on all primary screens. Hidden on modal sheets and linear confirmation flows.',
     notes: 'Labels always visible — no label-on-active-only patterns. 44px tap targets. Four items maximum.',
+    tokens: ['--bk-bg-nav', '--bk-brand-primary', '--bk-text-muted', '--bk-border-subtle', '--bk-brand-gradient'],
+    jsx: `import BottomNav from './BottomNav';\n\n<BottomNav />`,
   },
   {
     id: 'tab-bar', group: 'Navigation', name: 'Tab bar',
     description: 'Horizontal tab switcher for content views within a single screen. Active tab indicated by brand-colour underline.',
     usage: 'Within-screen content switching. Explore screen uses this for category filtering.',
     notes: 'Not a substitute for bottom nav. Should switch content, not navigate to new screens. Four tabs maximum.',
+    tokens: ['--bk-bg-card', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
+    jsx: `<div className="tabs" role="tablist">\n  <button className="tab active">Tokens</button>\n  <button className="tab">NFTs</button>\n</div>`,
   },
   {
     id: 'tx-row', group: 'DeFi', name: 'Transaction row',
     description: 'Activity list item showing type (sent/received/swapped), counterparty address, token amounts, and fiat values. Icon and colour encode the transaction direction.',
     usage: 'Activity feed, portfolio detail, transaction history.',
     notes: 'Timestamp in relative format for <7 days, absolute thereafter. Never truncate or round amounts.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'step-progress', group: 'DeFi', name: 'Step progress',
     description: 'Three-step linear indicator for transaction flows: Review → Approve → Confirm on-chain. Steps render as done (filled), active (brand), or pending (outline).',
     usage: 'Swap confirmation flow. Send confirmation flow.',
     notes: 'Never skip steps or show all as done simultaneously. Be honest about the current on-chain state.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'confirm-summary', group: 'DeFi', name: 'Confirmation summary',
     description: 'Pre-execution summary card showing the complete transaction: token pair, amounts, exchange rate, network fee, and the final CTA. Last check before on-chain submission.',
     usage: 'Swap confirmation. Send confirmation.',
     notes: 'Exchange rate must refresh if stale >15s. Show slippage tolerance. Never round amounts on this surface.',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'portfolio-metric', group: 'DeFi', name: 'Portfolio metric',
     description: 'Hero value block for total portfolio value with 24h change. Large numeral hierarchy establishes the dominant visual weight on the Home screen.',
     usage: 'Home screen hero area. Portfolio detail header.',
     notes: 'Locale-formatted currency. Animated count-up on first load. Change indicator always includes sign (+ or −).',
+    tokens: [],
+    jsx: '',
   },
   {
     id: 'wallet-chip', group: 'DeFi', name: 'Wallet address chip',
     description: 'Compact address display with identicon, truncated address, copy action, and optional network badges.',
     usage: 'Receive screen, transaction detail, address confirmation flows.',
     notes: 'Always truncate to 0x4a3f…c12d format — never show full address in a chip. Copy to clipboard with confirmation feedback.',
+    tokens: [],
+    jsx: '',
   },
 ];
 
@@ -1098,6 +1186,45 @@ function ComponentDemoStage({ comp, controls, tokens }) {
 // Studio — Component Inspector
 // ─────────────────────────────────────────────────────────────────────────────
 
+function CodeTab({ comp }) {
+  const [copied, setCopied] = useState(false);
+  const json = JSON.stringify({
+    component: comp.id,
+    name: comp.name,
+    group: comp.group,
+    tokens: comp.tokens || [],
+    usage: comp.usage,
+    jsx: comp.jsx || '',
+  }, null, 2);
+
+  function copy(text) {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  return (
+    <div className="ds-code-tab">
+      {comp.jsx && (
+        <div className="ds-code-block">
+          <div className="ds-code-block-header">
+            <span>JSX</span>
+            <button onClick={() => copy(comp.jsx)}>Copy</button>
+          </div>
+          <pre className="ds-code-pre">{comp.jsx}</pre>
+        </div>
+      )}
+      <div className="ds-code-block">
+        <div className="ds-code-block-header">
+          <span>Component JSON</span>
+          <button onClick={() => copy(json)}>{copied ? '✓' : 'Copy'}</button>
+        </div>
+        <pre className="ds-code-pre">{json}</pre>
+      </div>
+    </div>
+  );
+}
+
 function ComponentInspector({ comp, onClose }) {
   const { getToken } = useTokenOverride();
   const brand   = getToken('--bk-brand-primary');
@@ -1111,6 +1238,7 @@ function ComponentInspector({ comp, onClose }) {
 
   const defaultControls = (COMP_CONTROLS[comp.id] || []).reduce((acc, c) => ({ ...acc, [c.id]: c.def }), {});
   const [ctrlValues, setCtrlValues] = useState(defaultControls);
+  const [inspectorTab, setInspectorTab] = useState('preview');
 
   // Reset controls when component changes
   useEffect(() => {
@@ -1129,42 +1257,69 @@ function ComponentInspector({ comp, onClose }) {
     >
       {/* Inspector header */}
       <div className="ds-inspector-header" style={{ borderBottomColor: border }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span className="ds-inspector-group" style={{ color: textM }}>{comp.group}</span>
-          <span style={{ color: border }}>·</span>
-          <span className="ds-inspector-name" style={{ color: textP }}>{comp.name}</span>
+        <div className="ds-inspector-tabs">
+          {['preview','tokens','code'].map(t => (
+            <button
+              key={t}
+              className={`ds-inspector-tab${inspectorTab === t ? ' active' : ''}`}
+              onClick={() => setInspectorTab(t)}
+              style={{ color: inspectorTab === t ? textP : textM }}
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
         </div>
-        <button
-          className="ds-inspector-close"
-          onClick={onClose}
-          style={{ color: textM, borderColor: border }}
-          title="Back to preview"
-        >
-          <LucideIcons.X size={13} strokeWidth={2} />
-          <span>Preview</span>
-        </button>
+        <button className="ds-inspector-close" onClick={onClose} style={{ color: textM }}>×</button>
       </div>
 
       {/* Inspector body */}
       <div className="ds-inspector-body">
-        {/* Demo stage */}
-        <div className="ds-comp-stage" style={{ borderColor: border }}>
-          <ComponentDemoStage comp={comp} controls={ctrlValues} tokens={tokens} />
-        </div>
+        {inspectorTab === 'preview' && (
+          <>
+            {/* Demo stage */}
+            <div className="ds-comp-stage" style={{ borderColor: border }}>
+              <ComponentDemoStage comp={comp} controls={ctrlValues} tokens={tokens} />
+            </div>
 
-        {/* Right panel — controls + description */}
-        <div className="ds-inspector-right">
-          <ComponentControlPanel
-            compId={comp.id}
-            values={ctrlValues}
-            onChange={(id, val) => setCtrlValues(prev => ({ ...prev, [id]: val }))}
-            brand={brand} border={border} textM={textM}
-          />
-          <DescriptionPanel
-            comp={comp}
-            brand={brand} border={border} bgBase={bgBase} textP={textP} textM={textM}
-          />
-        </div>
+            {/* Right panel — controls + description */}
+            <div className="ds-inspector-right">
+              <ComponentControlPanel
+                compId={comp.id}
+                values={ctrlValues}
+                onChange={(id, val) => setCtrlValues(prev => ({ ...prev, [id]: val }))}
+                brand={brand} border={border} textM={textM}
+              />
+              <DescriptionPanel
+                comp={comp}
+                brand={brand} border={border} bgBase={bgBase} textP={textP} textM={textM}
+              />
+            </div>
+          </>
+        )}
+
+        {inspectorTab === 'tokens' && (
+          <div className="ds-tokens-tab">
+            {(comp.tokens || []).length === 0 && (
+              <p style={{ padding: '20px 16px', color: textM, fontSize: 12 }}>No tokens mapped.</p>
+            )}
+            {(comp.tokens || []).map(key => {
+              const val = getToken(key);
+              const isColor = /^#|^rgb/.test(val);
+              return (
+                <div key={key} className="ds-token-ref-row" onClick={() => navigator.clipboard.writeText(key)} title="Click to copy token name">
+                  {isColor && <span className="ds-token-ref-swatch" style={{ background: val }} />}
+                  <span className="ds-token-ref-key">{key}</span>
+                  <span className="ds-token-ref-value">{val}</span>
+                  <LucideIcons.Copy size={10} strokeWidth={2} style={{ opacity: 0.35, flexShrink: 0 }} />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {inspectorTab === 'code' && (
+          <CodeTab comp={comp} />
+        )}
       </div>
     </motion.div>
   );
@@ -1312,6 +1467,7 @@ function AccordionGroup({ group, isOpen, onToggle }) {
 
 function StudioSection() {
   const { resetToDefaults, getToken } = useTokenOverride();
+  const { devMode, setDevMode } = useDevMode();
   const [openPanel,    setOpenPanel]    = useState('Brand');
   const [activeScreen, setActiveScreen] = useState('/');
   const [showThemes,   setShowThemes]   = useState(false);
@@ -1324,6 +1480,7 @@ function StudioSection() {
   const bgBase = getToken('--bk-bg-base');
   const border = getToken('--bk-border-subtle');
   const textM  = getToken('--bk-text-muted');
+  const textP  = getToken('--bk-text-primary');
 
   // ESC exits fullscreen
   useEffect(() => {
@@ -1346,22 +1503,7 @@ function StudioSection() {
       <div className="ds-showcase-glow" />
 
       <div className="ds-showcase-topbar">
-        {/* Screen tabs — hidden in compare mode (shown per-phone instead) */}
-        {versionMode !== 'compare' && (
-          <div className="ds-screen-tabs ds-screen-tabs-showcase">
-            {PREVIEW_SCREENS.map(s => (
-              <button
-                key={s.path}
-                className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
-                onClick={() => setActiveScreen(s.path)}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Version toggle */}
+        {/* Left: version toggle */}
         <div className="ds-version-toggle">
           {VERSION_TABS.map(v => (
             <button
@@ -1374,8 +1516,21 @@ function StudioSection() {
           ))}
         </div>
 
+        {/* Centre: screen tabs — always in topbar */}
+        <div className="ds-screen-tabs ds-screen-tabs-showcase">
+          {PREVIEW_SCREENS.map(s => (
+            <button
+              key={s.path}
+              className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
+              onClick={() => setActiveScreen(s.path)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Right: theme + fullscreen */}
         <div className="ds-showcase-actions">
-          {/* Phone theme toggle */}
           <div className="ds-phone-theme-toggle">
             <button
               className={`ds-phone-theme-btn${phoneTheme === 'dark' ? ' active' : ''}`}
@@ -1394,7 +1549,18 @@ function StudioSection() {
               <LucideIcons.Sun size={12} strokeWidth={2} />
             </button>
           </div>
-          {/* Fullscreen button */}
+          <button
+            className="ds-showcase-action-btn"
+            onClick={() => setDevMode(v => !v)}
+            title={devMode ? 'Exit inspect mode' : 'Inspect mode'}
+            style={{
+              borderColor: devMode ? brand : border,
+              color: devMode ? brand : textM,
+              background: devMode ? `${brand}15` : 'transparent',
+            }}
+          >
+            <LucideIcons.Inspect size={13} strokeWidth={2} />
+          </button>
           <button
             className="ds-showcase-action-btn ds-showcase-fullscreen-btn"
             onClick={() => setFullscreen(v => !v)}
@@ -1412,27 +1578,9 @@ function StudioSection() {
       {versionMode === 'compare' ? (
         /* ── Compare: two phones side by side ── */
         <div className="ds-compare-stage">
-          {/* Screen tabs shared for compare mode */}
-          <div className="ds-screen-tabs ds-screen-tabs-showcase ds-compare-screen-tabs">
-            {PREVIEW_SCREENS.map(s => (
-              <button
-                key={s.path}
-                className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
-                onClick={() => setActiveScreen(s.path)}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
           <div className="ds-compare-phones-row">
-            <div className="ds-compare-phone">
-              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES_V1} theme={phoneTheme} />
-              <div className="ds-compare-label">V1</div>
-            </div>
-            <div className="ds-compare-phone">
-              <PhonePreview screen={activeScreen} routes={PREVIEW_ROUTES} theme={phoneTheme} />
-              <div className="ds-compare-label">V2</div>
-            </div>
+            <PhonePreview key={`v1-${activeScreen}`} screen={activeScreen} routes={PREVIEW_ROUTES_V1} theme={phoneTheme} onInspect={id => setSelectedComp(id)} />
+            <PhonePreview key={`v2-${activeScreen}`} screen={activeScreen} routes={PREVIEW_ROUTES} theme={phoneTheme} onInspect={id => setSelectedComp(id)} />
           </div>
         </div>
       ) : (
@@ -1446,7 +1594,7 @@ function StudioSection() {
               animate={{ opacity: 1, y: 0, transition: { duration: 0.18 } }}
               exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
-              <PhonePreview screen={activeScreen} routes={activeRoutes} theme={phoneTheme} />
+              <PhonePreview screen={activeScreen} routes={activeRoutes} theme={phoneTheme} onInspect={id => setSelectedComp(id)} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -2074,7 +2222,6 @@ export default function DesignSystemPage({ onBack }) {
     <div className="ds-page">
       <header className="ds-header">
         <div className="ds-header-left">
-          <button className="ds-back-btn" onClick={onBack}>← App</button>
           <img src={logoModulo} alt="Modulo" height="15" style={{ opacity: 0.55 }} />
         </div>
         <div className="ds-header-right">

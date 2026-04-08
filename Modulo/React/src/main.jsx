@@ -5,6 +5,7 @@ import App from './App.jsx';
 import DesignSystemPage from './DesignSystemPage.jsx';
 import { TokenOverrideProvider } from './TokenOverrideContext.jsx';
 import { IconOverrideProvider } from './IconOverrideContext.jsx';
+import { DevModeProvider } from './DevModeContext.jsx';
 import './tokens.css';
 
 class ErrorBoundary extends Component {
@@ -39,6 +40,7 @@ function Root() {
   return (
     <TokenOverrideProvider>
     <IconOverrideProvider>
+    <DevModeProvider>
       {isDS
         ? <DesignSystemPage onBack={() => { window.location.hash = '/'; }} />
         : (
@@ -47,6 +49,7 @@ function Root() {
           </HashRouter>
         )
       }
+    </DevModeProvider>
     </IconOverrideProvider>
     </TokenOverrideProvider>
   );

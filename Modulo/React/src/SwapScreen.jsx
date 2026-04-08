@@ -258,7 +258,7 @@ export default function SwapScreen() {
 
       <SwapHeader onClose={() => navigate('/')} />
 
-      <div className="swap-cards">
+      <div className="swap-cards" data-bk-component="swap-panel">
         <PayCard payAmount={payAmount} payUSD={payUSD} payToken={payToken} />
         <SwapDirectionButton
           swapped={swappedVisual}
@@ -279,6 +279,7 @@ export default function SwapScreen() {
 
       <Button
         className={`bottom-cta-btn ${ctaReady ? 'cta-ready' : 'cta-disabled'}`}
+        data-bk-component="button"
         aria-label={ctaLabel}
         isDisabled={!ctaReady && !!receiveToken}
         onPress={() => {

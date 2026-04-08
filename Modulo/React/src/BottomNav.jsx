@@ -13,7 +13,7 @@ export default function BottomNav() {
   const NavSwap     = getIcon('nav-swap');
 
   return (
-    <nav className="bottom-nav" aria-label="Main navigation">
+    <nav className="bottom-nav" data-bk-component="bottom-nav" aria-label="Main navigation">
       <Button
         className={`nav-btn${pathname === '/' ? ' active' : ''}`}
         aria-label="Home"

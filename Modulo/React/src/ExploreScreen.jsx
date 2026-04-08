@@ -100,7 +100,7 @@ export default function ExploreScreen() {
         </div>
 
         {/* Chain Filters */}
-        <div className="chain-filters" role="group" aria-label="Chain filter">
+        <div className="chain-filters" data-bk-component="chain-filter" role="group" aria-label="Chain filter">
           {CHAINS.map((c) => (
             <Button
               key={c}

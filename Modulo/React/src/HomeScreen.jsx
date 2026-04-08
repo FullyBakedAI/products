@@ -60,6 +60,7 @@ function TokenRow({ t, index }) {
   return (
     <motion.div
       className="token-row-outer"
+      data-bk-component="token-row"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 + index * 0.05 } }}
     >
@@ -164,6 +165,7 @@ export default function HomeScreen() {
         {/* Portfolio Card */}
         <motion.section
           className="portfolio-card"
+          data-bk-component="portfolio-card"
           aria-labelledby="portfolio-heading"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
@@ -197,6 +199,7 @@ export default function HomeScreen() {
         {/* Action Buttons */}
         <motion.div
           className="action-row"
+          data-bk-component="action-row"
           role="group"
           aria-label="Quick actions"
           initial={{ opacity: 0, y: 10 }}
@@ -241,6 +244,7 @@ export default function HomeScreen() {
         {/* Earn Card */}
         <motion.div
           className="earn-card"
+          data-bk-component="earn-card"
           role="region"
           aria-label="Earn — Annual Yield Accrual"
           initial={{ opacity: 0, y: 8 }}
