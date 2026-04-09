@@ -49,6 +49,12 @@ const TOKEN_MAP = {
     activePositions: [
       { type: 'lend', protocol: 'Aave v3', chain: 'Ethereum', amount: '3,000 USDC', apy: 3.8, earnPerYear: '$114/yr' },
     ],
+    about: 'USD Coin is a fully-reserved stablecoin pegged 1:1 to the US dollar. Issued by Circle, each USDC is backed by cash and short-duration US Treasuries held in regulated US financial institutions.',
+    news: [
+      { title: 'Circle files for US IPO, valuing firm at $5B', source: 'Bloomberg', age: '2h', sentiment: 'positive' },
+      { title: 'USDC supply hits all-time high of $43B on-chain', source: 'The Block', age: '8h', sentiment: 'positive' },
+      { title: 'Aave v3 USDC lending rates rise amid surge in borrowing demand', source: 'DeFiLlama', age: '1d', sentiment: 'neutral' },
+    ],
   },
   btc: {
     icon: tokenBtc, name: 'Bitcoin', symbol: 'BTC',
@@ -57,6 +63,12 @@ const TOKEN_MAP = {
     priceRange: [90000, 105000], chainPrice: '$97,855',
     chains: [{ name: 'Bitcoin', amount: '0.0574', usd: '$5,616.88' }],
     activePositions: [],
+    about: 'Bitcoin is the original decentralised cryptocurrency, secured by proof-of-work mining. With a fixed supply of 21 million coins, it is widely held as a long-term store of value and a hedge against inflation.',
+    news: [
+      { title: 'BlackRock Bitcoin ETF records $480M single-day inflow', source: 'CoinDesk', age: '3h', sentiment: 'positive' },
+      { title: 'BTC breaks $100K resistance for third time this month', source: 'CryptoSlate', age: '6h', sentiment: 'positive' },
+      { title: 'US spot Bitcoin ETFs see combined AUM top $60B', source: 'Bloomberg', age: '1d', sentiment: 'neutral' },
+    ],
   },
   eth: {
     icon: tokenEth, name: 'Ethereum', symbol: 'ETH',
@@ -67,6 +79,12 @@ const TOKEN_MAP = {
     activePositions: [
       { type: 'stake', protocol: 'Lido', chain: 'Ethereum', amount: '1.0 ETH', apy: 4.2, earnPerYear: '$167/yr' },
     ],
+    about: 'Ethereum is the leading smart contract platform, powering DeFi, NFTs, and thousands of decentralised applications. Its proof-of-stake consensus burns ETH with each transaction, making it a deflationary asset over time.',
+    news: [
+      { title: 'Ethereum Pectra upgrade confirmed for May — staking limit raised to 2048 ETH', source: 'Decrypt', age: '4h', sentiment: 'positive' },
+      { title: 'Layer 2 TVL crosses $50B for first time, led by Base and Arbitrum', source: 'L2Beat', age: '12h', sentiment: 'positive' },
+      { title: 'Lido staking share dips below 28% as solo staking grows', source: 'Blockworks', age: '2d', sentiment: 'neutral' },
+    ],
   },
   sol: {
     icon: tokenSol, name: 'Solana', symbol: 'SOL',
@@ -75,6 +93,12 @@ const TOKEN_MAP = {
     priceRange: [220, 280], chainPrice: '$242',
     chains: [{ name: 'Solana', amount: '17.4352', usd: '$4,228.38' }],
     activePositions: [],
+    about: 'Solana is a high-performance blockchain capable of 65,000 transactions per second with sub-cent fees. Its combination of proof-of-stake and proof-of-history makes it a leading platform for consumer apps, DeFi, and memecoins.',
+    news: [
+      { title: 'Solana network congestion causes delays during memecoin surge', source: 'CoinTelegraph', age: '5h', sentiment: 'negative' },
+      { title: 'Firedancer validator client goes live on mainnet', source: 'The Block', age: '1d', sentiment: 'positive' },
+      { title: 'Solana DEX volume overtakes Ethereum for second consecutive week', source: 'DeFiLlama', age: '2d', sentiment: 'positive' },
+    ],
   },
   usdt: {
     icon: tokenUsdt, name: 'Tether', symbol: 'USDT',
@@ -83,6 +107,12 @@ const TOKEN_MAP = {
     priceRange: [0.999, 1.001], chainPrice: '$1.00',
     chains: [{ name: 'Ethereum', amount: '3,398.7553', usd: '$3,398.75' }],
     activePositions: [],
+    about: 'Tether (USDT) is the world\'s largest stablecoin by market cap, pegged to the US dollar. It operates across 15+ blockchains and accounts for the majority of global crypto trading volume.',
+    news: [
+      { title: 'Tether reports $4.5B profit in Q1 2026, backed by US Treasury holdings', source: 'Reuters', age: '1d', sentiment: 'positive' },
+      { title: 'USDT market cap surpasses $110B as demand grows in emerging markets', source: 'CoinDesk', age: '2d', sentiment: 'positive' },
+      { title: 'EU MiCA enforcement puts pressure on USDT issuance in Europe', source: 'Blockworks', age: '3d', sentiment: 'negative' },
+    ],
   },
 };
 
@@ -448,6 +478,36 @@ export default function AssetScreen() {
             })}
           </div>
         )}
+
+        {/* ── About ── */}
+        <div className="asset-section-top">
+          <div className="portfolio-label">About {t.name}</div>
+          <p className="asset-about-text">{t.about}</p>
+        </div>
+
+        {/* ── News ── */}
+        <div className="asset-section-top">
+          <div className="portfolio-label">News</div>
+          <div className="asset-news-list">
+            {t.news.map((item, i) => (
+              <div key={i} className="asset-news-row">
+                <div className="asset-news-body">
+                  <span className="asset-news-title">{item.title}</span>
+                  <div className="asset-news-meta">
+                    <span className="asset-news-source">{item.source}</span>
+                    <span className="asset-news-dot">·</span>
+                    <span className="asset-news-age">{item.age}</span>
+                  </div>
+                </div>
+                {item.sentiment !== 'neutral' && (
+                  <span className={`asset-news-sentiment asset-news-sentiment--${item.sentiment}`}>
+                    {item.sentiment === 'positive' ? '↑' : '↓'}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Contract */}
         <div className="asset-contract-row">

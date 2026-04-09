@@ -225,6 +225,79 @@
   color: var(--bk-brand-primary) !important;
 }
 
+/* About section */
+.asset-about-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
+  line-height: 1.6;
+  padding: 0 20px 4px;
+  margin: 0;
+}
+
+/* News list */
+.asset-news-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.asset-news-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+}
+
+.asset-news-row:last-child { border-bottom: none; }
+
+.asset-news-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.asset-news-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-primary);
+  line-height: 1.45;
+}
+
+.asset-news-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.asset-news-source {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+}
+
+.asset-news-dot {
+  font-size: 11px;
+  color: var(--bk-text-muted);
+}
+
+.asset-news-age {
+  font-size: 11px;
+  color: var(--bk-text-muted);
+}
+
+.asset-news-sentiment {
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.asset-news-sentiment--positive { color: var(--bk-success); }
+.asset-news-sentiment--negative { color: var(--bk-error); }
+
 /* Contract row */
 .asset-contract-row {
   display: flex;
