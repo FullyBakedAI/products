@@ -1,1 +1,5 @@
 .DS_Store
+.claude-flow/
+.claude/
+.mcp.json
+node_modules/
