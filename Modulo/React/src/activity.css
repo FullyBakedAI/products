@@ -200,3 +200,24 @@
   margin: 0 20px 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* Press feedback */
+.activity-tx-row {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease;
+}
+.activity-tx-row:active {
+  background: var(--bk-bg-elevated);
+  transform: scale(0.985);
+  transform-origin: center;
+}
+
+.activity-filter-chip {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, background 0.15s, color 0.15s;
+}
+.activity-filter-chip:active {
+  transform: scale(0.92);
+}

@@ -44,11 +44,12 @@ export const motion = {
   },
 
   // Modal — full-screen overlays (Swap, Send, Receive) slide up
+  // Spring physics match native iOS modal presentation feel
   modal: {
-    enter: { duration: 0.22, ease: [0.25, 0.1, 0.25, 1] },
-    exit:  { duration: 0.15, ease: 'easeIn' },
-    offsetEnter: 48, // px Y offset for enter
-    offsetExit:  32, // px Y offset for exit
+    enter: { type: 'spring', damping: 28, stiffness: 320, mass: 0.75 },
+    exit:  { duration: 0.18, ease: [0.4, 0, 1, 1] },
+    offsetEnter: 64, // px Y offset for enter
+    offsetExit:  24, // px Y offset for exit
   },
 
   // Sheet — bottom sheet (token select) spring

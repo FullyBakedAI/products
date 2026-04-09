@@ -124,3 +124,25 @@
 .settings-signout {
   margin-top: 8px;
 }
+
+/* Press feedback */
+.settings-row {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease, transform 0.1s ease;
+}
+.settings-row:active {
+  background: var(--bk-bg-elevated);
+  transform: scale(0.985);
+  transform-origin: center;
+}
+
+.settings-wallet-card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease, transform 0.1s ease;
+}
+.settings-wallet-card:active {
+  transform: scale(0.985);
+  opacity: 0.85;
+}

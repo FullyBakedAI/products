@@ -389,3 +389,33 @@
 }
 
 .asset-contract-btn:hover { opacity: 1; }
+
+/* Press feedback */
+.asset-opp-row {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s ease, transform 0.1s ease;
+}
+.asset-opp-row:active {
+  background: var(--bk-bg-card);
+  transform: scale(0.985);
+  transform-origin: center;
+}
+
+.asset-news-row {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease;
+}
+.asset-news-row:active {
+  background: var(--bk-bg-elevated);
+}
+
+.asset-manage-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, opacity 0.1s !important;
+}
+.asset-manage-btn:active {
+  transform: scale(0.97) !important;
+}

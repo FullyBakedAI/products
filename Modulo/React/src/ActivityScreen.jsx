@@ -200,12 +200,13 @@ function TxDetailSheet({ tx, onClose }) {
 function TxRow({ tx, delay, onTap, onAction }) {
   return (
     <motion.div
-      className="tx-row"
+      className="tx-row activity-tx-row"
       role="listitem"
       onClick={() => onTap(tx)}
       style={{ cursor: 'pointer' }}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay } }}
+      whileTap={{ scale: 0.985 }}
     >
       <div style={{ position: 'relative', flexShrink: 0 }}>
         <TxBadge icon1={tx.icon1} pending={tx.pending} />
@@ -254,6 +255,7 @@ function TxRow({ tx, delay, onTap, onAction }) {
 // ── Main screen ────────────────────────────────────────────────────────
 
 export default function ActivityScreen() {
+  const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedTx, setSelectedTx] = useState(null);
   const pending  = TX.filter(t => t.pending);
@@ -272,9 +274,9 @@ export default function ActivityScreen() {
       role="main"
       aria-label="Activity"
       className="home-screen"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: m.fade.enter }}
-      exit={{ opacity: 0, transition: m.fade.exit }}
+      initial={{ opacity: 0, y: m.modal.offsetEnter }}
+      animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
+      exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
       <StatusBar />
 

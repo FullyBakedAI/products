@@ -638,7 +638,13 @@
   transition: opacity 0.15s ease;
 }
 
-.optimise-promo-card:active { opacity: 0.8; }
+.optimise-promo-card {
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+.optimise-promo-card:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
 
 .optimise-promo-icon {
   width: 44px;
@@ -826,6 +832,36 @@
 }
 
 .see-all-btn:hover { color: var(--bk-text-secondary); }
+
+/* ── Press states for mobile ────────────────────────────────────────── */
+.positions-sort-btn {
+  transition: transform 0.1s ease, opacity 0.1s;
+}
+.positions-sort-btn:active {
+  transform: scale(0.93);
+  opacity: 0.7;
+}
+
+.portfolio-whatif-btn:active {
+  transform: scale(0.93);
+  opacity: 1;
+}
+
+.swipe-action {
+  transition: filter 0.1s, transform 0.1s ease;
+}
+.swipe-action:active {
+  filter: brightness(1.2);
+  transform: scale(0.95);
+}
+
+.nudge-cta-btn {
+  transition: transform 0.1s ease, opacity 0.1s;
+}
+.nudge-cta-btn:active {
+  transform: scale(0.94);
+  opacity: 0.85;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    Feature 6: Achievement toast on HomeScreen

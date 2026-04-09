@@ -235,6 +235,7 @@ function TokenRow({ t, index }) {
         dragMomentum={false}
         onDragEnd={handleDragEnd}
         onTap={handleTap}
+        whileTap={{ scale: 0.985 }}
         aria-label={`${t.name}: ${t.usd}, ${t.change}, ${(t.yield * 100).toFixed(1)}% APY`}
       >
         <div className="token-row-main">

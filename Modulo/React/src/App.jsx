@@ -45,7 +45,7 @@ const sheetVariants = {
 };
 
 const MODAL_PATHS = [
-  '/swap', '/send', '/receive', '/asset', '/success',
+  '/swap', '/send', '/receive', '/asset', '/success', '/activity',
   '/optimise', '/autopilot', '/simulate', '/achievements', '/send/amount', '/settings',
 ];
 const SHEET_PATHS = ['/swap/select', '/review'];

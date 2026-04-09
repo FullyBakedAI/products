@@ -41,7 +41,13 @@
   font-family: var(--bk-font);
   cursor: pointer;
   flex-shrink: 0;
+  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, opacity 0.1s;
+}
+.optimise-back-btn:active {
+  transform: scale(0.93);
+  opacity: 0.7;
 }
 
 /* ── Stats row ───────────────────────────────────────────────────────── */
@@ -139,7 +145,12 @@
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-card);
   border-radius: 14px;
-  transition: opacity var(--bk-motion-fast);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--bk-motion-fast), transform 0.1s ease;
+}
+.optimise-row:active {
+  transform: scale(0.97);
 }
 
 .optimise-row--off {
