@@ -1,9 +1,83 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   ActionsScreen — supplemental styles only.
+   ActionsScreen — bottom sheet + order ticket styles
    Core styles from swap.css, home.css, shared.css.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* Tab content stack — matches SwapScreen spacing (16px side padding, 10px gap between sections) */
+/* ── Sheet overlay ──────────────────────────────────────────────────── */
+
+/* Fills the full screen-wrapper; screen-wrapper slides from y:100% */
+.actions-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Tap to dismiss — dark area above the sheet */
+.actions-backdrop {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The sheet itself */
+.actions-sheet {
+  background: var(--bk-bg-base);
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 87%;
+  /* Subtle top border */
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Sheet header row */
+.actions-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 20px 10px;
+  flex-shrink: 0;
+}
+
+.actions-sheet-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.4;
+}
+
+/* Tab bar — horizontal scroll for 4 tabs */
+.actions-tabs {
+  border-bottom: 1px solid var(--bk-border-subtle);
+  padding-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.actions-tabs::-webkit-scrollbar { display: none; }
+.actions-tabs .tab { white-space: nowrap; }
+
+/* Scrollable area within the sheet */
+.actions-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.actions-scroll::-webkit-scrollbar { display: none; }
+
+/* ── Tab content stack ──────────────────────────────────────────────── */
+
 .actions-tab-stack {
   display: flex;
   flex-direction: column;
@@ -11,7 +85,6 @@
   padding: 16px 16px 0;
 }
 
-/* Numpad and CTA have their own side padding/margin — don't double up */
 .actions-tab-stack .numpad {
   padding-left: 8px;
   padding-right: 8px;
@@ -24,7 +97,245 @@
   width: 100% !important;
 }
 
-/* Segment control row (Market/Limit, Lend/Borrow) — uses existing .time-btn */
+/* ── Trade tab — order ticket ───────────────────────────────────────── */
+
+/* Asset context header */
+.trade-asset-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 14px;
+  width: 100%;
+  font-family: var(--bk-font);
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s;
+}
+
+.trade-asset-header:active {
+  border-color: var(--bk-brand-primary);
+}
+
+.trade-asset-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: block;
+  border-radius: 50%;
+}
+
+.trade-asset-info { flex: 1; min-width: 0; }
+
+.trade-asset-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.3;
+}
+
+.trade-asset-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.trade-asset-price {
+  font-size: 13px;
+  color: var(--bk-text-secondary);
+}
+
+.trade-asset-chg {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.trade-asset-chg.positive { color: var(--bk-success); }
+.trade-asset-chg.negative { color: var(--bk-error); }
+
+.trade-change-chip {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-brand-primary);
+  flex-shrink: 0;
+}
+
+/* Buy / Sell direction toggle */
+.trade-direction-tabs {
+  display: flex;
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 14px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.trade-dir-tab {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 11px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  color: var(--bk-text-muted);
+  background: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.trade-dir-tab.dir-buy-active {
+  background: color-mix(in srgb, var(--bk-success) 16%, var(--bk-bg-base) 84%);
+  color: var(--bk-success);
+}
+
+.trade-dir-tab.dir-sell-active {
+  background: color-mix(in srgb, var(--bk-error) 16%, var(--bk-bg-base) 84%);
+  color: var(--bk-error);
+}
+
+/* Order type pill row */
+.trade-order-type-row {
+  display: flex;
+  gap: 6px;
+}
+
+.trade-order-pill {
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  background: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  transition: all 0.12s;
+}
+
+.trade-order-pill.active {
+  background: var(--bk-bg-elevated);
+  color: var(--bk-text-primary);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Limit price row */
+.trade-limit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.trade-limit-row.focused {
+  border-color: var(--bk-brand-primary);
+}
+
+.trade-limit-label {
+  font-size: 13px;
+  color: var(--bk-text-muted);
+}
+
+.trade-limit-right {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.trade-limit-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+/* Amount display — centred, Robinhood style */
+.trade-amount-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.trade-amount-display.focused {
+  border-color: var(--bk-brand-primary);
+}
+
+.trade-amount-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.trade-amount-currency {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--bk-text-muted);
+  line-height: 1;
+  margin-right: 2px;
+}
+
+.trade-amount-number {
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.trade-amount-sub {
+  font-size: 13px;
+  color: var(--bk-text-muted);
+  margin-top: 6px;
+}
+
+/* Order summary row */
+.trade-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  padding: 0 4px;
+}
+
+.trade-summary-dot { opacity: 0.35; }
+
+/* CTA colour overrides — buy = green, sell = red */
+.trade-cta-buy {
+  background: var(--bk-success) !important;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--bk-success) 30%, transparent) !important;
+}
+
+.trade-cta-sell {
+  background: var(--bk-error) !important;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--bk-error) 30%, transparent) !important;
+}
+
+/* ── Segment control (Lend/Borrow sub-tabs) ─────────────────────────── */
+
 .actions-segment-row {
   display: flex;
   gap: 4px;
@@ -43,82 +354,14 @@
   padding: 0;
 }
 
-/* Buy/Sell direction */
-.actions-direction-row {
-  display: flex;
-  gap: 8px;
-}
+/* ── Collateral section ─────────────────────────────────────────────── */
 
-.actions-dir-btn {
-  flex: 1 !important;
-  height: 40px !important;
-}
-
-.dir-buy  { background: color-mix(in srgb, var(--bk-success) 14%, transparent) !important; border-color: color-mix(in srgb, var(--bk-success) 30%, transparent) !important; color: var(--bk-success) !important; }
-.dir-sell { background: color-mix(in srgb, var(--bk-error)   14%, transparent) !important; border-color: color-mix(in srgb, var(--bk-error)   30%, transparent) !important; color: var(--bk-error)   !important; }
-
-/* Asset selector — uses .swap-card chrome */
-.actions-asset-select {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  cursor: pointer;
-  font-family: var(--bk-font);
-  width: 100%;
-  text-align: left;
-  height: auto;
-  border: none;
-}
-
-.actions-asset-name {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--bk-text-primary);
-}
-
-.actions-asset-change {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--bk-brand-primary);
-}
-
-/* Token pill without background — for use inside amount cards */
-.token-pill-flat {
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-/* Selected state for platform rows in lend tab — scoped to avoid CSS conflict with asset.css */
-.actions-tab-stack .asset-opp-row[data-selected="true"] {
-  background: rgba(88, 75, 235, 0.06);
-}
-
-.asset-opp-info { flex: 1; }
-
-.asset-opp-apy {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--bk-success);
-  letter-spacing: -0.02em;
-}
-
-.asset-opp-apy-label {
-  font-size: 11px;
-  color: var(--bk-text-muted);
-  margin-left: 2px;
-}
-
-/* Collateral section — clean, no card chrome */
 .actions-collateral-section {
   padding: 14px 0 0;
   border-bottom: 1px solid var(--bk-border-subtle);
   padding-bottom: 14px;
 }
 
-/* Collateral row — inside collateral section */
 .collateral-row {
   display: flex;
   align-items: center;
@@ -166,7 +409,36 @@
   background: var(--bk-text-primary);
 }
 
-/* Price impact + route row — Uniswap pattern */
+/* ── Platform rows (Lend tab) ───────────────────────────────────────── */
+
+.asset-opp-info { flex: 1; }
+
+.asset-opp-apy {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bk-success);
+  letter-spacing: -0.02em;
+}
+
+.asset-opp-apy-label {
+  font-size: 11px;
+  color: var(--bk-text-muted);
+  margin-left: 2px;
+}
+
+.actions-tab-stack .asset-opp-row[data-selected="true"] {
+  background: rgba(88, 75, 235, 0.06);
+}
+
+/* Token pill without background */
+.token-pill-flat {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* ── Price impact row (Swap tab) ────────────────────────────────────── */
+
 .swap-impact-row {
   display: flex;
   justify-content: space-between;
@@ -195,18 +467,8 @@
   text-align: right;
 }
 
-/* card-bottom variant with top margin */
-.card-bottom-mt {
-  margin-top: 12px;
-}
+/* ── Deposit tab ────────────────────────────────────────────────────── */
 
-/* Success-coloured bold text */
-.text-success-bold {
-  color: var(--bk-success);
-  font-weight: 700;
-}
-
-/* Deposit cards */
 .actions-deposit-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -240,7 +502,6 @@
 
 .actions-deposit-card .card-label { margin: 0; }
 
-/* Info/notice row at bottom of a tab */
 .actions-notice {
   display: flex;
   align-items: center;
@@ -249,19 +510,11 @@
   color: var(--bk-text-muted);
 }
 
-/* Header — no bottom line (matches AssetScreen pattern) */
-.actions-screen .swap-header {
-  border: none;
+/* ── Misc ───────────────────────────────────────────────────────────── */
+
+.card-bottom-mt { margin-top: 12px; }
+
+.text-success-bold {
+  color: var(--bk-success);
+  font-weight: 700;
 }
-
-/* Tab bar — horizontal scroll for 4 tabs, no wrapping */
-.actions-tabs {
-  border-bottom: 1px solid var(--bk-border-subtle);
-  padding-bottom: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.actions-tabs::-webkit-scrollbar { display: none; }
-
-.actions-tabs .tab { white-space: nowrap; }

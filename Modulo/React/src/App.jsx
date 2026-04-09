@@ -44,10 +44,10 @@ const sheetVariants = {
 };
 
 const MODAL_PATHS = [
-  '/swap', '/send', '/receive', '/asset', '/actions', '/success',
+  '/swap', '/send', '/receive', '/asset', '/success',
   '/optimise', '/autopilot', '/simulate', '/achievements', '/send/amount', '/settings',
 ];
-const SHEET_PATHS = ['/swap/select', '/review'];
+const SHEET_PATHS = ['/swap/select', '/review', '/actions'];
 
 function getVariants(pathname) {
   if (SHEET_PATHS.some(p => pathname.startsWith(p))) return sheetVariants;
