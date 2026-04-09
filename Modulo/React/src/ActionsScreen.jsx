@@ -1,32 +1,40 @@
 /**
  * ActionsScreen — bottom sheet action hub
  *
- * Slides up as a partial-height sheet (Uniswap pattern).
- * Tap backdrop or X to dismiss back to previous screen.
+ * Rendered as an overlay from ActionsContext (not a route).
+ * Previous screen stays mounted and visible behind the backdrop.
  *
- * Route: /actions  (sheetVariants — slides from bottom)
  * Tabs: Swap | Trade | Lend & Borrow | Deposit
  */
 
-import { useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { X, Delete, ChevronDown, AlertCircle, TrendingUp } from 'lucide-react';
+import { Delete, ChevronDown, X, AlertCircle } from 'lucide-react';
 import { useSwap } from './SwapContext';
 import { useIconOverride } from './IconOverrideContext';
+import { useActions } from './ActionsContext';
 import './actions.css';
 
-import iconActionRecv  from './assets/icon-action-receive.svg';
-import iconActionSend  from './assets/icon-action-send.svg';
 import tokenEth  from './assets/token-eth.svg';
 import tokenUsdc from './assets/token-usdc.svg';
+import iconActionRecv from './assets/icon-action-receive.svg';
+import iconActionSend from './assets/icon-action-send.svg';
+
+// ── Hook: navigate AND close the drawer so the next screen appears on top ──
+
+function useFlowNavigate() {
+  const navigate = useNavigate();
+  const { closeActions } = useActions();
+  return (path, opts) => { closeActions(); navigate(path, opts); };
+}
 
 // ── Shared sub-components ────────────────────────────────────────────────────
 
 function TokenPill({ token, side }) {
-  const navigate = useNavigate();
+  const navigate = useFlowNavigate();
   return (
     <Button
       className="token-pill-btn"
@@ -41,7 +49,7 @@ function TokenPill({ token, side }) {
 }
 
 function SelectTokenButton({ side }) {
-  const navigate = useNavigate();
+  const navigate = useFlowNavigate();
   return (
     <Button className="select-token-cta-btn" onPress={() => navigate(`/swap/select/${side}`)}>
       Select token
@@ -67,7 +75,8 @@ function Numpad({ onKey }) {
 
 // ── Swap tab ─────────────────────────────────────────────────────────────────
 
-function SwapTab({ navigate }) {
+function SwapTab() {
+  const navigate = useFlowNavigate();
   const {
     payToken, receiveToken,
     payAmount, setPayAmount,
@@ -102,7 +111,7 @@ function SwapTab({ navigate }) {
   function handleSwap() { setSwappedVisual(v => !v); swapDirections(); }
 
   return (
-    <>
+    <div className="actions-tab-stack">
       <div className="swap-cards">
         <div className="swap-card pay-card" role="region" aria-label="You pay">
           <div className="card-label">You pay</div>
@@ -194,7 +203,7 @@ function SwapTab({ navigate }) {
           >{ctaLabel}</motion.span>
         </AnimatePresence>
       </Button>
-    </>
+    </div>
   );
 }
 
@@ -202,7 +211,8 @@ function SwapTab({ navigate }) {
 
 const ETH_PRICE = 3864.20;
 
-function TradeTab({ navigate }) {
+function TradeTab() {
+  const navigate = useFlowNavigate();
   const [orderType, setOrderType]   = useState('market');
   const [direction, setDirection]   = useState('buy');
   const [amount, setAmount]         = useState('');
@@ -230,7 +240,7 @@ function TradeTab({ navigate }) {
   return (
     <div className="actions-tab-stack">
 
-      {/* Asset header — tap to change */}
+      {/* Asset header */}
       <button
         className="trade-asset-header"
         aria-label="Change asset — currently Ethereum"
@@ -249,7 +259,7 @@ function TradeTab({ navigate }) {
         </div>
       </button>
 
-      {/* Buy / Sell toggle — Robinhood style */}
+      {/* Buy / Sell toggle */}
       <div className="trade-direction-tabs" role="group" aria-label="Buy or sell">
         <button
           className={`trade-dir-tab${direction === 'buy' ? ' dir-buy-active' : ''}`}
@@ -277,7 +287,7 @@ function TradeTab({ navigate }) {
         ))}
       </div>
 
-      {/* Limit price row — shown only for limit orders */}
+      {/* Limit price row */}
       {orderType === 'limit' && (
         <button
           className={`trade-limit-row${activeInput === 'limit' ? ' focused' : ''}`}
@@ -292,7 +302,7 @@ function TradeTab({ navigate }) {
         </button>
       )}
 
-      {/* Amount display — centred, Robinhood style */}
+      {/* Amount display */}
       <button
         className={`trade-amount-display${activeInput === 'amount' || orderType === 'market' ? ' focused' : ''}`}
         onClick={() => setActiveInput('amount')}
@@ -308,7 +318,6 @@ function TradeTab({ navigate }) {
         <div className="trade-amount-sub">≈ {ethAmount} ETH</div>
       </button>
 
-      {/* Order summary — appears once amount entered */}
       {ctaReady && (
         <div className="trade-summary-row" aria-live="polite">
           <span>Est. fee $2.10</span>
@@ -351,7 +360,8 @@ const PLATFORMS = [
   { name: 'Spark',    apy: 4.1, tvl: '$1.4B'  },
 ];
 
-function LendBorrowTab({ navigate }) {
+function LendBorrowTab() {
+  const navigate = useFlowNavigate();
   const [sub, setSub]           = useState('lend');
   const [amount, setAmount]     = useState('');
   const [platform, setPlatform] = useState(PLATFORMS[0]);
@@ -369,13 +379,19 @@ function LendBorrowTab({ navigate }) {
 
   return (
     <div className="actions-tab-stack">
-      <div className="actions-segment-row" role="group" aria-label="Lend or borrow">
-        {['lend', 'borrow'].map(s => (
-          <button key={s} className={`time-btn${sub === s ? ' active' : ''}`}
-            onClick={() => setSub(s)} aria-pressed={sub === s}>
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </button>
-        ))}
+
+      {/* Lend / Borrow toggle — matches Buy/Sell style */}
+      <div className="trade-direction-tabs" role="group" aria-label="Lend or borrow">
+        <button
+          className={`trade-dir-tab${sub === 'lend' ? ' dir-buy-active' : ''}`}
+          onClick={() => setSub('lend')}
+          aria-pressed={sub === 'lend'}
+        >Lend</button>
+        <button
+          className={`trade-dir-tab${sub === 'borrow' ? ' dir-sell-active' : ''}`}
+          onClick={() => setSub('borrow')}
+          aria-pressed={sub === 'borrow'}
+        >Borrow</button>
       </div>
 
       {sub === 'lend' ? (
@@ -488,7 +504,8 @@ function LendBorrowTab({ navigate }) {
 
 // ── Deposit tab ──────────────────────────────────────────────────────────────
 
-function DepositTab({ navigate }) {
+function DepositTab() {
+  const navigate = useFlowNavigate();
   return (
     <div className="actions-tab-stack">
       <div className="actions-deposit-grid">
@@ -516,68 +533,71 @@ function DepositTab({ navigate }) {
 const TABS = [
   { id: 'swap',    label: 'Swap' },
   { id: 'trade',   label: 'Trade' },
-  { id: 'lend',    label: 'Lend & Borrow' },
+  { id: 'lend',    label: 'Lend' },
   { id: 'deposit', label: 'Deposit' },
 ];
 
 export default function ActionsScreen() {
-  const navigate       = useNavigate();
-  const [searchParams] = useSearchParams();
-  const defaultTab     = searchParams.get('tab') || 'swap';
-  const [active, setActive] = useState(TABS.find(t => t.id === defaultTab) ? defaultTab : 'swap');
+  const { closeActions, tab: initialTab } = useActions();
+  const [activeIdx, setActiveIdx] = useState(() => {
+    const i = TABS.findIndex(t => t.id === initialTab);
+    return i >= 0 ? i : 0;
+  });
+
+  const active = TABS[activeIdx].id;
+
+  function next() { setActiveIdx(i => (i + 1) % TABS.length); }
 
   return (
-    /* Full-height overlay — the screen-wrapper slides this from y:100% */
     <div className="actions-overlay" role="dialog" aria-modal="true" aria-label="Actions">
 
       {/* Dark backdrop — tap to dismiss */}
       <button
         className="actions-backdrop"
         aria-label="Close actions"
-        onClick={() => navigate(-1)}
+        onClick={closeActions}
       />
 
-      {/* The sheet panel — anchored to bottom */}
-      <div className="actions-sheet">
-
+      {/* Sheet with drag-to-dismiss */}
+      <motion.div
+        className="actions-sheet"
+        drag="y"
+        dragConstraints={{ top: 0 }}
+        dragElastic={{ top: 0, bottom: 0.3 }}
+        onDragEnd={(_, info) => { if (info.offset.y > 80) closeActions(); }}
+      >
         {/* Drag handle */}
         <div className="drag-handle" aria-hidden="true">
           <div className="drag-handle-pill" />
         </div>
 
-        {/* Sheet header */}
-        <div className="actions-sheet-header">
-          <span className="actions-sheet-title">Actions</span>
+        {/* Cycle button + close */}
+        <div className="actions-header-row">
+          <button
+            className="actions-cycle-btn"
+            onClick={next}
+            aria-label={`Current: ${TABS[activeIdx].label}. Tap to cycle.`}
+            aria-live="polite"
+          >
+            {TABS[activeIdx].label}
+          </button>
           <Button
             className="close-btn-shared"
             aria-label="Close"
-            onPress={() => navigate(-1)}
+            onPress={closeActions}
           >
             <X size={16} color="var(--bk-text-muted)" strokeWidth={2} aria-hidden="true" />
           </Button>
         </div>
 
-        {/* Tab bar */}
-        <div className="tabs actions-tabs" role="tablist" aria-label="Action type" data-bk-component="tab-bar">
-          {TABS.map(t => (
-            <button
-              key={t.id}
-              className={`tab${active === t.id ? ' active' : ''}`}
-              role="tab"
-              aria-selected={active === t.id}
-              onClick={() => setActive(t.id)}
-            >{t.label}</button>
-          ))}
+        {/* Tab content — no scroll */}
+        <div className="actions-scroll">
+          {active === 'swap'    && <SwapTab />}
+          {active === 'trade'   && <TradeTab />}
+          {active === 'lend'    && <LendBorrowTab />}
+          {active === 'deposit' && <DepositTab />}
         </div>
-
-        {/* Scrollable tab content */}
-        <div className="scroll-content actions-scroll">
-          {active === 'swap'    && <SwapTab navigate={navigate} />}
-          {active === 'trade'   && <TradeTab navigate={navigate} />}
-          {active === 'lend'    && <LendBorrowTab navigate={navigate} />}
-          {active === 'deposit' && <DepositTab navigate={navigate} />}
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

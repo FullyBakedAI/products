@@ -15,6 +15,7 @@ import { motion, useMotionValue, animate, AnimatePresence } from 'framer-motion'
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
+import { useActions } from './ActionsContext';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import './home.css';
@@ -162,6 +163,7 @@ function AchievementToast({ onClose }) {
 function TokenRow({ t, index }) {
   const x = useMotionValue(0);
   const navigate = useNavigate();
+  const { openActions } = useActions();
 
   function snap(open) {
     animate(x, open ? -ACTION_W : 0, { type: 'spring', stiffness: 260, damping: 26, mass: 0.7 });
@@ -210,8 +212,8 @@ function TokenRow({ t, index }) {
               setTimeout(() => {
                 if (id === 'swap')        navigate('/swap');
                 else if (id === 'manage') navigate(`/asset/${t.id}`);
-                else if (id === 'stake')  navigate(`/actions?tab=lend&asset=${t.id}`);
-                else                      navigate(`/actions?tab=${id}&asset=${t.id}`);
+                else if (id === 'stake')  openActions({ tab: 'lend', asset: t.id });
+                else                      openActions({ tab: id, asset: t.id });
               }, 280);
             }}
           >
@@ -274,6 +276,7 @@ function TokenRow({ t, index }) {
 // ── HomeScreen ────────────────────────────────────────────────────────────────
 export default function HomeScreen() {
   const navigate = useNavigate();
+  const { openActions } = useActions();
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
   const [showAchievementToast, setShowAchievementToast] = useState(false);
@@ -402,7 +405,7 @@ export default function HomeScreen() {
             <img src={iconActionSwap} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Swap</span>
           </Button>
-          <Button className="action-btn" aria-label="Buy tokens" onPress={() => navigate('/actions?tab=deposit')}>
+          <Button className="action-btn" aria-label="Buy tokens" onPress={() => openActions({ tab: 'deposit' })}>
             <img src={iconActionBuy} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Buy</span>
           </Button>
@@ -472,7 +475,7 @@ export default function HomeScreen() {
               <button
                 className="see-all-btn"
                 aria-label="See all tokens"
-                onClick={() => navigate('/actions?tab=lend')}
+                onClick={() => openActions({ tab: 'lend' })}
               >
                 See all {TOKENS.length} tokens
                 <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />

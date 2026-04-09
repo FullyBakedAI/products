@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { SwapProvider }           from './SwapContext';
 import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
+import { ActionsProvider, useActions } from './ActionsContext';
 import { motion as m }            from './motion-tokens';
 import './shared.css';
 import HomeScreen         from './HomeScreen';
@@ -47,12 +48,33 @@ const MODAL_PATHS = [
   '/swap', '/send', '/receive', '/asset', '/success',
   '/optimise', '/autopilot', '/simulate', '/achievements', '/send/amount', '/settings',
 ];
-const SHEET_PATHS = ['/swap/select', '/review', '/actions'];
+const SHEET_PATHS = ['/swap/select', '/review'];
 
 function getVariants(pathname) {
   if (SHEET_PATHS.some(p => pathname.startsWith(p))) return sheetVariants;
   if (MODAL_PATHS.some(p => pathname.startsWith(p))) return modalVariants;
   return fadeVariants;
+}
+
+// ── Actions overlay (sits on top of whatever screen is active) ───────────
+function ActionsOverlay() {
+  const { isOpen } = useActions();
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="screen-wrapper"
+          style={{ zIndex: 10 }}
+          variants={sheetVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <ActionsScreen />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }
 
 // ── App routes (inside phone frame) ──────────────────────────────────────
@@ -78,7 +100,6 @@ function AnimatedRoutes() {
           <Route path="/send"                element={<SendScreen />} />
           <Route path="/receive"             element={<ReceiveScreen />} />
           <Route path="/asset/:id"           element={<AssetScreen />} />
-          <Route path="/actions"             element={<ActionsScreen />} />
           <Route path="/review"              element={<ReviewScreen />} />
           <Route path="/success"             element={<SuccessScreen />} />
           <Route path="/activity"            element={<ActivityScreen />} />
@@ -100,14 +121,17 @@ function AnimatedRoutes() {
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <IconOverrideProvider>
-      <SwapProvider>
-        <UndoToastProvider>
-          <div className="phone">
-            <AnimatedRoutes />
-          </div>
-        </UndoToastProvider>
-      </SwapProvider>
-    </IconOverrideProvider>
+    <ActionsProvider>
+      <IconOverrideProvider>
+        <SwapProvider>
+          <UndoToastProvider>
+            <div className="phone">
+              <AnimatedRoutes />
+              <ActionsOverlay />
+            </div>
+          </UndoToastProvider>
+        </SwapProvider>
+      </IconOverrideProvider>
+    </ActionsProvider>
   );
 }

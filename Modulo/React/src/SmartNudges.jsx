@@ -10,6 +10,7 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { TrendingUp, AlertCircle, Lightbulb, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useActions } from './ActionsContext';
 
 const NUDGES_DATA = [
   {
@@ -19,7 +20,7 @@ const NUDGES_DATA = [
     headline: 'ETH yield up +0.9% on Lido',
     detail: 'Better rate available now',
     cta: 'Move now',
-    path: '/actions?tab=lend&asset=eth',
+    action: { type: 'actions', tab: 'lend', asset: 'eth' },
   },
   {
     id: 'sol-idle',
@@ -28,7 +29,7 @@ const NUDGES_DATA = [
     headline: 'SOL idle for 14 days',
     detail: "Could've earned $12 staking",
     cta: 'Stake',
-    path: '/actions?tab=lend&asset=sol',
+    action: { type: 'actions', tab: 'lend', asset: 'sol' },
   },
   {
     id: 'btc-health',
@@ -37,12 +38,13 @@ const NUDGES_DATA = [
     headline: 'BTC health factor: 3.2×',
     detail: "You're safe — no liquidation risk",
     cta: 'Details',
-    path: '/asset/btc',
+    action: { type: 'navigate', path: '/asset/btc' },
   },
 ];
 
 export default function SmartNudges() {
   const navigate = useNavigate();
+  const { openActions } = useActions();
   const [nudges, setNudges] = useState(NUDGES_DATA);
 
   function dismiss(id) {
@@ -58,7 +60,7 @@ export default function SmartNudges() {
     >
       <div className="smart-nudges-scroll">
         <AnimatePresence>
-          {nudges.map(({ id, Icon, iconColor, headline, detail, cta, path }) => (
+          {nudges.map(({ id, Icon, iconColor, headline, detail, cta, action }) => (
             <motion.article
               key={id}
               className="nudge-card"
@@ -85,7 +87,10 @@ export default function SmartNudges() {
               <Button
                 className="nudge-cta-btn"
                 aria-label={`${cta} — ${headline}`}
-                onPress={() => navigate(path)}
+                onPress={() => action.type === 'actions'
+                  ? openActions({ tab: action.tab, asset: action.asset })
+                  : navigate(action.path)
+                }
               >
                 {cta}
               </Button>

@@ -1,6 +1,7 @@
 import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIconOverride } from './IconOverrideContext';
+import { useActions } from './ActionsContext';
 
 import iconNavHome     from './assets/icon-nav-home.svg';
 import iconNavSearch   from './assets/icon-nav-search.svg';
@@ -11,6 +12,7 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { getIcon } = useIconOverride(); // kept for DS page icon slot overrides
+  const { openActions } = useActions();
 
   const isActive = (path) => pathname === path || pathname.startsWith(path + '/');
 
@@ -38,7 +40,7 @@ export default function BottomNav() {
       <Button
         className="nav-btn nav-btn-swap"
         aria-label="Actions"
-        onPress={() => navigate('/actions')}
+        onPress={() => openActions({})}
       >
         <img src={iconNavSwap} alt="" width="22" height="22" aria-hidden="true" />
       </Button>

@@ -13,6 +13,7 @@
  */
 
 import { useParams, useNavigate } from 'react-router-dom';
+import { useActions } from './ActionsContext';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
@@ -201,6 +202,7 @@ const fmt = (n) => n >= 10000
 export default function AssetScreen() {
   const { id }   = useParams();
   const navigate = useNavigate();
+  const { openActions } = useActions();
   const [period, setPeriod]             = useState('1D');
   const [crosshairPrice, setCrosshair]  = useState(null);  // floating label value
   const [crosshairX, setCrosshairX]     = useState(null);  // 0–1 normalized
@@ -373,7 +375,7 @@ export default function AssetScreen() {
             { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
             { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
             { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
-            { label: 'Actions', Icon: Zap,           action: () => navigate(`/actions?asset=${id}`) },
+            { label: 'Actions', Icon: Zap,           action: () => openActions({ asset: id }) },
           ].map(({ label, src, Icon, action }) => (
             <Button key={label} className="action-btn" aria-label={label} onPress={action}>
               {src
@@ -396,7 +398,7 @@ export default function AssetScreen() {
             ].map(({ Icon, label, sub, tab }, i) => (
               <button key={label}
                 className={`asset-opp-row${i === 0 ? ' first' : i === 2 ? ' last' : ''}`}
-                onClick={() => navigate(`/actions?tab=${tab}&asset=${id}`)}
+                onClick={() => openActions({ tab, asset: id })}
                 aria-label={label}>
                 <Icon size={20} strokeWidth={1.5} color="var(--bk-brand-primary)" aria-hidden="true" />
                 <div className="asset-opp-text">
@@ -438,7 +440,7 @@ export default function AssetScreen() {
                   <Button
                     className="bottom-cta-btn cta-disabled asset-manage-btn"
                     aria-label={`Manage ${pos.protocol}`}
-                    onPress={() => navigate(`/actions?tab=lend&asset=${id}`)}>
+                    onPress={() => openActions({ tab: 'lend', asset: id })}>
                     Manage position →
                   </Button>
                 </div>
