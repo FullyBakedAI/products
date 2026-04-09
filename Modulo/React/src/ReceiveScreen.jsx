@@ -108,7 +108,7 @@ export default function ReceiveScreen() {
                 : <img src={iconCopy} width="16" height="16" aria-hidden="true" />
               }
             </Button>
-            <Button className="address-action-btn" aria-label="Share address" onPress={() => {}}>
+            <Button className="address-action-btn" aria-label="Share address" onPress={() => { if (navigator.share) navigator.share({ title: 'Modulo Wallet', text: '0x7f3e...9A14' }).catch(() => {}); }}>
               <img src={iconShare} width="16" height="16" aria-hidden="true" />
             </Button>
           </div>
@@ -184,7 +184,7 @@ export default function ReceiveScreen() {
                 key={ex}
                 className="exchange-row-btn"
                 aria-label={`Fund from ${ex}`}
-                onPress={() => {}}
+                onPress={() => navigate('/')}
                 role="listitem"
               >
                 {ex}

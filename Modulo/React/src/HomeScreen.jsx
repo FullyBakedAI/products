@@ -227,10 +227,10 @@ export default function HomeScreen() {
           <img src={logoModulo} alt="Modulo" width="93" height="18" />
         </div>
         <div className="home-header-actions">
-          <Button className="icon-btn" aria-label="Notifications" onPress={() => {}}>
+          <Button className="icon-btn" aria-label="Notifications" onPress={() => navigate('/activity')}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
           </Button>
-          <Button className="icon-btn" aria-label="Settings" onPress={() => {}}>
+          <Button className="icon-btn" aria-label="Settings" onPress={() => navigate('/settings')}>
             <img src={iconSettings} alt="" width="16" height="16" aria-hidden="true" />
           </Button>
         </div>

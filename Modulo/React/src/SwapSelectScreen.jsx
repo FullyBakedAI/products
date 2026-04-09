@@ -21,7 +21,7 @@ export default function SwapSelectScreen() {
 
   function handleSelect(symbol) {
     selectToken(side, symbol);
-    navigate(-1);
+    navigate('/swap');
   }
 
   return (
@@ -34,7 +34,7 @@ export default function SwapSelectScreen() {
 
       <div className="select-header">
         <span className="select-title">Select token</span>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate(-1)}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/swap')}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M16.5 5.5L5.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />
             <path d="M5.5 5.5L16.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />

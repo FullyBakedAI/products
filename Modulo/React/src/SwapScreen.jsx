@@ -37,7 +37,7 @@ function SwapHeader({ onClose }) {
         </Button>
         <h1 className="swap-title">Swap</h1>
       </div>
-      <Button className="settings-btn" aria-label="Swap settings">
+      <Button className="settings-btn" aria-label="Swap settings" onPress={() => navigate('/settings')}>
         <img src={iconSettings} width="20" height="20" aria-hidden="true" />
       </Button>
     </div>

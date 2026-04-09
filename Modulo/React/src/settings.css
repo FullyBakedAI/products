@@ -1,0 +1,116 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SettingsScreen Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.settings-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  flex-shrink: 0;
+}
+
+.settings-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.5;
+}
+
+/* ── Wallet Card ───────────────────────────────────────────────────── */
+.settings-wallet-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+}
+
+.settings-wallet-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-wallet-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.5;
+}
+
+.settings-wallet-addr {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Section ───────────────────────────────────────────────────────── */
+.settings-section {
+  padding-top: 8px;
+}
+
+.settings-section-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 12px 20px 8px;
+  line-height: 1.5;
+}
+
+/* ── Row ───────────────────────────────────────────────────────────── */
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  text-align: left;
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-row:hover {
+  background: var(--bk-bg-card);
+}
+
+.settings-row-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-row-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--bk-text-primary);
+  line-height: 1.5;
+}
+
+.settings-row-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  line-height: 1.5;
+}
+
+.settings-signout {
+  margin-top: 8px;
+}

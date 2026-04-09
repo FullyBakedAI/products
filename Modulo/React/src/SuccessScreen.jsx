@@ -130,7 +130,7 @@ export default function SuccessScreen() {
             className="bottom-cta-btn success-nudge-btn"
             style={{ margin: '8px 0 0', width: '100%' }}
             aria-label={`Set a price alert for ${action === 'swap' ? 'this token' : action}`}
-            onPress={() => {}}
+            onPress={() => navigate('/settings')}
           >
             <img src={iconNotif} width="14" height="14" aria-hidden="true" />
             Set a price alert
@@ -138,7 +138,7 @@ export default function SuccessScreen() {
           <button
             className="success-share-btn"
             aria-label="Share transaction"
-            onClick={() => {}}
+            onClick={() => { if (navigator.share) navigator.share({ title: 'Modulo', text: `${action} complete` }).catch(() => {}); }}
           >
             <img src={iconShare} width="13" height="13" aria-hidden="true" />
             Share

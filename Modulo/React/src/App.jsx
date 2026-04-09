@@ -15,6 +15,8 @@ import ActionsScreen      from './ActionsScreen';
 import ReviewScreen       from './ReviewScreen';
 import SuccessScreen      from './SuccessScreen';
 import ActivityScreen     from './ActivityScreen';
+import SendAmountScreen   from './SendAmountScreen';
+import SettingsScreen     from './SettingsScreen';
 
 // ── Motion variants (driven by motion-tokens.js) ──────────────────────────
 const fadeVariants = {
@@ -35,7 +37,7 @@ const sheetVariants = {
   exit:    { y: '100%', transition: m.sheet.exit  },
 };
 
-const MODAL_PATHS = ['/swap', '/send', '/receive', '/asset', '/actions', '/success'];
+const MODAL_PATHS = ['/swap', '/send', '/receive', '/asset', '/actions', '/success', '/settings'];
 const SHEET_PATHS = ['/swap/select', '/review'];
 
 function getVariants(pathname) {
@@ -71,6 +73,8 @@ function AnimatedRoutes() {
           <Route path="/review"              element={<ReviewScreen />} />
           <Route path="/success"             element={<SuccessScreen />} />
           <Route path="/activity"            element={<ActivityScreen />} />
+          <Route path="/send/amount"         element={<SendAmountScreen />} />
+          <Route path="/settings"            element={<SettingsScreen />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

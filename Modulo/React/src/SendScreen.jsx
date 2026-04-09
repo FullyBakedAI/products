@@ -110,7 +110,7 @@ export default function SendScreen() {
                     className={`contact-row${c.variant ? ` avatar-${c.variant}` : ''}`}
                     role="listitem"
                     aria-label={c.ariaLabel}
-                    onPress={() => navigate(-1)}
+                    onPress={() => navigate('/send/amount', { state: { recipient: { name: c.name, address: c.sub || c.name } } })}
                   >
                     <div className="avatar-wrap">
                       <img className="avatar" src={walletAvatar} alt="" />

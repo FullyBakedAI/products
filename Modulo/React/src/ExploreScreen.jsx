@@ -100,7 +100,7 @@ export default function ExploreScreen() {
         {/* Favourites */}
         <div className="fav-header">
           <span className="fav-label">Favourites</span>
-          <Button className="icon-btn-sm" aria-label="More options" onPress={() => {}}>
+          <Button className="icon-btn-sm" aria-label="More options" onPress={() => navigate('/settings')}>
             <img src={iconMore} width="16" height="16" aria-hidden="true" />
           </Button>
         </div>
