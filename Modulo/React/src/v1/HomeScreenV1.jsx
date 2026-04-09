@@ -10,7 +10,7 @@ import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import StatusBar from '../StatusBar';
 import BottomNav from '../BottomNav';
-import '../home.css';
+import './home-v1.css'; // frozen snapshot — do not update
 
 import {
   Bell, Settings, TrendingUp, ArrowRightLeft,

@@ -179,4 +179,38 @@
   outline-offset: 2px;
 }
 
+/* ── Token Selector ─────────────────────────────────────────────────── */
+.receive-token-selector {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+.receive-token-selector::-webkit-scrollbar { display: none; }
+
+/* ── Copy feedback ──────────────────────────────────────────────────── */
+.address-action-btn.copied {
+  background: rgba(34, 197, 94, 0.12);
+  border-radius: 8px;
+}
+
+/* ── Network warning ────────────────────────────────────────────────── */
+.receive-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px 20px 0;
+  padding: 10px 12px;
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
+  line-height: 1.5;
+}
+.receive-warning svg { color: #EAB308; flex-shrink: 0; margin-top: 2px; }
+
 /* primary-btn in shared.css */

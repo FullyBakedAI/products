@@ -28,10 +28,29 @@ class ErrorBoundary extends Component {
 // Top-level router split — DS page lives outside HashRouter so it can own
 // its own router context for the phone preview. Everything else uses HashRouter.
 function Root() {
-  const [hash, setHash] = useState(window.location.hash);
+  // Restore last route on PWA launch (start_url always resets to /modulo/).
+  // On browser refresh the hash is already in the URL — this is a no-op.
+  const [hash, setHash] = useState(() => {
+    const current = window.location.hash;
+    if (!current || current === '#' || current === '#/') {
+      const saved = localStorage.getItem('modulo_route');
+      if (saved && saved !== '#/' && saved !== '#') {
+        window.location.hash = saved;
+        return saved;
+      }
+    }
+    return current;
+  });
+
   useEffect(() => {
-    const handler = () => setHash(window.location.hash);
+    const handler = () => {
+      const h = window.location.hash;
+      setHash(h);
+      localStorage.setItem('modulo_route', h);
+    };
     window.addEventListener('hashchange', handler);
+    // Save current route on mount too
+    if (window.location.hash) localStorage.setItem('modulo_route', window.location.hash);
     return () => window.removeEventListener('hashchange', handler);
   }, []);
 

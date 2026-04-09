@@ -21,7 +21,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
-import { Delete, Settings, X, ChevronDown } from 'lucide-react';
+import { Delete, X, ChevronDown } from 'lucide-react';
+import iconSettings from './assets/icon-settings.svg';
 import { useIconOverride } from './IconOverrideContext';
 import './swap.css';
 
@@ -37,7 +38,7 @@ function SwapHeader({ onClose }) {
         <h1 className="swap-title">Swap</h1>
       </div>
       <Button className="settings-btn" aria-label="Swap settings">
-        <Settings size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+        <img src={iconSettings} width="20" height="20" aria-hidden="true" />
       </Button>
     </div>
   );
@@ -49,6 +50,7 @@ function TokenPill({ token, side, appear }) {
     <Button
       className={`token-pill-btn${appear ? ' appear' : ''}`}
       aria-label={`${side === 'pay' ? 'Pay' : 'Receive'} token: ${token.symbol}, tap to change`}
+      data-bk-component="token-pill"
       onPress={() => navigate(`/swap/select/${side}`)}
     >
       <span className="token-icon">
@@ -270,7 +272,7 @@ export default function SwapScreen() {
 
       <SwapHeader onClose={() => navigate('/')} />
 
-      <div className="swap-cards" data-bk-component="swap-panel">
+      <div className="swap-cards" data-bk-component="swap-card">
         <PayCard payAmount={payAmount} payUSD={payUSD} payToken={payToken} />
         <SwapDirectionButton
           swapped={swappedVisual}

@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SwapProvider }           from './SwapContext';
+import { IconOverrideProvider }   from './IconOverrideContext';
 import { motion as m }            from './motion-tokens';
 import './shared.css';
 import HomeScreen         from './HomeScreen';
@@ -9,6 +10,11 @@ import SwapScreen         from './SwapScreen';
 import SwapSelectScreen   from './SwapSelectScreen';
 import SendScreen         from './SendScreen';
 import ReceiveScreen      from './ReceiveScreen';
+import AssetScreen        from './AssetScreen';
+import ActionsScreen      from './ActionsScreen';
+import ReviewScreen       from './ReviewScreen';
+import SuccessScreen      from './SuccessScreen';
+import ActivityScreen     from './ActivityScreen';
 
 // ── Motion variants (driven by motion-tokens.js) ──────────────────────────
 const fadeVariants = {
@@ -29,12 +35,12 @@ const sheetVariants = {
   exit:    { y: '100%', transition: m.sheet.exit  },
 };
 
-const MODAL_PATHS = ['/swap', '/send', '/receive'];
-const SHEET_PATHS = ['/swap/select'];
+const MODAL_PATHS = ['/swap', '/send', '/receive', '/asset', '/actions', '/success'];
+const SHEET_PATHS = ['/swap/select', '/review'];
 
 function getVariants(pathname) {
   if (SHEET_PATHS.some(p => pathname.startsWith(p))) return sheetVariants;
-  if (MODAL_PATHS.includes(pathname))                return modalVariants;
+  if (MODAL_PATHS.some(p => pathname.startsWith(p))) return modalVariants;
   return fadeVariants;
 }
 
@@ -60,6 +66,11 @@ function AnimatedRoutes() {
           <Route path="/swap/select/:side"   element={<SwapSelectScreen />} />
           <Route path="/send"                element={<SendScreen />} />
           <Route path="/receive"             element={<ReceiveScreen />} />
+          <Route path="/asset/:id"           element={<AssetScreen />} />
+          <Route path="/actions"             element={<ActionsScreen />} />
+          <Route path="/review"              element={<ReviewScreen />} />
+          <Route path="/success"             element={<SuccessScreen />} />
+          <Route path="/activity"            element={<ActivityScreen />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -69,10 +80,12 @@ function AnimatedRoutes() {
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <SwapProvider>
-      <div className="phone">
-        <AnimatedRoutes />
-      </div>
-    </SwapProvider>
+    <IconOverrideProvider>
+      <SwapProvider>
+        <div className="phone">
+          <AnimatedRoutes />
+        </div>
+      </SwapProvider>
+    </IconOverrideProvider>
   );
 }

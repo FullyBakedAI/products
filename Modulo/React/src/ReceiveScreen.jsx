@@ -8,6 +8,7 @@
  *   Stagger      — header, address card, QR, networks, exchanges stagger in sequence
  */
 
+import { useState } from 'react';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -17,7 +18,9 @@ import './receive.css';
 
 import walletAvatar from './assets/wallet-avatar.svg';
 import moduloBadge from './assets/icon-modulo-badge.svg';
-import { Copy, Share2 } from 'lucide-react';
+import { Check, AlertTriangle } from 'lucide-react';
+import iconCopy from './assets/icon-copy.svg';
+import iconShare from './assets/icon-share.svg';
 import qrCode from './assets/qr-code.svg';
 import networkEthereum from './assets/network-ethereum.svg';
 import networkArbitrum from './assets/network-arbitrum.svg';
@@ -35,8 +38,17 @@ const NETWORKS = [
 
 const EXCHANGES = ['Coinbase', 'Binance', 'Kraken', 'Another wallet'];
 
+const RECEIVE_TOKENS = ['Any token', 'ETH', 'USDC', 'USDT'];
+
 export default function ReceiveScreen() {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+  const [receiveToken, setReceiveToken] = useState('Any token');
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <motion.main
@@ -86,13 +98,36 @@ export default function ReceiveScreen() {
             </div>
           </div>
           <div className="address-actions">
-            <Button className="address-action-btn" aria-label="Copy address" onPress={() => {}}>
-              <Copy size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+            <Button
+              className={`address-action-btn${copied ? ' copied' : ''}`}
+              aria-label={copied ? 'Copied!' : 'Copy address'}
+              onPress={handleCopy}
+            >
+              {copied
+                ? <Check size={16} color="var(--bk-success)" strokeWidth={1.5} aria-hidden="true" />
+                : <img src={iconCopy} width="16" height="16" aria-hidden="true" />
+              }
             </Button>
             <Button className="address-action-btn" aria-label="Share address" onPress={() => {}}>
-              <Share2 size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+              <img src={iconShare} width="16" height="16" aria-hidden="true" />
             </Button>
           </div>
+        </motion.div>
+
+        {/* Token Selector */}
+        <motion.div
+          className="receive-token-selector"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
+        >
+          {RECEIVE_TOKENS.map(t => (
+            <button
+              key={t}
+              className={`chain-pill${receiveToken === t ? ' active' : ''}`}
+              onClick={() => setReceiveToken(t)}
+              aria-pressed={receiveToken === t}
+            >{t}</button>
+          ))}
         </motion.div>
 
         {/* QR Code */}
@@ -123,6 +158,17 @@ export default function ReceiveScreen() {
               </div>
             ))}
           </div>
+        </motion.div>
+
+        {/* Network Warning */}
+        <motion.div
+          className="receive-warning"
+          role="alert"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.24 } }}
+        >
+          <AlertTriangle size={13} strokeWidth={1.5} aria-hidden="true" />
+          <span>Only send assets on a supported network. Wrong network = permanent loss.</span>
         </motion.div>
 
         {/* Fund from Exchange */}

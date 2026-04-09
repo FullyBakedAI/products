@@ -1,0 +1,201 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   ActivityScreen — supplemental styles only.
+   Uses: home.css (home-screen, home-header, portfolio-label, token-name-text,
+         token-amount, icon-btn), shared.css (chain-pill, scroll-content)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Filter chip row — scroll horizontally on overflow */
+.activity-filter-row {
+  display: flex;
+  gap: 7px;
+  padding: 4px 20px 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.activity-filter-row::-webkit-scrollbar { display: none; }
+
+/* Transaction row */
+.tx-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 20px;
+  transition: background 0.1s ease;
+}
+
+.tx-row:hover { background: rgba(255, 255, 255, 0.025); }
+
+/* Secondary token icon overlay */
+.tx-secondary-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  border-radius: 50%;
+  border: 2px solid var(--bk-bg-base);
+  display: block;
+}
+
+/* Spinner animation */
+@keyframes tx-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.tx-spinner { animation: tx-spin 1.2s linear infinite; }
+
+/* Transaction detail sheet */
+.tx-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+}
+
+.tx-detail-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bk-bg-base);
+  border-radius: 24px 24px 0 0;
+  max-height: 90%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+  border: 1px solid var(--bk-border-subtle);
+  border-bottom: none;
+}
+
+.tx-detail-sheet::-webkit-scrollbar { display: none; }
+
+.tx-explorer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--bk-brand-primary);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--bk-font);
+  padding: 8px 0 24px;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.tx-explorer-btn:hover { opacity: 1; }
+
+/* ── Pending transaction actions ────────────────────────────────────── */
+.tx-pending-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.tx-action-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--bk-border-subtle);
+  background: var(--bk-bg-elevated);
+  color: var(--bk-text-secondary);
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+.tx-action-speed { color: var(--bk-brand-primary); border-color: var(--bk-brand-primary); }
+.tx-action-cancel { color: var(--bk-error); border-color: var(--bk-error); }
+
+/* ── Date group header with totals ──────────────────────────────────── */
+.activity-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px 4px;
+}
+.activity-group-total {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-success);
+}
+.activity-group-total.negative { color: var(--bk-error); }
+
+/* ── Swap legs in detail sheet ──────────────────────────────────────── */
+.swap-leg-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.swap-leg-label {
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  flex: 1;
+}
+.swap-leg-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+.swap-leg-positive { color: var(--bk-success); }
+
+/* Token icon in transaction row */
+.tx-token-icon {
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Pending spinner badge */
+.tx-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-badge-pending { background: rgba(255, 255, 255, 0.1); }
+
+.tx-badge-lg {
+  width: 56px;
+  height: 56px;
+}
+
+/* Detail sheet focal area */
+.tx-detail-focal {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.tx-detail-icons {
+  position: relative;
+  width: 56px;
+  height: 48px;
+}
+
+.tx-detail-icons .tx-token-icon:first-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.tx-detail-icon2 {
+  position: absolute !important;
+  right: 0;
+  bottom: 0;
+  width: 28px !important;
+  height: 28px !important;
+  border: 2px solid var(--bk-bg-base);
+}
+
+/* Transaction detail rows — no card chrome, clean list */
+.tx-detail-rows {
+  margin: 0 20px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}

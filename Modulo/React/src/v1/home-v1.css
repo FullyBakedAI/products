@@ -328,18 +328,6 @@
   pointer-events: none; /* swipe gesture passes through */
 }
 
-/* Chain badge — colour-coded dot overlaid bottom-right (Crypto.com pattern) */
-.token-chain-badge {
-  position: absolute;
-  bottom: 0;
-  right: -2px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  border: 2px solid var(--bk-bg-base);
-  display: block;
-}
-
 /* Spacer in the sliding row — matches anchored icon to preserve layout */
 .token-icon-spacer {
   width: 40px;
@@ -540,56 +528,3 @@
   outline: 2px solid var(--bk-text-primary);
   outline-offset: 2px;
 }
-
-/* ── Portfolio All-time P&L ─────────────────────────────────────────── */
-.portfolio-alltime {
-  position: relative;
-  z-index: 1;
-  margin-top: 1px;
-}
-.alltime-text {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--bk-text-muted);
-  line-height: 1.5;
-}
-
-/* ── AI Suggestion Strip ────────────────────────────────────────────── */
-.suggestion-strip {
-  display: flex;
-  gap: 8px;
-  padding: 0 16px 12px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  flex-shrink: 0;
-}
-.suggestion-strip::-webkit-scrollbar { display: none; }
-
-.suggestion-pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle);
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--bk-text-secondary);
-  white-space: nowrap;
-  flex-shrink: 0;
-  cursor: pointer;
-  font-family: var(--bk-font);
-}
-.suggestion-pill svg { color: var(--bk-brand-primary); }
-.suggestion-pill:hover { background: var(--bk-bg-card-alt); }
-
-/* ── Token P&L ──────────────────────────────────────────────────────── */
-.token-pnl {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--bk-success);
-  margin-top: 1px;
-  line-height: 1.4;
-}
-.token-pnl.negative { color: var(--bk-error); }

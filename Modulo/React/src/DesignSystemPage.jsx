@@ -189,6 +189,7 @@ function PhonePreview({ screen, routes = PREVIEW_ROUTES, theme = 'dark', onInspe
   const handleClick = useCallback((e) => {
     if (!devMode || !highlight) return;
     e.preventDefault();
+    e.stopPropagation(); // prevent click bubbling to RouterProvider / triggering navigation
     onInspect?.(highlight.label);
   }, [devMode, highlight, onInspect]);
 
@@ -1236,6 +1237,8 @@ function ComponentInspector({ comp, onClose }) {
   const success = getToken('--bk-success');
   const error   = getToken('--bk-error');
 
+  if (!comp) return null; // guard: component ID not found in registry
+
   const defaultControls = (COMP_CONTROLS[comp.id] || []).reduce((acc, c) => ({ ...acc, [c.id]: c.def }), {});
   const [ctrlValues, setCtrlValues] = useState(defaultControls);
   const [inspectorTab, setInspectorTab] = useState('preview');
@@ -1645,7 +1648,7 @@ function StudioSection() {
             {selectedComp ? (
               <ComponentInspector
                 key={selectedComp}
-                comp={COMPONENT_REGISTRY.find(c => c.id === selectedComp)}
+                comp={COMPONENT_REGISTRY.find(c => c.id === selectedComp) ?? null}
                 onClose={() => setSelectedComp(null)}
               />
             ) : (

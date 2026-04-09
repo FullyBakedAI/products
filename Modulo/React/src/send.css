@@ -150,3 +150,30 @@
   line-height: 1.5;
   color: var(--bk-text-secondary);
 }
+
+.contact-last-sent {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  margin-top: 1px;
+  line-height: 1.4;
+}
+
+.paste-btn {
+  margin-left: 4px;
+}
+
+.send-network-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 4px;
+}
+
+.send-network-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}

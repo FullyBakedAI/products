@@ -2188,9 +2188,17 @@
   overflow-x: auto;
   padding-bottom: 16px;
 }
-/* Full-size phones in compare mode — no scaling */
+/* Compare phones match single showcase scale.
+   Outer wrapper constrains layout to the visual size so there's no dead space.
+   transform-origin: top left so the scaled phone fills from the top-left of the wrapper. */
+.ds-compare-phones-row .ds-phone-outer {
+  width: calc(390px * 0.88);
+  height: calc(844px * 0.88);
+  overflow: hidden;
+}
 .ds-compare-phones-row .ds-phone-frame {
-  transform: none;
+  transform: scale(0.88);
+  transform-origin: top left;
 }
 .ds-compare-label {
   font-size: 11px;

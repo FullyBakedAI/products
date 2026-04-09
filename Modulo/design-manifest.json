@@ -1,0 +1,121 @@
+{
+  "_comment": "Machine-readable design contract for Modulo. Used by design-lint.py to catch violations before Ant sees them.",
+  "_philosophy": "Lucide is the icon library — use it freely. The rule is simple: when a purpose-designed Figma asset exists for a specific UI element, use that asset. Don't substitute a generic Lucide icon. Everything else: Lucide is fine. Patterns enter this manifest when they pass Ant's review.",
+  "_icon_background_rule": "Icons must never be placed inside coloured background containers (lozenges, circles, pills, badges). No coloured icon wraps anywhere in the product. Icons stand on their own — colour belongs in the icon tint, text, or surrounding UI, not as a background behind the icon. This applies to: deposit-card-icon, asset-opp-icon-wrap, asset-opp-icon-sm, tx-badge swipe-action variants, and any element that is both a coloured background and an icon container. Home screen swipe action buttons are exempt — they are full-bleed action affordances, not icon containers.",
+  "_updated": "2026-04-08",
+
+  "asset_rules": {
+    "_comment": "Purpose-designed Figma assets for specific UI elements. When these exist, they must be used. Lucide substitutes for these specific elements are errors.",
+    "icon-notification.svg":   { "usage": "notification bell — home header",          "banned_lucide": ["Bell", "BellRing", "BellOff"] },
+    "icon-settings.svg":       { "usage": "settings gear — screen headers",           "banned_lucide": ["Settings", "Settings2"] },
+    "icon-gain-arrow.svg":     { "usage": "portfolio gain arrow — portfolio card",    "banned_lucide": ["ArrowUpRight"] },
+    "icon-action-swap.svg":    { "usage": "swap action button — home quick actions",  "banned_lucide": ["ArrowRightLeft", "Repeat", "RefreshCw"] },
+    "icon-action-buy.svg":     { "usage": "buy action button — home quick actions",   "banned_lucide": ["Plus", "ShoppingCart", "CreditCard"] },
+    "icon-action-send.svg":    { "usage": "send / withdraw action — home quick actions and deposit tab", "banned_lucide": ["Send", "ArrowRight", "PaperPlane"] },
+    "icon-action-receive.svg": { "usage": "receive / deposit action — home quick actions and deposit tab", "banned_lucide": ["Download", "Inbox", "Wallet"] },
+    "icon-nav-home.svg":       { "usage": "home tab — bottom nav",                    "banned_lucide": ["House", "Home"] },
+    "icon-nav-search.svg":     { "usage": "markets/search tab — bottom nav",          "banned_lucide": ["Compass", "Telescope"] },
+    "icon-nav-swap.svg":       { "usage": "actions FAB — bottom nav",                 "banned_lucide": ["Repeat"] },
+    "icon-nav-activity.svg":   { "usage": "activity tab — bottom nav",               "banned_lucide": ["Activity", "Clock", "History"] },
+    "icon-search.svg":         { "usage": "search field input icon",                  "banned_lucide": [] },
+    "icon-backspace.svg":      { "usage": "numpad delete key",                        "banned_lucide": ["Backspace"] },
+    "icon-chevron-down.svg":   { "usage": "dropdown chevron in token pills",          "banned_lucide": [] },
+    "icon-copy.svg":           { "usage": "copy button — receive screen",             "banned_lucide": ["Copy", "Clipboard"] },
+    "icon-share.svg":          { "usage": "share action",                             "banned_lucide": ["Share", "Share2"] },
+    "icon-more.svg":           { "usage": "more options / overflow menu",             "banned_lucide": ["MoreHorizontal", "MoreVertical", "Ellipsis"] }
+  },
+
+  "token_rules": {
+    "required_prefix": "--bk-",
+    "no_hardcoded_colors_in_inline_styles": true,
+    "no_hardcoded_colors_in_css": true,
+    "banned_inline_color_patterns": [
+      "#[0-9a-fA-F]{3,8}(?!\\w)",
+      "rgb\\(",
+      "rgba\\(",
+      "hsl\\("
+    ],
+    "exceptions": [
+      "rgba(0,0,0,0)",
+      "rgba(0, 0, 0, 0)",
+      "#fff",
+      "#000"
+    ]
+  },
+
+  "css_registry": {
+    "_comment": "Canonical class names that exist in the system. Agents must use these — never invent duplicates.",
+    "swap.css": [
+      "swap-screen-inner", "swap-header", "swap-title", "header-left",
+      "close-btn", "settings-btn", "swap-cards", "swap-card", "pay-card",
+      "receive-card", "card-label", "card-middle", "card-bottom",
+      "swap-amount", "amount-text", "amount-cursor", "swap-direction-row",
+      "swap-direction", "token-pill-btn", "token-icon", "token-name",
+      "token-chevron", "select-token-cta-btn", "pct-row", "pct-pill-btn",
+      "numpad", "numpad-key-btn", "bottom-cta-btn", "cta-ready", "cta-disabled"
+    ],
+    "home.css": [
+      "home-screen", "home-header", "header-logo", "home-header-actions",
+      "icon-btn", "portfolio-card", "portfolio-chart", "portfolio-header",
+      "portfolio-label", "portfolio-value", "portfolio-dollars", "portfolio-cents",
+      "portfolio-gain", "gain-text", "time-periods", "time-btn",
+      "action-row", "action-btn", "action-label", "tabs", "tab",
+      "token-list", "token-row-outer", "token-row", "token-row-main",
+      "token-icon-anchor", "token-icon-lg", "token-chain-badge",
+      "token-icon-spacer", "token-swipe-actions", "swipe-action",
+      "token-info", "token-name-row", "token-name-text", "token-change",
+      "token-amount", "token-values", "token-usd", "token-yield-bar-row",
+      "token-yield-track", "token-yield-fill", "token-yield-label",
+      "earn-card", "earn-label", "earn-value-row", "earn-value", "earn-unit",
+      "earn-btn", "suggestion-strip", "suggestion-pill"
+    ],
+    "shared.css": [
+      "phone", "screen-wrapper", "scroll-content", "bottom-nav",
+      "nav-btn", "nav-btn-swap", "drag-handle", "drag-handle-pill",
+      "primary-btn", "search-field", "chain-pill", "chain-filters"
+    ]
+  },
+
+  "screen_contracts": {
+    "_comment": "Per-screen rules — what each screen must use.",
+    "HomeScreen": {
+      "required_assets": [
+        "logo-modulo.svg", "chart-line.svg",
+        "icon-notification.svg", "icon-settings.svg", "icon-gain-arrow.svg",
+        "icon-action-swap.svg", "icon-action-buy.svg",
+        "icon-action-send.svg", "icon-action-receive.svg"
+      ],
+      "required_classes": ["home-screen", "portfolio-card", "action-row", "tabs", "earn-card"]
+    },
+    "BottomNav": {
+      "required_assets": [
+        "icon-nav-home.svg", "icon-nav-search.svg",
+        "icon-nav-swap.svg", "icon-nav-activity.svg"
+      ],
+      "required_classes": ["bottom-nav", "nav-btn", "nav-btn-swap"]
+    },
+    "SwapScreen": {
+      "required_classes": ["swap-screen-inner", "swap-header", "swap-cards", "swap-card",
+                           "pct-row", "numpad", "bottom-cta-btn"]
+    },
+    "AssetScreen": {
+      "required_classes": ["swap-screen-inner", "swap-header", "scroll-content", "swap-card"]
+    },
+    "ActionsScreen": {
+      "required_classes": ["swap-screen-inner", "swap-header", "tabs", "scroll-content",
+                           "swap-cards", "swap-card", "bottom-cta-btn"]
+    },
+    "ReviewScreen": {
+      "required_classes": ["drag-handle", "drag-handle-pill", "swap-cards", "swap-card",
+                           "card-label", "primary-btn"]
+    },
+    "SendScreen": {
+      "required_assets": ["icon-search.svg"],
+      "required_classes": ["drag-handle", "search-field"]
+    },
+    "ReceiveScreen": {
+      "required_assets": ["icon-copy.svg", "qr-code.svg"],
+      "required_classes": ["drag-handle", "chain-pill"]
+    }
+  }
+}

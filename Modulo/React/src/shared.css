@@ -86,6 +86,26 @@
   border-radius: 1px;
 }
 
+/* ── Real device: fill viewport, no frame ───────────────────────────── */
+@media (max-width: 500px), (display-mode: standalone) {
+  .phone {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Replace fake status bar with safe-area spacer — real OS draws its own */
+  .status-bar {
+    height: env(safe-area-inset-top, 20px);
+    padding: 0;
+  }
+
+  .status-bar > * {
+    display: none;
+  }
+}
+
 /* ── Screen Transition Wrapper ──────────────────────────────────────── */
 .screen-wrapper {
   position: absolute;
