@@ -151,32 +151,36 @@
 .exchange-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
-.exchange-btn {
+.exchange-row-btn {
   width: 100%;
   height: 48px;
-  background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle);
-  border-radius: 16px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--bk-border-subtle);
   display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 15px;
   font-weight: 500;
   color: var(--bk-text-primary);
   cursor: pointer;
   font-family: var(--bk-font);
+  padding: 0 4px;
+  transition: background 0.12s ease;
 }
 
-.exchange-btn[data-hovered] {
-  background: var(--bk-bg-card-alt);
+.exchange-list .exchange-row-btn:first-child {
+  border-top: 1px solid var(--bk-border-subtle);
 }
 
-.exchange-btn[data-focused] {
+.exchange-row-btn[data-hovered] {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.exchange-row-btn[data-focused] {
   outline: 2px solid var(--bk-brand-primary);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
 /* ── Token Selector ─────────────────────────────────────────────────── */

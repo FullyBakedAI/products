@@ -4,8 +4,15 @@
 Cross-chain DeFi wallet. "One vault, every chain." BakedUX's first client engagement.
 
 ## Before You Build ANYTHING
-1. Read `~/workspace/Framework/Docs/decision-log.md` — validated lessons. If it says something doesn't work, don't try it.
-2. Read `product.json` in this directory — it has all Figma node IDs, screen list, component specs, and build rules.
+1. Read `product.json` in this directory — it has all Figma node IDs, screen list, component specs, and build rules.
+2. Key validated lessons (from decision log — Mac Studio only, summarised here):
+   - Never redefine a shared CSS class in a screen file — always put it in `shared.css`
+   - Don't export text nodes from Figma — always export the parent group/frame to get the actual icon
+   - `swap-card` is for interactive input areas only — not data display sections (strips panels from non-input UI)
+   - All colours must use `--bk-*` tokens — no hardcoded hex values anywhere
+   - `asset-opp-row` lives in `asset.css` only — don't redefine it in screen-specific CSS files
+   - Tab IDs in navigation calls must exactly match the receiving component's TABS array
+   - Use HashRouter (`/#/path`) for deep linking — standard history router loses state on PWA launch
 
 ## Build Pipeline — Follow This Order
 
@@ -48,8 +55,8 @@ Create `Prototype-v2/shared.css` containing:
 - Check navigation links point to valid files
 
 ### Step 6: Push
-- Commit and push both repos (`~/products` and `~/workspace`)
-- Frank will automatically detect the push and run visual QA with gemma4
+- Commit and push `~/products`
+- Frank (Mac Studio) will automatically detect the push and run visual QA with gemma4
 
 ## What NOT To Do
 - Do NOT build React components (that's step 4 of the engagement, not now)
@@ -68,8 +75,8 @@ Create `Prototype-v2/shared.css` containing:
 | Component snippets | `~/products/Modulo/Prototype/SNIPPETS.md` |
 | Design system page | `~/products/Modulo/Prototype/design-system.html` |
 | Downloaded assets | `~/products/Modulo/Prototype-v2/assets/` |
-| Decision log | `~/workspace/Framework/Docs/decision-log.md` |
-| Extract script | `~/workspace/Platform/Scripts/extract-components.py` |
+| Decision log | Mac Studio only — key learnings summarised above |
+| Extract script | Mac Studio only (`Platform/Scripts/extract-components.py`) |
 
 ## Building New Screens (Experimentation Mode)
 **Read `Prototype/SNIPPETS.md` first.** It contains copy-paste HTML/CSS building blocks extracted from the 6 existing screens — shells, cards, token rows, contact rows, pills, buttons, tabs, and more. All use `modulo-shared.css` tokens.

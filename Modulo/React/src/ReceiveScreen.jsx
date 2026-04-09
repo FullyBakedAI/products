@@ -178,13 +178,14 @@ export default function ReceiveScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.26 } }}
         >
           <div className="section-label">Fund from an exchange</div>
-          <div className="exchange-list">
+          <div className="exchange-list" role="list">
             {EXCHANGES.map((ex) => (
               <Button
                 key={ex}
-                className="exchange-btn"
+                className="exchange-row-btn"
                 aria-label={`Fund from ${ex}`}
                 onPress={() => {}}
+                role="listitem"
               >
                 {ex}
               </Button>

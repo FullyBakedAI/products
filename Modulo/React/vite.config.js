@@ -64,5 +64,9 @@ function claudeProxyPlugin() {
 
 export default defineConfig({
   base: '/modulo/',
+  build: {
+    outDir: '../Prototype/modulo',
+    emptyOutDir: true,
+  },
   plugins: [react(), claudeProxyPlugin()],
 });

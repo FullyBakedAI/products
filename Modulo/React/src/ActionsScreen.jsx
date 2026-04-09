@@ -385,9 +385,9 @@ function LendBorrowTab({ navigate }) {
         </>
       ) : (
         <>
-          {/* Collateral */}
-          <div className="swap-card">
-            <div className="card-label">Your collateral</div>
+          {/* Collateral — clean section, no card chrome */}
+          <div className="actions-collateral-section">
+            <div className="card-label" style={{ margin: '0 0 8px' }}>Your collateral</div>
             <div className="collateral-row">
               <img src={tokenEth} alt="" className="collateral-img" />
               <div className="collateral-info">
@@ -401,7 +401,7 @@ function LendBorrowTab({ navigate }) {
                 </div>
               </div>
             </div>
-            <div className="card-bottom card-bottom-mt">
+            <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10, marginTop: 8 }}>
               <span>Health factor</span>
               <span className="text-success-bold">2.4 — Safe</span>
             </div>
@@ -494,7 +494,7 @@ export default function ActionsScreen() {
     <motion.div
       role="main"
       aria-label="Actions"
-      className="swap-screen-inner"
+      className="swap-screen-inner actions-screen"
       initial={{ opacity: 0, y: m.modal.offsetEnter }}
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}

@@ -55,9 +55,9 @@ export default function ReviewScreen() {
         Review {capitalize(action)}
       </h1>
 
-      {/* Summary — swap-card chrome */}
+      {/* Summary — card chrome for visual weight on confirmation step */}
       <div className="swap-cards" style={{ paddingBottom: 12 }}>
-        <div className="swap-card review-summary">
+        <div className="swap-card">
           {/* You give */}
           <div className="review-asset-row">
             <div className="review-asset-left">
@@ -77,7 +77,7 @@ export default function ReviewScreen() {
           </div>
 
           {isEarnOnly ? (
-            <div style={{ padding: '4px 0 8px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 0 8px' }}>
               <span className="card-label" style={{ margin: 0 }}>Earning</span>
               <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--bk-brand-primary)' }}>{rate}</span>
             </div>
@@ -98,57 +98,55 @@ export default function ReviewScreen() {
         </div>
       </div>
 
-      {/* Fee breakdown — collapsible, Coinbase pattern */}
-      <div className="swap-cards" style={{ paddingBottom: 12 }}>
-        <div className="swap-card">
-          {/* Rate row — always visible */}
-          <div className="card-bottom" style={{ padding: '6px 0', margin: 0 }}>
-            <span className="card-label" style={{ margin: 0 }}>Rate</span>
-            <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{rate}</span>
-          </div>
-
-          {/* Collapsible fee section */}
-          <button
-            className="review-fee-toggle"
-            onClick={() => setFeesOpen(v => !v)}
-            aria-expanded={feesOpen}
-            aria-controls="fee-breakdown"
-          >
-            <span className="card-label" style={{ margin: 0 }}>Total fees</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--bk-text-primary)' }}>{fee.total}</span>
-              <motion.span
-                animate={{ rotate: feesOpen ? 180 : 0 }}
-                transition={{ type: 'spring', damping: 20, stiffness: 280 }}
-                style={{ display: 'flex' }}
-              >
-                <ChevronDown size={14} strokeWidth={2} color="var(--bk-text-muted)" aria-hidden="true" />
-              </motion.span>
-            </div>
-          </button>
-
-          <AnimatePresence initial={false}>
-            {feesOpen && (
-              <motion.div
-                id="fee-breakdown"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
-                exit={{ height: 0, opacity: 0, transition: { duration: 0.15, ease: 'easeIn' } }}
-                style={{ overflow: 'hidden' }}
-              >
-                {[
-                  { label: 'Network fee',  value: fee.network  },
-                  { label: 'Protocol fee', value: fee.protocol },
-                ].map(({ label, value }) => (
-                  <div key={label} className="card-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '9px 0', margin: 0 }}>
-                    <span className="card-label" style={{ margin: 0, paddingLeft: 10 }}>{label}</span>
-                    <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-muted)' }}>{value}</span>
-                  </div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+      {/* Fee breakdown — clean list, no card chrome */}
+      <div className="review-fees-section">
+        {/* Rate row */}
+        <div className="card-bottom" style={{ padding: '10px 0', margin: 0 }}>
+          <span className="card-label" style={{ margin: 0 }}>Rate</span>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{rate}</span>
         </div>
+
+        {/* Collapsible fee section */}
+        <button
+          className="review-fee-toggle"
+          onClick={() => setFeesOpen(v => !v)}
+          aria-expanded={feesOpen}
+          aria-controls="fee-breakdown"
+        >
+          <span className="card-label" style={{ margin: 0 }}>Total fees</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--bk-text-primary)' }}>{fee.total}</span>
+            <motion.span
+              animate={{ rotate: feesOpen ? 180 : 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 280 }}
+              style={{ display: 'flex' }}
+            >
+              <ChevronDown size={14} strokeWidth={2} color="var(--bk-text-muted)" aria-hidden="true" />
+            </motion.span>
+          </div>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {feesOpen && (
+            <motion.div
+              id="fee-breakdown"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
+              exit={{ height: 0, opacity: 0, transition: { duration: 0.15, ease: 'easeIn' } }}
+              style={{ overflow: 'hidden' }}
+            >
+              {[
+                { label: 'Network fee',  value: fee.network  },
+                { label: 'Protocol fee', value: fee.protocol },
+              ].map(({ label, value }) => (
+                <div key={label} className="card-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '9px 0', margin: 0 }}>
+                  <span className="card-label" style={{ margin: 0, paddingLeft: 10 }}>{label}</span>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-muted)' }}>{value}</span>
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Warning */}

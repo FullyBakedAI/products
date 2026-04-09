@@ -91,31 +91,10 @@
   padding: 0 !important;
 }
 
-/* Platform / opportunity rows — shared with AssetScreen */
-.asset-opp-list {
-  display: flex;
-  flex-direction: column;
+/* Selected state for platform rows in lend tab — scoped to avoid CSS conflict with asset.css */
+.actions-tab-stack .asset-opp-row[data-selected="true"] {
+  background: rgba(88, 75, 235, 0.06);
 }
-
-.asset-opp-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--bk-bg-card);
-  border-top: 1px solid var(--bk-border-subtle);
-  border-left: 3px solid transparent;
-  cursor: pointer;
-  font-family: var(--bk-font);
-  width: 100%;
-  text-align: left;
-  transition: background 0.15s ease;
-}
-
-.asset-opp-row[data-selected="true"] { border-left-color: var(--bk-brand-primary); }
-.asset-opp-row:hover                 { background: var(--bk-bg-card-alt); }
-.asset-opp-row.first { border-radius: 16px 16px 0 0; border-top: 1px solid var(--bk-border-subtle); }
-.asset-opp-row.last  { border-radius: 0 0 16px 16px; }
 
 .asset-opp-info { flex: 1; }
 
@@ -132,7 +111,14 @@
   margin-left: 2px;
 }
 
-/* Collateral row — inside swap-card for borrow tab */
+/* Collateral section — clean, no card chrome */
+.actions-collateral-section {
+  padding: 14px 0 0;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  padding-bottom: 14px;
+}
+
+/* Collateral row — inside collateral section */
 .collateral-row {
   display: flex;
   align-items: center;
@@ -261,6 +247,11 @@
   gap: 6px;
   font-size: 12px;
   color: var(--bk-text-muted);
+}
+
+/* Header — no bottom line (matches AssetScreen pattern) */
+.actions-screen .swap-header {
+  border: none;
 }
 
 /* Tab bar — horizontal scroll for 4 tabs, no wrapping */
