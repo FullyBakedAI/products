@@ -89,9 +89,9 @@ const MAX_YIELD  = Math.max(...TOKENS.map(t => t.yield));
 const ACTION_W   = 300;
 
 const SWIPE_ACTIONS = [
-  { id: 'lend',   label: 'Stake',   Icon: Zap,               cls: 'swipe-stake'   },
-  { id: 'trade',  label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade'   },
-  { id: 'lend',   label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
+  { id: 'stake',   label: 'Stake',   Icon: Zap,               cls: 'swipe-stake'   },
+  { id: 'trade',   label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade'   },
+  { id: 'lend',    label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
   { id: 'swap',   label: 'Swap',    Icon: null, svgSrc: iconActionSwap, cls: 'swipe-swap' },
   { id: 'manage', label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage'  },
 ];
@@ -210,6 +210,7 @@ function TokenRow({ t, index }) {
               setTimeout(() => {
                 if (id === 'swap')        navigate('/swap');
                 else if (id === 'manage') navigate(`/asset/${t.id}`);
+                else if (id === 'stake')  navigate(`/actions?tab=lend&asset=${t.id}`);
                 else                      navigate(`/actions?tab=${id}&asset=${t.id}`);
               }, 280);
             }}

@@ -526,13 +526,6 @@ export default function ActionsScreen() {
   const defaultTab     = searchParams.get('tab') || 'swap';
   const [active, setActive] = useState(TABS.find(t => t.id === defaultTab) ? defaultTab : 'swap');
 
-  const tabContent = {
-    swap:    <SwapTab navigate={navigate} />,
-    trade:   <TradeTab navigate={navigate} />,
-    lend:    <LendBorrowTab navigate={navigate} />,
-    deposit: <DepositTab navigate={navigate} />,
-  };
-
   return (
     /* Full-height overlay — the screen-wrapper slides this from y:100% */
     <div className="actions-overlay" role="dialog" aria-modal="true" aria-label="Actions">
@@ -579,16 +572,10 @@ export default function ActionsScreen() {
 
         {/* Scrollable tab content */}
         <div className="scroll-content actions-scroll">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.15, ease: 'easeOut' } }}
-              exit={{ opacity: 0, transition: { duration: 0.08 } }}
-            >
-              {tabContent[active]}
-            </motion.div>
-          </AnimatePresence>
+          {active === 'swap'    && <SwapTab navigate={navigate} />}
+          {active === 'trade'   && <TradeTab navigate={navigate} />}
+          {active === 'lend'    && <LendBorrowTab navigate={navigate} />}
+          {active === 'deposit' && <DepositTab navigate={navigate} />}
         </div>
       </div>
     </div>
