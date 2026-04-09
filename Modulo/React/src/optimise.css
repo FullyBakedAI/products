@@ -85,7 +85,8 @@
 }
 
 .optimise-row--off {
-  opacity: 0.4;
+  background: var(--bk-bg-elevated);
+  border-color: transparent;
 }
 
 .optimise-row-btn {
@@ -103,7 +104,12 @@
 }
 
 .optimise-row--off .optimise-token-icon {
-  filter: grayscale(1);
+  filter: grayscale(1) opacity(0.4);
+}
+
+.optimise-row--off .optimise-row-token,
+.optimise-row--off .optimise-row-protocol {
+  color: var(--bk-text-muted);
 }
 
 .optimise-row--off .optimise-row-apy,
