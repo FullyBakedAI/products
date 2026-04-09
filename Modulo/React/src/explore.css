@@ -82,6 +82,7 @@
   justify-content: space-between;
   overflow: hidden;
   cursor: pointer;
+  font-family: var(--bk-font);
 }
 
 .fav-card:focus-visible {
@@ -195,6 +196,24 @@
   padding: 8px 16px;
   gap: 10px;
   height: 56px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  color: inherit;
+  text-align: left;
+  transition: background 0.12s ease;
+}
+
+.token-row-explore:active,
+.token-row-explore:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.token-list-explore .token-row-explore:last-child {
+  border-bottom: none;
 }
 
 .token-rank {

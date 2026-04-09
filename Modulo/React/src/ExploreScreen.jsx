@@ -192,7 +192,7 @@ export default function ExploreScreen() {
             <div style={{ padding: '24px 16px', textAlign: 'center', fontSize: 13, color: 'var(--bk-text-muted)' }}>
               No tokens match this filter.
             </div>
-          ) : sortedTokens.map((t) => (
+          ) : sortedTokens.map((t, i) => (
             <button
               key={t.id}
               className="token-row-explore"
@@ -200,7 +200,7 @@ export default function ExploreScreen() {
               aria-label={`${t.name}: ${t.price}, ${t.change}`}
               onClick={() => navigate(`/asset/${t.id}`)}
             >
-              <span className="token-rank">{t.rank}</span>
+              <span className="token-rank">{i + 1}</span>
               <img className="token-icon-sm" src={t.icon} alt={t.name} />
               <div className="token-info-explore">
                 <div className="token-name-sm">{t.name}</div>
