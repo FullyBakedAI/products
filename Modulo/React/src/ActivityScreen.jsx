@@ -15,7 +15,7 @@ import { Button } from 'react-aria-components';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import {
-  SlidersHorizontal, Loader, X, ExternalLink,
+  Loader, X, ExternalLink,
 } from 'lucide-react';
 import './activity.css';
 
@@ -111,14 +111,14 @@ function TxDetailSheet({ tx, onClose }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 20px 16px' }}>
         <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--bk-text-primary)', margin: 0 }}>{tx.label}</h2>
-        <button
+        <Button
           className="icon-btn"
-          onClick={onClose}
+          onPress={onClose}
           aria-label="Close"
-          style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bk-bg-elevated)' }}
+          style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bk-bg-elevated)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
         >
           <X size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
-        </button>
+        </Button>
       </div>
 
       {/* Amount focal point */}
@@ -256,7 +256,6 @@ function TxRow({ tx, delay, onTap, onAction }) {
 export default function ActivityScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedTx, setSelectedTx] = useState(null);
-  const [showFilters, setShowFilters] = useState(true);
   const pending  = TX.filter(t => t.pending);
   const filtered = TX.filter(t => !t.pending && (activeFilter === 'All' || t.filter === activeFilter));
 
@@ -284,24 +283,20 @@ export default function ActivityScreen() {
         <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--bk-text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
           Activity
         </h1>
-        <Button className="icon-btn" aria-label="Filter transactions" style={{ width: 24, height: 24 }} onPress={() => setShowFilters(f => !f)}>
-          <SlidersHorizontal size={18} color={showFilters ? 'var(--bk-brand-primary)' : 'var(--bk-text-muted)'} strokeWidth={1.5} aria-hidden="true" />
-        </Button>
+        <div aria-hidden="true" style={{ width: 24 }} />
       </header>
 
       {/* Filter chips — shared.css .chain-pill pattern */}
-      {showFilters && (
-        <div className="activity-filter-row" role="group" aria-label="Filter">
-          {FILTERS.map(f => (
-            <button
-              key={f}
-              className={`chain-pill${activeFilter === f ? ' active' : ''}`}
-              onClick={() => setActiveFilter(f)}
-              aria-pressed={activeFilter === f}
-            >{f}</button>
-          ))}
-        </div>
-      )}
+      <div className="activity-filter-row" role="group" aria-label="Filter">
+        {FILTERS.map(f => (
+          <button
+            key={f}
+            className={`chain-pill${activeFilter === f ? ' active' : ''}`}
+            onClick={() => setActiveFilter(f)}
+            aria-pressed={activeFilter === f}
+          >{f}</button>
+        ))}
+      </div>
 
       {/* List */}
       <div className="scroll-content" role="list" aria-label="Transaction history">
