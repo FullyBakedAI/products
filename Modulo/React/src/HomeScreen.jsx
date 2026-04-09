@@ -383,19 +383,19 @@ export default function HomeScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
         >
           <Button className="action-btn" aria-label="Swap tokens" onPress={() => navigate('/swap')}>
-            <img src={iconActionSwap} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-icon-wrap action-icon-swap"><img src={iconActionSwap} alt="" width="20" height="20" aria-hidden="true" /></span>
             <span className="action-label">Swap</span>
           </Button>
           <Button className="action-btn" aria-label="Buy tokens" onPress={() => openActions({ tab: 'deposit' })}>
-            <img src={iconActionBuy} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-icon-wrap action-icon-buy"><img src={iconActionBuy} alt="" width="20" height="20" aria-hidden="true" /></span>
             <span className="action-label">Buy</span>
           </Button>
           <Button className="action-btn" aria-label="Send tokens" onPress={() => navigate('/send')}>
-            <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-icon-wrap action-icon-send"><img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" /></span>
             <span className="action-label">Send</span>
           </Button>
           <Button className="action-btn" aria-label="Receive tokens" onPress={() => navigate('/receive')}>
-            <img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-icon-wrap action-icon-recv"><img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" /></span>
             <span className="action-label">Receive</span>
           </Button>
         </motion.div>
