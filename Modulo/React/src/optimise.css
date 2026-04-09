@@ -27,6 +27,64 @@
   text-align: center;
 }
 
+/* ── Back button ─────────────────────────────────────────────────────── */
+.optimise-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  color: var(--bk-brand-primary);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--bk-font);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Stats row ───────────────────────────────────────────────────────── */
+.optimise-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 0 20px 20px;
+  padding: 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 14px;
+}
+
+.optimise-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 3px;
+}
+
+.optimise-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  letter-spacing: -0.3px;
+}
+
+.optimise-stat-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
+}
+
+.optimise-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--bk-border-subtle);
+  flex-shrink: 0;
+}
+
 /* ── Hero ────────────────────────────────────────────────────────────── */
 .optimise-hero {
   display: flex;

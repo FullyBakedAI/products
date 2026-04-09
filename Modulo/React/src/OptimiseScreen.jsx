@@ -22,11 +22,11 @@ import tokenUsdt from './assets/token-usdt.svg';
 import './optimise.css';
 
 const RECOMMENDATIONS = [
-  { id: 'usdc', icon: tokenUsdc, name: 'USDC', protocol: 'Aave',           apy: 4.8, yieldNum: 256 },
-  { id: 'btc',  icon: tokenBtc,  name: 'BTC',  protocol: 'Native staking', apy: 1.8, yieldNum: 101 },
-  { id: 'eth',  icon: tokenEth,  name: 'ETH',  protocol: 'Lido',           apy: 3.8, yieldNum: 168 },
-  { id: 'sol',  icon: tokenSol,  name: 'SOL',  protocol: 'Marinade',       apy: 6.8, yieldNum: 288 },
-  { id: 'usdt', icon: tokenUsdt, name: 'USDT', protocol: 'Compound',       apy: 4.6, yieldNum: 156 },
+  { id: 'usdc', icon: tokenUsdc, name: 'USDC', protocol: 'Aave',           apy: 4.8, yieldNum: 256, value: 5343 },
+  { id: 'btc',  icon: tokenBtc,  name: 'BTC',  protocol: 'Native staking', apy: 1.8, yieldNum: 101, value: 5617 },
+  { id: 'eth',  icon: tokenEth,  name: 'ETH',  protocol: 'Lido',           apy: 3.8, yieldNum: 168, value: 4413 },
+  { id: 'sol',  icon: tokenSol,  name: 'SOL',  protocol: 'Marinade',       apy: 6.8, yieldNum: 288, value: 4228 },
+  { id: 'usdt', icon: tokenUsdt, name: 'USDT', protocol: 'Compound',       apy: 4.6, yieldNum: 156, value: 3399 },
 ];
 
 export default function OptimiseScreen() {
@@ -34,8 +34,13 @@ export default function OptimiseScreen() {
   const { showUndo } = useUndoToast();
   const [selected, setSelected] = useState(new Set(RECOMMENDATIONS.map(r => r.id)));
 
-  const selectedCount = selected.size;
-  const total = RECOMMENDATIONS.reduce((sum, r) => selected.has(r.id) ? sum + r.yieldNum : sum, 0);
+  const selectedRecs   = RECOMMENDATIONS.filter(r => selected.has(r.id));
+  const selectedCount  = selected.size;
+  const totalYield     = selectedRecs.reduce((s, r) => s + r.yieldNum, 0);
+  const totalValue     = selectedRecs.reduce((s, r) => s + r.value, 0);
+  const weightedApy    = totalValue > 0
+    ? selectedRecs.reduce((s, r) => s + r.apy * r.value, 0) / totalValue
+    : 0;
 
   function toggleItem(id) {
     setSelected(prev => {
@@ -64,12 +69,11 @@ export default function OptimiseScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <header className="optimise-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
-        </Button>
-        <div aria-hidden="true" style={{ width: 20 }} />
-      </header>
+      {/* Back button — full-width tap target */}
+      <button className="optimise-back-btn" aria-label="Go back" onClick={() => navigate(-1)}>
+        <ChevronLeft size={18} strokeWidth={2} aria-hidden="true" />
+        Back
+      </button>
 
       <div className="scroll-content">
         {/* Hero */}
@@ -78,9 +82,22 @@ export default function OptimiseScreen() {
           <p className="optimise-hero-sub">
             Deploy all assets to the highest-yield protocols. One tap, fully optimised.
           </p>
-          <div className="optimise-yield-hero" role="status" aria-live="polite" aria-label={`Estimated annual yield: $${total}`}>
-            <span className="optimise-yield-amount">+${total.toLocaleString()}</span>
+          <div className="optimise-yield-hero" role="status" aria-live="polite" aria-label={`Estimated annual yield: $${totalYield}`}>
+            <span className="optimise-yield-amount">+${totalYield.toLocaleString()}</span>
             <span className="optimise-yield-period">/yr estimated</span>
+          </div>
+        </div>
+
+        {/* Summary stats */}
+        <div className="optimise-stats-row">
+          <div className="optimise-stat">
+            <span className="optimise-stat-value">{weightedApy.toFixed(1)}%</span>
+            <span className="optimise-stat-label">avg APY</span>
+          </div>
+          <div className="optimise-stat-divider" />
+          <div className="optimise-stat">
+            <span className="optimise-stat-value">${totalValue.toLocaleString()}</span>
+            <span className="optimise-stat-label">total deployed</span>
           </div>
         </div>
 
@@ -117,9 +134,9 @@ export default function OptimiseScreen() {
         </div>
 
         {/* Total */}
-        <div className="optimise-total-row" aria-label={`Total estimated yield: $${total} per year`} role="status" aria-live="polite">
+        <div className="optimise-total-row" aria-label={`Total estimated yield: $${totalYield} per year`} role="status" aria-live="polite">
           <span className="optimise-total-label">Total estimated yield</span>
-          <span className="optimise-total-value">+${total} / yr</span>
+          <span className="optimise-total-value">+${totalYield} / yr</span>
         </div>
       </div>
 
