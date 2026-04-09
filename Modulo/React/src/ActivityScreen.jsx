@@ -15,7 +15,7 @@ import { Button } from 'react-aria-components';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import {
-  Loader, X, ExternalLink,
+  Loader, X, ExternalLink, ChevronLeft,
 } from 'lucide-react';
 import './activity.css';
 
@@ -278,12 +278,15 @@ export default function ActivityScreen() {
     >
       <StatusBar />
 
-      {/* Header — home-header pattern */}
+      {/* Header */}
       <header className="home-header">
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--bk-text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+        </Button>
+        <h1 style={{ fontSize: 17, fontWeight: 600, color: 'var(--bk-text-primary)', letterSpacing: '-0.01em', margin: 0 }}>
           Activity
         </h1>
-        <div aria-hidden="true" style={{ width: 24 }} />
+        <div aria-hidden="true" style={{ width: 20 }} />
       </header>
 
       {/* Filter chips — shared.css .chain-pill pattern */}

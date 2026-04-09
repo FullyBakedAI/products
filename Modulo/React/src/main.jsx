@@ -34,7 +34,7 @@ function Root() {
     const current = window.location.hash;
     if (!current || current === '#' || current === '#/') {
       const saved = localStorage.getItem('modulo_route');
-      if (saved && saved !== '#/' && saved !== '#') {
+      if (saved && saved !== '#/' && saved !== '#' && !saved.startsWith('#/ds')) {
         window.location.hash = saved;
         return saved;
       }
@@ -46,11 +46,11 @@ function Root() {
     const handler = () => {
       const h = window.location.hash;
       setHash(h);
-      localStorage.setItem('modulo_route', h);
+      if (!h.startsWith('#/ds')) localStorage.setItem('modulo_route', h);
     };
     window.addEventListener('hashchange', handler);
     // Save current route on mount too
-    if (window.location.hash) localStorage.setItem('modulo_route', window.location.hash);
+    if (window.location.hash && !window.location.hash.startsWith('#/ds')) localStorage.setItem('modulo_route', window.location.hash);
     return () => window.removeEventListener('hashchange', handler);
   }, []);
 

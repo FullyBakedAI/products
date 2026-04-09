@@ -169,9 +169,9 @@ export default function ReviewScreen() {
         Confirm {capitalize(action)}
       </Button>
 
-      <button className="review-cancel" onClick={() => navigate('/')} aria-label="Cancel">
+      <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">
         Cancel
-      </button>
+      </Button>
     </motion.div>
   );
 }

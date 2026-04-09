@@ -5,6 +5,7 @@
 import { useMemo } from 'react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { SwapProvider } from '../SwapContext';
+import { ActionsProvider } from '../ActionsContext';
 import HomeScreen from '../HomeScreen';
 import SwapScreen from '../SwapScreen';
 import SwapSelectScreen from '../SwapSelectScreen';
@@ -21,12 +22,12 @@ export const PREVIEW_SCREENS = [
 ];
 
 const PREVIEW_ROUTES = [
-  { path: '/',                  element: <SwapProvider><HomeScreen /></SwapProvider> },
-  { path: '/swap',              element: <SwapProvider><SwapScreen /></SwapProvider> },
-  { path: '/swap/select/:side', element: <SwapProvider><SwapSelectScreen /></SwapProvider> },
-  { path: '/explore',           element: <SwapProvider><ExploreScreen /></SwapProvider> },
-  { path: '/send',              element: <SwapProvider><SendScreen /></SwapProvider> },
-  { path: '/receive',           element: <SwapProvider><ReceiveScreen /></SwapProvider> },
+  { path: '/',                  element: <ActionsProvider><SwapProvider><HomeScreen /></SwapProvider></ActionsProvider> },
+  { path: '/swap',              element: <ActionsProvider><SwapProvider><SwapScreen /></SwapProvider></ActionsProvider> },
+  { path: '/swap/select/:side', element: <ActionsProvider><SwapProvider><SwapSelectScreen /></SwapProvider></ActionsProvider> },
+  { path: '/explore',           element: <ActionsProvider><SwapProvider><ExploreScreen /></SwapProvider></ActionsProvider> },
+  { path: '/send',              element: <ActionsProvider><SwapProvider><SendScreen /></SwapProvider></ActionsProvider> },
+  { path: '/receive',           element: <ActionsProvider><SwapProvider><ReceiveScreen /></SwapProvider></ActionsProvider> },
 ];
 
 /**

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { X, ChevronRight, Shield, Bell, Globe, Palette, Info, HelpCircle, LogOut, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Shield, Bell, Globe, Palette, Info, HelpCircle, LogOut, Check } from 'lucide-react';
 import StatusBar from './StatusBar';
 import './settings.css';
 
@@ -62,10 +62,11 @@ export default function SettingsScreen() {
 
       {/* Header */}
       <div className="settings-header">
-        <span className="settings-title">Settings</span>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
-          <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} />
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
         </Button>
+        <span className="settings-title">Settings</span>
+        <div aria-hidden="true" style={{ width: 20 }} />
       </div>
 
       <div className="scroll-content">

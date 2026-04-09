@@ -30,7 +30,11 @@
   }
 }
 
-/* ── Status Bar ─────────────────────────────────────────────────────── */
+/* ── Status Bar — hidden on real phones, shown in desktop preview ── */
+@media (max-width: 500px) {
+  .status-bar { display: none; }
+}
+
 .status-bar {
   height: 37px;
   display: flex;
@@ -108,13 +112,8 @@
     box-shadow: none;
   }
 
-  /* Replace fake status bar with safe-area spacer — real OS draws its own */
+  /* Hide fake status bar on real devices — the OS draws its own */
   .status-bar {
-    height: env(safe-area-inset-top, 20px);
-    padding: 0;
-  }
-
-  .status-bar > * {
     display: none;
   }
 }

@@ -552,10 +552,10 @@ export default function ActionsScreen() {
     <div className="actions-overlay" role="dialog" aria-modal="true" aria-label="Actions">
 
       {/* Dark backdrop — tap to dismiss */}
-      <button
+      <Button
         className="actions-backdrop"
         aria-label="Close actions"
-        onClick={closeActions}
+        onPress={closeActions}
       />
 
       {/* Sheet with drag-to-dismiss */}
@@ -573,14 +573,13 @@ export default function ActionsScreen() {
 
         {/* Cycle button + close */}
         <div className="actions-header-row">
-          <button
+          <Button
             className="actions-cycle-btn"
-            onClick={next}
+            onPress={next}
             aria-label={`Current: ${TABS[activeIdx].label}. Tap to cycle.`}
-            aria-live="polite"
           >
             {TABS[activeIdx].label}
-          </button>
+          </Button>
           <Button
             className="close-btn-shared"
             aria-label="Close"

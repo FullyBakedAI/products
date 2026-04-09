@@ -10,7 +10,7 @@
  * All colours via --bk-* tokens. All data mocked.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, animate, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
@@ -281,7 +281,24 @@ export default function HomeScreen() {
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
   const [showAchievementToast, setShowAchievementToast] = useState(false);
   const [activeAssetTab, setActiveAssetTab] = useState('tokens');
+  const [sortBy, setSortBy] = useState('size'); // 'size' | 'performance'
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+  const scrollRef = useRef(null);
   useIconOverride();
+
+  function handleScroll() {
+    setHeaderScrolled((scrollRef.current?.scrollTop ?? 0) > 70);
+  }
+
+  const sortedTokens = [...TOKENS].sort((a, b) => {
+    if (sortBy === 'performance') {
+      const aVal = parseFloat(a.change.replace('%', '').replace('+', ''));
+      const bVal = parseFloat(b.change.replace('%', '').replace('+', ''));
+      return bVal - aVal;
+    }
+    // size — by USD value
+    return parseFloat(b.usd.replace(/[$,]/g, '')) - parseFloat(a.usd.replace(/[$,]/g, ''));
+  });
 
   // F2: Live balance
   const { balance, glowing } = useLiveBalance(yieldActive);
@@ -305,8 +322,8 @@ export default function HomeScreen() {
     >
       <StatusBar />
 
-      {/* Header */}
-      <header className="home-header">
+      {/* Header — collapses on scroll */}
+      <header className={`home-header${headerScrolled ? ' home-header--scrolled' : ''}`}>
         <div className="header-logo">
           <img src={logoModulo} alt="Modulo" width="93" height="18" />
         </div>
@@ -328,7 +345,7 @@ export default function HomeScreen() {
         </div>
       </header>
 
-      <div className="scroll-content">
+      <div className="scroll-content" ref={scrollRef} onScroll={handleScroll}>
 
         {/* Portfolio Card — F2: live yield counter */}
         <motion.section
@@ -424,7 +441,7 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
         >
-          <div className="optimise-promo-card" role="region" aria-label="Put It All To Work">
+          <button className="optimise-promo-card" aria-label="Put it all to work — optimise all assets" onClick={() => navigate('/optimise')}>
             <div className="optimise-promo-icon" aria-hidden="true">
               <Sparkles size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} />
             </div>
@@ -432,55 +449,39 @@ export default function HomeScreen() {
               <div className="optimise-promo-headline">Put it all to work</div>
               <div className="optimise-promo-sub">Estimated +$969/yr across 4 protocols</div>
             </div>
-            <Button
-              className="optimise-promo-btn"
-              aria-label="Optimise all assets"
-              onPress={() => navigate('/optimise')}
-            >
-              Optimise
-            </Button>
-          </div>
+            <span className="optimise-promo-btn" aria-hidden="true">Optimise</span>
+          </button>
         </motion.div>
 
         {/* F4: SmartNudges horizontal scroll */}
         <SmartNudges />
 
-        {/* Tabs */}
+        {/* Positions header + sort */}
         <motion.div
-          className="tabs"
-          role="tablist"
-          data-bk-component="tab-bar"
+          className="positions-header"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.14 } }}
         >
-          <button className={`tab${activeAssetTab === 'tokens' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'tokens'} aria-controls="token-panel" id="tab-tokens" onClick={() => setActiveAssetTab('tokens')}>Tokens</button>
-          <button className={`tab${activeAssetTab === 'nfts' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'nfts'} id="tab-nfts" onClick={() => setActiveAssetTab('nfts')}>NFTs</button>
+          <span className="positions-title">
+            Positions <span className="positions-count">{TOKENS.length}</span>
+          </span>
+          <button
+            className="positions-sort-btn"
+            aria-label={`Sort by ${sortBy === 'size' ? 'size' : 'performance'}`}
+            onClick={() => setSortBy(s => s === 'size' ? 'performance' : 'size')}
+          >
+            {sortBy === 'size' ? 'Size' : 'Performance'} ↕
+          </button>
         </motion.div>
 
         {activeAssetTab === 'tokens' ? (
           <>
-            {/* Token List — top 3 */}
-            <div className="token-list" role="tabpanel" id="token-panel" aria-labelledby="tab-tokens">
-              {TOKENS.slice(0, 3).map((t, i) => (
+            {/* Token List */}
+            <div className="token-list" role="list" id="token-panel">
+              {sortedTokens.map((t, i) => (
                 <TokenRow key={t.name} t={t} index={i} />
               ))}
             </div>
-
-            {/* See all tokens */}
-            <motion.div
-              className="see-all-row"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.28 } }}
-            >
-              <button
-                className="see-all-btn"
-                aria-label="See all tokens"
-                onClick={() => openActions({ tab: 'lend' })}
-              >
-                See all {TOKENS.length} tokens
-                <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />
-              </button>
-            </motion.div>
           </>
         ) : (
           <motion.div
