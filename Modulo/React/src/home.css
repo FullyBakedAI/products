@@ -640,6 +640,92 @@
   outline-offset: 2px;
 }
 
+/* ── Smart Nudges ──────────────────────────────────────────────────── */
+.smart-nudges-row {
+  padding: 0 0 4px;
+}
+
+.smart-nudges-scroll {
+  display: flex;
+  gap: 10px;
+  padding: 4px 20px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.smart-nudges-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.nudge-card {
+  flex-shrink: 0;
+  width: 200px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nudge-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.nudge-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--bk-bg-elevated);
+}
+
+.nudge-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.nudge-detail {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.nudge-cta-btn {
+  margin-top: 8px;
+  align-self: flex-start;
+  height: 28px;
+  padding: 0 12px;
+  background: var(--bk-brand-primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  display: flex;
+  align-items: center;
+}
+
+.nudge-cta-btn[data-hovered] { opacity: 0.88; }
+
+.nudge-cta-btn[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 2px;
+}
+
 .nudge-dismiss-btn {
   width: 20px;
   height: 20px;
