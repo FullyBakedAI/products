@@ -190,16 +190,16 @@
 
 .action-btn {
   flex: 1;
-  height: 70.5px;
-  background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle);
-  border-radius: 16px;
+  height: 64px;
+  background: var(--bk-bg-elevated);
+  border: none;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 13px 0;
+  padding: 0;
   cursor: pointer;
   font-family: var(--bk-font);
   transition: background 0.15s ease;
@@ -224,7 +224,7 @@
   font-size: 11px;
   font-weight: 500;
   line-height: 1.5;
-  color: var(--bk-text-secondary);
+  color: var(--bk-text-primary);
 }
 
 /* ── Tabs ───────────────────────────────────────────────────────────── */
@@ -360,8 +360,8 @@
 /* Main content row (icon + info + values) */
 .token-row-main {
   display: flex;
-  align-items: flex-start;
-  padding: 14px 20px 8px;
+  align-items: center;
+  padding: 16px 20px;
   gap: 12px;
 }
 
@@ -398,8 +398,7 @@
   font-weight: 400;
   line-height: 1.4;
   color: var(--bk-text-muted);
-  opacity: 0.7;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .token-values {

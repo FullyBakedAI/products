@@ -27,7 +27,6 @@ import {
 } from 'lucide-react';
 import { useIconOverride } from './IconOverrideContext';
 
-import SmartNudges     from './SmartNudges';
 import logoModulo      from './assets/logo-modulo.svg';
 import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
@@ -146,14 +145,14 @@ function AchievementToast({ onClose }) {
           <div className="achievement-toast-label">Achievement unlocked</div>
           <div className="achievement-toast-title">Century Club 🎉</div>
         </div>
-        <button
+        <Button
           className="nudge-dismiss-btn"
           aria-label="Dismiss"
-          onClick={onClose}
-          style={{ color: 'var(--bk-text-muted)' }}
+          onPress={onClose}
+          style={{ color: 'var(--bk-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
           ×
-        </button>
+        </Button>
       </div>
     </motion.div>
   );
@@ -202,12 +201,11 @@ function TokenRow({ t, index }) {
 
       <div className="token-swipe-actions">
         {SWIPE_ACTIONS.map(({ id, label, Icon, svgSrc, cls }) => (
-          <button
+          <Button
             key={id}
             className={`swipe-action ${cls}`}
             aria-label={`${label} ${t.name}`}
-            onClick={(e) => {
-              e.stopPropagation();
+            onPress={() => {
               snap(false);
               setTimeout(() => {
                 if (id === 'swap')        navigate('/swap');
@@ -222,7 +220,7 @@ function TokenRow({ t, index }) {
               : <Icon size={18} strokeWidth={1.5} />
             }
             <span>{label}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -240,12 +238,8 @@ function TokenRow({ t, index }) {
         <div className="token-row-main">
           <div className="token-icon-spacer" aria-hidden="true" />
           <div className="token-info">
-            <div className="token-name-row">
-              <span className="token-name-text">{t.name}</span>
-              <span className={`token-change${t.negative ? ' negative' : ''}`}>{t.change}</span>
-            </div>
+            <span className="token-name-text">{t.name}</span>
             <div className="token-amount">{t.amount}</div>
-            <div className={`token-pnl${t.pnlNegative ? ' negative' : ''}`}>{t.pnl}</div>
           </div>
           <div className="token-values">
             <MiniSparkline id={t.id} negative={t.negative} />
@@ -254,19 +248,6 @@ function TokenRow({ t, index }) {
               {t.change}
             </div>
           </div>
-        </div>
-
-        <div className="token-yield-bar-row">
-          <div className="token-yield-track">
-            <motion.div
-              className="token-yield-fill"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: t.yield / MAX_YIELD }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.22 + index * 0.06 }}
-              style={{ transformOrigin: 'left' }}
-            />
-          </div>
-          <span className="token-yield-label">{(t.yield * 100).toFixed(1)}% APY</span>
         </div>
       </motion.div>
     </motion.div>
@@ -383,13 +364,13 @@ export default function HomeScreen() {
           </div>
 
           {/* F5: "What if?" link */}
-          <button
+          <Button
             className="portfolio-whatif-btn"
             aria-label="Open What-if simulator"
-            onClick={() => navigate('/simulate')}
+            onPress={() => navigate('/simulate')}
           >
             What if? →
-          </button>
+          </Button>
         </motion.section>
 
         {/* Action Buttons */}
@@ -419,31 +400,6 @@ export default function HomeScreen() {
           </Button>
         </motion.div>
 
-        {/* F1: "Put It All To Work" promo card */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
-        >
-          <div className="optimise-promo-card" role="region" aria-label="Put It All To Work">
-            <div className="optimise-promo-icon" aria-hidden="true">
-              <Sparkles size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} />
-            </div>
-            <div className="optimise-promo-text">
-              <div className="optimise-promo-headline">Put it all to work</div>
-              <div className="optimise-promo-sub">Estimated +$969/yr across 4 protocols</div>
-            </div>
-            <Button
-              className="optimise-promo-btn"
-              aria-label="Optimise all assets"
-              onPress={() => navigate('/optimise')}
-            >
-              Optimise
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* F4: SmartNudges horizontal scroll */}
-        <SmartNudges />
 
         {/* Tabs */}
         <motion.div
@@ -453,8 +409,8 @@ export default function HomeScreen() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.14 } }}
         >
-          <button className={`tab${activeAssetTab === 'tokens' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'tokens'} aria-controls="token-panel" id="tab-tokens" onClick={() => setActiveAssetTab('tokens')}>Tokens</button>
-          <button className={`tab${activeAssetTab === 'nfts' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'nfts'} id="tab-nfts" onClick={() => setActiveAssetTab('nfts')}>NFTs</button>
+          <Button className={`tab${activeAssetTab === 'tokens' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'tokens'} aria-controls="token-panel" id="tab-tokens" onPress={() => setActiveAssetTab('tokens')}>Tokens</Button>
+          <Button className={`tab${activeAssetTab === 'nfts' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'nfts'} id="tab-nfts" onPress={() => setActiveAssetTab('nfts')}>NFTs</Button>
         </motion.div>
 
         {activeAssetTab === 'tokens' ? (
@@ -472,14 +428,14 @@ export default function HomeScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.28 } }}
             >
-              <button
+              <Button
                 className="see-all-btn"
                 aria-label="See all tokens"
-                onClick={() => openActions({ tab: 'lend' })}
+                onPress={() => openActions({ tab: 'lend' })}
               >
                 See all {TOKENS.length} tokens
                 <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />
-              </button>
+              </Button>
             </motion.div>
           </>
         ) : (

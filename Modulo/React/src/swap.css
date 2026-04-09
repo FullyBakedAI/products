@@ -174,8 +174,8 @@
 }
 
 .swap-card {
-  background: linear-gradient(180deg, var(--bk-bg-card), var(--bk-bg-card-alt));
-  border: 1px solid var(--bk-border-subtle);
+  background: var(--bk-bg-elevated);
+  border: none;
   border-radius: 16px;
   padding: 16px 16px 14px;
   display: flex;
@@ -188,10 +188,9 @@
 
 .card-label {
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.5;
-  color: var(--bk-text-secondary);
-  opacity: 0.6;
+  color: var(--bk-text-muted);
   margin-bottom: 6px;
 }
 
