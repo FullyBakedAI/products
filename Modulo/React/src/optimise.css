@@ -37,35 +37,32 @@
   text-align: center;
 }
 
-.optimise-hero-icon {
-  width: 56px;
-  height: 56px;
-  background: var(--bk-earn-card-bg);
-  border: 1px solid var(--bk-earn-card-border);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .optimise-hero-sub {
   font-size: 14px;
   font-weight: 400;
-  color: var(--bk-text-secondary);
+  color: var(--bk-text-primary);
   line-height: 1.5;
   max-width: 280px;
 }
 
-.optimise-total-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 16px;
-  background: var(--bk-earn-card-bg);
-  border: 1px solid var(--bk-earn-card-border);
-  border-radius: 9999px;
-  font-size: 15px;
+.optimise-yield-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.optimise-yield-amount {
+  font-size: 32px;
   font-weight: 700;
-  color: var(--bk-brand-primary);
+  color: var(--bk-success);
+  letter-spacing: -0.5px;
+}
+
+.optimise-yield-period {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
 }
 
 /* ── Recommendation list ─────────────────────────────────────────────── */
@@ -73,17 +70,45 @@
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
 }
 
 .optimise-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
+  gap: 0;
+  padding: 0 16px 0 0;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-card);
   border-radius: 14px;
+  transition: opacity var(--bk-motion-fast);
+}
+
+.optimise-row--off {
+  opacity: 0.4;
+}
+
+.optimise-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0 14px 16px;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.optimise-row--off .optimise-token-icon {
+  filter: grayscale(1);
+}
+
+.optimise-row--off .optimise-row-apy,
+.optimise-row--off .optimise-row-yield {
+  color: var(--bk-text-muted);
 }
 
 .optimise-token-icon {
@@ -109,7 +134,7 @@
 .optimise-row-protocol {
   font-size: 12px;
   font-weight: 400;
-  color: var(--bk-text-muted);
+  color: var(--bk-text-secondary);
   margin-top: 1px;
 }
 
@@ -147,7 +172,7 @@
 .optimise-total-label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--bk-text-secondary);
+  color: var(--bk-text-primary);
 }
 
 .optimise-total-value {
