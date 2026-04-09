@@ -25,7 +25,8 @@
   transition: background 0.1s ease;
 }
 
-.tx-row:hover { background: rgba(255, 255, 255, 0.025); }
+.tx-row:hover,
+.tx-row:active { background: var(--bk-bg-card); }
 
 /* Secondary token icon overlay */
 .tx-secondary-icon {

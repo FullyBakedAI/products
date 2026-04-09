@@ -1,7 +1,7 @@
 /**
- * ExploreScreen — market discovery
- * Matches HTML prototype at ../Prototype/explore-screen.html
- * All colours via --bk-* tokens. All data mocked.
+ * ExploreScreen — Markets & Yield Discovery
+ * Yield-first: top rates shown prominently, token rows include APY.
+ * Replaces the old tile-based favourites/new-listings layout.
  */
 
 import { useState } from 'react';
@@ -9,13 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
+import { useActions } from './ActionsContext';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import './explore.css';
-import './home.css';
 
-import { Search, Star } from 'lucide-react';
-import iconMore from './assets/icon-more.svg';
+import { Search, Star, TrendingUp, Zap } from 'lucide-react';
 import tokenEth from './assets/token-eth.svg';
 import tokenBtc from './assets/token-btc.svg';
 import tokenUsdc from './assets/token-usdc.svg';
@@ -26,62 +25,54 @@ import sparklineBtc from './assets/explore-sparkline-btc.svg';
 
 const CHAINS = ['All', 'Ethereum', 'Arbitrum', 'Base', 'Optimism'];
 
-const MARKET_TABS = ['Trending', 'Gainers', 'Losers', 'Top'];
-const SORT_OPTIONS = ['Volume', 'Price', '% Change'];
+const TABS = ['All', 'Staking', 'Lending', 'Top'];
+const SORT_OPTIONS = ['Volume', 'Price', '% Change', 'APY'];
 
-const NEW_TOKENS = [
-  { id: 'new1', icon: tokenUsdc, symbol: 'PYUSD',  change: '+12.4%', negative: false },
-  { id: 'new2', icon: tokenEth,  symbol: 'EIGEN',  change: '+8.1%',  negative: false },
-  { id: 'new3', icon: tokenSol,  symbol: 'JTO',    change: '-3.2%',  negative: true  },
+// Top yield opportunities — shown prominently at the top
+const TOP_YIELDS = [
+  { asset: 'ETH',  icon: tokenEth,  protocol: 'Lido',     apy: 4.2, type: 'stake', tab: 'lend' },
+  { asset: 'USDC', icon: tokenUsdc, protocol: 'Aave v3',  apy: 5.8, type: 'lend',  tab: 'lend' },
+  { asset: 'SOL',  icon: tokenSol,  protocol: 'Marinade', apy: 7.1, type: 'stake', tab: 'lend' },
 ];
 
 const ALL_TOKENS = [
-  { id: 'usdc', rank: 1, icon: tokenUsdc, name: 'USD Coin',       volume: '$514M Vol', price: '$1.00',       change: '-0.38%', changeRaw: -0.38, negative: true,  priceRaw: 1.00,      sparkline: null,         trending: false },
-  { id: 'eth',  rank: 2, icon: tokenEth,  name: 'Ethereum',       volume: '$480M Vol', price: '$2,450.78',   change: '+4.42%', changeRaw:  4.42, negative: false, priceRaw: 2450.78,   sparkline: sparklineEth, trending: true  },
-  { id: 'usdt', rank: 3, icon: tokenUsdt, name: 'Tether',         volume: '$398M Vol', price: '$1.00',       change: '+0.01%', changeRaw:  0.01, negative: false, priceRaw: 1.00,      sparkline: null,         trending: false },
-  { id: 'btc',  rank: 4, icon: tokenBtc,  name: 'Bitcoin',        volume: '$244M Vol', price: '$88,421.33',  change: '+2.14%', changeRaw:  2.14, negative: false, priceRaw: 88421.33,  sparkline: sparklineBtc, trending: true  },
-  { id: 'sol',  rank: 5, icon: tokenSol,  name: 'Solana',         volume: '$220M Vol', price: '$165.42',     change: '-1.82%', changeRaw: -1.82, negative: true,  priceRaw: 165.42,    sparkline: null,         trending: false },
+  { id: 'usdc', rank: 1, icon: tokenUsdc, name: 'USD Coin',  symbol: 'USDC', volume: '$514M Vol', price: '$1.00',      change: '-0.38%', changeRaw: -0.38, negative: true,  priceRaw: 1.00,     sparkline: null,         apy: 5.8, apyType: 'lend' },
+  { id: 'eth',  rank: 2, icon: tokenEth,  name: 'Ethereum',  symbol: 'ETH',  volume: '$480M Vol', price: '$2,450.78',  change: '+4.42%', changeRaw:  4.42, negative: false, priceRaw: 2450.78,  sparkline: sparklineEth, apy: 4.2, apyType: 'stake' },
+  { id: 'usdt', rank: 3, icon: tokenUsdt, name: 'Tether',    symbol: 'USDT', volume: '$398M Vol', price: '$1.00',      change: '+0.01%', changeRaw:  0.01, negative: false, priceRaw: 1.00,     sparkline: null,         apy: 4.9, apyType: 'lend' },
+  { id: 'btc',  rank: 4, icon: tokenBtc,  name: 'Bitcoin',   symbol: 'BTC',  volume: '$244M Vol', price: '$88,421.33', change: '+2.14%', changeRaw:  2.14, negative: false, priceRaw: 88421.33, sparkline: sparklineBtc, apy: 1.8, apyType: 'stake' },
+  { id: 'sol',  rank: 5, icon: tokenSol,  name: 'Solana',    symbol: 'SOL',  volume: '$220M Vol', price: '$165.42',    change: '-1.82%', changeRaw: -1.82, negative: true,  priceRaw: 165.42,   sparkline: null,         apy: 7.1, apyType: 'stake' },
 ];
 
 export default function ExploreScreen() {
   const navigate = useNavigate();
+  const { openActions } = useActions();
   const [activeChain, setActiveChain] = useState('All');
-  const [activeMarketTab, setActiveMarketTab] = useState('Trending');
+  const [activeTab, setActiveTab] = useState('All');
   const [sortBy, setSortBy] = useState('Volume');
-  const [favourites, setFavourites] = useState(new Set(['eth', 'btc']));
 
   const cycleSort = () => {
     const next = SORT_OPTIONS[(SORT_OPTIONS.indexOf(sortBy) + 1) % SORT_OPTIONS.length];
     setSortBy(next);
   };
 
-  const toggleFav = (id) => setFavourites(prev => {
-    const next = new Set(prev);
-    next.has(id) ? next.delete(id) : next.add(id);
-    return next;
-  });
-
-  // Filter by market tab first, then sort
   const tabFiltered = ALL_TOKENS.filter(t => {
-    if (activeMarketTab === 'Trending') return t.trending;
-    if (activeMarketTab === 'Gainers')  return t.changeRaw > 0;
-    if (activeMarketTab === 'Losers')   return t.changeRaw < 0;
-    return true; // Top — all
+    if (activeTab === 'Staking') return t.apyType === 'stake';
+    if (activeTab === 'Lending') return t.apyType === 'lend';
+    if (activeTab === 'Top')     return t.rank <= 5;
+    return true;
   });
 
   const sortedTokens = [...tabFiltered].sort((a, b) => {
     if (sortBy === 'Price')     return b.priceRaw - a.priceRaw;
     if (sortBy === '% Change')  return b.changeRaw - a.changeRaw;
-    return a.rank - b.rank; // Volume — original order
+    if (sortBy === 'APY')       return b.apy - a.apy;
+    return a.rank - b.rank;
   });
-
-  // Favourites cards — driven by state, not hardcoded
-  const favTokens = ALL_TOKENS.filter(t => favourites.has(t.id));
 
   return (
     <motion.main
       role="main"
-      aria-label="Modulo explore screen"
+      aria-label="Modulo markets screen"
       className="explore-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: m.fade.enter }}
@@ -91,80 +82,50 @@ export default function ExploreScreen() {
 
       <div className="scroll-content explore-scroll">
 
-        {/* Search Field */}
-        <button className="search-field explore-search" role="search" aria-label="Search tokens" onClick={() => { /* focus state handled by CSS :active */ }}>
+        {/* Search */}
+        <button className="search-field explore-search" role="search" aria-label="Search tokens">
           <Search size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
           <span>Token name or address</span>
         </button>
 
-        {/* Favourites */}
-        <div className="fav-header">
-          <span className="fav-label">Favourites</span>
-          <Button className="icon-btn-sm" aria-label="More options" onPress={() => navigate('/settings')}>
-            <img src={iconMore} width="16" height="16" aria-hidden="true" />
-          </Button>
-        </div>
-
-        <div className="fav-cards" role="group" aria-label="Favourite tokens">
-          {favTokens.length === 0 ? (
-            <div style={{ padding: '12px 16px', fontSize: 12, color: 'var(--bk-text-muted)' }}>
-              Star a token below to add it here.
-            </div>
-          ) : favTokens.map(t => (
+        {/* Top Yields — compact list, not tiles */}
+        <div className="yield-section">
+          <div className="yield-header">
+            <TrendingUp size={14} strokeWidth={1.5} color="var(--bk-success)" />
+            <span className="yield-title">Top rates right now</span>
+          </div>
+          {TOP_YIELDS.map(y => (
             <button
-              key={t.id}
-              className="fav-card"
-              aria-label={`${t.id.toUpperCase()} — ${t.price} ${t.change}`}
-              onClick={() => navigate(`/asset/${t.id}`)}
+              key={y.asset + y.protocol}
+              className="yield-row"
+              onClick={() => openActions({ tab: y.tab, asset: y.asset.toLowerCase() })}
+              aria-label={`${y.asset} ${y.apy}% APY on ${y.protocol}`}
             >
-              <div className="fav-card-top">
-                <img src={t.icon} alt="" />
-                <span>{t.id.toUpperCase()}</span>
+              <img src={y.icon} alt="" width="28" height="28" className="yield-icon" />
+              <div className="yield-info">
+                <span className="yield-asset">{y.asset}</span>
+                <span className="yield-protocol">{y.protocol} · {y.type === 'stake' ? 'Stake' : 'Lend'}</span>
               </div>
-              <div className="fav-sparkline" aria-hidden="true">
-                {t.sparkline
-                  ? <img src={t.sparkline} alt="" />
-                  : <div style={{ height: 32 }} />
-                }
-              </div>
-              <div className="fav-card-bottom">
-                <span className="fav-price">{t.price}</span>
-                <span className={`fav-change${t.negative ? ' negative' : ' positive'}`}>{t.change}</span>
-              </div>
+              <span className="yield-apy">{y.apy}%</span>
+              <span className="yield-apy-label">APY</span>
             </button>
           ))}
         </div>
 
-        {/* New on Modulo rail */}
-        <div className="new-listings-section">
-          <div className="section-header-row">
-            <span className="fav-label">New on Modulo</span>
-          </div>
-          <div className="new-listings-rail">
-            {NEW_TOKENS.map(t => (
-              <button key={t.id} className="new-listing-card" onClick={() => navigate(`/asset/${t.id}`)} aria-label={`${t.symbol} ${t.change}`}>
-                <img src={t.icon} alt="" width="28" height="28" />
-                <span className="new-listing-symbol">{t.symbol}</span>
-                <span className={`new-listing-change${t.negative ? ' negative' : ''}`}>{t.change}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Market Tabs */}
         <div className="tabs" role="tablist" data-bk-component="tab-bar">
-          {MARKET_TABS.map(tab => (
+          {TABS.map(tab => (
             <button
               key={tab}
-              className={`tab${activeMarketTab === tab ? ' active' : ''}`}
+              className={`tab${activeTab === tab ? ' active' : ''}`}
               role="tab"
-              aria-selected={activeMarketTab === tab}
-              onClick={() => setActiveMarketTab(tab)}
+              aria-selected={activeTab === tab}
+              onClick={() => setActiveTab(tab)}
             >{tab}</button>
           ))}
         </div>
 
-        {/* Sort + Chain Filters row */}
+        {/* Sort + Chain Filters */}
         <div className="top-header">
           <span className="top-label" />
           <button className="sort-btn" onClick={cycleSort} aria-label={`Sort by ${sortBy}`}>
@@ -172,22 +133,19 @@ export default function ExploreScreen() {
           </button>
         </div>
 
-        {/* Chain Filters */}
         <div className="chain-filters" data-bk-component="tab-bar" role="group" aria-label="Chain filter">
-          {CHAINS.map((c) => (
+          {CHAINS.map(c => (
             <Button
               key={c}
               className={`chain-pill${activeChain === c ? ' active' : ''}`}
               aria-pressed={activeChain === c}
               onPress={() => setActiveChain(c)}
-            >
-              {c}
-            </Button>
+            >{c}</Button>
           ))}
         </div>
 
-        {/* Token List */}
-        <div className="token-list-explore" role="list" aria-label="Top tokens by volume">
+        {/* Token List — with APY column */}
+        <div className="token-list-explore" role="list" aria-label="Markets">
           {sortedTokens.length === 0 ? (
             <div style={{ padding: '24px 16px', textAlign: 'center', fontSize: 13, color: 'var(--bk-text-muted)' }}>
               No tokens match this filter.
@@ -197,31 +155,27 @@ export default function ExploreScreen() {
               key={t.id}
               className="token-row-explore"
               role="listitem"
-              aria-label={`${t.name}: ${t.price}, ${t.change}`}
+              aria-label={`${t.name}: ${t.price}, ${t.change}, ${t.apy}% APY`}
               onClick={() => navigate(`/asset/${t.id}`)}
             >
               <span className="token-rank">{i + 1}</span>
-              <img className="token-icon-sm" src={t.icon} alt={t.name} />
-              <div className="token-info-explore">
-                <div className="token-name-sm">{t.name}</div>
-                <div className="token-volume">{t.volume}</div>
+              <img src={t.icon} alt="" width="32" height="32" className="explore-token-icon" />
+              <div className="token-col-name">
+                <span className="token-name-text">{t.name}</span>
+                <span className="token-amount">{t.symbol}</span>
               </div>
-              <div className="token-values-explore">
-                <div className="token-price">{t.price}</div>
-                <div className={`token-change-explore${t.negative ? ' negative' : ' positive'}`}>{t.change}</div>
+              <div className="token-col-price">
+                <span className="token-price-text">{t.price}</span>
+                <span className={`token-change-text${t.negative ? ' negative' : ' positive'}`}>{t.change}</span>
               </div>
-              <button
-                className={`fav-star-btn${favourites.has(t.id) ? ' active' : ''}`}
-                aria-label={`${favourites.has(t.id) ? 'Remove from' : 'Add to'} favourites`}
-                onClick={(e) => { e.stopPropagation(); toggleFav(t.id); }}
-              >
-                <Star size={14} strokeWidth={1.5} />
-              </button>
+              <div className="token-col-apy">
+                <span className="token-apy-value">{t.apy}%</span>
+                <span className="token-apy-label">APY</span>
+              </div>
             </button>
           ))}
         </div>
-
-      </div>{/* /.scroll-content */}
+      </div>
 
       <BottomNav />
     </motion.main>

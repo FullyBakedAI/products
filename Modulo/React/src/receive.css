@@ -145,7 +145,11 @@
 
 /* ── Exchange Buttons ───────────────────────────────────────────────── */
 .exchange-section {
-  margin: 20px 20px 0;
+  margin: 20px 0 0;
+}
+
+.exchange-section .section-label {
+  padding: 0 20px;
 }
 
 .exchange-list {
@@ -167,19 +171,21 @@
   color: var(--bk-text-primary);
   cursor: pointer;
   font-family: var(--bk-font);
-  padding: 0 4px;
+  padding: 0 20px;
   transition: background 0.12s ease;
 }
 .exchange-row-btn.selected {
   color: var(--bk-success);
+  background: var(--bk-bg-card);
 }
 
 .exchange-list .exchange-row-btn:first-child {
   border-top: 1px solid var(--bk-border-subtle);
 }
 
-.exchange-row-btn[data-hovered] {
-  background: rgba(255, 255, 255, 0.025);
+.exchange-row-btn[data-hovered],
+.exchange-row-btn:active {
+  background: var(--bk-bg-card);
 }
 
 .exchange-row-btn[data-focused] {

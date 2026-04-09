@@ -44,7 +44,7 @@
   overflow-x: hidden;
   scrollbar-width: none;
   margin-top: 16px;
-  padding: 0 20px;
+  padding: 0 0 24px;
   display: flex;
   flex-direction: column;
 }
@@ -56,9 +56,8 @@
 .select-token-row {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 14px 20px;
   gap: 16px;
-  height: 76.5px;
   border-bottom: 1px solid var(--bk-border-subtle);
   width: 100%;
   background: none;
@@ -68,15 +67,16 @@
   cursor: pointer;
   font-family: var(--bk-font);
   text-align: left;
-  transition: background 0.1s ease;
+  transition: background 0.12s ease;
 }
 
 .select-token-row:last-child {
   border-bottom: none;
 }
 
-.select-token-row[data-hovered] {
-  background: rgba(26, 26, 41, 0.5);
+.select-token-row[data-hovered],
+.select-token-row:active {
+  background: var(--bk-bg-card);
 }
 
 .select-token-row[data-focused] {
