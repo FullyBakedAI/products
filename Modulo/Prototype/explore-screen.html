@@ -9,16 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="modulo-shared.css">
   <style>
-    /* ── Explore Screen Overrides ───────────────────────────────────────── */
+    /* ── Explore Screen ────────────────────────────────────────────────── */
     .scroll-content { padding-top: 8px; }
-    .search-field { margin: 0 16px 16px; }
+    .search-field { margin: 0 20px 16px; }
 
     /* ── Favourites ─────────────────────────────────────────────────────── */
     .fav-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 20px;
       margin-bottom: 8px;
     }
 
@@ -46,7 +46,7 @@
     .fav-cards {
       display: flex;
       gap: 8px;
-      padding: 0 16px;
+      padding: 0 20px;
       margin-bottom: 16px;
     }
 
@@ -56,7 +56,7 @@
       background: var(--bk-bg-card);
       border: 1px solid var(--bk-border-subtle);
       border-radius: 16px;
-      padding: 17px 17px 1px;
+      padding: 17px 17px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -89,11 +89,10 @@
       overflow: hidden;
     }
 
-    .fav-sparkline img {
+    .fav-sparkline svg {
       width: 100%;
       height: 32px;
       display: block;
-      object-fit: contain;
     }
 
     .fav-card-bottom {
@@ -118,42 +117,118 @@
     .fav-change.positive { color: var(--bk-success); }
     .fav-change.negative { color: var(--bk-error); }
 
-    /* ── Top Tokens Header ──────────────────────────────────────────────── */
-    .top-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
+    /* ── New on Modulo ──────────────────────────────────────────────────── */
+    .new-section-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--bk-text-muted);
+      padding: 0 20px;
       margin-bottom: 8px;
     }
 
-    .top-label {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.5;
+    .new-cards {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .new-cards::-webkit-scrollbar { display: none; }
+
+    .new-card {
+      width: 100px;
+      flex-shrink: 0;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 14px;
+      padding: 14px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .new-card img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    .new-card-name {
+      font-size: 13px;
+      font-weight: 600;
       color: var(--bk-text-primary);
+      line-height: 1.5;
+    }
+
+    .new-card-change {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── Explore Tabs ──────────────────────────────────────────────────── */
+    .explore-tabs {
+      display: flex;
+      gap: 24px;
+      padding: 0 20px;
+      margin-bottom: 4px;
+    }
+
+    .explore-tab {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--bk-text-muted);
+      line-height: 1.5;
+      padding-bottom: 8px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .explore-tab.active {
+      font-weight: 600;
+      color: var(--bk-text-primary);
+    }
+
+    .explore-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--bk-brand-primary);
+      border-radius: 1px;
+    }
+
+    /* ── Volume sort ───────────────────────────────────────────────────── */
+    .sort-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 20px 4px;
     }
 
     .volume-dropdown {
       font-size: 13px;
       font-weight: 400;
       line-height: 1.5;
-      color: var(--bk-text-secondary);
+      color: var(--bk-brand-primary);
     }
 
     /* ── Chain Filters ──────────────────────────────────────────────────── */
     .chain-filters {
       display: flex;
       gap: 8px;
-      padding: 0 16px;
+      padding: 0 20px;
       margin-bottom: 12px;
       overflow-x: auto;
       scrollbar-width: none;
     }
 
-    .chain-filters::-webkit-scrollbar {
-      display: none;
-    }
+    .chain-filters::-webkit-scrollbar { display: none; }
 
     /* ── Token List ─────────────────────────────────────────────────────── */
     .token-list {
@@ -164,17 +239,20 @@
     .token-row {
       display: flex;
       align-items: center;
-      padding: 8px 16px;
+      padding: 10px 20px;
       gap: 10px;
-      height: 56px;
+      min-height: 56px;
+      border-bottom: 1px solid var(--bk-border-subtle);
     }
+
+    .token-row:last-child { border-bottom: none; }
 
     .token-rank {
       font-size: 12px;
       font-weight: 400;
       line-height: 1.5;
       color: var(--bk-text-muted);
-      width: 24px;
+      width: 20px;
       text-align: center;
       flex-shrink: 0;
     }
@@ -226,7 +304,11 @@
     .token-change.positive { color: var(--bk-success); }
     .token-change.negative { color: var(--bk-error); }
 
-    /* Active search tab — no dot indicator per Figma */
+    .token-star {
+      flex-shrink: 0;
+      color: var(--bk-text-muted);
+      opacity: 0.4;
+    }
   </style>
 </head>
 <body>
@@ -263,7 +345,7 @@
       <div class="fav-header">
         <span class="fav-label">Favourites</span>
         <button aria-label="More options">
-          <img src="assets/icon-more.svg" alt="">
+          <i data-lucide="more-horizontal" style="width:16px; height:16px; color:var(--bk-text-muted);"></i>
         </button>
       </div>
 
@@ -275,7 +357,7 @@
             <span>ETH</span>
           </div>
           <div class="fav-sparkline" aria-hidden="true">
-            <img src="assets/explore-sparkline-eth.svg" alt="">
+            <svg viewBox="0 0 160 32" fill="none"><polyline points="0,28 20,24 40,26 60,20 80,22 100,16 120,14 140,10 160,6" stroke="#22C55E" stroke-width="1.5" fill="none"/></svg>
           </div>
           <div class="fav-card-bottom">
             <span class="fav-price">$2,450.78</span>
@@ -290,18 +372,45 @@
             <span>BTC</span>
           </div>
           <div class="fav-sparkline" aria-hidden="true">
-            <img src="assets/explore-sparkline-btc.svg" alt="">
+            <svg viewBox="0 0 160 32" fill="none"><polyline points="0,26 20,24 40,22 60,20 80,18 100,14 120,12 140,8 160,4" stroke="#22C55E" stroke-width="1.5" fill="none"/></svg>
           </div>
           <div class="fav-card-bottom">
-            <span class="fav-price">$88,421</span>
+            <span class="fav-price">$88,421.33</span>
             <span class="fav-change positive">+2.14%</span>
           </div>
         </div>
       </div>
 
-      <!-- Top Tokens Header -->
-      <div class="top-header">
-        <span class="top-label">Top tokens</span>
+      <!-- New on Modulo -->
+      <div class="new-section-label">New on Modulo</div>
+      <div class="new-cards" role="group" aria-label="New tokens on Modulo">
+        <div class="new-card">
+          <img src="assets/token-usdc.svg" alt="">
+          <span class="new-card-name">PYUSD</span>
+          <span class="new-card-change text-positive">+12.4%</span>
+        </div>
+        <div class="new-card">
+          <img src="assets/token-eth.svg" alt="">
+          <span class="new-card-name">EIGEN</span>
+          <span class="new-card-change text-positive">+8.1%</span>
+        </div>
+        <div class="new-card">
+          <img src="assets/token-sol.svg" alt="">
+          <span class="new-card-name">JTO</span>
+          <span class="new-card-change text-negative">-3.2%</span>
+        </div>
+      </div>
+
+      <!-- Explore Tabs -->
+      <div class="explore-tabs" role="tablist">
+        <button class="explore-tab active" role="tab" aria-selected="true">Trending</button>
+        <button class="explore-tab" role="tab" aria-selected="false">Gainers</button>
+        <button class="explore-tab" role="tab" aria-selected="false">Losers</button>
+        <button class="explore-tab" role="tab" aria-selected="false">Top</button>
+      </div>
+
+      <!-- Sort -->
+      <div class="sort-row">
         <span class="volume-dropdown">Volume &#9662;</span>
       </div>
 
@@ -324,10 +433,11 @@
             <div class="token-name">USD Coin</div>
             <div class="token-volume">$514M Vol</div>
           </div>
-          <div class="token-values" aria-label="USD Coin: $1.00, -0.38%">
+          <div class="token-values">
             <div class="token-price">$1.00</div>
             <div class="token-change negative">-0.38%</div>
           </div>
+          <i data-lucide="star" class="token-star" style="width:18px; height:18px;"></i>
         </div>
 
         <div class="token-row" role="listitem">
@@ -337,10 +447,11 @@
             <div class="token-name">Ethereum</div>
             <div class="token-volume">$480M Vol</div>
           </div>
-          <div class="token-values" aria-label="Ethereum: $2,450.78, +4.42%">
+          <div class="token-values">
             <div class="token-price">$2,450.78</div>
             <div class="token-change positive">+4.42%</div>
           </div>
+          <i data-lucide="star" class="token-star" style="width:18px; height:18px;"></i>
         </div>
 
         <div class="token-row" role="listitem">
@@ -350,23 +461,25 @@
             <div class="token-name">Tether</div>
             <div class="token-volume">$398M Vol</div>
           </div>
-          <div class="token-values" aria-label="Tether: $1.00, +0.01%">
+          <div class="token-values">
             <div class="token-price">$1.00</div>
             <div class="token-change positive">+0.01%</div>
           </div>
+          <i data-lucide="star" class="token-star" style="width:18px; height:18px;"></i>
         </div>
 
         <div class="token-row" role="listitem">
           <span class="token-rank">4</span>
-          <img class="token-icon" src="assets/token-btc.svg" alt="Wrapped Bitcoin">
+          <img class="token-icon" src="assets/token-btc.svg" alt="Bitcoin">
           <div class="token-info">
-            <div class="token-name">Wrapped Bitcoin</div>
+            <div class="token-name">Bitcoin</div>
             <div class="token-volume">$244M Vol</div>
           </div>
-          <div class="token-values" aria-label="Wrapped Bitcoin: $88,421.33, +2.14%">
+          <div class="token-values">
             <div class="token-price">$88,421.33</div>
             <div class="token-change positive">+2.14%</div>
           </div>
+          <i data-lucide="star" class="token-star" style="width:18px; height:18px;"></i>
         </div>
 
         <div class="token-row" role="listitem">
@@ -376,10 +489,11 @@
             <div class="token-name">Solana</div>
             <div class="token-volume">$220M Vol</div>
           </div>
-          <div class="token-values" aria-label="Solana: $165.42, -1.82%">
+          <div class="token-values">
             <div class="token-price">$165.42</div>
             <div class="token-change negative">-1.82%</div>
           </div>
+          <i data-lucide="star" class="token-star" style="width:18px; height:18px;"></i>
         </div>
 
       </div><!-- /.token-list -->
@@ -391,18 +505,50 @@
       <a href="home-screen.html" class="nav-btn" aria-label="Home">
         <img src="assets/icon-nav-home.svg" alt="">
       </a>
-      <a href="explore-screen.html" class="nav-btn active" aria-label="Search" aria-current="page">
+      <a class="nav-btn" aria-label="Explore" aria-current="page">
         <img src="assets/icon-nav-search.svg" alt="">
       </a>
-      <button class="nav-btn" aria-label="Activity">
-        <img src="assets/icon-nav-activity.svg" alt="">
-      </button>
       <a href="swap-screen.html" class="nav-btn nav-btn-swap" aria-label="Swap">
         <img src="assets/icon-nav-swap.svg" alt="">
+      </a>
+      <a href="home-screen.html" class="nav-btn" aria-label="Activity">
+        <img src="assets/icon-nav-activity.svg" alt="">
+      </a>
+      <a href="home-screen.html" class="nav-btn" aria-label="AI">
+        <img src="assets/icon-nav-ai.svg" alt="">
       </a>
     </nav>
 
   </div><!-- /.phone -->
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    // Tab switching
+    document.querySelectorAll('.explore-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.explore-tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      });
+    });
+
+    // Chain pill switching
+    document.querySelectorAll('.chain-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.chain-pill').forEach(p => {
+          p.classList.remove('active');
+          p.setAttribute('aria-pressed', 'false');
+        });
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      });
+    });
+  </script>
 
 </body>
 </html>

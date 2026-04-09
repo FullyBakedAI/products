@@ -99,14 +99,11 @@
 }
 
 body {
-  background: var(--bk-bg-outer);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding: 32px 0;
+  background: var(--bk-bg-base);
   font-family: var(--bk-font);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  margin: 0;
 }
 
 /* ── Real device: fill viewport, drop the frame ──────────────────────── */

@@ -1,70 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modulo Prototype</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: #0a0a0f;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 24px;
-  }
-  h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-  }
-  p {
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 40px;
-  }
-  .screens {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    width: 100%;
-    max-width: 360px;
-  }
-  a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #16161f;
-    border: 1px solid #2a2a3a;
-    border-radius: 16px;
-    padding: 20px 12px;
-    text-decoration: none;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 500;
-    gap: 8px;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  a:active { background: #1e1e2e; border-color: #5b5bff; }
-  .icon { font-size: 24px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Modulo — Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="modulo-shared.css">
+  <style>
+    .scroll-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 48px 20px;
+    }
+
+    .index-logo { width: 120px; height: auto; margin-bottom: 8px; }
+
+    .index-sub {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--bk-text-muted);
+      margin-bottom: 40px;
+    }
+
+    .screen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .screen-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 12px;
+      background: var(--bk-bg-card);
+      border: 1px solid var(--bk-border-subtle);
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--bk-text-primary);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .screen-link:active {
+      background: var(--bk-bg-card-alt);
+      border-color: var(--bk-brand-primary);
+    }
+
+    .screen-link svg {
+      width: 20px;
+      height: 20px;
+      color: var(--bk-text-muted);
+    }
+
+    .screen-link span { color: var(--bk-text-secondary); font-size: 11px; font-weight: 400; }
+  </style>
 </head>
 <body>
-  <h1>Modulo</h1>
-  <p>Prototype — April 2026</p>
-  <div class="screens">
-    <a href="home-screen.html"><span class="icon">🏠</span>Home</a>
-    <a href="explore-screen.html"><span class="icon">🔍</span>Explore</a>
-    <a href="swap-screen.html"><span class="icon">🔄</span>Swap</a>
-    <a href="swap-select-screen.html"><span class="icon">📋</span>Swap Select</a>
-    <a href="send-screen.html"><span class="icon">📤</span>Send</a>
-    <a href="receive-screen.html"><span class="icon">📥</span>Receive</a>
+  <div class="phone">
+    <div class="scroll-content">
+      <img class="index-logo" src="assets/logo-modulo.svg" alt="Modulo">
+      <p class="index-sub">Prototype v2 — April 2026</p>
+
+      <div class="screen-grid">
+        <a href="home-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10L10 3L17 10"/><path d="M5 8.5V16H8.5V12H11.5V16H15V8.5"/></svg>
+          Home
+        </a>
+        <a href="explore-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5L17 17"/></svg>
+          Explore
+        </a>
+        <a href="swap-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7H15M15 7L12 4M15 7L12 10"/><path d="M15 13H5M5 13L8 10M5 13L8 16"/></svg>
+          Swap
+        </a>
+        <a href="swap-select-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 7V13M7 10H13"/></svg>
+          Swap Select
+        </a>
+        <a href="send-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15L15 5"/><path d="M8 5H15V12"/></svg>
+          Send
+        </a>
+        <a href="receive-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5L5 15"/><path d="M12 15H5V8"/></svg>
+          Receive
+        </a>
+        <a href="staking-screen.html" class="screen-link">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15L8 7L12 11L16 5"/><circle cx="16" cy="5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          Staking
+        </a>
+      </div>
+    </div>
   </div>
 </body>
 </html>
