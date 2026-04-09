@@ -6,13 +6,28 @@
 
 /* ── Phone Frame ────────────────────────────────────────────────────── */
 .phone {
-  max-width: 390px;
+  width: 100%;
+  max-width: 402px;
   min-height: 100vh;
   margin: 0 auto;
   background: var(--bk-bg-base);
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+/* Desktop: render as iPhone 17 Pro frame — always exactly 402px */
+@media (min-width: 501px) {
+  .phone {
+    width: 402px;
+    max-width: 402px;
+    height: 874px;
+    min-height: unset;
+    overflow: hidden;
+    border-radius: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin: auto;
+  }
 }
 
 /* ── Status Bar ─────────────────────────────────────────────────────── */
@@ -138,6 +153,7 @@
   justify-content: space-between;
   padding: 0 40.25px;
   flex-shrink: 0;
+  position: relative;
 }
 
 .nav-btn {

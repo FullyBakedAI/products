@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SimulateScreen — "What if?" simulator (Feature 5)
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.simulate-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bk-bg-base);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.simulate-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.simulate-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────── */
+.simulate-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 20px 12px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  flex-shrink: 0;
+}
+
+.simulate-tab {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  position: relative;
+  text-align: center;
+  transition: color 0.15s;
+}
+
+.simulate-tab.active {
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+.simulate-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--bk-brand-primary);
+  border-radius: 1px;
+}
+
+.simulate-tab:focus-visible {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Slider section ──────────────────────────────────────────────────── */
+.simulate-slider-section {
+  padding: 20px 20px 0;
+}
+
+.simulate-slider-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+}
+
+.simulate-slider-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--bk-brand-primary);
+}
+
+.simulate-slider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(
+    to right,
+    var(--bk-brand-primary) 0%,
+    var(--bk-brand-primary) var(--slider-progress, 33%),
+    var(--bk-border-subtle) var(--slider-progress, 33%),
+    var(--bk-border-subtle) 100%
+  );
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  display: block;
+}
+
+.simulate-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bk-brand-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bk-brand-primary) 20%, transparent),
+              0 2px 8px rgba(0,0,0,0.35);
+  cursor: pointer;
+  border: 2px solid var(--bk-bg-base);
+}
+
+.simulate-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bk-brand-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bk-brand-primary) 20%, transparent),
+              0 2px 8px rgba(0,0,0,0.35);
+  cursor: pointer;
+  border: 2px solid var(--bk-bg-base);
+}
+
+.simulate-slider-range {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+}
+
+/* ── Summary card ────────────────────────────────────────────────────── */
+.simulate-summary-card {
+  margin: 16px 20px 8px;
+  padding: 14px 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.simulate-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.simulate-summary-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+}
+
+.simulate-summary-val {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+.simulate-summary-val.positive { color: var(--bk-success); }
+.simulate-summary-val.negative { color: var(--bk-error);   }
+
+/* ── Token list ──────────────────────────────────────────────────────── */
+.simulate-token-list {
+  padding: 0 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.simulate-token-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 12px;
+}
+
+.simulate-token-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: block;
+}
+
+.simulate-token-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.simulate-token-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.4;
+}
+
+.simulate-token-current {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  margin-top: 1px;
+}
+
+.simulate-token-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.simulate-token-proj {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.simulate-token-diff {
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.simulate-token-proj.positive,
+.simulate-token-diff.positive { color: var(--bk-success); }
+.simulate-token-proj.negative,
+.simulate-token-diff.negative { color: var(--bk-error);   }
+
+/* ── Stake tab ───────────────────────────────────────────────────────── */
+.simulate-stake-tab {
+  padding-bottom: 16px;
+}
+
+.simulate-stake-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 16px 20px;
+  padding: 14px 16px;
+  background: var(--bk-earn-card-bg);
+  border: 1px solid var(--bk-earn-card-border);
+  border-radius: 14px;
+}
+
+.simulate-stake-intro p {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* ── Bar chart ───────────────────────────────────────────────────────── */
+.simulate-bar-chart {
+  margin: 0 20px 20px;
+  padding: 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.simulate-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.simulate-bar-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  width: 108px;
+  flex-shrink: 0;
+}
+
+.simulate-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  min-width: 0;
+}
+
+.simulate-bar.current   { background: var(--bk-border-active); opacity: 0.55; }
+.simulate-bar.optimised { background: var(--bk-brand-primary); }
+
+.simulate-bar-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bk-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 72px;
+  text-align: right;
+}
+
+.simulate-bar-value-highlight {
+  color: var(--bk-brand-primary);
+}
+
+/* ── Stake token list ────────────────────────────────────────────────── */
+.simulate-stake-tokens {
+  padding: 0 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.simulate-stake-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 12px;
+}

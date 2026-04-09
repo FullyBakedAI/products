@@ -51,6 +51,7 @@ export default function BottomNav() {
       >
         <img src={iconNavActivity} alt="" width="22" height="22" aria-hidden="true" />
       </Button>
+      <span style={{ position: 'absolute', bottom: 2, left: 0, right: 0, textAlign: 'center', fontSize: 9, color: 'var(--bk-text-muted)', opacity: 0.4, pointerEvents: 'none' }}>v3.0</span>
     </nav>
   );
 }

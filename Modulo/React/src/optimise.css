@@ -1,0 +1,157 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   OptimiseScreen — "Put It All To Work" detail (Feature 1)
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.optimise-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bk-bg-base);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.optimise-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.optimise-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  text-align: center;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────── */
+.optimise-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 20px;
+  gap: 10px;
+  text-align: center;
+}
+
+.optimise-hero-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--bk-earn-card-bg);
+  border: 1px solid var(--bk-earn-card-border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.optimise-hero-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--bk-text-secondary);
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.optimise-total-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  background: var(--bk-earn-card-bg);
+  border: 1px solid var(--bk-earn-card-border);
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bk-brand-primary);
+}
+
+/* ── Recommendation list ─────────────────────────────────────────────── */
+.optimise-list {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.optimise-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 14px;
+}
+
+.optimise-token-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: block;
+}
+
+.optimise-row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.optimise-row-token {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.4;
+}
+
+.optimise-row-protocol {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  margin-top: 1px;
+}
+
+.optimise-row-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.optimise-row-apy {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bk-brand-primary);
+  line-height: 1.4;
+}
+
+.optimise-row-yield {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-success);
+  margin-top: 1px;
+}
+
+/* ── Total row ───────────────────────────────────────────────────────── */
+.optimise-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 20px 20px;
+  padding: 14px 16px;
+  background: var(--bk-earn-card-bg);
+  border: 1px solid var(--bk-earn-card-border);
+  border-radius: 14px;
+}
+
+.optimise-total-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+}
+
+.optimise-total-value {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--bk-success);
+}

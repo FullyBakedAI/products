@@ -1,18 +1,29 @@
 /**
  * HomeScreen — Modulo home dashboard
+ * v3 additions:
+ *   F1 — "Put It All To Work" promo card
+ *   F2 — Live yield counter on portfolio balance
+ *   F3 — Autopilot inline toggle card
+ *   F4 — SmartNudges horizontal scroll
+ *   F6 — Achievements icon in header + milestone toast
+ *
  * All colours via --bk-* tokens. All data mocked.
  */
 
-import { useState } from 'react';
-import { motion, useMotionValue, animate } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, useMotionValue, animate, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import './home.css';
+import './achievements.css'; // achievement-toast styles
 
-import { TrendingUp, Zap, Landmark, SlidersHorizontal } from 'lucide-react';
+import {
+  TrendingUp, Zap, Landmark, SlidersHorizontal,
+  Sparkles, Trophy, ChevronRight,
+} from 'lucide-react';
 import { useIconOverride } from './IconOverrideContext';
 
 import logoModulo      from './assets/logo-modulo.svg';
@@ -32,17 +43,16 @@ import tokenUsdt from './assets/token-usdt.svg';
 
 const TIME_PERIODS = ['1D', '1W', '1M', '1Y', 'ALL'];
 
-// Chain badge: colour-coded dot (bottom-right of token icon) — Crypto.com pattern
+// Chain badge: colour-coded dot (bottom-right of token icon)
 const CHAIN_BADGE = {
-  usdc: { color: '#2D374B', title: 'Arbitrum' },  // primary chain
+  usdc: { color: '#2D374B', title: 'Arbitrum' },
   btc:  { color: '#F7931A', title: 'Bitcoin'  },
   eth:  { color: '#0052FF', title: 'Base'     },
   sol:  { color: '#9945FF', title: 'Solana'   },
   usdt: { color: '#627EEA', title: 'Ethereum' },
 };
 
-// 7-day sparkline data (normalised 0–1) — pre-computed, consistent across renders
-// Encodes the 7-day story: ETH up, SOL down, BTC V-shaped, stables flat
+// 7-day sparkline data (normalised 0–1)
 const SPARKLINES = {
   usdc: [0.50, 0.50, 0.51, 0.49, 0.50, 0.50, 0.50, 0.51, 0.50],
   btc:  [0.62, 0.55, 0.48, 0.42, 0.46, 0.54, 0.61, 0.66, 0.70],
@@ -51,7 +61,6 @@ const SPARKLINES = {
   usdt: [0.50, 0.50, 0.50, 0.51, 0.50, 0.50, 0.49, 0.50, 0.50],
 };
 
-// Mini sparkline SVG — TradingView/Revolut inline trend signal
 function MiniSparkline({ id, negative }) {
   const vals = SPARKLINES[id] || SPARKLINES.usdc;
   const W = 52, H = 22, pad = 1;
@@ -75,18 +84,80 @@ const TOKENS = [
   { id: 'usdt', icon: tokenUsdt, name: 'Tether',   amount: '3,398.7553 USDT', usd: '$3,398.75', change: '+0.00%', negative: false, yield: 0.046, yieldUsd: '$156.34', pnl: '+$0.00 (0.0%)',    pnlNegative: false },
 ];
 
-const MAX_YIELD   = Math.max(...TOKENS.map(t => t.yield));
-const ACTION_W    = 300; // 5 actions × 60px
+const MAX_YIELD  = Math.max(...TOKENS.map(t => t.yield));
+const ACTION_W   = 300;
 
-// Order: left → right in the revealed panel. Rightmost = first visible on partial swipe (iOS convention).
 const SWIPE_ACTIONS = [
-  { id: 'lend',  label: 'Stake',   Icon: Zap,               cls: 'swipe-stake' },
-  { id: 'trade', label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade' },
-  { id: 'lend',  label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
-  { id: 'swap',    label: 'Swap',    Icon: null, svgSrc: iconActionSwap, cls: 'swipe-swap' },
-  { id: 'manage',  label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage' },
+  { id: 'lend',   label: 'Stake',   Icon: Zap,               cls: 'swipe-stake'   },
+  { id: 'trade',  label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade'   },
+  { id: 'lend',   label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
+  { id: 'swap',   label: 'Swap',    Icon: null, svgSrc: iconActionSwap, cls: 'swipe-swap' },
+  { id: 'manage', label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage'  },
 ];
 
+// ── Feature 2: Live yield counter ────────────────────────────────────────────
+// $969/yr at 100x display speed so the tick is visible in the prototype.
+// Per 300ms: 969 / 365 / 24 / 3600 / 1000 * 300 * 100 ≈ 0.00922
+const YIELD_TICK_MS    = 300;
+const YIELD_PER_TICK   = (969 / 31_536_000) * YIELD_TICK_MS / 1000 * 100;
+const BASE_BALANCE     = 22_999.83;
+
+function useLiveBalance(active) {
+  const [balance, setBalance] = useState(BASE_BALANCE);
+  const [glowing, setGlowing] = useState(false);
+
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => {
+      setBalance(prev => prev + YIELD_PER_TICK);
+      setGlowing(true);
+      setTimeout(() => setGlowing(false), 300);
+    }, YIELD_TICK_MS);
+    return () => clearInterval(id);
+  }, [active]);
+
+  return { balance, glowing };
+}
+
+// ── Feature 6: Achievement milestone toast ───────────────────────────────────
+function AchievementToast({ onClose }) {
+  return (
+    <motion.div
+      className="achievement-toast"
+      role="status"
+      aria-live="polite"
+      aria-label="Achievement unlocked: Century Club"
+      initial={{ y: 80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1, transition: { ...m.modal.enter, duration: 0.28 } }}
+      exit={{ y: 80, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
+    >
+      <div className="confetti-burst" aria-hidden="true">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="confetti-particle" />
+        ))}
+      </div>
+      <div className="achievement-toast-content">
+        <div className="achievement-toast-icon" aria-hidden="true">
+          <TrendingUp size={18} color="var(--bk-brand-primary)" strokeWidth={1.5} />
+        </div>
+        <div className="achievement-toast-text">
+          <div className="achievement-toast-label">Achievement unlocked</div>
+          <div className="achievement-toast-title">Century Club 🎉</div>
+        </div>
+        <button
+          className="nudge-dismiss-btn"
+          aria-label="Dismiss"
+          onClick={onClose}
+          style={{ color: 'var(--bk-text-muted)' }}
+        >
+          ×
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── TokenRow ─────────────────────────────────────────────────────────────────
 function TokenRow({ t, index }) {
   const x = useMotionValue(0);
   const navigate = useNavigate();
@@ -115,7 +186,6 @@ function TokenRow({ t, index }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 + index * 0.05 } }}
     >
-      {/* ── Asset icon + chain badge — anchored outside the sliding row ── */}
       <div className="token-icon-anchor" aria-hidden="true">
         <img className="token-icon-lg" src={t.icon} alt="" />
         {CHAIN_BADGE[t.id] && (
@@ -127,7 +197,6 @@ function TokenRow({ t, index }) {
         )}
       </div>
 
-      {/* ── Actions revealed on swipe ── */}
       <div className="token-swipe-actions">
         {SWIPE_ACTIONS.map(({ id, label, Icon, svgSrc, cls }) => (
           <button
@@ -153,7 +222,6 @@ function TokenRow({ t, index }) {
         ))}
       </div>
 
-      {/* ── Draggable foreground ── */}
       <motion.div
         className="token-row"
         style={{ x, touchAction: 'pan-y', position: 'relative', zIndex: 1 }}
@@ -165,9 +233,7 @@ function TokenRow({ t, index }) {
         onTap={handleTap}
         aria-label={`${t.name}: ${t.usd}, ${t.change}, ${(t.yield * 100).toFixed(1)}% APY`}
       >
-        {/* Main row */}
         <div className="token-row-main">
-          {/* Spacer matches anchored icon dimensions so layout is identical */}
           <div className="token-icon-spacer" aria-hidden="true" />
           <div className="token-info">
             <div className="token-name-row">
@@ -178,7 +244,6 @@ function TokenRow({ t, index }) {
             <div className={`token-pnl${t.pnlNegative ? ' negative' : ''}`}>{t.pnl}</div>
           </div>
           <div className="token-values">
-            {/* Sparkline — TradingView/Revolut inline 7-day trend */}
             <MiniSparkline id={t.id} negative={t.negative} />
             <div className="token-usd">{t.usd}</div>
             <div className={`token-change${t.negative ? ' negative' : ''}`} style={{ fontSize: 11, textAlign: 'right' }}>
@@ -187,7 +252,6 @@ function TokenRow({ t, index }) {
           </div>
         </div>
 
-        {/* Full-width yield bar */}
         <div className="token-yield-bar-row">
           <div className="token-yield-track">
             <motion.div
@@ -205,10 +269,24 @@ function TokenRow({ t, index }) {
   );
 }
 
+// ── HomeScreen ────────────────────────────────────────────────────────────────
 export default function HomeScreen() {
   const navigate = useNavigate();
   const [activePeriod, setActivePeriod] = useState('1D');
-  const { getIcon } = useIconOverride(); // kept for DS page icon slot overrides
+  const [yieldActive] = useState(true); // F2: yield counter always on in demo
+  const [showAchievementToast, setShowAchievementToast] = useState(false);
+  useIconOverride();
+
+  // F2: Live balance
+  const { balance, glowing } = useLiveBalance(yieldActive);
+  const balanceDollars = Math.floor(balance).toLocaleString('en-US');
+  const balanceCents   = (balance % 1).toFixed(4).slice(1); // ".8312"
+
+  // F6: Demo achievement toast — fires 4s after mount
+  useEffect(() => {
+    const id = setTimeout(() => setShowAchievementToast(true), 4000);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <motion.main
@@ -227,6 +305,14 @@ export default function HomeScreen() {
           <img src={logoModulo} alt="Modulo" width="93" height="18" />
         </div>
         <div className="home-header-actions">
+          <Button
+            className="icon-btn"
+            aria-label="Achievements"
+            onPress={() => navigate('/achievements')}
+            style={{ color: 'var(--bk-text-muted)' }}
+          >
+            <Trophy size={16} strokeWidth={1.5} />
+          </Button>
           <Button className="icon-btn" aria-label="Notifications" onPress={() => navigate('/activity')}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
           </Button>
@@ -238,7 +324,7 @@ export default function HomeScreen() {
 
       <div className="scroll-content">
 
-        {/* Portfolio Card */}
+        {/* Portfolio Card — F2: live yield counter */}
         <motion.section
           className="portfolio-card"
           data-bk-component="portfolio-metric"
@@ -262,10 +348,26 @@ export default function HomeScreen() {
               ))}
             </div>
           </div>
-          <div className="portfolio-value" aria-label="Portfolio total value: $12,847.53">
-            <span className="portfolio-dollars" aria-hidden="true">$12,847</span>
-            <span className="portfolio-cents" aria-hidden="true">.53</span>
+
+          {/* F2: animated balance + green pulse dot */}
+          <div
+            className="portfolio-value"
+            aria-label={`Portfolio total value: $${balanceDollars}${balanceCents}`}
+          >
+            <span
+              className={`portfolio-dollars${glowing ? ' portfolio-live-glow' : ''}`}
+              aria-hidden="true"
+            >
+              ${balanceDollars}
+            </span>
+            <span className="portfolio-cents" aria-hidden="true">{balanceCents}</span>
+            {yieldActive && (
+              <span className="portfolio-yield-pulse" aria-label="Yield active">
+                <span className="portfolio-yield-pulse-dot" />
+              </span>
+            )}
           </div>
+
           <div className="portfolio-gain" aria-label="Today's gain: $623.11 (5.08%)">
             <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
             <span className="gain-text">$623.11 (5.08%)</span>
@@ -273,6 +375,15 @@ export default function HomeScreen() {
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">
             <span className="alltime-text">+$2,341.18 all time (22.3%)</span>
           </div>
+
+          {/* F5: "What if?" link */}
+          <button
+            className="portfolio-whatif-btn"
+            aria-label="Open What-if simulator"
+            onClick={() => navigate('/simulate')}
+          >
+            What if? →
+          </button>
         </motion.section>
 
         {/* Action Buttons */}
@@ -302,25 +413,27 @@ export default function HomeScreen() {
           </Button>
         </motion.div>
 
-        {/* AI Suggestion Strip */}
+        {/* F1: "Put It All To Work" promo card */}
         <motion.div
-          className="suggestion-strip"
-          aria-label="Suggestions"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.09 } }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
         >
-          <button className="suggestion-pill" aria-label="SOL is down 1.8% — tap to buy">
-            <TrendingUp size={13} strokeWidth={1.5} aria-hidden="true" />
-            SOL down 1.8% — buy the dip?
-          </button>
-          <button className="suggestion-pill" aria-label="5,342 USDC idle — tap to put it to work">
-            <Zap size={13} strokeWidth={1.5} aria-hidden="true" />
-            $5,342 USDC idle — earn 4.8%?
-          </button>
-          <button className="suggestion-pill" aria-label="ETH up 4.4% — tap to take profit">
-            <img src={iconActionSwap} width="13" height="13" aria-hidden="true" />
-            ETH +4.4% today — take profit?
-          </button>
+          <div className="optimise-promo-card" role="region" aria-label="Put It All To Work">
+            <div className="optimise-promo-icon" aria-hidden="true">
+              <Sparkles size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} />
+            </div>
+            <div className="optimise-promo-text">
+              <div className="optimise-promo-headline">Put it all to work</div>
+              <div className="optimise-promo-sub">Estimated +$969/yr across 4 protocols</div>
+            </div>
+            <Button
+              className="optimise-promo-btn"
+              aria-label="Optimise all assets"
+              onPress={() => navigate('/optimise')}
+            >
+              Optimise
+            </Button>
+          </div>
         </motion.div>
 
         {/* Tabs */}
@@ -329,41 +442,43 @@ export default function HomeScreen() {
           role="tablist"
           data-bk-component="tab-bar"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.10 } }}
+          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.14 } }}
         >
           <button className="tab active" role="tab" aria-selected="true" aria-controls="token-panel" id="tab-tokens">Tokens</button>
           <button className="tab" role="tab" aria-selected="false" id="tab-nfts">NFTs</button>
         </motion.div>
 
-        {/* Token List */}
+        {/* Token List — top 3 */}
         <div className="token-list" role="tabpanel" id="token-panel" aria-labelledby="tab-tokens">
-          {TOKENS.map((t, i) => (
+          {TOKENS.slice(0, 3).map((t, i) => (
             <TokenRow key={t.name} t={t} index={i} />
           ))}
         </div>
 
-        {/* Earn Card */}
+        {/* See all tokens */}
         <motion.div
-          className="earn-card"
-          data-bk-component="earn-card"
-          role="region"
-          aria-label="Earn — Annual Yield Accrual"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.46 } }}
+          className="see-all-row"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.28 } }}
         >
-          <div>
-            <div className="earn-label">3 assets earning · 2 idle</div>
-            <div className="earn-value-row">
-              <span className="earn-value">0.97</span>
-              <span className="earn-unit">/ yr</span>
-            </div>
-          </div>
-          <Button className="earn-btn" aria-label="Earn All" onPress={() => navigate('/actions?tab=lend')}>
-            Earn All
-          </Button>
+          <button
+            className="see-all-btn"
+            aria-label="See all tokens"
+            onClick={() => navigate('/actions?tab=lend')}
+          >
+            See all {TOKENS.length} tokens
+            <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />
+          </button>
         </motion.div>
 
       </div>
+
+      {/* F6: Achievement milestone toast */}
+      <AnimatePresence>
+        {showAchievementToast && (
+          <AchievementToast onClose={() => setShowAchievementToast(false)} />
+        )}
+      </AnimatePresence>
 
       <BottomNav />
     </motion.main>
