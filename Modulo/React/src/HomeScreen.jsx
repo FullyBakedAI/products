@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useIconOverride } from './IconOverrideContext';
 
+import SmartNudges     from './SmartNudges';
 import logoModulo      from './assets/logo-modulo.svg';
 import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
@@ -275,6 +276,7 @@ export default function HomeScreen() {
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
   const [showAchievementToast, setShowAchievementToast] = useState(false);
+  const [activeAssetTab, setActiveAssetTab] = useState('tokens');
   useIconOverride();
 
   // F2: Live balance
@@ -399,7 +401,7 @@ export default function HomeScreen() {
             <img src={iconActionSwap} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Swap</span>
           </Button>
-          <Button className="action-btn" aria-label="Buy tokens" onPress={() => {}}>
+          <Button className="action-btn" aria-label="Buy tokens" onPress={() => navigate('/actions?tab=deposit')}>
             <img src={iconActionBuy} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Buy</span>
           </Button>
@@ -436,6 +438,9 @@ export default function HomeScreen() {
           </div>
         </motion.div>
 
+        {/* F4: SmartNudges horizontal scroll */}
+        <SmartNudges />
+
         {/* Tabs */}
         <motion.div
           className="tabs"
@@ -444,32 +449,51 @@ export default function HomeScreen() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.14 } }}
         >
-          <button className="tab active" role="tab" aria-selected="true" aria-controls="token-panel" id="tab-tokens">Tokens</button>
-          <button className="tab" role="tab" aria-selected="false" id="tab-nfts">NFTs</button>
+          <button className={`tab${activeAssetTab === 'tokens' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'tokens'} aria-controls="token-panel" id="tab-tokens" onClick={() => setActiveAssetTab('tokens')}>Tokens</button>
+          <button className={`tab${activeAssetTab === 'nfts' ? ' active' : ''}`} role="tab" aria-selected={activeAssetTab === 'nfts'} id="tab-nfts" onClick={() => setActiveAssetTab('nfts')}>NFTs</button>
         </motion.div>
 
-        {/* Token List — top 3 */}
-        <div className="token-list" role="tabpanel" id="token-panel" aria-labelledby="tab-tokens">
-          {TOKENS.slice(0, 3).map((t, i) => (
-            <TokenRow key={t.name} t={t} index={i} />
-          ))}
-        </div>
+        {activeAssetTab === 'tokens' ? (
+          <>
+            {/* Token List — top 3 */}
+            <div className="token-list" role="tabpanel" id="token-panel" aria-labelledby="tab-tokens">
+              {TOKENS.slice(0, 3).map((t, i) => (
+                <TokenRow key={t.name} t={t} index={i} />
+              ))}
+            </div>
 
-        {/* See all tokens */}
-        <motion.div
-          className="see-all-row"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.28 } }}
-        >
-          <button
-            className="see-all-btn"
-            aria-label="See all tokens"
-            onClick={() => navigate('/actions?tab=lend')}
+            {/* See all tokens */}
+            <motion.div
+              className="see-all-row"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.28 } }}
+            >
+              <button
+                className="see-all-btn"
+                aria-label="See all tokens"
+                onClick={() => navigate('/actions?tab=lend')}
+              >
+                See all {TOKENS.length} tokens
+                <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />
+              </button>
+            </motion.div>
+          </>
+        ) : (
+          <motion.div
+            role="tabpanel"
+            id="nft-panel"
+            aria-labelledby="tab-nfts"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0, transition: m.fade.enter }}
+            style={{ padding: '40px 20px', textAlign: 'center' }}
           >
-            See all {TOKENS.length} tokens
-            <ChevronRight size={14} strokeWidth={2} aria-hidden="true" />
-          </button>
-        </motion.div>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>🖼️</div>
+            <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--bk-text-primary)', marginBottom: 6 }}>No NFTs yet</div>
+            <div style={{ fontSize: 13, color: 'var(--bk-text-muted)', lineHeight: 1.5 }}>
+              NFTs you receive will appear here. Explore collections on your favourite marketplace.
+            </div>
+          </motion.div>
+        )}
 
       </div>
 

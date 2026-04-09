@@ -30,7 +30,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
+  border: none;
   border-bottom: 1px solid var(--bk-border-subtle);
+  background: none;
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.settings-wallet-card:active {
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .settings-wallet-left {

@@ -249,6 +249,13 @@
   align-items: center;
   padding: 0 16px;
   gap: 12px;
+  width: 100%;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.search-field:active {
+  border-color: var(--bk-brand-primary);
 }
 
 .search-field img {

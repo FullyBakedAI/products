@@ -8,6 +8,7 @@
  *   Stagger      — header, search, contact list fade/slide in sequence
  */
 
+import { useState } from 'react';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -27,8 +28,16 @@ const CONTACTS = [
   { id: 3, section: 'Recent', variant: 'variant-3', name: '0xb5A9...Db3a', sub: null,            hasBadge: false, lastSent: '2 weeks ago',  lastAmount: '$50',  ariaLabel: '0xb5A9...Db3a' },
 ];
 
+const SEND_NETWORKS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
+
 export default function SendScreen() {
   const navigate = useNavigate();
+  const [network, setNetwork] = useState(SEND_NETWORKS[0]);
+
+  function cycleNetwork() {
+    const idx = SEND_NETWORKS.indexOf(network);
+    setNetwork(SEND_NETWORKS[(idx + 1) % SEND_NETWORKS.length]);
+  }
 
   return (
     <motion.main
@@ -72,10 +81,10 @@ export default function SendScreen() {
       >
         <img src={iconSearch} width="16" height="16" aria-hidden="true" />
         <span className="placeholder">Address, ENS, or username</span>
-        <Button className="scan-btn" aria-label="Scan QR code" onPress={() => {}}>
+        <Button className="scan-btn" aria-label="Scan QR code" onPress={() => navigate('/send/amount', { state: { recipient: { name: '0xScanned…Address' } } })}>
           <ScanLine size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
         </Button>
-        <Button className="scan-btn paste-btn" aria-label="Paste address from clipboard" onPress={() => {}}>
+        <Button className="scan-btn paste-btn" aria-label="Paste address from clipboard" onPress={() => navigate('/send/amount', { state: { recipient: { name: '0xPasted…Address' } } })}>
           <img src={iconCopy} width="16" height="16" aria-hidden="true" />
         </Button>
       </motion.div>
@@ -87,8 +96,8 @@ export default function SendScreen() {
         animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.12 } }}
       >
         <span className="send-network-label">Network</span>
-        <button className="chain-pill active" aria-label="Change network: Ethereum">
-          Ethereum &#9662;
+        <button className="chain-pill active" aria-label={`Change network: ${network}`} onClick={cycleNetwork}>
+          {network} &#9662;
         </button>
       </motion.div>
 

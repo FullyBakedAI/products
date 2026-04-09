@@ -92,10 +92,10 @@ export default function ExploreScreen() {
       <div className="scroll-content explore-scroll">
 
         {/* Search Field */}
-        <div className="search-field explore-search" role="search" aria-label="Search tokens">
+        <button className="search-field explore-search" role="search" aria-label="Search tokens" onClick={() => { /* focus state handled by CSS :active */ }}>
           <Search size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
           <span>Token name or address</span>
-        </div>
+        </button>
 
         {/* Favourites */}
         <div className="fav-header">
@@ -142,11 +142,11 @@ export default function ExploreScreen() {
           </div>
           <div className="new-listings-rail">
             {NEW_TOKENS.map(t => (
-              <div key={t.id} className="new-listing-card">
+              <button key={t.id} className="new-listing-card" onClick={() => navigate(`/asset/${t.id}`)} aria-label={`${t.symbol} ${t.change}`}>
                 <img src={t.icon} alt="" width="28" height="28" />
                 <span className="new-listing-symbol">{t.symbol}</span>
                 <span className={`new-listing-change${t.negative ? ' negative' : ''}`}>{t.change}</span>
-              </div>
+              </button>
             ))}
           </div>
         </div>

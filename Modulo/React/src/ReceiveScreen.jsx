@@ -18,7 +18,7 @@ import './receive.css';
 
 import walletAvatar from './assets/wallet-avatar.svg';
 import moduloBadge from './assets/icon-modulo-badge.svg';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check, AlertTriangle, ChevronRight } from 'lucide-react';
 import iconCopy from './assets/icon-copy.svg';
 import iconShare from './assets/icon-share.svg';
 import qrCode from './assets/qr-code.svg';
@@ -44,6 +44,7 @@ export default function ReceiveScreen() {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [receiveToken, setReceiveToken] = useState('Any token');
+  const [selectedExchange, setSelectedExchange] = useState(null);
 
   const handleCopy = () => {
     setCopied(true);
@@ -182,12 +183,19 @@ export default function ReceiveScreen() {
             {EXCHANGES.map((ex) => (
               <Button
                 key={ex}
-                className="exchange-row-btn"
+                className={`exchange-row-btn${selectedExchange === ex ? ' selected' : ''}`}
                 aria-label={`Fund from ${ex}`}
-                onPress={() => navigate('/')}
+                onPress={() => {
+                  setSelectedExchange(ex);
+                  setTimeout(() => setSelectedExchange(null), 2000);
+                }}
                 role="listitem"
               >
-                {ex}
+                <span>{selectedExchange === ex ? `Address copied for ${ex}` : ex}</span>
+                {selectedExchange === ex
+                  ? <Check size={14} color="var(--bk-success)" strokeWidth={2} />
+                  : <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                }
               </Button>
             ))}
           </div>

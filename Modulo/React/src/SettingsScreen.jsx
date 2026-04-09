@@ -6,10 +6,10 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { X, ChevronRight, Shield, Bell, Globe, Palette, Info, HelpCircle, LogOut } from 'lucide-react';
+import { X, ChevronRight, Shield, Bell, Globe, Palette, Info, HelpCircle, LogOut, Check } from 'lucide-react';
 import StatusBar from './StatusBar';
 import './settings.css';
 
@@ -42,6 +42,12 @@ const SETTINGS_SECTIONS = [
 
 export default function SettingsScreen() {
   const navigate = useNavigate();
+  const [tappedRow, setTappedRow] = useState(null);
+
+  function handleRowTap(id) {
+    setTappedRow(id);
+    setTimeout(() => setTappedRow(null), 1500);
+  }
 
   return (
     <motion.main
@@ -65,7 +71,7 @@ export default function SettingsScreen() {
       <div className="scroll-content">
 
         {/* Wallet card */}
-        <div className="settings-wallet-card">
+        <button className="settings-wallet-card" onClick={() => handleRowTap('wallet')} aria-label="Wallet details">
           <div className="settings-wallet-left">
             <div className="avatar-wrap">
               <img className="avatar" src={walletAvatar} alt="" />
@@ -77,20 +83,24 @@ export default function SettingsScreen() {
             </div>
           </div>
           <ChevronRight size={16} color="var(--bk-text-muted)" strokeWidth={1.5} />
-        </div>
+        </button>
 
         {/* Setting sections */}
         {SETTINGS_SECTIONS.map(section => (
           <div key={section.label} className="settings-section">
             <div className="settings-section-label">{section.label}</div>
             {section.items.map(item => (
-              <button key={item.id} className="settings-row" aria-label={item.label}>
+              <button key={item.id} className="settings-row" aria-label={item.label} onClick={() => handleRowTap(item.id)}>
                 <item.icon size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
                 <div className="settings-row-text">
                   <span className="settings-row-label">{item.label}</span>
-                  {item.sub && <span className="settings-row-sub">{item.sub}</span>}
+                  {item.sub && <span className="settings-row-sub">{tappedRow === item.id ? 'Coming soon' : item.sub}</span>}
+                  {!item.sub && tappedRow === item.id && <span className="settings-row-sub">Coming soon</span>}
                 </div>
-                <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                {tappedRow === item.id
+                  ? <Check size={14} color="var(--bk-brand-primary)" strokeWidth={2} />
+                  : <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                }
               </button>
             ))}
           </div>
@@ -98,7 +108,7 @@ export default function SettingsScreen() {
 
         {/* Sign out */}
         <div className="settings-section">
-          <button className="settings-row settings-signout" aria-label="Sign out">
+          <button className="settings-row settings-signout" aria-label="Sign out" onClick={() => navigate('/')}>
             <LogOut size={18} color="var(--bk-error)" strokeWidth={1.5} />
             <div className="settings-row-text">
               <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Sign Out</span>

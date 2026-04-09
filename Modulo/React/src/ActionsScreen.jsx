@@ -241,7 +241,7 @@ function TradeTab({ navigate }) {
       </div>
 
       {/* Asset selector */}
-      <button className="swap-card actions-asset-select" aria-label="Select asset">
+      <button className="swap-card actions-asset-select" aria-label="Select asset" onClick={() => navigate('/swap/select/pay')}>
         <img src={tokenEth} alt="" width="24" height="24" className="collateral-img" />
         <span className="actions-asset-name">Ethereum</span>
         <span className="actions-asset-change">Change</span>
@@ -509,7 +509,7 @@ export default function ActionsScreen() {
           </Button>
           <h1 className="swap-title">Actions</h1>
         </div>
-        <Button className="settings-btn" aria-label="Settings">
+        <Button className="settings-btn" aria-label="Settings" onPress={() => navigate('/settings')}>
           <img src={iconSettings} width="20" height="20" aria-hidden="true" />
         </Button>
       </div>

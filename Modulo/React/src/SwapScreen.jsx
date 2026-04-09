@@ -29,6 +29,7 @@ import './swap.css';
 // ── Sub-components ────────────────────────────────────────────────────────
 
 function SwapHeader({ onClose }) {
+  const navigate = useNavigate();
   return (
     <div className="swap-header">
       <div className="header-left">
@@ -297,7 +298,17 @@ export default function SwapScreen() {
         aria-label={ctaLabel}
         isDisabled={!ctaReady && !!receiveToken}
         onPress={() => {
-          if (!receiveToken) navigate('/swap/select/receive');
+          if (!receiveToken) { navigate('/swap/select/receive'); return; }
+          if (ctaReady) {
+            navigate('/review', { state: {
+              action: 'swap',
+              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * payToken.price },
+              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * receiveToken.price },
+              fee: { network: '$2.40', protocol: '$0.88', total: '$3.28' },
+              rate: rateLabel,
+              warning: null,
+            }});
+          }
         }}
       >
         <AnimatePresence mode="wait" initial={false}>

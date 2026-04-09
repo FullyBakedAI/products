@@ -326,6 +326,13 @@
   border-radius: 14px;
   min-width: 80px;
   flex-shrink: 0;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease;
+}
+.new-listing-card:active {
+  border-color: var(--bk-brand-primary);
 }
 .new-listing-symbol {
   font-size: 12px;

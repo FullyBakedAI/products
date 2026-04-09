@@ -253,7 +253,7 @@ export default function AssetScreen() {
             <h1 className="swap-title">{t.name}</h1>
           </div>
         </div>
-        <Button className="settings-btn" aria-label="More options">
+        <Button className="settings-btn" aria-label="More options" onPress={() => navigate('/settings')}>
           <img src={iconSettings} width="20" height="20" aria-hidden="true" />
         </Button>
       </div>
@@ -450,7 +450,7 @@ export default function AssetScreen() {
         {/* Contract */}
         <div className="asset-contract-row">
           <span className="card-label">Contract</span>
-          <button className="asset-contract-btn" aria-label="View on explorer">
+          <button className="asset-contract-btn" aria-label="View on explorer" onClick={() => navigate('/activity')}>
             0x2260…1d1e <ExternalLink size={11} strokeWidth={1.5} aria-hidden="true" />
           </button>
         </div>

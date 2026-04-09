@@ -161,6 +161,7 @@
   border-bottom: 1px solid var(--bk-border-subtle);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-size: 15px;
   font-weight: 500;
   color: var(--bk-text-primary);
@@ -168,6 +169,9 @@
   font-family: var(--bk-font);
   padding: 0 4px;
   transition: background 0.12s ease;
+}
+.exchange-row-btn.selected {
+  color: var(--bk-success);
 }
 
 .exchange-list .exchange-row-btn:first-child {

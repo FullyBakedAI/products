@@ -92,7 +92,7 @@ function TxBadge({ icon1, pending }) {
 // ── Transaction detail sheet ───────────────────────────────────────────
 
 function TxDetailSheet({ tx, onClose }) {
-
+  const [actionFeedback, setActionFeedback] = useState(null);
   const MOCK_HASH = '0x4a7f…e3b2';
   const MOCK_BLOCK = '19,284,751';
 
@@ -186,7 +186,7 @@ function TxDetailSheet({ tx, onClose }) {
 
       {/* Explorer link */}
       {!tx.pending && (
-        <button className="tx-explorer-btn" aria-label="View on block explorer">
+        <button className="tx-explorer-btn" aria-label="View on block explorer" onClick={onClose}>
           <ExternalLink size={14} strokeWidth={1.5} aria-hidden="true" />
           View on block explorer
         </button>
@@ -197,7 +197,7 @@ function TxDetailSheet({ tx, onClose }) {
 
 // ── Transaction row ────────────────────────────────────────────────────
 
-function TxRow({ tx, delay, onTap }) {
+function TxRow({ tx, delay, onTap, onAction }) {
   return (
     <motion.div
       className="tx-row"
@@ -238,10 +238,10 @@ function TxRow({ tx, delay, onTap }) {
         )}
         {tx.pending && (
           <div className="tx-pending-actions">
-            <button className="tx-action-btn tx-action-speed" aria-label="Speed up transaction">
+            <button className="tx-action-btn tx-action-speed" aria-label="Speed up transaction" onClick={(e) => { e.stopPropagation(); onAction && onAction('speed'); }}>
               Speed up
             </button>
-            <button className="tx-action-btn tx-action-cancel" aria-label="Cancel transaction">
+            <button className="tx-action-btn tx-action-cancel" aria-label="Cancel transaction" onClick={(e) => { e.stopPropagation(); onAction && onAction('cancel'); }}>
               Cancel
             </button>
           </div>
@@ -256,6 +256,7 @@ function TxRow({ tx, delay, onTap }) {
 export default function ActivityScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedTx, setSelectedTx] = useState(null);
+  const [showFilters, setShowFilters] = useState(true);
   const pending  = TX.filter(t => t.pending);
   const filtered = TX.filter(t => !t.pending && (activeFilter === 'All' || t.filter === activeFilter));
 
@@ -283,22 +284,24 @@ export default function ActivityScreen() {
         <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--bk-text-primary)', letterSpacing: '-0.02em', margin: 0 }}>
           Activity
         </h1>
-        <Button className="icon-btn" aria-label="Filter transactions" style={{ width: 24, height: 24 }}>
-          <SlidersHorizontal size={18} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+        <Button className="icon-btn" aria-label="Filter transactions" style={{ width: 24, height: 24 }} onPress={() => setShowFilters(f => !f)}>
+          <SlidersHorizontal size={18} color={showFilters ? 'var(--bk-brand-primary)' : 'var(--bk-text-muted)'} strokeWidth={1.5} aria-hidden="true" />
         </Button>
       </header>
 
       {/* Filter chips — shared.css .chain-pill pattern */}
-      <div className="activity-filter-row" role="group" aria-label="Filter">
-        {FILTERS.map(f => (
-          <button
-            key={f}
-            className={`chain-pill${activeFilter === f ? ' active' : ''}`}
-            onClick={() => setActiveFilter(f)}
-            aria-pressed={activeFilter === f}
-          >{f}</button>
-        ))}
-      </div>
+      {showFilters && (
+        <div className="activity-filter-row" role="group" aria-label="Filter">
+          {FILTERS.map(f => (
+            <button
+              key={f}
+              className={`chain-pill${activeFilter === f ? ' active' : ''}`}
+              onClick={() => setActiveFilter(f)}
+              aria-pressed={activeFilter === f}
+            >{f}</button>
+          ))}
+        </div>
+      )}
 
       {/* List */}
       <div className="scroll-content" role="list" aria-label="Transaction history">
@@ -309,7 +312,7 @@ export default function ActivityScreen() {
             <div className="portfolio-label activity-group-header" style={{ paddingTop: 12 }}>
               <span>Pending</span>
             </div>
-            {pending.map((tx, i) => <TxRow key={tx.id} tx={tx} delay={i * 0.04} onTap={setSelectedTx} />)}
+            {pending.map((tx, i) => <TxRow key={tx.id} tx={tx} delay={i * 0.04} onTap={setSelectedTx} onAction={() => setSelectedTx(tx)} />)}
           </section>
         )}
 
