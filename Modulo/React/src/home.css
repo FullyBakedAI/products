@@ -202,20 +202,20 @@
 }
 
 .action-btn {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 72px;
+  height: 70.5px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-subtle);
-  border-radius: 18px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 0;
+  gap: 6px;
+  padding: 13px 0;
   cursor: pointer;
   font-family: var(--bk-font);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, transform 0.1s ease;
 }
 

@@ -388,7 +388,9 @@
    CSS :active gives immediate press feedback before JS fires.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* Eliminate 300ms tap delay + browser blue highlight everywhere */
+/* Eliminate 300ms tap delay + browser blue highlight everywhere.
+   Note: .action-btn excluded — handled in home.css to avoid Safari flex bugs
+   with -webkit-user-select on flex items. */
 button,
 [role="button"],
 a,
@@ -396,7 +398,6 @@ input,
 select,
 textarea,
 .nav-btn,
-.action-btn,
 .primary-btn,
 .icon-btn,
 .time-btn,
@@ -428,14 +429,6 @@ textarea,
 }
 .nav-btn:active {
   transform: scale(0.88);
-}
-
-/* Action row buttons (Send, Receive, etc) */
-.action-btn {
-  transition: transform 0.1s ease;
-}
-.action-btn:active {
-  transform: scale(0.92);
 }
 
 /* Icon buttons in headers — min 44×44 tap target */
