@@ -194,17 +194,16 @@
 
 /* ── Action Buttons ─────────────────────────────────────────────────── */
 .action-row {
-  display: flex;
-  width: 100%;
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   padding: 0 20px;
   gap: 10px;
   margin-bottom: 16px;
 }
 
 .action-btn {
-  flex: 1;
-  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
   height: 72px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-subtle);
