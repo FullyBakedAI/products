@@ -80,3 +80,33 @@ cd React && npm run build    # → outputs to Prototype/modulo/
 ## Figma
 - **File key:** `rTAg5ODay1ac1ZZBq8lYwr`
 - **Canvas node:** `2078-6541`
+
+## Session Handoff — Required
+
+At the end of every session, before finishing, write a session notes file:
+
+**Path:** `Modulo/Reviews/YYYY-MM-DD-session-notes.md` (use today's date)
+
+**Format:**
+```markdown
+## Session: YYYY-MM-DD — [brief topic]
+
+### What was built/fixed
+- ...
+
+### Decisions made (and why)
+- ...
+
+### Bugs found — root causes
+- ...
+
+### Patterns to reuse next time
+- ...
+
+### Open threads / next session
+- ...
+```
+
+Then commit and push. Frank (the OpenClaw QA agent) will pick this up on the next watch-commits cycle, update the decision log, and post a digest to Discord.
+
+This is not optional — undocumented sessions are lost sessions.
