@@ -11,82 +11,14 @@
   height: 100%;
 }
 
-/* ── Status Bar ─────────────────────────────────────────────────────── */
-.status-bar {
-  height: 37px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  flex-shrink: 0;
-}
-
-.status-time {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--bk-text-primary);
-}
-
-.status-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.signal-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.signal-bar {
-  width: 3px;
-  border-radius: 1px;
-}
-
-.signal-bar:nth-child(1) { height: 4px;  background: var(--bk-status-bar-dim); }
-.signal-bar:nth-child(2) { height: 6px;  background: var(--bk-status-bar-dim); }
-.signal-bar:nth-child(3) { height: 9px;  background: var(--bk-text-primary); }
-.signal-bar:nth-child(4) { height: 12px; background: var(--bk-text-primary); }
-
-.battery {
-  width: 24px;
-  height: 12px;
-  border: 1.5px solid var(--bk-text-primary);
-  border-radius: 3px;
-  position: relative;
-  padding: 2px;
-  display: flex;
-  align-items: center;
-}
-
-.battery::after {
-  content: '';
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 5px;
-  background: var(--bk-text-primary);
-  border-radius: 0 1px 1px 0;
-}
-
-.battery-fill {
-  width: 75%;
-  height: 100%;
-  background: var(--bk-text-primary);
-  border-radius: 1px;
-}
-
 /* ── Header ─────────────────────────────────────────────────────────── */
+/* Status bar styles live in shared.css — do NOT redeclare here */
 .swap-header {
   height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 20px 20px;
+  padding: 0 20px;
   border-bottom: 1px solid var(--bk-border-subtle);
   flex-shrink: 0;
 }

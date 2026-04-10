@@ -30,18 +30,20 @@
   }
 }
 
-/* ── Status Bar — hidden on real phones, shown in desktop preview ── */
-@media (max-width: 500px) {
-  .status-bar { display: none; }
-}
+/* Status bar visibility controlled at definition above (mobile-first display:none) */
 
+/* Hidden by default (mobile-first). Desktop preview reveals it. */
 .status-bar {
   height: 37px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
   flex-shrink: 0;
+}
+
+@media (min-width: 501px) {
+  .status-bar { display: flex; }
 }
 
 .status-time {
@@ -110,11 +112,6 @@
     height: 100dvh;
     border-radius: 0;
     box-shadow: none;
-  }
-
-  /* Hide fake status bar on real devices — the OS draws its own */
-  .status-bar {
-    display: none;
   }
 }
 
