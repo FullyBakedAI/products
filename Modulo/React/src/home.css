@@ -192,16 +192,24 @@
   color: var(--bk-success);
 }
 
-/* ── Action Buttons ─────────────────────────────────────────────────── */
+/* ── Action Buttons ──────────────────────────────────────────────────
+   Layout: grid (not flex) — more reliable equal-column sizing.
+   DO NOT add -webkit-user-select:none to .action-btn — known WebKit
+   bug collapses <button> grid/flex items to intrinsic width.
+   ──────────────────────────────────────────────────────────────────── */
 .action-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   padding: 0 20px;
   gap: 10px;
   margin-bottom: 16px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .action-btn {
+  /* Explicit width:100% ensures grid column fill even if browser disagrees */
+  width: 100%;
   height: 70.5px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-subtle);
@@ -217,6 +225,11 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.93);
+  background: var(--bk-bg-card-alt);
 }
 
 .action-btn[data-hovered] {

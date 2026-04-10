@@ -385,11 +385,13 @@
    CSS :active gives immediate press feedback before JS fires.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* Eliminate 300ms tap delay + browser blue highlight everywhere.
-   Note: .action-btn excluded — handled in home.css to avoid Safari flex bugs
-   with -webkit-user-select on flex items. */
-button,
-[role="button"],
+/* ── Touch optimisation ──────────────────────────────────────────────
+   IMPORTANT: Do NOT use the bare `button` selector here.
+   `-webkit-user-select: none` on `<button>` elements is a known WebKit bug
+   that collapses grid/flex items to intrinsic width. Use specific classes only.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* touch-action only (no user-select) — safe for all button elements */
 a,
 input,
 select,
