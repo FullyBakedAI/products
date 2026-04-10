@@ -16,14 +16,13 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
-import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import './home.css';
 import './achievements.css'; // achievement-toast styles
 
 import {
   TrendingUp, Zap, Landmark, SlidersHorizontal,
-  Sparkles, Trophy, ChevronRight,
+  Trophy, ChevronRight, Repeat2, ArrowUpRight,
 } from 'lucide-react';
 import { useIconOverride } from './IconOverrideContext';
 
@@ -33,8 +32,6 @@ import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
 import iconSettings    from './assets/icon-settings.svg';
 import iconGainArrow   from './assets/icon-gain-arrow.svg';
-import iconActionSwap  from './assets/icon-action-swap.svg';
-import iconActionBuy   from './assets/icon-action-buy.svg';
 import iconActionSend  from './assets/icon-action-send.svg';
 import iconActionRecv  from './assets/icon-action-receive.svg';
 import tokenUsdc from './assets/token-usdc.svg';
@@ -44,6 +41,8 @@ import tokenSol  from './assets/token-sol.svg';
 import tokenUsdt from './assets/token-usdt.svg';
 
 const TIME_PERIODS = ['1D', '1W', '1M', '1Y', 'ALL'];
+
+// Chart uses the original chart-line.svg for all periods (same visual style)
 
 // Chain badge: colour-coded dot (bottom-right of token icon)
 const CHAIN_BADGE = {
@@ -93,8 +92,8 @@ const SWIPE_ACTIONS = [
   { id: 'stake',   label: 'Stake',   Icon: Zap,               cls: 'swipe-stake'   },
   { id: 'trade',   label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade'   },
   { id: 'lend',    label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
-  { id: 'swap',   label: 'Swap',    Icon: null, svgSrc: iconActionSwap, cls: 'swipe-swap' },
-  { id: 'manage', label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage'  },
+  { id: 'swap',    label: 'Swap',    Icon: Repeat2,           cls: 'swipe-swap'    },
+  { id: 'manage',  label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage'  },
 ];
 
 // ── Feature 2: Live yield counter ────────────────────────────────────────────
@@ -122,7 +121,7 @@ function useLiveBalance(active) {
 }
 
 // ── Feature 6: Achievement milestone toast ───────────────────────────────────
-function AchievementToast({ onClose }) {
+function AchievementToast({ onClose, navigate }) {
   return (
     <motion.div
       className="achievement-toast"
@@ -132,29 +131,28 @@ function AchievementToast({ onClose }) {
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1, transition: { ...m.modal.enter, duration: 0.28 } }}
       exit={{ y: 80, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
+      whileTap={{ scale: 0.97 }}
     >
       <div className="confetti-burst" aria-hidden="true">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="confetti-particle" />
         ))}
       </div>
-      <div className="achievement-toast-content">
+      <Button
+        className="achievement-toast-content"
+        aria-label="Achievement unlocked: Century Club — tap to view achievements"
+        onPress={() => { navigate('/achievements'); onClose(); }}
+        style={{ all: 'unset', display: 'flex', alignItems: 'center', width: '100%', cursor: 'pointer', gap: '12px' }}
+      >
         <div className="achievement-toast-icon" aria-hidden="true">
           <TrendingUp size={18} color="var(--bk-brand-primary)" strokeWidth={1.5} />
         </div>
-        <div className="achievement-toast-text">
+        <div className="achievement-toast-text" style={{ flex: 1 }}>
           <div className="achievement-toast-label">Achievement unlocked</div>
           <div className="achievement-toast-title">Century Club 🎉</div>
         </div>
-        <Button
-          className="nudge-dismiss-btn"
-          aria-label="Dismiss"
-          onPress={onClose}
-          style={{ color: 'var(--bk-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
-        >
-          ×
-        </Button>
-      </div>
+        <ChevronRight size={14} color="var(--bk-text-muted)" aria-hidden="true" />
+      </Button>
     </motion.div>
   );
 }
@@ -201,7 +199,7 @@ function TokenRow({ t, index }) {
       </div>
 
       <div className="token-swipe-actions">
-        {SWIPE_ACTIONS.map(({ id, label, Icon, svgSrc, cls }) => (
+        {SWIPE_ACTIONS.map(({ id, label, Icon, cls }) => (
           <Button
             key={id}
             className={`swipe-action ${cls}`}
@@ -216,10 +214,7 @@ function TokenRow({ t, index }) {
               }, 280);
             }}
           >
-            {svgSrc
-              ? <img src={svgSrc} width="18" height="18" aria-hidden="true" />
-              : <Icon size={18} strokeWidth={1.5} />
-            }
+            <Icon size={18} strokeWidth={1.5} />
             <span>{label}</span>
           </Button>
         ))}
@@ -335,8 +330,6 @@ export default function HomeScreen() {
       animate={{ opacity: 1, transition: m.fade.enter }}
       exit={{ opacity: 0, transition: m.fade.exit }}
     >
-      <StatusBar />
-
       {/* Header — collapses on scroll */}
       <header className={`home-header${headerScrolled ? ' home-header--scrolled' : ''}`}>
         <div className="header-logo">
@@ -373,6 +366,7 @@ export default function HomeScreen() {
           <div className="portfolio-chart" aria-hidden="true">
             <img src={chartLine} alt="" />
           </div>
+
           <div className="portfolio-header">
             <span className="portfolio-label" id="portfolio-heading">Portfolio</span>
             <div className="time-periods" role="group" aria-label="Time period selector">
@@ -406,46 +400,49 @@ export default function HomeScreen() {
             )}
           </div>
 
-          <div className="portfolio-gain" aria-label="Today's gain: $623.11 (5.08%)">
-            <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
-            <span className="gain-text">$623.11 (5.08%)</span>
+          {/* Gain row with "What if?" pill on the right */}
+          <div className="portfolio-gain-row" aria-label="Today's gain: $623.11 (5.08%)">
+            <div className="portfolio-gain">
+              <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
+              <span className="gain-text">$623.11 (5.08%)</span>
+            </div>
+            <Button
+              className="portfolio-whatif-btn"
+              aria-label="Open What-if simulator"
+              onPress={() => navigate('/simulate')}
+            >
+              What if? →
+            </Button>
           </div>
+
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">
             <span className="alltime-text">+$2,341.18 all time (22.3%)</span>
           </div>
-
-          {/* F5: "What if?" link */}
-          <Button
-            className="portfolio-whatif-btn"
-            aria-label="Open What-if simulator"
-            onPress={() => navigate('/simulate')}
-          >
-            What if? →
-          </Button>
         </motion.section>
 
-        {/* Action Buttons — staggered spring entrance + whileTap feedback */}
-        <div className="action-row" data-bk-component="action-row" role="group" aria-label="Quick actions">
-          {[
-            { label: 'Swap',    icon: iconActionSwap, ariaLabel: 'Swap tokens',    onPress: () => navigate('/swap')                   },
-            { label: 'Buy',     icon: iconActionBuy,  ariaLabel: 'Buy tokens',     onPress: () => openActions({ tab: 'deposit' })      },
-            { label: 'Send',    icon: iconActionSend, ariaLabel: 'Send tokens',    onPress: () => navigate('/send')                    },
-            { label: 'Receive', icon: iconActionRecv, ariaLabel: 'Receive tokens', onPress: () => navigate('/receive')                 },
-          ].map((btn, i) => (
-            <motion.div
-              key={btn.label}
-              whileTap={{ scale: 0.88 }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ ...m.springTight, delay: 0.08 + i * 0.05 }}
-            >
-              <Button className="action-btn" aria-label={btn.ariaLabel} onPress={btn.onPress}>
-                <img src={btn.icon} alt="" width="20" height="20" aria-hidden="true" />
-                <span className="action-label">{btn.label}</span>
-              </Button>
-            </motion.div>
-          ))}
-        </div>
+        {/* Action buttons — Swap / Buy / Send / Receive */}
+        <motion.div
+          className="action-row"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
+        >
+          <button className="action-btn" aria-label="Swap" onClick={() => navigate('/swap')}>
+            <Repeat2 size={20} strokeWidth={1.5} color="var(--bk-text-primary)" aria-hidden="true" />
+            <span className="action-label">Swap</span>
+          </button>
+          <button className="action-btn" aria-label="Buy" onClick={() => openActions({ tab: 'buy' })}>
+            <ArrowUpRight size={20} strokeWidth={1.5} color="var(--bk-text-primary)" aria-hidden="true" />
+            <span className="action-label">Buy</span>
+          </button>
+          <button className="action-btn" aria-label="Send" onClick={() => navigate('/send')}>
+            <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-label">Send</span>
+          </button>
+          <button className="action-btn" aria-label="Receive" onClick={() => navigate('/receive')}>
+            <img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" />
+            <span className="action-label">Receive</span>
+          </button>
+        </motion.div>
 
         {/* F1: "Put It All To Work" promo card — spring scale entrance */}
         <motion.div
@@ -455,12 +452,10 @@ export default function HomeScreen() {
         >
           <motion.div className="optimise-promo-card" whileTap={{ scale: 0.98 }}>
           <Button aria-label="Put it all to work — optimise all assets" onPress={() => navigate('/optimise')} style={{ all: 'unset', display: 'contents', cursor: 'pointer' }}>
-            <div className="optimise-promo-icon" aria-hidden="true">
-              <Sparkles size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} />
-            </div>
+            <img src={logoModulo} alt="" aria-hidden="true" style={{ width: 28, height: 28, flexShrink: 0, objectFit: 'contain' }} />
             <div className="optimise-promo-text">
               <div className="optimise-promo-headline">Put it all to work</div>
-              <div className="optimise-promo-sub">Estimated +$969/yr across 4 protocols</div>
+              <div className="optimise-promo-sub">Estimated +$969/yr · 4.2% avg APY across 4 protocols</div>
             </div>
             <span className="optimise-promo-btn" aria-hidden="true">Optimise</span>
           </Button>
@@ -480,16 +475,16 @@ export default function HomeScreen() {
             Positions <span className="positions-count">{TOKENS.length}</span>
           </span>
           <div className="positions-sort-group" role="group" aria-label="Sort positions">
-            <button
+            <Button
               className={`positions-sort-opt${sortBy === 'size' ? ' active' : ''}`}
               aria-pressed={sortBy === 'size'}
-              onClick={() => setSortBy('size')}
-            >Size</button>
-            <button
+              onPress={() => setSortBy('size')}
+            >Size</Button>
+            <Button
               className={`positions-sort-opt${sortBy === 'performance' ? ' active' : ''}`}
               aria-pressed={sortBy === 'performance'}
-              onClick={() => setSortBy('performance')}
-            >Perf</button>
+              onPress={() => setSortBy('performance')}
+            >Perf</Button>
           </div>
         </motion.div>
 
@@ -524,7 +519,10 @@ export default function HomeScreen() {
       {/* F6: Achievement milestone toast */}
       <AnimatePresence>
         {showAchievementToast && (
-          <AchievementToast onClose={() => setShowAchievementToast(false)} />
+          <AchievementToast
+            onClose={() => setShowAchievementToast(false)}
+            navigate={navigate}
+          />
         )}
       </AnimatePresence>
 

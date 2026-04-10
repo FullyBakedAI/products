@@ -18,7 +18,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import StatusBar from './StatusBar';
 import {
   X, ArrowUp, ArrowDown,
   Zap, Landmark, TrendingUp, ExternalLink,
@@ -246,7 +245,7 @@ export default function AssetScreen() {
   if (!t) {
     return (
       <motion.div className="swap-screen-inner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <StatusBar />
+
         <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--bk-text-muted)' }}>Asset not found.</div>
       </motion.div>
     );
@@ -272,12 +271,12 @@ export default function AssetScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
+      {/* StatusBar removed — modal screen, real device draws its own */}
 
       {/* ── Header — SwapScreen pattern ── */}
       <div className="swap-header">
         <div className="header-left">
-          <Button className="close-btn" aria-label="Back" onPress={() => navigate(-1)}>
+          <Button className="close-btn" aria-label="Back" onPress={() => navigate('/')}>
             <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
           </Button>
           <div className="asset-header-title">
@@ -332,14 +331,19 @@ export default function AssetScreen() {
           </div>
 
           {/* Chart — trend-direction fill, crosshair float label */}
-          <div className="asset-chart-wrap">
+          <motion.div
+            className="asset-chart-wrap"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ...m.fade.enter, delay: 0.18 }}
+          >
             <PriceChart
               symbol={id}
               period={period}
               negative={t.negative}
               onCrosshairPrice={handleCrosshair}
             />
-          </div>
+          </motion.div>
 
           {/* Period pills — home.css .time-btn */}
           <div className="time-periods asset-period-tabs" role="group" aria-label="Chart period">
@@ -397,26 +401,6 @@ export default function AssetScreen() {
           </div>
         </div>
 
-        {/* ── Quick actions — home.css action-row ── */}
-        <motion.div className="action-row" role="group" aria-label="Quick actions"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}>
-          {[
-            { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
-            { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
-            { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
-            { label: 'Actions', Icon: Zap,           action: () => openActions({ asset: id }) },
-          ].map(({ label, src, Icon, action }) => (
-            <Button key={label} className="action-btn" aria-label={label} onPress={action}>
-              {src
-                ? <img src={src} width="20" height="20" aria-hidden="true" />
-                : <Icon size={20} color="var(--bk-brand-primary)" strokeWidth={1.5} aria-hidden="true" />
-              }
-              <span className="action-label">{label}</span>
-            </Button>
-          ))}
-        </motion.div>
-
         {/* ── Put it to work — swap-card list ── */}
         <div className="asset-section">
           <div className="portfolio-label">Put it to work</div>
@@ -426,17 +410,26 @@ export default function AssetScreen() {
               { Icon: Landmark,   label: 'Lend & Borrow', sub: 'Earn on idle assets · Use as collateral', tab: 'lend'  },
               { Icon: TrendingUp, label: 'Trade',          sub: 'Market & limit orders',                  tab: 'trade' },
             ].map(({ Icon, label, sub, tab }, i) => (
-              <button key={label}
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...m.fade.enter, delay: 0.12 + i * 0.06 }}
+                whileTap={{ scale: 0.98 }}
+              >
+              <Button
                 className={`asset-opp-row${i === 0 ? ' first' : i === 2 ? ' last' : ''}`}
-                onClick={() => openActions({ tab, asset: id })}
-                aria-label={label}>
+                onPress={() => openActions({ tab, asset: id })}
+                aria-label={label}
+                style={{ width: '100%' }}>
                 <Icon size={20} strokeWidth={1.5} color="var(--bk-brand-primary)" aria-hidden="true" />
                 <div className="asset-opp-text">
                   <span className="asset-opp-label">{label}</span>
                   <span className="card-label">{sub}</span>
                 </div>
                 <span className="asset-opp-chevron">›</span>
-              </button>
+              </Button>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -512,12 +505,32 @@ export default function AssetScreen() {
         {/* Contract */}
         <div className="asset-contract-row">
           <span className="card-label">Contract</span>
-          <button className="asset-contract-btn" aria-label="View on explorer" onClick={() => navigate('/activity')}>
+          <Button className="asset-contract-btn" aria-label="View on explorer" onPress={() => navigate('/activity')}>
             0x2260…1d1e <ExternalLink size={11} strokeWidth={1.5} aria-hidden="true" />
-          </button>
+          </Button>
         </div>
 
       </div>
+
+      {/* ── Sticky bottom action bar ── */}
+      <nav className="asset-bottom-bar" aria-label="Quick actions">
+        {[
+          { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
+          { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
+          { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
+          { label: 'Actions', Icon: Zap,           action: () => openActions({ asset: id }) },
+        ].map(({ label, src, Icon, action }) => (
+          <motion.div key={label} whileTap={{ scale: 0.88 }}>
+            <Button className="asset-bar-btn" aria-label={label} onPress={action}>
+              {src
+                ? <img src={src} width="20" height="20" aria-hidden="true" />
+                : <Icon size={20} color="var(--bk-brand-primary)" strokeWidth={1.5} aria-hidden="true" />
+              }
+              <span className="asset-bar-label">{label}</span>
+            </Button>
+          </motion.div>
+        ))}
+      </nav>
     </motion.div>
   );
 }

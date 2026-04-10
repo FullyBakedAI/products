@@ -146,3 +146,158 @@
   transform: scale(0.985);
   opacity: 0.85;
 }
+
+/* ── Sub-panel ────────────────────────────────────────────────────── */
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── Toggle row ───────────────────────────────────────────────────── */
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+}
+.settings-toggle-row:last-child { border-bottom: none; }
+
+/* Switch (shared by settings panels) */
+.sp-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sp-switch-indicator {
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--bk-bg-card-alt);
+  border: 1px solid var(--bk-border-pill);
+  position: relative;
+  transition: background var(--bk-motion-fast), border-color var(--bk-motion-fast);
+}
+.sp-switch[data-selected] .sp-switch-indicator {
+  background: var(--bk-brand-primary);
+  border-color: var(--bk-brand-primary);
+}
+.sp-switch-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bk-text-primary);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform var(--bk-motion-fast);
+}
+.sp-switch[data-selected] .sp-switch-thumb {
+  transform: translateX(18px);
+}
+
+/* ── Pill group ───────────────────────────────────────────────────── */
+.settings-pill-group {
+  display: flex;
+  gap: 8px;
+  padding: 8px 20px 16px;
+  flex-wrap: wrap;
+}
+.settings-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--bk-text-secondary);
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-pill);
+  cursor: pointer;
+  transition: background var(--bk-motion-fast), border-color var(--bk-motion-fast), color var(--bk-motion-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+.settings-pill.active {
+  background: var(--bk-brand-dim);
+  border-color: var(--bk-border-active);
+  color: var(--bk-text-primary);
+}
+.settings-pill:active {
+  transform: scale(0.96);
+}
+
+/* ── Network row ──────────────────────────────────────────────────── */
+.settings-network-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+}
+.settings-network-row:last-child { border-bottom: none; }
+.settings-network-icon {
+  border-radius: 50%;
+}
+.settings-network-row .settings-row-label {
+  flex: 1;
+}
+
+/* ── About content ────────────────────────────────────────────────── */
+.settings-about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px 24px;
+  gap: 8px;
+}
+.settings-about-logo {
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+.settings-about-version {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+.settings-about-tagline {
+  font-size: 13px;
+  color: var(--bk-text-secondary);
+  font-style: italic;
+}
+.settings-about-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  margin-top: 8px;
+}
+
+/* ── Version footer ───────────────────────────────────────────────── */
+.settings-version-footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  padding: 32px 0 16px;
+}
+
+/* ── Wallet detail ────────────────────────────────────────────────── */
+.settings-wallet-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 16px;
+}
+.settings-wallet-full-addr {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  word-break: break-all;
+  text-align: center;
+  padding: 8px 20px 0;
+  line-height: 1.5;
+}

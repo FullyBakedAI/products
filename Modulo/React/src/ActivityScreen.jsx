@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
+
+const MotionBackdrop = motion(Button);
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 import {
@@ -186,10 +188,10 @@ function TxDetailSheet({ tx, onClose }) {
 
       {/* Explorer link */}
       {!tx.pending && (
-        <button className="tx-explorer-btn" aria-label="View on block explorer" onClick={onClose}>
+        <Button className="tx-explorer-btn" aria-label="View on block explorer" onPress={onClose}>
           <ExternalLink size={14} strokeWidth={1.5} aria-hidden="true" />
           View on block explorer
-        </button>
+        </Button>
       )}
     </motion.div>
   );
@@ -200,54 +202,57 @@ function TxDetailSheet({ tx, onClose }) {
 function TxRow({ tx, delay, onTap, onAction }) {
   return (
     <motion.div
-      className="tx-row activity-tx-row"
       role="listitem"
-      onClick={() => onTap(tx)}
-      style={{ cursor: 'pointer' }}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay } }}
       whileTap={{ scale: 0.985 }}
     >
-      <div style={{ position: 'relative', flexShrink: 0 }}>
-        <TxBadge icon1={tx.icon1} pending={tx.pending} />
-        {tx.icon2 && (
-          <img src={tx.icon2} alt="" width="14" height="14" className="tx-secondary-icon" />
-        )}
-      </div>
-
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
-          <span className="token-name-text">{tx.label}</span>
-          {tx.amount && (
-            <span style={{
-              fontSize: 14, fontWeight: 600, flexShrink: 0,
-              color: tx.positive ? 'var(--bk-success)' : 'var(--bk-text-secondary)',
-            }}>{tx.amount}</span>
+      <Button
+        className="tx-row activity-tx-row"
+        onPress={() => onTap(tx)}
+        style={{ cursor: 'pointer', width: '100%', textAlign: 'left' }}
+      >
+        <div style={{ position: 'relative', flexShrink: 0 }}>
+          <TxBadge icon1={tx.icon1} pending={tx.pending} />
+          {tx.icon2 && (
+            <img src={tx.icon2} alt="" width="14" height="14" className="tx-secondary-icon" />
           )}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-          <span className="token-amount" style={{ opacity: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-            {tx.detail}
-          </span>
-          <div style={{ display: 'flex', gap: 5, flexShrink: 0, alignItems: 'center' }}>
-            {tx.time && <span className="token-amount" style={{ opacity: 1 }}>{tx.time}</span>}
-            <span className="chain-pill" style={{ height: 'auto', padding: '1px 7px', fontSize: 10 }}>{tx.chain}</span>
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
+            <span className="token-name-text">{tx.label}</span>
+            {tx.amount && (
+              <span style={{
+                fontSize: 14, fontWeight: 600, flexShrink: 0,
+                color: tx.positive ? 'var(--bk-success)' : 'var(--bk-text-secondary)',
+              }}>{tx.amount}</span>
+            )}
           </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+            <span className="token-amount" style={{ opacity: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
+              {tx.detail}
+            </span>
+            <div style={{ display: 'flex', gap: 5, flexShrink: 0, alignItems: 'center' }}>
+              {tx.time && <span className="token-amount" style={{ opacity: 1 }}>{tx.time}</span>}
+              <span className="chain-pill" style={{ height: 'auto', padding: '1px 7px', fontSize: 10 }}>{tx.chain}</span>
+            </div>
+          </div>
+          {tx.pending && (
+            <div style={{ fontSize: 11, color: 'var(--bk-brand-primary)', marginTop: 2 }}>{tx.status}</div>
+          )}
         </div>
-        {tx.pending && (
-          <div style={{ fontSize: 11, color: 'var(--bk-brand-primary)', marginTop: 2 }}>{tx.status}</div>
-        )}
-        {tx.pending && (
-          <div className="tx-pending-actions">
-            <button className="tx-action-btn tx-action-speed" aria-label="Speed up transaction" onClick={(e) => { e.stopPropagation(); onAction && onAction('speed'); }}>
-              Speed up
-            </button>
-            <button className="tx-action-btn tx-action-cancel" aria-label="Cancel transaction" onClick={(e) => { e.stopPropagation(); onAction && onAction('cancel'); }}>
-              Cancel
-            </button>
-          </div>
-        )}
-      </div>
+      </Button>
+      {tx.pending && (
+        <div className="tx-pending-actions">
+          <Button className="tx-action-btn tx-action-speed" aria-label="Speed up transaction" onPress={() => { onAction && onAction('speed'); }}>
+            Speed up
+          </Button>
+          <Button className="tx-action-btn tx-action-cancel" aria-label="Cancel transaction" onPress={() => { onAction && onAction('cancel'); }}>
+            Cancel
+          </Button>
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -282,7 +287,7 @@ export default function ActivityScreen() {
 
       {/* Header */}
       <header className="home-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
           <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
         </Button>
         <h1 style={{ fontSize: 17, fontWeight: 600, color: 'var(--bk-text-primary)', letterSpacing: '-0.01em', margin: 0 }}>
@@ -294,12 +299,12 @@ export default function ActivityScreen() {
       {/* Filter chips — shared.css .chain-pill pattern */}
       <div className="activity-filter-row" role="group" aria-label="Filter">
         {FILTERS.map(f => (
-          <button
+          <Button
             key={f}
             className={`chain-pill${activeFilter === f ? ' active' : ''}`}
-            onClick={() => setActiveFilter(f)}
+            onPress={() => setActiveFilter(f)}
             aria-pressed={activeFilter === f}
-          >{f}</button>
+          >{f}</Button>
         ))}
       </div>
 
@@ -347,12 +352,13 @@ export default function ActivityScreen() {
       <AnimatePresence>
         {selectedTx && (
           <>
-            <motion.div
+            <MotionBackdrop
               className="tx-backdrop"
+              aria-label="Close transaction details"
+              onPress={() => setSelectedTx(null)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedTx(null)}
             />
             <TxDetailSheet tx={selectedTx} onClose={() => setSelectedTx(null)} />
           </>

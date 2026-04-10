@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import StatusBar from './StatusBar';
 import { ChevronLeft, Award, Zap, TrendingUp, Globe, Clock, Sparkles, Calendar } from 'lucide-react';
 import './achievements.css';
 
@@ -84,10 +83,8 @@ export default function AchievementsScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       <header className="achievements-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
           <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
         </Button>
         <h1 className="achievements-title">Achievements</h1>

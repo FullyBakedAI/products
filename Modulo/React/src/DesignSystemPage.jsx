@@ -4,6 +4,7 @@
  * Route: rendered when hash === #/ds (outside HashRouter)
  */
 import { useState, useEffect } from 'react';
+import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTokenOverride } from './TokenOverrideContext';
 import BrandTab        from './ds/BrandTab';
@@ -66,10 +67,10 @@ export default function DesignSystemPage() {
                 <span className="ds-save-bar-inline-label">
                   {draftCount} unsaved
                 </span>
-                <button className="ds-discard-btn" onClick={discardChanges}>Discard</button>
-                <button className="ds-save-btn" onClick={saveOverrides} style={{ background: brand }}>
+                <Button className="ds-discard-btn" onPress={discardChanges}>Discard</Button>
+                <Button className="ds-save-btn" onPress={saveOverrides} style={{ background: brand }}>
                   Save
-                </button>
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -79,13 +80,13 @@ export default function DesignSystemPage() {
       {/* ── Tab bar ── */}
       <nav className="ds-tab-bar">
         {NAV_ITEMS.map(({ id, label }) => (
-          <button
+          <Button
             key={id}
             className={`ds-tab-item${activeSection === id ? ' active' : ''}`}
-            onClick={() => setActiveSection(id)}
+            onPress={() => setActiveSection(id)}
           >
             {label}
-          </button>
+          </Button>
         ))}
       </nav>
 

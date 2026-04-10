@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   ManageScreen Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.manage-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bk-bg-base);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.manage-header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--bk-border-subtle);
+}
+
+.manage-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.manage-settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bk-bg-elevated);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--bk-text-muted);
+  transition: color 0.15s;
+}
+
+.manage-settings-btn[data-hovered] {
+  color: var(--bk-text-primary);
+}
+
+.manage-settings-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Content ─────────────────────────────────────────────────────────── */
+.manage-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+}
+
+/* ── 2×2 Grid ────────────────────────────────────────────────────────── */
+.manage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Action Card ─────────────────────────────────────────────────────── */
+.manage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.manage-card[data-hovered] {
+  background: var(--bk-bg-card-alt);
+}
+
+.manage-card[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.manage-card-icon {
+  color: var(--bk-text-primary);
+  flex-shrink: 0;
+}
+
+.manage-card-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.3;
+}

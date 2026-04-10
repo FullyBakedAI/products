@@ -83,10 +83,10 @@ export default function ExploreScreen() {
       <div className="scroll-content explore-scroll">
 
         {/* Search */}
-        <button className="search-field explore-search" role="search" aria-label="Search tokens">
+        <Button className="search-field explore-search" role="search" aria-label="Search tokens">
           <Search size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
           <span>Token name or address</span>
-        </button>
+        </Button>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">
@@ -94,43 +94,50 @@ export default function ExploreScreen() {
             <TrendingUp size={14} strokeWidth={1.5} color="var(--bk-success)" />
             <span className="yield-title">Top rates right now</span>
           </div>
-          {TOP_YIELDS.map(y => (
-            <button
+          {TOP_YIELDS.map((y, i) => (
+            <motion.div
               key={y.asset + y.protocol}
-              className="yield-row"
-              onClick={() => openActions({ tab: y.tab, asset: y.asset.toLowerCase() })}
-              aria-label={`${y.asset} ${y.apy}% APY on ${y.protocol}`}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...m.fade.enter, delay: 0.06 + i * 0.05 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <img src={y.icon} alt="" width="28" height="28" className="yield-icon" />
-              <div className="yield-info">
-                <span className="yield-asset">{y.asset}</span>
-                <span className="yield-protocol">{y.protocol} · {y.type === 'stake' ? 'Stake' : 'Lend'}</span>
-              </div>
-              <span className="yield-apy">{y.apy}%</span>
-              <span className="yield-apy-label">APY</span>
-            </button>
+              <Button
+                className="yield-row"
+                aria-label={`${y.asset} ${y.apy}% APY on ${y.protocol}`}
+                onPress={() => openActions({ tab: y.tab, asset: y.asset.toLowerCase() })}
+              >
+                <img src={y.icon} alt="" width="28" height="28" className="yield-icon" />
+                <div className="yield-info">
+                  <span className="yield-asset">{y.asset}</span>
+                  <span className="yield-protocol">{y.protocol} · {y.type === 'stake' ? 'Stake' : 'Lend'}</span>
+                </div>
+                <span className="yield-apy">{y.apy}%</span>
+                <span className="yield-apy-label">APY</span>
+              </Button>
+            </motion.div>
           ))}
         </div>
 
         {/* Market Tabs */}
         <div className="tabs" role="tablist" data-bk-component="tab-bar">
           {TABS.map(tab => (
-            <button
+            <Button
               key={tab}
               className={`tab${activeTab === tab ? ' active' : ''}`}
               role="tab"
               aria-selected={activeTab === tab}
-              onClick={() => setActiveTab(tab)}
-            >{tab}</button>
+              onPress={() => setActiveTab(tab)}
+            >{tab}</Button>
           ))}
         </div>
 
         {/* Sort + Chain Filters */}
         <div className="top-header">
           <span className="top-label" />
-          <button className="sort-btn" onClick={cycleSort} aria-label={`Sort by ${sortBy}`}>
+          <Button className="sort-btn" onPress={cycleSort} aria-label={`Sort by ${sortBy}`}>
             {sortBy} &#9662;
-          </button>
+          </Button>
         </div>
 
         <div className="chain-filters" data-bk-component="tab-bar" role="group" aria-label="Chain filter">
@@ -151,28 +158,36 @@ export default function ExploreScreen() {
               No tokens match this filter.
             </div>
           ) : sortedTokens.map((t, i) => (
-            <button
+            <motion.div
               key={t.id}
-              className="token-row-explore"
-              role="listitem"
-              aria-label={`${t.name}: ${t.price}, ${t.change}, ${t.apy}% APY`}
-              onClick={() => navigate(`/asset/${t.id}`)}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...m.fade.enter, delay: 0.04 + i * 0.05 }}
+              whileTap={{ scale: 0.985 }}
             >
-              <span className="token-rank">{i + 1}</span>
-              <img src={t.icon} alt="" width="32" height="32" className="explore-token-icon" />
-              <div className="token-col-name">
-                <span className="token-name-text">{t.name}</span>
-                <span className="token-amount">{t.symbol}</span>
-              </div>
-              <div className="token-col-price">
-                <span className="token-price-text">{t.price}</span>
-                <span className={`token-change-text${t.negative ? ' negative' : ' positive'}`}>{t.change}</span>
-              </div>
-              <div className="token-col-apy">
-                <span className="token-apy-value">{t.apy}%</span>
-                <span className="token-apy-label">APY</span>
-              </div>
-            </button>
+              <Button
+                className="token-row-explore"
+                role="listitem"
+                aria-label={`${t.name}: ${t.price}, ${t.change}, ${t.apy}% APY`}
+                onPress={() => navigate(`/asset/${t.id}`)}
+              >
+                <span className="token-rank">{i + 1}</span>
+
+                <img src={t.icon} alt="" width="32" height="32" className="explore-token-icon" />
+                <div className="token-col-name">
+                  <span className="token-name-text">{t.name}</span>
+                  <span className="token-amount">{t.symbol}</span>
+                </div>
+                <div className="token-col-price">
+                  <span className="token-price-text">{t.price}</span>
+                  <span className={`token-change-text${t.negative ? ' negative' : ' positive'}`}>{t.change}</span>
+                </div>
+                <div className="token-col-apy">
+                  <span className="token-apy-value">{t.apy}%</span>
+                  <span className="token-apy-label">APY</span>
+                </div>
+              </Button>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -241,10 +241,10 @@ function TradeTab() {
     <div className="actions-tab-stack">
 
       {/* Asset header */}
-      <button
+      <Button
         className="trade-asset-header"
         aria-label="Change asset — currently Ethereum"
-        onClick={() => navigate('/swap/select/pay')}
+        onPress={() => navigate('/swap/select/pay')}
       >
         <img src={tokenEth} alt="" width="36" height="36" className="trade-asset-icon" />
         <div className="trade-asset-info">
@@ -257,41 +257,41 @@ function TradeTab() {
         <div className="trade-change-chip" aria-hidden="true">
           Change <ChevronDown size={12} strokeWidth={2} />
         </div>
-      </button>
+      </Button>
 
       {/* Buy / Sell toggle */}
       <div className="trade-direction-tabs" role="group" aria-label="Buy or sell">
-        <button
+        <Button
           className={`trade-dir-tab${direction === 'buy' ? ' dir-buy-active' : ''}`}
-          onClick={() => setDirection('buy')}
+          onPress={() => setDirection('buy')}
           aria-pressed={direction === 'buy'}
-        >Buy</button>
-        <button
+        >Buy</Button>
+        <Button
           className={`trade-dir-tab${direction === 'sell' ? ' dir-sell-active' : ''}`}
-          onClick={() => setDirection('sell')}
+          onPress={() => setDirection('sell')}
           aria-pressed={direction === 'sell'}
-        >Sell</button>
+        >Sell</Button>
       </div>
 
       {/* Order type pills */}
       <div className="trade-order-type-row" role="group" aria-label="Order type">
         {['market', 'limit'].map(t => (
-          <button
+          <Button
             key={t}
             className={`trade-order-pill${orderType === t ? ' active' : ''}`}
-            onClick={() => { setOrderType(t); setActiveInput('amount'); }}
+            onPress={() => { setOrderType(t); setActiveInput('amount'); }}
             aria-pressed={orderType === t}
           >
             {t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
+          </Button>
         ))}
       </div>
 
       {/* Limit price row */}
       {orderType === 'limit' && (
-        <button
+        <Button
           className={`trade-limit-row${activeInput === 'limit' ? ' focused' : ''}`}
-          onClick={() => setActiveInput('limit')}
+          onPress={() => setActiveInput('limit')}
           aria-label={`Limit price: ${limitPrice ? '$' + limitPrice : 'not set'}`}
         >
           <span className="trade-limit-label">Limit price</span>
@@ -299,13 +299,13 @@ function TradeTab() {
             <span className="trade-limit-value">{limitPrice ? `$${limitPrice}` : 'Set price'}</span>
             {activeInput === 'limit' && <span className="amount-cursor" aria-hidden="true" />}
           </div>
-        </button>
+        </Button>
       )}
 
       {/* Amount display */}
-      <button
+      <Button
         className={`trade-amount-display${activeInput === 'amount' || orderType === 'market' ? ' focused' : ''}`}
-        onClick={() => setActiveInput('amount')}
+        onPress={() => setActiveInput('amount')}
         aria-label={`Amount: $${amount || '0'}`}
       >
         <div className="trade-amount-value">
@@ -316,7 +316,7 @@ function TradeTab() {
           )}
         </div>
         <div className="trade-amount-sub">≈ {ethAmount} ETH</div>
-      </button>
+      </Button>
 
       {ctaReady && (
         <div className="trade-summary-row" aria-live="polite">
@@ -382,16 +382,16 @@ function LendBorrowTab() {
 
       {/* Lend / Borrow toggle — matches Buy/Sell style */}
       <div className="trade-direction-tabs" role="group" aria-label="Lend or borrow">
-        <button
+        <Button
           className={`trade-dir-tab${sub === 'lend' ? ' dir-buy-active' : ''}`}
-          onClick={() => setSub('lend')}
+          onPress={() => setSub('lend')}
           aria-pressed={sub === 'lend'}
-        >Lend</button>
-        <button
+        >Lend</Button>
+        <Button
           className={`trade-dir-tab${sub === 'borrow' ? ' dir-sell-active' : ''}`}
-          onClick={() => setSub('borrow')}
+          onPress={() => setSub('borrow')}
           aria-pressed={sub === 'borrow'}
-        >Borrow</button>
+        >Borrow</Button>
       </div>
 
       {sub === 'lend' ? (
@@ -399,9 +399,9 @@ function LendBorrowTab() {
           <div className="portfolio-label">Select platform</div>
           <div className="asset-opp-list">
             {PLATFORMS.map((p, i) => (
-              <button key={p.name}
+              <Button key={p.name}
                 className={`asset-opp-row${i === 0 ? ' first' : i === PLATFORMS.length - 1 ? ' last' : ''}`}
-                onClick={() => setPlatform(p)}
+                onPress={() => setPlatform(p)}
                 data-selected={p.name === platform.name}
                 aria-pressed={p.name === platform.name}
               >
@@ -411,7 +411,7 @@ function LendBorrowTab() {
                 </div>
                 <span className="asset-opp-apy">{p.apy}%</span>
                 <span className="asset-opp-apy-label">APY</span>
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -422,10 +422,10 @@ function LendBorrowTab() {
                 <span className="amount-text">{amount || '0'}</span>
                 <span className="amount-cursor" aria-hidden="true" />
               </div>
-              <button className="token-pill-btn token-pill-flat">
+              <Button className="token-pill-btn token-pill-flat">
                 <span className="token-icon"><img src={tokenUsdc} alt="" width="22" height="22" /></span>
                 <span className="token-name">USDC</span>
-              </button>
+              </Button>
             </div>
             <div className="card-bottom"><span>≈ ${amount || '0'}</span><span>Balance: 5,342.98</span></div>
           </div>
@@ -474,10 +474,10 @@ function LendBorrowTab() {
                 <span className="amount-text">{amount || '0'}</span>
                 <span className="amount-cursor" aria-hidden="true" />
               </div>
-              <button className="token-pill-btn token-pill-flat">
+              <Button className="token-pill-btn token-pill-flat">
                 <span className="token-icon"><img src={tokenUsdc} alt="" width="22" height="22" /></span>
                 <span className="token-name">USDC</span>
-              </button>
+              </Button>
             </div>
             <div className="card-bottom"><span>Variable 4.8% APR</span><span>Max: $3,300</span></div>
           </div>
@@ -513,11 +513,11 @@ function DepositTab() {
           { label: 'Deposit',  sub: 'Add funds via crypto or bank transfer',    src: iconActionRecv, action: () => navigate('/receive') },
           { label: 'Withdraw', sub: 'Move funds to an external wallet or bank',  src: iconActionSend, action: () => navigate('/send') },
         ].map(({ label, sub, src, action }) => (
-          <button key={label} className="swap-card actions-deposit-card" onClick={action} aria-label={label}>
+          <Button key={label} className="swap-card actions-deposit-card" onPress={action} aria-label={label}>
             <img src={src} width="28" height="28" className="deposit-card-img" aria-hidden="true" />
             <div className="deposit-card-title">{label}</div>
             <div className="card-label">{sub}</div>
-          </button>
+          </Button>
         ))}
       </div>
       <div className="actions-notice">
@@ -552,10 +552,10 @@ export default function ActionsScreen() {
     <div className="actions-overlay" role="dialog" aria-modal="true" aria-label="Actions">
 
       {/* Dark backdrop — tap to dismiss */}
-      <button
+      <Button
         className="actions-backdrop"
         aria-label="Close actions"
-        onClick={closeActions}
+        onPress={closeActions}
       />
 
       {/* Sheet with drag-to-dismiss */}
@@ -573,14 +573,14 @@ export default function ActionsScreen() {
 
         {/* Cycle button + close */}
         <div className="actions-header-row">
-          <button
+          <Button
             className="actions-cycle-btn"
-            onClick={next}
+            onPress={next}
             aria-label={`Current: ${TABS[activeIdx].label}. Tap to cycle.`}
             aria-live="polite"
           >
             {TABS[activeIdx].label}
-          </button>
+          </Button>
           <Button
             className="close-btn-shared"
             aria-label="Close"

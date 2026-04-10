@@ -23,6 +23,7 @@ import SimulateScreen     from './SimulateScreen';
 import AchievementsScreen from './AchievementsScreen';
 import SendAmountScreen   from './SendAmountScreen';
 import SettingsScreen     from './SettingsScreen';
+import ManageScreen       from './ManageScreen';
 import UndoToast          from './UndoToast';
 
 // ── Motion variants (driven by motion-tokens.js) ──────────────────────────
@@ -109,6 +110,7 @@ function AnimatedRoutes() {
           <Route path="/achievements"        element={<AchievementsScreen />} />
           <Route path="/send/amount"         element={<SendAmountScreen />} />
           <Route path="/settings"            element={<SettingsScreen />} />
+          <Route path="/manage"              element={<ManageScreen />} />
         </Routes>
 
         {/* F7: UndoToast — rendered inside .phone so positioning is relative to the frame */}

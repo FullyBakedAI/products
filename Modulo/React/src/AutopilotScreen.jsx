@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
-import StatusBar from './StatusBar';
+
+const MotionButton = motion.create(Button);
 import { Zap, ChevronLeft, Bell, Pause } from 'lucide-react';
 import './autopilot.css';
 
@@ -41,10 +42,8 @@ export default function AutopilotScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       <header className="autopilot-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
           <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
         </Button>
         <div className="autopilot-header-title">
@@ -89,14 +88,15 @@ export default function AutopilotScreen() {
           <div className="autopilot-section-title" id="risk-heading">Risk tolerance</div>
           <div className="autopilot-risk-pills" role="group" aria-label="Select risk level">
             {RISK_LEVELS.map(level => (
-              <button
+              <MotionButton
                 key={level.id}
                 className={`autopilot-risk-pill${risk === level.id ? ' active' : ''}`}
                 aria-pressed={risk === level.id}
-                onClick={() => setRisk(level.id)}
+                whileTap={{ scale: 0.92 }}
+                onPress={() => setRisk(level.id)}
               >
                 {level.label}
-              </button>
+              </MotionButton>
             ))}
           </div>
           <div className="autopilot-risk-desc" role="status" aria-live="polite">

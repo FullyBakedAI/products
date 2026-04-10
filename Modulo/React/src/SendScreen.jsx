@@ -96,9 +96,9 @@ export default function SendScreen() {
         animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.12 } }}
       >
         <span className="send-network-label">Network</span>
-        <button className="chain-pill active" aria-label={`Change network: ${network}`} onClick={cycleNetwork}>
+        <Button className="chain-pill active" aria-label={`Change network: ${network}`} onPress={cycleNetwork}>
           {network} &#9662;
-        </button>
+        </Button>
       </motion.div>
 
       {/* Contact List — Saved + Recent sections */}
@@ -114,6 +114,7 @@ export default function SendScreen() {
                   key={c.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.16 + i * 0.05 } }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <Button
                     className={`contact-row${c.variant ? ` avatar-${c.variant}` : ''}`}

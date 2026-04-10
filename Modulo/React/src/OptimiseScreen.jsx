@@ -5,9 +5,9 @@
  * Confirm & Deploy → /success + triggers UndoToast.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, animate } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { ChevronLeft } from 'lucide-react';
@@ -33,6 +33,19 @@ export default function OptimiseScreen() {
   const navigate = useNavigate();
   const { showUndo } = useUndoToast();
   const [selected, setSelected] = useState(new Set(RECOMMENDATIONS.map(r => r.id)));
+
+  // Hero yield count-up on mount
+  const [countedUp, setCountedUp]     = useState(false);
+  const [mountYield, setMountYield]   = useState(0);
+  useEffect(() => {
+    const ctrl = animate(0, 969, {
+      duration: 0.7,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      onUpdate: (v) => setMountYield(Math.round(v)),
+      onComplete: () => setCountedUp(true),
+    });
+    return ctrl.stop;
+  }, []);
 
   const selectedRecs   = RECOMMENDATIONS.filter(r => selected.has(r.id));
   const selectedCount  = selected.size;
@@ -70,10 +83,10 @@ export default function OptimiseScreen() {
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
       {/* Back button — full-width tap target */}
-      <button className="optimise-back-btn" aria-label="Go back" onClick={() => navigate(-1)}>
+      <Button className="optimise-back-btn" aria-label="Go back" onPress={() => navigate('/')}>
         <ChevronLeft size={18} strokeWidth={2} aria-hidden="true" />
         Back
-      </button>
+      </Button>
 
       <div className="scroll-content">
         {/* Hero */}
@@ -83,7 +96,14 @@ export default function OptimiseScreen() {
             Deploy all assets to the highest-yield protocols. One tap, fully optimised.
           </p>
           <div className="optimise-yield-hero" role="status" aria-live="polite" aria-label={`Estimated annual yield: $${totalYield}`}>
-            <span className="optimise-yield-amount">+${totalYield.toLocaleString()}</span>
+            <motion.span
+              className="optimise-yield-amount"
+              key={countedUp ? totalYield : 'mount'}
+              animate={{ opacity: [0.6, 1] }}
+              transition={m.valueUpdate}
+            >
+              +${countedUp ? totalYield.toLocaleString() : mountYield}
+            </motion.span>
             <span className="optimise-yield-period">/yr estimated</span>
           </div>
         </div>
@@ -111,7 +131,12 @@ export default function OptimiseScreen() {
                 className={`optimise-row${isOn ? '' : ' optimise-row--off'}`}
                 role="listitem"
                 initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.06 + i * 0.05 } }}
+                animate={{ opacity: isOn ? 1 : 0.45, y: 0 }}
+                transition={{
+                  opacity: m.valueUpdate,
+                  y: { ...m.fade.enter, delay: 0.06 + i * 0.05 },
+                }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Button
                   className="optimise-row-btn"
@@ -136,7 +161,12 @@ export default function OptimiseScreen() {
         {/* Total */}
         <div className="optimise-total-row" aria-label={`Total estimated yield: $${totalYield} per year`} role="status" aria-live="polite">
           <span className="optimise-total-label">Total estimated yield</span>
-          <span className="optimise-total-value">+${totalYield} / yr</span>
+          <motion.span
+            className="optimise-total-value"
+            key={totalYield}
+            animate={{ opacity: [0.5, 1] }}
+            transition={m.valueUpdate}
+          >+${totalYield} / yr</motion.span>
         </div>
       </div>
 

@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useState, useRef } from 'react';
+import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { useUndoToast } from './UndoToastContext';
@@ -66,9 +67,9 @@ export default function UndoToast() {
           </span>
 
           {!undone && (
-            <button
+            <Button
               className="undo-ring-btn"
-              onClick={handleUndo}
+              onPress={handleUndo}
               aria-label={`Undo — ${timeLeft} seconds remaining`}
             >
               <svg
@@ -110,7 +111,7 @@ export default function UndoToast() {
                   Undo
                 </text>
               </svg>
-            </button>
+            </Button>
           )}
         </motion.div>
       )}

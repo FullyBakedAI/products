@@ -107,9 +107,9 @@ export default function ReviewScreen() {
         </div>
 
         {/* Collapsible fee section */}
-        <button
+        <Button
           className="review-fee-toggle"
-          onClick={() => setFeesOpen(v => !v)}
+          onPress={() => setFeesOpen(v => !v)}
           aria-expanded={feesOpen}
           aria-controls="fee-breakdown"
         >
@@ -124,7 +124,7 @@ export default function ReviewScreen() {
               <ChevronDown size={14} strokeWidth={2} color="var(--bk-text-muted)" aria-hidden="true" />
             </motion.span>
           </div>
-        </button>
+        </Button>
 
         <AnimatePresence initial={false}>
           {feesOpen && (

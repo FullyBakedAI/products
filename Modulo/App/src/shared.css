@@ -1,0 +1,382 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Modulo Shared Layout & Components
+   Phone frame, status bar, bottom nav, shared patterns.
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Phone Frame ────────────────────────────────────────────────────── */
+.phone {
+  width: 100%;
+  max-width: 402px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--bk-bg-base);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Desktop: render as iPhone 17 Pro frame — always exactly 402px */
+@media (min-width: 501px) {
+  .phone {
+    width: 402px;
+    max-width: 402px;
+    height: 874px;
+    min-height: unset;
+    overflow: hidden;
+    border-radius: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin: auto;
+  }
+}
+
+/* ── Status Bar ─────────────────────────────────────────────────────── */
+.status-bar {
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  flex-shrink: 0;
+}
+
+.status-time {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signal-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.signal-bar {
+  width: 3px;
+  border-radius: 1px;
+}
+
+.signal-bar:nth-child(1) { height: 4px;  background: var(--bk-status-bar-dim); }
+.signal-bar:nth-child(2) { height: 6px;  background: var(--bk-status-bar-dim); }
+.signal-bar:nth-child(3) { height: 9px;  background: var(--bk-text-primary); }
+.signal-bar:nth-child(4) { height: 12px; background: var(--bk-text-primary); }
+
+.battery {
+  width: 24px;
+  height: 12px;
+  border: 1.5px solid var(--bk-text-primary);
+  border-radius: 3px;
+  position: relative;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.battery::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 5px;
+  background: var(--bk-text-primary);
+  border-radius: 0 1px 1px 0;
+}
+
+.battery-fill {
+  width: 75%;
+  height: 100%;
+  background: var(--bk-text-primary);
+  border-radius: 1px;
+}
+
+/* ── Real device: fill viewport, no frame ───────────────────────────── */
+@media (max-width: 500px), (display-mode: standalone) {
+  .phone {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Replace fake status bar with safe-area spacer — real OS draws its own */
+  .status-bar {
+    height: env(safe-area-inset-top, 20px);
+    padding: 0;
+  }
+
+  .status-bar > * {
+    display: none;
+  }
+}
+
+/* ── Screen Transition Wrapper ──────────────────────────────────────── */
+.screen-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+/* ── Scrollable Content ─────────────────────────────────────────────── */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 0;
+}
+
+.scroll-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Bottom Nav ─────────────────────────────────────────────────────── */
+.bottom-nav {
+  height: 71px;
+  background: var(--bk-bg-nav);
+  border-top: 1px solid var(--bk-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40.25px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 0;
+  color: var(--bk-text-muted);
+  opacity: 0.55;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.nav-btn.active {
+  color: var(--bk-brand-primary);
+  opacity: 1;
+}
+
+.nav-btn img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.nav-btn.active img,
+.nav-btn[data-active="true"] img {
+  opacity: 1;
+}
+
+.nav-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+[data-rac] {
+  outline: none;
+}
+
+.nav-btn-swap {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  background: var(--bk-brand-gradient) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.nav-btn-swap img {
+  width: 22px;
+  height: 22px;
+  opacity: 1 !important;
+}
+
+.nav-btn-swap[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* ── Drag Handle ────────────────────────────────────────────────────── */
+.drag-handle {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 0;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.drag-handle-pill {
+  width: 32px;
+  height: 4px;
+  background: var(--bk-border-subtle);
+  border-radius: 9999px;
+}
+
+/* ── Search Field ───────────────────────────────────────────────────── */
+.search-field {
+  height: 48.5px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.search-field img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  opacity: 0.5;
+}
+
+.search-field span,
+.search-field .placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-muted);
+}
+
+/* ── Pills ──────────────────────────────────────────────────────────── */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 37.5px;
+  padding: 0 13px;
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+  flex-shrink: 0;
+}
+
+.pill img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.chain-pill {
+  display: flex;
+  align-items: center;
+  height: 33.5px;
+  padding: 0 12px;
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-muted);
+  flex-shrink: 0;
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+
+.chain-pill.active {
+  background: var(--bk-brand-primary);
+  color: #fff;
+  border-color: var(--bk-brand-primary);
+  font-weight: 600;
+}
+
+/* ── Avatar with Badge ──────────────────────────────────────────────── */
+.avatar-wrap {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.avatar-wrap img.avatar {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.avatar-wrap .modulo-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 17px;
+  height: 17px;
+}
+
+/* ── Primary Button ─────────────────────────────────────────────────── */
+.primary-btn {
+  margin: 0 16px 20px;
+  width: calc(100% - 32px);
+  height: 56px;
+  background: var(--bk-brand-gradient);
+  box-shadow: 0 0 24px rgba(88, 75, 235, 0.3);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+}
+
+.primary-btn[data-focused] {
+  outline: 2px solid var(--bk-text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Close Button ───────────────────────────────────────────────────── */
+.close-btn-shared {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 0;
+}
+
+.close-btn-shared[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

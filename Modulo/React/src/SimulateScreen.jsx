@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import StatusBar from './StatusBar';
+
+const MotionButton = motion.create(Button);
 import { ChevronLeft, TrendingUp } from 'lucide-react';
 
 import tokenUsdc from './assets/token-usdc.svg';
@@ -64,10 +65,8 @@ export default function SimulateScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       <header className="simulate-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate(-1)}>
+        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
           <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
         </Button>
         <h1 className="simulate-title">What if?</h1>
@@ -76,26 +75,28 @@ export default function SimulateScreen() {
 
       {/* Tab bar */}
       <div className="simulate-tabs" role="tablist" aria-label="Simulator mode">
-        <button
+        <MotionButton
           className={`simulate-tab${tab === 'price' ? ' active' : ''}`}
           role="tab"
           aria-selected={tab === 'price'}
           aria-controls="panel-price"
           id="tab-price"
-          onClick={() => setTab('price')}
+          whileTap={{ scale: 0.95 }}
+          onPress={() => setTab('price')}
         >
           Price change
-        </button>
-        <button
+        </MotionButton>
+        <MotionButton
           className={`simulate-tab${tab === 'stake' ? ' active' : ''}`}
           role="tab"
           aria-selected={tab === 'stake'}
           aria-controls="panel-stake"
           id="tab-stake"
-          onClick={() => setTab('stake')}
+          whileTap={{ scale: 0.95 }}
+          onPress={() => setTab('stake')}
         >
           If I staked everything
-        </button>
+        </MotionButton>
       </div>
 
       <div className="scroll-content">

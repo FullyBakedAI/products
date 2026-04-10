@@ -19,6 +19,8 @@ import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
+
+const MotionButton = motion.create(Button);
 import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
 import { Delete, X, ChevronDown } from 'lucide-react';
@@ -48,10 +50,11 @@ function SwapHeader({ onClose }) {
 function TokenPill({ token, side, appear }) {
   const navigate = useNavigate();
   return (
-    <Button
+    <MotionButton
       className={`token-pill-btn${appear ? ' appear' : ''}`}
       aria-label={`${side === 'pay' ? 'Pay' : 'Receive'} token: ${token.symbol}, tap to change`}
       data-bk-component="token-pill"
+      whileTap={{ scale: 0.93 }}
       onPress={() => navigate(`/swap/select/${side}`)}
     >
       <span className="token-icon">
@@ -59,7 +62,7 @@ function TokenPill({ token, side, appear }) {
       </span>
       <span className="token-name">{token.symbol}</span>
       <ChevronDown size={13} color="var(--bk-text-muted)" strokeWidth={1.5} className="token-chevron" aria-hidden="true" />
-    </Button>
+    </MotionButton>
   );
 }
 
@@ -164,15 +167,16 @@ function PercentagePills({ activePct, payToken, onPress }) {
   return (
     <div className="pct-row" role="group" aria-label="Amount presets">
       {pills.map(({ label, pct }) => (
-        <Button
+        <MotionButton
           key={pct}
           className={`pct-pill-btn${activePct === pct ? ' active' : ''}`}
           aria-label={`Set amount to ${label}`}
           aria-pressed={activePct === pct}
+          whileTap={{ scale: 0.88 }}
           onPress={() => onPress(pct)}
         >
           {label}
-        </Button>
+        </MotionButton>
       ))}
     </div>
   );
@@ -183,17 +187,18 @@ function Numpad({ onKey }) {
   return (
     <div className="numpad" role="group" aria-label="Number input">
       {keys.map((key) => (
-        <Button
+        <MotionButton
           key={key}
           className="numpad-key-btn"
           aria-label={key === 'del' ? 'Delete last digit' : key}
+          whileTap={{ scale: 0.82 }}
           onPress={() => onKey(key)}
         >
           {key === 'del'
             ? <Delete size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} aria-hidden="true" />
             : key
           }
-        </Button>
+        </MotionButton>
       ))}
     </div>
   );

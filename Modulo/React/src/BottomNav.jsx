@@ -1,7 +1,7 @@
 import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useActions } from './ActionsContext';
-import { Home, BarChart3, Zap, Clock } from 'lucide-react';
+import { Home, BarChart3, Zap, Clock, SlidersHorizontal } from 'lucide-react';
 
 export default function BottomNav() {
   const navigate = useNavigate();
@@ -49,6 +49,16 @@ export default function BottomNav() {
       >
         <Clock size={20} strokeWidth={1.5} />
         <span className="nav-label">Activity</span>
+      </Button>
+
+      <Button
+        className={`nav-btn${isActive('/manage') ? ' active' : ''}`}
+        aria-label="Manage"
+        aria-current={isActive('/manage') ? 'page' : undefined}
+        onPress={() => navigate('/manage')}
+      >
+        <SlidersHorizontal size={20} strokeWidth={1.5} />
+        <span className="nav-label">Manage</span>
       </Button>
     </nav>
   );

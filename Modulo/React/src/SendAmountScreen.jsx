@@ -9,8 +9,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
+
+const MotionButton = motion.create(Button);
 import { X, ArrowRight } from 'lucide-react';
-import StatusBar from './StatusBar';
 import './send-amount.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -88,8 +89,6 @@ export default function SendAmountScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       {/* Header */}
       <div className="sa-header">
         <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
@@ -105,11 +104,11 @@ export default function SendAmountScreen() {
           <span className={`sa-amount-value${!hasAmount ? ' dimmed' : ''}${overBalance ? ' error' : ''}`}>
             {amount || '0'}
           </span>
-          <button className="sa-token-pill" onClick={() => setShowTokenPicker(!showTokenPicker)}>
+          <MotionButton className="sa-token-pill" aria-label="Select token" whileTap={{ scale: 0.93 }} onPress={() => setShowTokenPicker(!showTokenPicker)}>
             <img src={selectedToken.icon} width="22" height="22" alt="" />
             <span>{selectedToken.symbol}</span>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,4 6,8 10,4" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </button>
+          </MotionButton>
         </div>
         <div className="sa-usd-row">
           <span className="sa-usd">
@@ -118,7 +117,7 @@ export default function SendAmountScreen() {
         </div>
         <div className="sa-balance-row">
           <span className="sa-balance">Balance: {selectedToken.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })} {selectedToken.symbol}</span>
-          <button className="sa-max-btn" onClick={handleMax}>MAX</button>
+          <Button className="sa-max-btn" aria-label="Use maximum balance" onPress={handleMax}>MAX</Button>
         </div>
         {overBalance && (
           <div className="sa-error">Insufficient balance</div>
@@ -129,17 +128,18 @@ export default function SendAmountScreen() {
       {showTokenPicker && (
         <div className="sa-token-dropdown">
           {TOKENS.map(t => (
-            <button
+            <Button
               key={t.key}
               className={`sa-token-option${t.key === selectedToken.key ? ' active' : ''}`}
-              onClick={() => { setSelectedToken(t); setShowTokenPicker(false); setAmount(''); }}
+              aria-label={`Select ${t.symbol}`}
+              onPress={() => { setSelectedToken(t); setShowTokenPicker(false); setAmount(''); }}
             >
               <img src={t.icon} width="28" height="28" alt="" />
               <div className="sa-token-option-info">
                 <span className="sa-token-option-symbol">{t.symbol}</span>
                 <span className="sa-token-option-bal">{t.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       )}
@@ -147,11 +147,11 @@ export default function SendAmountScreen() {
       {/* Numpad */}
       <div className="sa-numpad">
         {['1','2','3','4','5','6','7','8','9','.','0','del'].map(k => (
-          <button key={k} className="sa-numpad-key" onClick={() => handleKey(k)} aria-label={k === 'del' ? 'Delete' : k}>
+          <MotionButton key={k} className="sa-numpad-key" whileTap={{ scale: 0.82 }} onPress={() => handleKey(k)} aria-label={k === 'del' ? 'Delete' : k}>
             {k === 'del' ? (
               <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><path d="M8 1L1 8L8 15" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 8H21" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             ) : k}
-          </button>
+          </MotionButton>
         ))}
       </div>
 

@@ -122,12 +122,12 @@ export default function ReceiveScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
         >
           {RECEIVE_TOKENS.map(t => (
-            <button
+            <Button
               key={t}
               className={`chain-pill${receiveToken === t ? ' active' : ''}`}
-              onClick={() => setReceiveToken(t)}
+              onPress={() => setReceiveToken(t)}
               aria-pressed={receiveToken === t}
-            >{t}</button>
+            >{t}</Button>
           ))}
         </motion.div>
 

@@ -105,45 +105,55 @@ export default function SuccessScreen() {
           ))}
         </motion.div>
 
-        <motion.div
-          className="success-actions"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 1.0 } }}
-        >
-          <Button
-            className="primary-btn"
-            style={{ margin: 0, width: '100%' }}
-            aria-label="View in Activity"
-            onPress={() => navigate('/activity')}
+        <div className="success-actions">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...m.springTight, delay: 1.0 }}
+            whileTap={{ scale: 0.97 }}
+            style={{ width: '100%' }}
           >
-            View in Activity
-          </Button>
-          <Button
-            className="bottom-cta-btn cta-disabled"
-            style={{ margin: '8px 0 0', width: '100%' }}
-            aria-label="Back to Portfolio"
-            onPress={() => navigate('/')}
+            <Button className="primary-btn" style={{ margin: 0, width: '100%' }} aria-label="View in Activity" onPress={() => navigate('/activity')}>
+              View in Activity
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...m.springTight, delay: 1.06 }}
+            whileTap={{ scale: 0.97 }}
+            style={{ width: '100%' }}
           >
-            Back to Portfolio
-          </Button>
-          <Button
-            className="bottom-cta-btn success-nudge-btn"
-            style={{ margin: '8px 0 0', width: '100%' }}
-            aria-label={`Set a price alert for ${action === 'swap' ? 'this token' : action}`}
-            onPress={() => navigate('/settings')}
+            <Button className="success-secondary-btn" aria-label="Back to Portfolio" onPress={() => navigate('/')}>
+              Back to Portfolio
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...m.springTight, delay: 1.12 }}
+            whileTap={{ scale: 0.97 }}
+            style={{ width: '100%' }}
           >
-            <img src={iconNotif} width="14" height="14" aria-hidden="true" />
-            Set a price alert
-          </Button>
-          <button
-            className="success-share-btn"
-            aria-label="Share transaction"
-            onClick={() => { if (navigator.share) navigator.share({ title: 'Modulo', text: `${action} complete` }).catch(() => {}); }}
+            <Button className="success-nudge-btn" aria-label={`Set a price alert for ${action === 'swap' ? 'this token' : action}`} onPress={() => navigate('/settings')}>
+              <img src={iconNotif} width="14" height="14" aria-hidden="true" /> Set a price alert
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...m.springTight, delay: 1.18 }}
+            whileTap={{ scale: 0.97 }}
+            style={{ width: '100%' }}
           >
-            <img src={iconShare} width="13" height="13" aria-hidden="true" />
-            Share
-          </button>
-        </motion.div>
+            <Button className="success-share-btn" aria-label="Share transaction" onPress={() => { if (navigator.share) navigator.share({ title: 'Modulo', text: `${action} complete` }).catch(() => {}); }}>
+              <img src={iconShare} width="13" height="13" aria-hidden="true" /> Share
+            </Button>
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );

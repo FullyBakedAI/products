@@ -1,0 +1,461 @@
+/**
+ * AssetScreen — asset command centre
+ *
+ * Chart improvements (TradingView-inspired):
+ *   - Trend-direction fill: green gradient when positive, red when negative
+ *   - Floating crosshair price label: follows the cursor/touch, shows price at point
+ *   - Live period switch: updates series data without recreating the chart
+ *
+ * Earn prominence (Ledger Live-inspired):
+ *   - APY + projected earn displayed as prominently as the current price
+ *
+ * Route: /asset/:id  (modal slide-up)
+ */
+
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { motion as m } from './motion-tokens';
+import { Button } from 'react-aria-components';
+import StatusBar from './StatusBar';
+import {
+  X, ArrowUp, ArrowDown,
+  Zap, Landmark, TrendingUp, ExternalLink,
+} from 'lucide-react';
+import { createChart, AreaSeries } from 'lightweight-charts';
+import './asset.css';
+
+import iconSettings   from './assets/icon-settings.svg';
+import iconActionSend from './assets/icon-action-send.svg';
+import iconActionRecv from './assets/icon-action-receive.svg';
+import iconActionSwap from './assets/icon-action-swap.svg';
+
+import tokenUsdc from './assets/token-usdc.svg';
+import tokenBtc  from './assets/token-btc.svg';
+import tokenEth  from './assets/token-eth.svg';
+import tokenSol  from './assets/token-sol.svg';
+import tokenUsdt from './assets/token-usdt.svg';
+
+// ─── Token data ───────────────────────────────────────────────────────────────
+
+const TOKEN_MAP = {
+  usdc: {
+    icon: tokenUsdc, name: 'USD Coin', symbol: 'USDC',
+    amount: '5,342.9824', usd: 5342.98, change24h: 0.00, negative: false,
+    yield: 0.048, yieldUsd: 256.46,
+    priceRange: [0.999, 1.001], chainPrice: '$1.00',
+    chains: [{ name: 'Ethereum', amount: '3,000', usd: '$3,000' }, { name: 'Arbitrum', amount: '2,342.98', usd: '$2,342.98' }],
+    activePositions: [
+      { type: 'lend', protocol: 'Aave v3', chain: 'Ethereum', amount: '3,000 USDC', apy: 3.8, earnPerYear: '$114/yr' },
+    ],
+  },
+  btc: {
+    icon: tokenBtc, name: 'Bitcoin', symbol: 'BTC',
+    amount: '0.0574', usd: 5616.88, change24h: 2.14, negative: false,
+    yield: 0.018, yieldUsd: 101.10,
+    priceRange: [90000, 105000], chainPrice: '$97,855',
+    chains: [{ name: 'Bitcoin', amount: '0.0574', usd: '$5,616.88' }],
+    activePositions: [],
+  },
+  eth: {
+    icon: tokenEth, name: 'Ethereum', symbol: 'ETH',
+    amount: '1.1421', usd: 4412.82, change24h: 4.38, negative: false,
+    yield: 0.038, yieldUsd: 167.69,
+    priceRange: [3600, 4600], chainPrice: '$3,864',
+    chains: [{ name: 'Ethereum', amount: '0.6421', usd: '$2,481' }, { name: 'Base', amount: '0.5', usd: '$1,932' }],
+    activePositions: [
+      { type: 'stake', protocol: 'Lido', chain: 'Ethereum', amount: '1.0 ETH', apy: 4.2, earnPerYear: '$167/yr' },
+    ],
+  },
+  sol: {
+    icon: tokenSol, name: 'Solana', symbol: 'SOL',
+    amount: '17.4352', usd: 4228.38, change24h: -1.82, negative: true,
+    yield: 0.068, yieldUsd: 287.53,
+    priceRange: [220, 280], chainPrice: '$242',
+    chains: [{ name: 'Solana', amount: '17.4352', usd: '$4,228.38' }],
+    activePositions: [],
+  },
+  usdt: {
+    icon: tokenUsdt, name: 'Tether', symbol: 'USDT',
+    amount: '3,398.7553', usd: 3398.75, change24h: 0.00, negative: false,
+    yield: 0.046, yieldUsd: 156.34,
+    priceRange: [0.999, 1.001], chainPrice: '$1.00',
+    chains: [{ name: 'Ethereum', amount: '3,398.7553', usd: '$3,398.75' }],
+    activePositions: [],
+  },
+};
+
+// ─── Chart data ───────────────────────────────────────────────────────────────
+
+function generateChartData(symbol, period) {
+  const token = TOKEN_MAP[symbol];
+  if (!token) return [];
+  const [lo, hi] = token.priceRange;
+  const mid = (lo + hi) / 2;
+  const now = Math.floor(Date.now() / 1000);
+  const configs = {
+    '1D':  { points: 48, step: 1800    },
+    '1W':  { points: 84, step: 7200    },
+    '1M':  { points: 60, step: 43200   },
+    '1Y':  { points: 52, step: 604800  },
+    'ALL': { points: 60, step: 2592000 },
+  };
+  const { points, step } = configs[period] || configs['1D'];
+  let price = mid;
+  return Array.from({ length: points + 1 }, (_, i) => {
+    const time = now - (points - i) * step;
+    const drift = (mid - price) * 0.08;
+    const noise = (Math.random() - 0.5) * (hi - lo) * 0.06;
+    price = Math.max(lo, Math.min(hi, price + drift + noise));
+    const decimals = (symbol === 'usdc' || symbol === 'usdt') ? 4 : 2;
+    return { time, value: parseFloat(price.toFixed(decimals)) };
+  });
+}
+
+// ─── Price chart — live period switch, crosshair float label ─────────────────
+
+function PriceChart({ symbol, period, negative, onCrosshairPrice }) {
+  const containerRef = useRef(null);
+  const chartRef     = useRef(null);
+  const seriesRef    = useRef(null);
+
+  // Create chart once
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+
+    const chart = createChart(el, {
+      width:  el.clientWidth,
+      height: 130,
+      layout: {
+        background:  { type: 'solid', color: 'transparent' },
+        textColor:   'rgba(135,135,140,0)',  // hide axis labels for clean look
+        fontSize:    10,
+        fontFamily:  "'Inter', sans-serif",
+      },
+      grid:            { vertLines: { visible: false }, horzLines: { visible: false } },
+      crosshair:       { mode: 1 },
+      rightPriceScale: { visible: false },  // hide price axis — we show floating label
+      timeScale:       { visible: false },  // hide time axis — clean chart
+      handleScroll:    false,
+      handleScale:     false,
+    });
+
+    const lineColor = negative ? '#F04348' : '#584BEB';
+    const topColor  = negative ? 'rgba(240,67,72,0.25)' : 'rgba(88,75,235,0.25)';
+
+    const series = chart.addSeries(AreaSeries, {
+      lineColor,
+      topColor,
+      bottomColor:                    'rgba(0,0,0,0)',
+      lineWidth:                      2,
+      priceLineVisible:               false,
+      lastValueVisible:               false,
+      crosshairMarkerVisible:         true,
+      crosshairMarkerRadius:          5,
+      crosshairMarkerBorderColor:     lineColor,
+      crosshairMarkerBackgroundColor: lineColor,
+    });
+
+    const data = generateChartData(symbol, period);
+    series.setData(data);
+    chart.timeScale().fitContent();
+
+    // Floating price label on crosshair move
+    chart.subscribeCrosshairMove(param => {
+      if (param.point && param.seriesData.size > 0) {
+        const entry = param.seriesData.get(series);
+        if (entry) onCrosshairPrice(entry.value, param.point.x / el.clientWidth);
+      } else {
+        onCrosshairPrice(null, null);
+      }
+    });
+
+    chartRef.current  = chart;
+    seriesRef.current = series;
+
+    const ro = new ResizeObserver(() => { chart.applyOptions({ width: el.clientWidth }); });
+    ro.observe(el);
+    return () => { ro.disconnect(); chart.remove(); chartRef.current = null; };
+  }, [symbol, negative]); // recreate only when asset changes
+
+  // Live period switch — update data without recreating chart
+  useEffect(() => {
+    if (!seriesRef.current || !chartRef.current) return;
+    const data = generateChartData(symbol, period);
+    seriesRef.current.setData(data);
+    chartRef.current.timeScale().fitContent();
+  }, [period]); // eslint-disable-line
+
+  return <div ref={containerRef} className="asset-chart-canvas" aria-hidden="true" />;
+}
+
+// ─── Main screen ──────────────────────────────────────────────────────────────
+
+const PERIODS  = ['1D', '1W', '1M', '1Y', 'ALL'];
+const MAX_YIELD = 0.068;
+const fmt = (n) => n >= 10000
+  ? `$${(n / 1000).toFixed(1)}k`
+  : `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+export default function AssetScreen() {
+  const { id }   = useParams();
+  const navigate = useNavigate();
+  const [period, setPeriod]             = useState('1D');
+  const [crosshairPrice, setCrosshair]  = useState(null);  // floating label value
+  const [crosshairX, setCrosshairX]     = useState(null);  // 0–1 normalized
+  const t = TOKEN_MAP[id];
+
+  const handleCrosshair = useCallback((price, x) => {
+    setCrosshair(price);
+    setCrosshairX(x);
+  }, []);
+
+  if (!t) {
+    return (
+      <motion.div className="swap-screen-inner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <StatusBar />
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--bk-text-muted)' }}>Asset not found.</div>
+      </motion.div>
+    );
+  }
+
+  const changeSign  = t.change24h > 0 ? '+' : '';
+  const changeColor = t.negative ? 'var(--bk-error)' : 'var(--bk-success)';
+  const lineColor   = t.negative ? '#F04348' : '#584BEB';
+
+  // Price shown: crosshair override when scrubbing, else current price
+  const displayPrice = crosshairPrice
+    ? (crosshairPrice >= 1000
+        ? `$${crosshairPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}`
+        : `$${crosshairPrice.toFixed(crosshairPrice < 2 ? 4 : 2)}`)
+    : t.chainPrice;
+
+  return (
+    <motion.div
+      role="main"
+      aria-label={`${t.name} detail`}
+      className="swap-screen-inner asset-screen"
+      initial={{ opacity: 0, y: m.modal.offsetEnter }}
+      animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
+      exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
+    >
+      <StatusBar />
+
+      {/* ── Header — SwapScreen pattern ── */}
+      <div className="swap-header">
+        <div className="header-left">
+          <Button className="close-btn" aria-label="Back" onPress={() => navigate(-1)}>
+            <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+          </Button>
+          <div className="asset-header-title">
+            <img src={t.icon} alt="" width="20" height="20" style={{ borderRadius: '50%', display: 'block' }} />
+            <h1 className="swap-title">{t.name}</h1>
+          </div>
+        </div>
+        <Button className="settings-btn" aria-label="More options">
+          <img src={iconSettings} width="20" height="20" aria-hidden="true" />
+        </Button>
+      </div>
+
+      <div className="scroll-content asset-scroll">
+
+        {/* ── Price + chart ── */}
+        <div className="asset-price-section">
+          {/* Price row — large, light weight (Coinbase) */}
+          <div className="asset-price-row">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={displayPrice}
+                className="swap-amount asset-price-value"
+                initial={{ opacity: 0.6 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0.6 }}
+                transition={{ duration: 0.1 }}
+              >
+                <span className="amount-text">{displayPrice}</span>
+              </motion.span>
+            </AnimatePresence>
+            {!crosshairPrice && (
+              <span className="asset-change-badge" style={{ color: changeColor }}>
+                {t.negative
+                  ? <ArrowDown size={12} strokeWidth={2} aria-hidden="true" />
+                  : <ArrowUp   size={12} strokeWidth={2} aria-hidden="true" />
+                }
+                {changeSign}{Math.abs(t.change24h).toFixed(2)}% today
+              </span>
+            )}
+          </div>
+
+          {/* Earn metric — Ledger Live: as prominent as the price */}
+          <div className="asset-earn-row">
+            <div className="asset-earn-metric">
+              <span className="asset-earn-apy" style={{ color: lineColor }}>
+                {(t.yield * 100).toFixed(1)}% APY
+              </span>
+              <span className="asset-earn-projected">
+                {fmt(t.yieldUsd)} projected / year
+              </span>
+            </div>
+          </div>
+
+          {/* Chart — trend-direction fill, crosshair float label */}
+          <div className="asset-chart-wrap">
+            <PriceChart
+              symbol={id}
+              period={period}
+              negative={t.negative}
+              onCrosshairPrice={handleCrosshair}
+            />
+          </div>
+
+          {/* Period pills — home.css .time-btn */}
+          <div className="time-periods asset-period-tabs" role="group" aria-label="Chart period">
+            {PERIODS.map(p => (
+              <Button
+                key={p}
+                className={`time-btn${period === p ? ' active' : ''}`}
+                aria-pressed={period === p}
+                onPress={() => setPeriod(p)}
+              >{p}</Button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Position ── */}
+        <div className="asset-position-wrap">
+          <div className="asset-position-card">
+            <div className="card-label">Your position</div>
+            <div className="asset-pos-row">
+              <div className="asset-pos-left">
+                <img src={t.icon} alt={t.name} width="36" height="36" className="asset-token-img" />
+                <div>
+                  <div className="asset-pos-amount">{t.amount} {t.symbol}</div>
+                </div>
+              </div>
+              <div className="asset-pos-right">
+                <div className="asset-pos-usd">{fmt(t.usd)}</div>
+                <div className="asset-pos-change" style={{ color: changeColor }}>
+                  {changeSign}{Math.abs(t.change24h).toFixed(2)}% today
+                </div>
+              </div>
+            </div>
+
+            {/* Yield bar */}
+            <div className="token-yield-bar-row token-yield-bar-row-top">
+              <div className="token-yield-track">
+                <motion.div
+                  className="token-yield-fill"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: t.yield / MAX_YIELD }}
+                  transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </div>
+            </div>
+
+            {/* Chain pills */}
+            {t.chains.length > 1 && (
+              <div className="asset-chain-pills">
+                {t.chains.map(c => (
+                  <span key={c.name} className="chain-pill">{c.name} · {c.amount}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── Quick actions — home.css action-row ── */}
+        <motion.div className="action-row" role="group" aria-label="Quick actions"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}>
+          {[
+            { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
+            { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
+            { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
+            { label: 'Actions', Icon: Zap,           action: () => navigate(`/actions?asset=${id}`) },
+          ].map(({ label, src, Icon, action }) => (
+            <Button key={label} className="action-btn" aria-label={label} onPress={action}>
+              {src
+                ? <img src={src} width="20" height="20" aria-hidden="true" />
+                : <Icon size={20} color="var(--bk-brand-primary)" strokeWidth={1.5} aria-hidden="true" />
+              }
+              <span className="action-label">{label}</span>
+            </Button>
+          ))}
+        </motion.div>
+
+        {/* ── Put it to work — swap-card list ── */}
+        <div className="asset-section">
+          <div className="portfolio-label">Put it to work</div>
+          <div className="asset-opp-list">
+            {[
+              { Icon: Zap,        label: 'Stake',         sub: `Up to 6.8% APY · Flexible or locked`,   tab: 'lend'   },
+              { Icon: Landmark,   label: 'Lend & Borrow', sub: 'Earn on idle assets · Use as collateral', tab: 'lend'  },
+              { Icon: TrendingUp, label: 'Trade',          sub: 'Market & limit orders',                  tab: 'trade' },
+            ].map(({ Icon, label, sub, tab }, i) => (
+              <button key={label}
+                className={`asset-opp-row${i === 0 ? ' first' : i === 2 ? ' last' : ''}`}
+                onClick={() => navigate(`/actions?tab=${tab}&asset=${id}`)}
+                aria-label={label}>
+                <Icon size={20} strokeWidth={1.5} color="var(--bk-brand-primary)" aria-hidden="true" />
+                <div className="asset-opp-text">
+                  <span className="asset-opp-label">{label}</span>
+                  <span className="card-label">{sub}</span>
+                </div>
+                <span className="asset-opp-chevron">›</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Active positions ── */}
+        {t.activePositions.length > 0 && (
+          <div className="asset-section-top">
+            <div className="portfolio-label">Active positions</div>
+            {t.activePositions.map((pos, i) => {
+              const PosIcon = pos.type === 'stake' ? Zap : Landmark;
+              return (
+                <div key={i} className="asset-active-card">
+                  <div className="asset-pos-row asset-pos-row-wrap">
+                    <div className="asset-pos-left">
+                      <PosIcon size={18} strokeWidth={1.5} color="var(--bk-brand-primary)" aria-hidden="true" />
+                      <div>
+                        <div className="token-name-text">{pos.protocol}</div>
+                        <div className="token-amount">{pos.chain}</div>
+                      </div>
+                    </div>
+                    <span className="asset-active-badge">Active</span>
+                  </div>
+                  <div className="asset-pos-stats">
+                    {[['Position', pos.amount, false], ['APY', `${pos.apy}%`, true], ['Earning', pos.earnPerYear, true]].map(([lbl, val, green]) => (
+                      <div key={lbl} className="asset-pos-stat">
+                        <div className="card-label">{lbl}</div>
+                        <div className={`asset-pos-stat-value${green ? ' positive' : ''}`}>{val}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <Button
+                    className="bottom-cta-btn cta-disabled asset-manage-btn"
+                    aria-label={`Manage ${pos.protocol}`}
+                    onPress={() => navigate(`/actions?tab=lend&asset=${id}`)}>
+                    Manage position →
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Contract */}
+        <div className="asset-contract-row">
+          <span className="card-label">Contract</span>
+          <button className="asset-contract-btn" aria-label="View on explorer">
+            0x2260…1d1e <ExternalLink size={11} strokeWidth={1.5} aria-hidden="true" />
+          </button>
+        </div>
+
+      </div>
+    </motion.div>
+  );
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Modulo",
+  "short_name": "Modulo",
+  "description": "One vault, every chain.",
+  "start_url": "/modulo/",
+  "scope": "/modulo/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0E17",
+  "theme_color": "#0D0E17",
+  "icons": [
+    {
+      "src": "/modulo/assets/logo-modulo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

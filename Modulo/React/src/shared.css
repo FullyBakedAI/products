@@ -18,12 +18,19 @@ html, body {
   width: 100%;
   max-width: 402px;
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
   background: var(--bk-bg-base);
   position: relative;
   display: flex;
   flex-direction: column;
 }
+
+/* Safe-area padding lives on each screen, NOT on .phone.
+   Reason: .phone uses min-height:100dvh with box-sizing:content-box, so any
+   padding-top here increases total height beyond 100dvh, making absolutely-
+   positioned .screen-wrapper taller than the viewport and pushing BottomNav
+   off the bottom of the screen. */
 
 /* Desktop: render as iPhone 17 Pro frame — always exactly 402px */
 @media (min-width: 501px) {
@@ -36,6 +43,7 @@ html, body {
     border-radius: 44px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     margin: auto;
+    padding-top: 0 !important;
   }
 }
 
@@ -133,6 +141,11 @@ html, body {
   height: 100%;
   overflow: hidden;
   will-change: transform, opacity;
+  /* Safe-area inset — applies to every screen automatically.
+     box-sizing:border-box keeps the border-box at exactly 100dvh so
+     BottomNav stays pinned. padding-top pushes content below the notch. */
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* ── Scrollable Content ─────────────────────────────────────────────── */
@@ -150,16 +163,16 @@ html, body {
 
 /* ── Bottom Nav ─────────────────────────────────────────────────────── */
 .bottom-nav {
-  height: 71px;
+  height: calc(71px + env(safe-area-inset-bottom, 0px));
   background: var(--bk-bg-nav);
   border-top: 1px solid var(--bk-border-subtle);
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  align-items: start;
   justify-items: center;
   flex-shrink: 0;
   position: relative;
-  padding: 0 8px;
+  padding: 8px 8px env(safe-area-inset-bottom, 0px);
 }
 
 .nav-btn {
@@ -342,9 +355,66 @@ html, body {
   height: 17px;
 }
 
+/* ── Action Buttons (shared: AssetScreen, etc.) ────────────────────── */
+.action-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 20px;
+  gap: 10px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.action-btn {
+  width: 100%;
+  height: 70.5px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 13px 0;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.93);
+  background: var(--bk-bg-card-alt);
+}
+
+.action-btn[data-hovered] {
+  background: var(--bk-bg-card-alt);
+}
+
+.action-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.action-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.action-label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bk-text-secondary);
+}
+
 /* ── Primary Button ─────────────────────────────────────────────────── */
 .primary-btn {
-  margin: 0 16px 20px;
+  margin: 0 16px calc(20px + env(safe-area-inset-bottom, 0px));
   width: calc(100% - 32px);
   height: 56px;
   background: var(--bk-brand-gradient);
