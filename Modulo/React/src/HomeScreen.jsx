@@ -146,14 +146,14 @@ function AchievementToast({ onClose }) {
           <div className="achievement-toast-label">Achievement unlocked</div>
           <div className="achievement-toast-title">Century Club 🎉</div>
         </div>
-        <button
+        <Button
           className="nudge-dismiss-btn"
           aria-label="Dismiss"
-          onClick={onClose}
-          style={{ color: 'var(--bk-text-muted)' }}
+          onPress={onClose}
+          style={{ color: 'var(--bk-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
           ×
-        </button>
+        </Button>
       </div>
     </motion.div>
   );
@@ -202,12 +202,11 @@ function TokenRow({ t, index }) {
 
       <div className="token-swipe-actions">
         {SWIPE_ACTIONS.map(({ id, label, Icon, svgSrc, cls }) => (
-          <button
+          <Button
             key={id}
             className={`swipe-action ${cls}`}
             aria-label={`${label} ${t.name}`}
-            onClick={(e) => {
-              e.stopPropagation();
+            onPress={() => {
               snap(false);
               setTimeout(() => {
                 if (id === 'swap')        navigate('/swap');
@@ -222,7 +221,7 @@ function TokenRow({ t, index }) {
               : <Icon size={18} strokeWidth={1.5} />
             }
             <span>{label}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -303,8 +302,23 @@ export default function HomeScreen() {
 
   // F2: Live balance
   const { balance, glowing } = useLiveBalance(yieldActive);
-  const balanceDollars = Math.floor(balance).toLocaleString('en-US');
-  const balanceCents   = (balance % 1).toFixed(4).slice(1); // ".8312"
+
+  // Portfolio count-up on mount (0 → BASE_BALANCE over 600ms)
+  const [countedUp, setCountedUp]       = useState(false);
+  const [mountBalance, setMountBalance] = useState(0);
+  useEffect(() => {
+    const ctrl = animate(0, BASE_BALANCE, {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      onUpdate: (v) => setMountBalance(v),
+      onComplete: () => setCountedUp(true),
+    });
+    return ctrl.stop;
+  }, []);
+
+  const activeBalance  = countedUp ? balance : mountBalance;
+  const balanceDollars = Math.floor(activeBalance).toLocaleString('en-US');
+  const balanceCents   = (activeBalance % 1).toFixed(4).slice(1); // ".8312"
 
   // F6: Demo achievement toast — fires 4s after mount
   useEffect(() => {
@@ -401,48 +415,46 @@ export default function HomeScreen() {
           </div>
 
           {/* F5: "What if?" link */}
-          <button
+          <Button
             className="portfolio-whatif-btn"
             aria-label="Open What-if simulator"
-            onClick={() => navigate('/simulate')}
+            onPress={() => navigate('/simulate')}
           >
             What if? →
-          </button>
+          </Button>
         </motion.section>
 
-        {/* Action Buttons */}
-        <motion.div
-          className="action-row"
-          data-bk-component="action-row"
-          role="group"
-          aria-label="Quick actions"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
-        >
-          <Button className="action-btn" aria-label="Swap tokens" onPress={() => navigate('/swap')}>
-            <img src={iconActionSwap} alt="" width="20" height="20" aria-hidden="true" />
-            <span className="action-label">Swap</span>
-          </Button>
-          <Button className="action-btn" aria-label="Buy tokens" onPress={() => openActions({ tab: 'deposit' })}>
-            <img src={iconActionBuy} alt="" width="20" height="20" aria-hidden="true" />
-            <span className="action-label">Buy</span>
-          </Button>
-          <Button className="action-btn" aria-label="Send tokens" onPress={() => navigate('/send')}>
-            <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />
-            <span className="action-label">Send</span>
-          </Button>
-          <Button className="action-btn" aria-label="Receive tokens" onPress={() => navigate('/receive')}>
-            <img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" />
-            <span className="action-label">Receive</span>
-          </Button>
-        </motion.div>
+        {/* Action Buttons — staggered spring entrance + whileTap feedback */}
+        <div className="action-row" data-bk-component="action-row" role="group" aria-label="Quick actions">
+          {[
+            { label: 'Swap',    icon: iconActionSwap, ariaLabel: 'Swap tokens',    onPress: () => navigate('/swap')                   },
+            { label: 'Buy',     icon: iconActionBuy,  ariaLabel: 'Buy tokens',     onPress: () => openActions({ tab: 'deposit' })      },
+            { label: 'Send',    icon: iconActionSend, ariaLabel: 'Send tokens',    onPress: () => navigate('/send')                    },
+            { label: 'Receive', icon: iconActionRecv, ariaLabel: 'Receive tokens', onPress: () => navigate('/receive')                 },
+          ].map((btn, i) => (
+            <motion.div
+              key={btn.label}
+              whileTap={{ scale: 0.88 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ ...m.springTight, delay: 0.08 + i * 0.05 }}
+            >
+              <Button className="action-btn" aria-label={btn.ariaLabel} onPress={btn.onPress}>
+                <img src={btn.icon} alt="" width="20" height="20" aria-hidden="true" />
+                <span className="action-label">{btn.label}</span>
+              </Button>
+            </motion.div>
+          ))}
+        </div>
 
-        {/* F1: "Put It All To Work" promo card */}
+        {/* F1: "Put It All To Work" promo card — spring scale entrance */}
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
+          initial={{ opacity: 0, y: 12, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ ...m.spring, delay: 0.16 }}
         >
-          <button className="optimise-promo-card" aria-label="Put it all to work — optimise all assets" onClick={() => navigate('/optimise')}>
+          <motion.div className="optimise-promo-card" whileTap={{ scale: 0.98 }}>
+          <Button aria-label="Put it all to work — optimise all assets" onPress={() => navigate('/optimise')} style={{ all: 'unset', display: 'contents', cursor: 'pointer' }}>
             <div className="optimise-promo-icon" aria-hidden="true">
               <Sparkles size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} />
             </div>
@@ -451,7 +463,8 @@ export default function HomeScreen() {
               <div className="optimise-promo-sub">Estimated +$969/yr across 4 protocols</div>
             </div>
             <span className="optimise-promo-btn" aria-hidden="true">Optimise</span>
-          </button>
+          </Button>
+          </motion.div>
         </motion.div>
 
         {/* F4: SmartNudges horizontal scroll */}
@@ -466,13 +479,18 @@ export default function HomeScreen() {
           <span className="positions-title">
             Positions <span className="positions-count">{TOKENS.length}</span>
           </span>
-          <button
-            className="positions-sort-btn"
-            aria-label={`Sort by ${sortBy === 'size' ? 'size' : 'performance'}`}
-            onClick={() => setSortBy(s => s === 'size' ? 'performance' : 'size')}
-          >
-            {sortBy === 'size' ? 'Size' : 'Performance'} ↕
-          </button>
+          <div className="positions-sort-group" role="group" aria-label="Sort positions">
+            <button
+              className={`positions-sort-opt${sortBy === 'size' ? ' active' : ''}`}
+              aria-pressed={sortBy === 'size'}
+              onClick={() => setSortBy('size')}
+            >Size</button>
+            <button
+              className={`positions-sort-opt${sortBy === 'performance' ? ' active' : ''}`}
+              aria-pressed={sortBy === 'performance'}
+              onClick={() => setSortBy('performance')}
+            >Perf</button>
+          </div>
         </motion.div>
 
         {activeAssetTab === 'tokens' ? (
