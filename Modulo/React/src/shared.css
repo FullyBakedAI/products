@@ -4,6 +4,15 @@
    All values via --bk-* tokens. No hardcoded hex.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* ── Global base — prevents white flash on iOS overscroll / load ──── */
+html, body {
+  background: #0D0E17;
+  color-scheme: dark;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 /* ── Phone Frame ────────────────────────────────────────────────────── */
 .phone {
   width: 100%;

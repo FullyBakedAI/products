@@ -25,7 +25,10 @@
   transition: background 0.1s ease;
 }
 
-.tx-row:hover,
+/* hover: only on true-hover devices (not touch) — iOS `:hover` persists after tap */
+@media (hover: hover) {
+  .tx-row:hover { background: var(--bk-bg-card); }
+}
 .tx-row:active { background: var(--bk-bg-card); }
 
 /* Secondary token icon overlay */
