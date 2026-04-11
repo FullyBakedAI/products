@@ -12,27 +12,41 @@ Cross-chain DeFi wallet. "One vault, every chain."
 
 Also see: `Skills/foundations.md` (typography, spacing, principles), `Skills/README.md` (how to use)
 
-## Structure
+## Architecture — v4 Target (see `Spec/full-build-spec.md`)
+
+The component library is the primary deliverable. Modulo-the-product is built on top of it.
 
 ```
 Modulo/
 ├── CLAUDE.md
+├── BakeKit/           — white-label component library docs
 ├── Skills/            — agentic design system rules
-├── React/             — React source code
-│   ├── src/
-│   │   ├── ds/        — design system page (Brand, Studio, Rules, Agentic Guide)
-│   │   └── assets/    — SVG icons from Figma
-│   ├── package.json
-│   └── vite.config.js
+├── React/src/
+│   ├── components/    ← WHITE-LABEL LIBRARY (extract here first)
+│   │   ├── AppButton/
+│   │   ├── Card/
+│   │   ├── TokenListItem/
+│   │   ├── ActionBar/
+│   │   ├── BottomNav/
+│   │   ├── SearchInput/
+│   │   ├── PillFilter/
+│   │   ├── SwapCard/
+│   │   ├── ScreenHeader/
+│   │   ├── PriceDisplay/
+│   │   ├── YieldBar/
+│   │   ├── ChainPill/
+│   │   └── index.js
+│   ├── theme/         ← BrandProvider + modulo-theme.js
+│   ├── ds/            — design system page
+│   └── assets/        — SVG icons from Figma
 ├── Prototype/modulo/  — built output (served via tunnel)
-├── ProductBrief/
-├── Personas/
-├── Discovery/
-├── Spec/
-├── VERSIONS.md        — version history (v1, v2 via git tags)
+├── Spec/              — build specs and assessments
+├── VERSIONS.md
 ├── design-manifest.json
 └── product.json
 ```
+
+**Before building any screen:** check `components/` first. If the pattern exists there, use it. If not, extract it before using it inline.
 
 ## Build
 ```bash
@@ -76,6 +90,12 @@ cd React && npm run build    # → outputs to Prototype/modulo/
 6. React ARIA `Button` with `onPress`
 7. Motion from `motion-tokens.js`
 8. WCAG 2.1 AA minimum
+9. Components go in `components/` first, screens consume them — never inline a pattern that belongs in the library
+10. `box-sizing: border-box` on any element using `height: 100%` with `padding-top` (prevents layout overflow on iOS)
+11. Never add `-webkit-user-select: none` to `<button>` elements — WebKit bug collapses grid/flex items (see shared.css comment)
+
+## White-Label
+All components must accept theming via `--bk-*` CSS custom properties set by `ThemeProvider`. No component should reference Modulo branding directly. The theme config lives in `theme/modulo-theme.js` — swapping it rebrands the whole product.
 
 ## Figma
 - **File key:** `rTAg5ODay1ac1ZZBq8lYwr`
