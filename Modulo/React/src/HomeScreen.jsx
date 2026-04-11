@@ -71,6 +71,7 @@ import { useIconOverride } from './IconOverrideContext';
 
 import SmartNudges     from './SmartNudges';
 import logoModulo      from './assets/logo-modulo.svg';
+import iconModuloBadge from './assets/icon-modulo-badge.svg';
 import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
 import iconSettings    from './assets/icon-settings.svg';
@@ -495,7 +496,7 @@ export default function HomeScreen() {
         >
           <motion.div className="optimise-promo-card" whileTap={{ scale: 0.98 }}>
           <Button aria-label="Put it all to work — optimise all assets" onPress={() => navigate('/optimise')} style={{ all: 'unset', display: 'contents', cursor: 'pointer' }}>
-            <img src={logoModulo} alt="" aria-hidden="true" style={{ width: 28, height: 28, flexShrink: 0, objectFit: 'contain' }} />
+            <img src={iconModuloBadge} alt="" aria-hidden="true" style={{ width: 28, height: 28, flexShrink: 0, objectFit: 'contain' }} />
             <div className="optimise-promo-text">
               <div className="optimise-promo-headline">Put it all to work</div>
               <div className="optimise-promo-sub">Estimated +$969/yr · 4.2% avg APY across 4 protocols</div>
