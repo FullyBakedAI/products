@@ -102,7 +102,7 @@ export default function SmartNudges() {
                   aria-label={`Dismiss: ${headline}`}
                   onPress={() => dismiss(id)}
                 >
-                  <X size={11} strokeWidth={2.5} />
+                  <IconX />
                 </Button>
               </div>
               <p className="nudge-headline">{headline}</p>
