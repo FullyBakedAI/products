@@ -250,7 +250,7 @@ function TokenRow({ t, index }) {
             onPress={() => {
               snap(false);
               setTimeout(() => {
-                if (id === 'swap')        navigate('/swap');
+                if (id === 'swap')        openActions({ tab: 'swap', asset: t.id });
                 else if (id === 'manage') navigate(`/asset/${t.id}`);
                 else if (id === 'stake')  openActions({ tab: 'lend', asset: t.id });
                 else                      openActions({ tab: id, asset: t.id });

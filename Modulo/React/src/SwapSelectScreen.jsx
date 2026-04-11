@@ -9,6 +9,7 @@ import { Button } from 'react-aria-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
+import { useActions } from './ActionsContext';
 import { SWAP_TOKENS, TOKEN_ORDER } from './tokens-data';
 import './swap-select.css';
 
@@ -18,10 +19,12 @@ export default function SwapSelectScreen() {
   const navigate = useNavigate();
   const { side }  = useParams();
   const { selectToken, payKey, receiveKey } = useSwap();
+  const { openActions } = useActions();
 
   function handleSelect(symbol) {
     selectToken(side, symbol);
-    navigate('/swap');
+    openActions({ tab: 'swap' });
+    navigate('/');
   }
 
   return (
@@ -34,7 +37,7 @@ export default function SwapSelectScreen() {
 
       <div className="select-header">
         <span className="select-title">Select token</span>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/swap')}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => { openActions({ tab: 'swap' }); navigate('/'); }}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M16.5 5.5L5.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />
             <path d="M5.5 5.5L16.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />

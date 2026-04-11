@@ -552,7 +552,7 @@ export default function AssetScreen() {
         {[
           { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
           { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
-          { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
+          { label: 'Swap',    src: iconActionSwap, action: () => openActions({ tab: 'swap', asset: id }) },
           { label: 'Actions', Icon: IconZap,        action: () => openActions({ asset: id }) },
         ].map(({ label, src, Icon, action }) => (
           <motion.div key={label} whileTap={{ scale: 0.88 }}>
