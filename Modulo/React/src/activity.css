@@ -22,14 +22,16 @@
   align-items: flex-start;
   gap: 12px;
   padding: 11px 20px;
+  background: var(--bk-bg-card);
+  border-bottom: 1px solid var(--bk-border-row);
   transition: background 0.1s ease;
 }
 
 /* hover: only on true-hover devices (not touch) — iOS `:hover` persists after tap */
 @media (hover: hover) {
-  .tx-row:hover { background: var(--bk-bg-card); }
+  .tx-row:hover { background: var(--bk-bg-card-alt); }
 }
-.tx-row:active { background: var(--bk-bg-card); }
+.tx-row:active { background: var(--bk-bg-card-alt); }
 
 /* Secondary token icon overlay */
 .tx-secondary-icon {
