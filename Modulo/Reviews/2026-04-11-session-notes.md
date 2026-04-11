@@ -1,3 +1,36 @@
+## Session: 2026-04-11 — Phase 4 Full Lucide Removal
+
+### What was built/fixed
+- **Lucide removed from all 18 product screen files.** Zero `lucide-react` imports remain in `src/` (excluding `v1/`, `IconOverrideContext.jsx`, `ds/`).
+- **Inline SVG icon components** defined at the top of each consuming file. Every icon: `stroke="currentColor"`, `fill="none"`, `aria-hidden="true"`, size via prop defaulting to the primary usage size.
+- **Files migrated:** `OptimiseScreen`, `SwapScreen`, `SimulateScreen`, `SendScreen`, `SendAmountScreen`, `ReviewScreen`, `ReceiveScreen`, `SmartNudges`, `ExploreScreen`, `AutopilotScreen`, `ActivityScreen`, `ActionsScreen`, `BottomNav`, `ManageScreen`, `AchievementsScreen`, `AssetScreen`, `SettingsScreen`, `HomeScreen`.
+- **Data arrays updated** — SWIPE_ACTIONS, SETTINGS_SECTIONS, ACHIEVEMENTS, CARDS, NUDGES_DATA all updated to reference `IconFoo` inline components.
+- **Grep check passes clean** — `grep -r "lucide-react" src/ --include="*.jsx"` returns nothing.
+- **Build passes clean** — `npm run build` ✓ 3476 modules, zero errors.
+
+### Decisions made (and why)
+- **Size-prop pattern used when icon appears at multiple sizes or in a data array** — `({ size = 22 }) => ...`. Fixed-size no-arg components used when only one size ever appears.
+- **Icons in data arrays forward size prop** — React silently ignores unknown props, so `<Icon size={18} strokeWidth={1.5} />` works even if the component accepts only `size`.
+- **`IconLoader` accepts `className` prop** — ActivityScreen applies `.tx-spinner` CSS class for the rotation animation; the SVG arc is a single path approximating a spinner.
+- **`BottomNav` icons are all fixed-size, no props** — all five nav icons are always 20px; no data array; no reason to accept props.
+
+### Bugs found — root causes
+- **SmartNudges data array edit failed on first attempt** — string match failed due to indentation mismatch (2-space vs. tab). Fixed by reading exact lines first to get the correct whitespace context.
+- **ActionsScreen `ChevronDown` two-occurrence edit** — first attempt matched wrong occurrence. Fixed by reading the exact target line to verify its unique surrounding context.
+- **SettingsScreen `ChevronRight` two identical lines** — `replace_all: false` rejected because two identical strings existed. Fixed with `replace_all: true`.
+
+### Patterns to reuse next time
+- Inline SVG icon at top of file: one component per icon, `aria-hidden="true"`, `stroke="currentColor"`, size prop when needed.
+- For data-array icons, always verify which prop name the render site uses (`<item.Icon size={18} />`) — the inline component must accept `size`.
+- Read exact lines before editing when there's any doubt about whitespace or duplicate strings.
+
+### Open threads / next session
+- **Bundle size (1.7MB pre-existing)** — lightweight-charts + framer-motion main contributors; code-splitting could be investigated.
+- **AssetRow** extracted in Phase 3 but not yet consumed by ActivityScreen / AssetScreen — screen-level refactor still pending.
+- **Design system page** — should showcase Phase 1–3 components; no progress this session.
+
+---
+
 ## Session: 2026-04-11 — Phase 3 React ARIA Migration
 
 ### What was built/fixed
