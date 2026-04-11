@@ -6,6 +6,8 @@ import DesignSystemPage from './DesignSystemPage.jsx';
 import { TokenOverrideProvider } from './TokenOverrideContext.jsx';
 import { IconOverrideProvider } from './IconOverrideContext.jsx';
 import { DevModeProvider } from './DevModeContext.jsx';
+import { BrandProvider } from './theme/ThemeProvider.jsx';
+import moduloTheme from './theme/modulo-theme.js';
 import './tokens.css';
 
 class ErrorBoundary extends Component {
@@ -57,20 +59,22 @@ function Root() {
   const isDS = hash === '#/ds' || hash.startsWith('#/ds/');
 
   return (
-    <TokenOverrideProvider>
-    <IconOverrideProvider>
-    <DevModeProvider>
-      {isDS
-        ? <DesignSystemPage onBack={() => { window.location.hash = '/'; }} />
-        : (
-          <HashRouter>
-            <App />
-          </HashRouter>
-        )
-      }
-    </DevModeProvider>
-    </IconOverrideProvider>
-    </TokenOverrideProvider>
+    <BrandProvider theme={moduloTheme}>
+      <TokenOverrideProvider>
+      <IconOverrideProvider>
+      <DevModeProvider>
+        {isDS
+          ? <DesignSystemPage onBack={() => { window.location.hash = '/'; }} />
+          : (
+            <HashRouter>
+              <App />
+            </HashRouter>
+          )
+        }
+      </DevModeProvider>
+      </IconOverrideProvider>
+      </TokenOverrideProvider>
+    </BrandProvider>
   );
 }
 

@@ -1,0 +1,40 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   BottomSheet — White-Label Component Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.bottom-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bk-bg-base);
+  border-radius: 24px 24px 0 0;
+  z-index: 999;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  /* Safe area handled by parent screen */
+}
+
+.drag-handle {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 0;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.drag-handle-pill {
+  width: 32px;
+  height: 4px;
+  background: var(--bk-border-subtle);
+  border-radius: 9999px;
+}

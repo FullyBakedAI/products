@@ -23,46 +23,22 @@ import { motion as m } from './motion-tokens';
 const MotionButton = motion.create(Button);
 import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
-import { Delete, X, ChevronDown } from 'lucide-react';
+import { Delete } from 'lucide-react';
 import iconSettings from './assets/icon-settings.svg';
 import { useIconOverride } from './IconOverrideContext';
+import { ScreenHeader, TokenPill } from './components';
 import './swap.css';
 
 // ── Sub-components ────────────────────────────────────────────────────────
 
-function SwapHeader({ onClose }) {
+function SwapTokenPill({ token, side, appear }) {
   const navigate = useNavigate();
   return (
-    <div className="swap-header">
-      <div className="header-left">
-        <Button className="close-btn" aria-label="Close" onPress={onClose}>
-          <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
-        </Button>
-        <h1 className="swap-title">Swap</h1>
-      </div>
-      <Button className="settings-btn" aria-label="Swap settings" onPress={() => navigate('/settings')}>
-        <img src={iconSettings} width="20" height="20" aria-hidden="true" />
-      </Button>
-    </div>
-  );
-}
-
-function TokenPill({ token, side, appear }) {
-  const navigate = useNavigate();
-  return (
-    <MotionButton
-      className={`token-pill-btn${appear ? ' appear' : ''}`}
-      aria-label={`${side === 'pay' ? 'Pay' : 'Receive'} token: ${token.symbol}, tap to change`}
-      data-bk-component="token-pill"
-      whileTap={{ scale: 0.93 }}
+    <TokenPill
+      token={{ id: token.id, name: token.symbol, icon: token.icon }}
       onPress={() => navigate(`/swap/select/${side}`)}
-    >
-      <span className="token-icon">
-        <img src={token.icon} alt="" width="22" height="22" />
-      </span>
-      <span className="token-name">{token.symbol}</span>
-      <ChevronDown size={13} color="var(--bk-text-muted)" strokeWidth={1.5} className="token-chevron" aria-hidden="true" />
-    </MotionButton>
+      appear={appear}
+    />
   );
 }
 
@@ -94,7 +70,7 @@ function PayCard({ payAmount, payUSD, payToken }) {
           <span className="amount-text">{payAmount || '0'}</span>
           <span className="amount-cursor" aria-hidden="true" />
         </div>
-        <TokenPill token={payToken} side="pay" />
+        <SwapTokenPill token={payToken} side="pay" />
       </div>
       <div className="card-bottom">
         <span>≈ ${payUSD}</span>
@@ -120,7 +96,7 @@ function ReceiveCard({ receiveAmount, receiveToken, rateLabel, flash }) {
           <span className="amount-text">{receiveAmount || '0'}</span>
         </div>
         {receiveToken
-          ? <TokenPill token={receiveToken} side="receive" />
+          ? <SwapTokenPill token={receiveToken} side="receive" />
           : <SelectTokenButton side="receive" />
         }
       </div>
@@ -207,7 +183,6 @@ function Numpad({ onKey }) {
 // ── Main SwapScreen ───────────────────────────────────────────────────────
 
 export default function SwapScreen() {
-  const navigate = useNavigate();
   const {
     payToken, receiveToken,
     payAmount, setPayAmount,
@@ -265,6 +240,8 @@ export default function SwapScreen() {
     swapDirections();
   }
 
+  const navigate = useNavigate();
+
   return (
     <motion.div
       role="main"
@@ -276,7 +253,19 @@ export default function SwapScreen() {
     >
       <StatusBar />
 
-      <SwapHeader onClose={() => navigate('/')} />
+      <ScreenHeader
+        title="Swap"
+        onClose={() => navigate('/')}
+        rightSlot={
+          <Button
+            className="settings-btn"
+            aria-label="Swap settings"
+            onPress={() => navigate('/settings')}
+          >
+            <img src={iconSettings} width="20" height="20" aria-hidden="true" />
+          </Button>
+        }
+      />
 
       <div className="swap-cards" data-bk-component="swap-card">
         <PayCard payAmount={payAmount} payUSD={payUSD} payToken={payToken} />

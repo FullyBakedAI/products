@@ -1,0 +1,76 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   TokenPill — White-Label Component Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.token-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bk-pill-bg);
+  border: 1px solid var(--bk-border-pill);
+  border-radius: 20px;
+  padding: 6px 10px 6px 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+  font-family: var(--bk-font);
+}
+
+.token-pill[data-hovered] {
+  background: var(--bk-bg-card);
+}
+
+.token-pill[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.token-pill-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.token-pill-icon img,
+.token-pill-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.token-pill-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bk-text-primary);
+}
+
+.token-pill-chevron {
+  width: 13px;
+  height: 13px;
+  stroke: var(--bk-text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Appear Animation ───────────────────────────────────────────────── */
+@keyframes tokenAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.token-pill.appear {
+  animation: tokenAppear 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
