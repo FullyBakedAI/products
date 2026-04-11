@@ -172,6 +172,8 @@ html, body {
   justify-items: center;
   flex-shrink: 0;
   position: relative;
+  overflow: visible;
+  z-index: 10;
   padding: 8px 8px env(safe-area-inset-bottom, 0px);
 }
 
@@ -214,8 +216,8 @@ html, body {
 }
 
 .nav-btn-swap {
-  width: 48px !important;
-  height: 48px !important;
+  width: 52px !important;
+  height: 52px !important;
   border-radius: 50% !important;
   background: var(--bk-brand-gradient) !important;
   display: flex !important;
@@ -226,8 +228,10 @@ html, body {
   gap: 0 !important;
   color: #fff !important;
   opacity: 1 !important;
-  margin-top: -12px;
-  box-shadow: 0 0 20px color-mix(in srgb, var(--bk-brand-primary) 35%, transparent);
+  position: relative;
+  z-index: 2;
+  margin-top: -18px;
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--bk-brand-primary) 50%, transparent);
 }
 
 .nav-btn-swap[data-focused] {
