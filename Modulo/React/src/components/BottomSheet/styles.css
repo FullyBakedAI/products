@@ -6,7 +6,7 @@
 .bottom-sheet-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--bk-overlay, rgba(0, 0, 0, 0.6));
   z-index: 998;
 }
 
@@ -24,7 +24,7 @@
   /* Safe area handled by parent screen */
 }
 
-.drag-handle {
+.bottom-sheet-handle {
   display: flex;
   justify-content: center;
   padding: 12px 0 0;
@@ -32,7 +32,7 @@
   flex-shrink: 0;
 }
 
-.drag-handle-pill {
+.bottom-sheet-handle-pill {
   width: 32px;
   height: 4px;
   background: var(--bk-border-subtle);

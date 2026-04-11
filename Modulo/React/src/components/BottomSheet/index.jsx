@@ -75,8 +75,8 @@ export function BottomSheet({
             exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
           >
             {showDragHandle && (
-              <div className="drag-handle" aria-hidden="true">
-                <div className="drag-handle-pill" />
+              <div className="bottom-sheet-handle" aria-hidden="true">
+                <div className="bottom-sheet-handle-pill" />
               </div>
             )}
             {children}

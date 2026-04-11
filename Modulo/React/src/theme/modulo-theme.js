@@ -45,6 +45,7 @@ const moduloTheme = {
   error: '#F04348',
 
   // Special
+  overlay: 'rgba(0, 0, 0, 0.6)',
   statusBarDim: '#3A3B4E',
   pillBg: '#2A2A3E',
   earnCardBg: 'rgba(88, 75, 235, 0.18)',

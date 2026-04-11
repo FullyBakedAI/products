@@ -16,8 +16,19 @@
  */
 
 import { Button } from 'react-aria-components';
-import { ChevronLeft, X } from 'lucide-react';
 import './styles.css';
+
+// Inline SVGs — no Lucide dependency in components/
+const IconBack = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconClose = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 
 export function ScreenHeader({
   title,
@@ -29,25 +40,15 @@ export function ScreenHeader({
 }) {
   return (
     <div className={`screen-header${transparent ? ' transparent' : ''}`}>
-      <div className="header-left">
+      <div className="screen-header-left">
         {onBack && (
           <Button className="header-back-btn" aria-label="Go back" onPress={onBack}>
-            <ChevronLeft
-              size={20}
-              color="var(--bk-text-primary)"
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
+            <IconBack />
           </Button>
         )}
         {onClose && (
           <Button className="header-close-btn" aria-label="Close" onPress={onClose}>
-            <X
-              size={20}
-              color="var(--bk-text-muted)"
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
+            <IconClose />
           </Button>
         )}
         {titleIcon && <span className="header-title-icon">{titleIcon}</span>}
