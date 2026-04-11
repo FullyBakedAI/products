@@ -20,10 +20,53 @@ import BottomNav from './BottomNav';
 import './home.css';
 import './achievements.css'; // achievement-toast styles
 
-import {
-  TrendingUp, Zap, Landmark, SlidersHorizontal,
-  Trophy, ChevronRight, Repeat2, ArrowUpRight,
-} from 'lucide-react';
+const IconTrendingUp = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 14L8 9L11 12L17 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 6H17V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconZap = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconLandmark = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 16H17M3 8H17M10 4L3 8M10 4L17 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 8V16M10 8V16M14 8V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconSlidersHorizontal = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="7" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="13" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="8" cy="14" r="2" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconTrophy = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7 17H13M10 13V17M6 3H14V9C14 11.21 12.21 13 10 13C7.79 13 6 11.21 6 9V3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M6 5H3V7C3 8.66 4.34 10 6 10M14 5H17V7C17 8.66 15.66 10 14 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconChevronRight = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconRepeat2 = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 7H16M16 7L13 4M16 7L13 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M16 13H4M4 13L7 16M4 13L7 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconArrowUpRight = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M6 14L14 6M14 6H8M14 6V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import { useIconOverride } from './IconOverrideContext';
 
 import SmartNudges     from './SmartNudges';
@@ -89,11 +132,11 @@ const MAX_YIELD  = Math.max(...TOKENS.map(t => t.yield));
 const ACTION_W   = 300;
 
 const SWIPE_ACTIONS = [
-  { id: 'stake',   label: 'Stake',   Icon: Zap,               cls: 'swipe-stake'   },
-  { id: 'trade',   label: 'Trade',   Icon: TrendingUp,        cls: 'swipe-trade'   },
-  { id: 'lend',    label: 'Lending', Icon: Landmark,          cls: 'swipe-lending' },
-  { id: 'swap',    label: 'Swap',    Icon: Repeat2,           cls: 'swipe-swap'    },
-  { id: 'manage',  label: 'Manage',  Icon: SlidersHorizontal, cls: 'swipe-manage'  },
+  { id: 'stake',   label: 'Stake',   Icon: IconZap,               cls: 'swipe-stake'   },
+  { id: 'trade',   label: 'Trade',   Icon: IconTrendingUp,        cls: 'swipe-trade'   },
+  { id: 'lend',    label: 'Lending', Icon: IconLandmark,          cls: 'swipe-lending' },
+  { id: 'swap',    label: 'Swap',    Icon: IconRepeat2,           cls: 'swipe-swap'    },
+  { id: 'manage',  label: 'Manage',  Icon: IconSlidersHorizontal, cls: 'swipe-manage'  },
 ];
 
 // ── Feature 2: Live yield counter ────────────────────────────────────────────
@@ -145,13 +188,13 @@ function AchievementToast({ onClose, navigate }) {
         style={{ all: 'unset', display: 'flex', alignItems: 'center', width: '100%', cursor: 'pointer', gap: '12px' }}
       >
         <div className="achievement-toast-icon" aria-hidden="true">
-          <TrendingUp size={18} color="var(--bk-brand-primary)" strokeWidth={1.5} />
+          <IconTrendingUp size={18} />
         </div>
         <div className="achievement-toast-text" style={{ flex: 1 }}>
           <div className="achievement-toast-label">Achievement unlocked</div>
           <div className="achievement-toast-title">Century Club 🎉</div>
         </div>
-        <ChevronRight size={14} color="var(--bk-text-muted)" aria-hidden="true" />
+        <IconChevronRight size={14} />
       </Button>
     </motion.div>
   );
@@ -342,7 +385,7 @@ export default function HomeScreen() {
             onPress={() => navigate('/achievements')}
             style={{ color: 'var(--bk-text-muted)' }}
           >
-            <Trophy size={16} strokeWidth={1.5} />
+            <IconTrophy />
           </Button>
           <Button className="icon-btn" aria-label="Notifications" onPress={() => navigate('/activity')}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
@@ -427,11 +470,11 @@ export default function HomeScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
         >
           <button className="action-btn" aria-label="Swap" onClick={() => navigate('/swap')}>
-            <Repeat2 size={20} strokeWidth={1.5} color="var(--bk-text-primary)" aria-hidden="true" />
+            <IconRepeat2 />
             <span className="action-label">Swap</span>
           </button>
           <button className="action-btn" aria-label="Buy" onClick={() => openActions({ tab: 'buy' })}>
-            <ArrowUpRight size={20} strokeWidth={1.5} color="var(--bk-text-primary)" aria-hidden="true" />
+            <IconArrowUpRight />
             <span className="action-label">Buy</span>
           </button>
           <button className="action-btn" aria-label="Send" onClick={() => navigate('/send')}>

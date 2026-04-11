@@ -11,10 +11,83 @@ import { motion as m } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
-import {
-  ChevronLeft, ChevronRight, Shield, Bell, Globe, Palette,
-  Info, HelpCircle, LogOut, Copy, ExternalLink, Edit3,
-} from 'lucide-react';
+const IconChevronLeft = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconChevronRight = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconShield = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3L4 5.5V10C4 13.5 6.5 16.5 10 17.5C13.5 16.5 16 13.5 16 10V5.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconBell = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3C7.24 3 5 5.24 5 8V13H15V8C15 5.24 12.76 3 10 3Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8.5 13V14C8.5 14.83 9.17 15.5 10 15.5C10.83 15.5 11.5 14.83 11.5 14V13" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconGlobe = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 3C10 3 7.5 6 7.5 10C7.5 14 10 17 10 17" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 3C10 3 12.5 6 12.5 10C12.5 14 10 17 10 17" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M3 10H17" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconPalette = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3C6.13 3 3 6.13 3 10C3 13.87 6.13 17 10 17C10.83 17 11.5 16.33 11.5 15.5C11.5 15.12 11.35 14.78 11.11 14.53C10.88 14.28 10.74 13.95 10.74 13.59C10.74 12.76 11.41 12.09 12.24 12.09H14C15.66 12.09 17 10.75 17 9.09C17 5.73 13.87 3 10 3Z" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="6.5" cy="11.5" r="1" fill="currentColor"/>
+    <circle cx="8" cy="7.5" r="1" fill="currentColor"/>
+    <circle cx="12" cy="7.5" r="1" fill="currentColor"/>
+  </svg>
+);
+const IconInfo = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 9V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="10" cy="6.5" r="0.75" fill="currentColor"/>
+  </svg>
+);
+const IconHelpCircle = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M7.5 8C7.5 6.62 8.62 5.5 10 5.5C11.38 5.5 12.5 6.62 12.5 8C12.5 9.38 10 10.5 10 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="10" cy="13" r="0.75" fill="currentColor"/>
+  </svg>
+);
+const IconLogOut = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7 17H4C3.45 17 3 16.55 3 16V4C3 3.45 3.45 3 4 3H7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M13 14L17 10L13 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17 10H7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconCopy = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <rect x="8" y="8" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 8V5C12 4.45 11.55 4 11 4H3C2.45 4 2 4.45 2 5V13C2 13.55 2.45 14 3 14H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconExternalLink = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M9 5H5C4.45 5 4 5.45 4 6V15C4 15.55 4.45 16 5 16H14C14.55 16 15 15.55 15 15V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 4H16V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 10L16 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconEdit3 = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 16H7L15.5 7.5L12.5 4.5L4 13V16Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M12.5 4.5L15.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 import './settings.css';
 
 import walletAvatar from './assets/wallet-avatar.svg';
@@ -29,22 +102,22 @@ const SETTINGS_SECTIONS = [
   {
     label: 'Account',
     items: [
-      { id: 'security',      icon: Shield,      label: 'Security & Privacy',    sub: 'Biometrics, 2FA, approvals' },
-      { id: 'notifications', icon: Bell,        label: 'Notifications',         sub: 'Price alerts, transactions' },
-      { id: 'networks',      icon: Globe,        label: 'Networks',              sub: 'Manage chains & RPCs' },
+      { id: 'security',      icon: IconShield,     label: 'Security & Privacy',    sub: 'Biometrics, 2FA, approvals' },
+      { id: 'notifications', icon: IconBell,       label: 'Notifications',         sub: 'Price alerts, transactions' },
+      { id: 'networks',      icon: IconGlobe,      label: 'Networks',              sub: 'Manage chains & RPCs' },
     ],
   },
   {
     label: 'Preferences',
     items: [
-      { id: 'appearance',    icon: Palette,     label: 'Appearance',            sub: 'Dark mode, currency, language' },
+      { id: 'appearance',    icon: IconPalette,    label: 'Appearance',            sub: 'Dark mode, currency, language' },
     ],
   },
   {
     label: 'About',
     items: [
-      { id: 'help',          icon: HelpCircle,  label: 'Help & Support',        sub: null },
-      { id: 'about',         icon: Info,         label: 'About Modulo',          sub: 'v3.0' },
+      { id: 'help',          icon: IconHelpCircle, label: 'Help & Support',        sub: null },
+      { id: 'about',         icon: IconInfo,       label: 'About Modulo',          sub: 'v3.0' },
     ],
   },
 ];
@@ -74,7 +147,7 @@ function PanelShell({ title, onBack, children }) {
     >
       <div className="settings-header">
         <Button className="icon-btn" aria-label="Back" onPress={onBack}>
-          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+          <IconChevronLeft size={20} />
         </Button>
         <span className="settings-title">{title}</span>
         <div aria-hidden="true" style={{ width: 20 }} />
@@ -139,12 +212,12 @@ function SecurityPanel({ onBack }) {
       </div>
       <div className="settings-section">
         <Button className="settings-row" aria-label="Connected apps">
-          <Globe size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
+          <IconGlobe size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">Connected apps</span>
             <span className="settings-row-sub">3 apps</span>
           </div>
-          <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+          <IconChevronRight size={14} />
         </Button>
       </div>
     </PanelShell>
@@ -235,7 +308,7 @@ function HelpPanel({ onBack }) {
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
-            <ExternalLink size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+            <IconExternalLink size={14} />
           </Button>
         ))}
       </div>
@@ -260,7 +333,7 @@ function AboutPanel({ onBack }) {
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
-            <ExternalLink size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+            <IconExternalLink size={14} />
           </Button>
         ))}
       </div>
@@ -291,19 +364,19 @@ function WalletPanel({ onBack }) {
       </div>
       <div className="settings-section">
         <Button className="settings-row" aria-label="Copy address" onPress={handleCopy}>
-          <Copy size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
+          <IconCopy size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">{copied ? 'Copied!' : 'Copy address'}</span>
           </div>
         </Button>
         <Button className="settings-row" aria-label="View on explorer">
-          <ExternalLink size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
+          <IconExternalLink size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">View on explorer</span>
           </div>
         </Button>
         <Button className="settings-row" aria-label="Rename wallet">
-          <Edit3 size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
+          <IconEdit3 size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">Rename wallet</span>
           </div>
@@ -355,7 +428,7 @@ export default function SettingsScreen() {
             {/* Header */}
             <div className="settings-header">
               <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-                <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+                <IconChevronLeft size={20} />
               </Button>
               <span className="settings-title">Settings</span>
               <div aria-hidden="true" style={{ width: 20 }} />
@@ -374,7 +447,7 @@ export default function SettingsScreen() {
                     <div className="settings-wallet-addr">0x7f3e...9A14</div>
                   </div>
                 </div>
-                <ChevronRight size={16} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                <IconChevronRight size={16} />
               </MotionButton>
 
               {/* Setting sections */}
@@ -388,7 +461,7 @@ export default function SettingsScreen() {
                         <span className="settings-row-label">{item.label}</span>
                         {item.sub && <span className="settings-row-sub">{item.sub}</span>}
                       </div>
-                      <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                      <IconChevronRight size={14} />
                     </MotionButton>
                   ))}
                 </div>
@@ -397,7 +470,7 @@ export default function SettingsScreen() {
               {/* Sign out */}
               <div className="settings-section">
                 <Button className="settings-row settings-signout" aria-label="Sign out" onPress={() => navigate('/')}>
-                  <LogOut size={18} color="var(--bk-error)" strokeWidth={1.5} />
+                  <IconLogOut size={18} />
                   <div className="settings-row-text">
                     <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Sign Out</span>
                   </div>

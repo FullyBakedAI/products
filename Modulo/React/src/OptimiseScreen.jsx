@@ -10,7 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion, animate } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { ChevronLeft } from 'lucide-react';
+const IconChevronLeft = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import { useUndoToast } from './UndoToastContext';
 
 import logoModulo from './assets/logo-modulo.svg';
@@ -84,7 +88,7 @@ export default function OptimiseScreen() {
     >
       {/* Back button — full-width tap target */}
       <Button className="optimise-back-btn" aria-label="Go back" onPress={() => navigate('/')}>
-        <ChevronLeft size={18} strokeWidth={2} aria-hidden="true" />
+        <IconChevronLeft size={18} />
         Back
       </Button>
 

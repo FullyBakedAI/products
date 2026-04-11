@@ -12,7 +12,17 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
-import { ChevronLeft, TrendingUp } from 'lucide-react';
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconTrendingUp = () => (
+  <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 14L8 9L11 12L17 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 6H17V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 import tokenUsdc from './assets/token-usdc.svg';
 import tokenBtc  from './assets/token-btc.svg';
@@ -67,7 +77,7 @@ export default function SimulateScreen() {
     >
       <header className="simulate-header">
         <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+          <IconChevronLeft />
         </Button>
         <h1 className="simulate-title">What if?</h1>
         <div aria-hidden="true" style={{ width: 20 }} />
@@ -225,7 +235,7 @@ export default function SimulateScreen() {
             >
               {/* Intro */}
               <div className="simulate-stake-intro">
-                <TrendingUp size={22} color="var(--bk-brand-primary)" strokeWidth={1.5} aria-hidden="true" />
+                <IconTrendingUp />
                 <p>
                   See how much more you'd earn if all assets were staked at optimal rates.
                 </p>

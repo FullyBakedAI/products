@@ -16,7 +16,16 @@ import { motion as m } from './motion-tokens';
 import StatusBar from './StatusBar';
 import './send.css';
 
-import { ScanLine, X } from 'lucide-react';
+const IconScanLine = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 4H7M13 4H16V7M16 13V16H13M7 16H4V13M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconX = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 import iconSearch from './assets/icon-search.svg';
 import iconCopy from './assets/icon-copy.svg';
 import walletAvatar from './assets/wallet-avatar.svg';
@@ -67,7 +76,7 @@ export default function SendScreen() {
           aria-label="Close"
           onPress={() => navigate('/')}
         >
-          <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+          <IconX />
         </Button>
       </motion.div>
 
@@ -82,7 +91,7 @@ export default function SendScreen() {
         <img src={iconSearch} width="16" height="16" aria-hidden="true" />
         <span className="placeholder">Address, ENS, or username</span>
         <Button className="scan-btn" aria-label="Scan QR code" onPress={() => navigate('/send/amount', { state: { recipient: { name: '0xScanned…Address' } } })}>
-          <ScanLine size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+          <IconScanLine />
         </Button>
         <Button className="scan-btn paste-btn" aria-label="Paste address from clipboard" onPress={() => navigate('/send/amount', { state: { recipient: { name: '0xPasted…Address' } } })}>
           <img src={iconCopy} width="16" height="16" aria-hidden="true" />

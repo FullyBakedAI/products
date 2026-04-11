@@ -11,7 +11,28 @@ import { motion as m } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
-import { Zap, ChevronLeft, Bell, Pause } from 'lucide-react';
+const IconZap = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconBell = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3C7.24 3 5 5.24 5 8V13H15V8C15 5.24 12.76 3 10 3Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8.5 13V14C8.5 14.83 9.17 15.5 10 15.5C10.83 15.5 11.5 14.83 11.5 14V13" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconPause = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <rect x="5.5" y="4" width="3" height="12" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="11.5" y="4" width="3" height="12" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
 import './autopilot.css';
 
 const RISK_LEVELS = [
@@ -44,10 +65,10 @@ export default function AutopilotScreen() {
     >
       <header className="autopilot-header">
         <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+          <IconChevronLeft />
         </Button>
         <div className="autopilot-header-title">
-          <Zap size={16} color="var(--bk-brand-primary)" strokeWidth={1.5} aria-hidden="true" />
+          <IconZap />
           <h1 className="autopilot-title">Autopilot</h1>
         </div>
         <div aria-hidden="true" style={{ width: 20 }} />
@@ -111,7 +132,7 @@ export default function AutopilotScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 } }}
         >
           <div className="autopilot-notif-left">
-            <Bell size={16} color="var(--bk-text-secondary)" strokeWidth={1.5} aria-hidden="true" />
+            <IconBell />
             <span className="autopilot-notif-label">Rebalance notifications</span>
           </div>
           <Switch
@@ -166,7 +187,7 @@ export default function AutopilotScreen() {
             aria-label="Pause autopilot"
             onPress={() => setActive(false)}
           >
-            <Pause size={16} strokeWidth={1.5} aria-hidden="true" />
+            <IconPause />
             Pause Autopilot
           </Button>
         </motion.div>

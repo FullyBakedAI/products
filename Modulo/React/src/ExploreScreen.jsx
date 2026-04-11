@@ -15,7 +15,18 @@ import BottomNav from './BottomNav';
 import { TabSwitcher } from './components';
 import './explore.css';
 
-import { Search, Star, TrendingUp, Zap } from 'lucide-react';
+const IconSearch = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="9" cy="9" r="5" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M15.5 15.5L13 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconTrendingUp = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 14L8 9L11 12L17 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 6H17V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import tokenEth from './assets/token-eth.svg';
 import tokenBtc from './assets/token-btc.svg';
 import tokenUsdc from './assets/token-usdc.svg';
@@ -85,14 +96,14 @@ export default function ExploreScreen() {
 
         {/* Search */}
         <Button className="search-field explore-search" role="search" aria-label="Search tokens">
-          <Search size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+          <IconSearch />
           <span>Token name or address</span>
         </Button>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">
           <div className="yield-header">
-            <TrendingUp size={14} strokeWidth={1.5} color="var(--bk-success)" />
+            <IconTrendingUp />
             <span className="yield-title">Top rates right now</span>
           </div>
           {TOP_YIELDS.map((y, i) => (

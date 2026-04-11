@@ -18,7 +18,23 @@ import './receive.css';
 
 import walletAvatar from './assets/wallet-avatar.svg';
 import moduloBadge from './assets/icon-modulo-badge.svg';
-import { Check, AlertTriangle, ChevronRight } from 'lucide-react';
+const IconCheck = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 10.5L8 14.5L16 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconAlertTriangle = () => (
+  <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3L17.5 16H2.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M10 9V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="10" cy="14.5" r="0.75" fill="currentColor"/>
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import iconCopy from './assets/icon-copy.svg';
 import iconShare from './assets/icon-share.svg';
 import qrCode from './assets/qr-code.svg';
@@ -105,7 +121,7 @@ export default function ReceiveScreen() {
               onPress={handleCopy}
             >
               {copied
-                ? <Check size={16} color="var(--bk-success)" strokeWidth={1.5} aria-hidden="true" />
+                ? <IconCheck size={16} />
                 : <img src={iconCopy} width="16" height="16" aria-hidden="true" />
               }
             </Button>
@@ -168,7 +184,7 @@ export default function ReceiveScreen() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { ...m.fade.enter, delay: 0.24 } }}
         >
-          <AlertTriangle size={13} strokeWidth={1.5} aria-hidden="true" />
+          <IconAlertTriangle />
           <span>Only send assets on a supported network. Wrong network = permanent loss.</span>
         </motion.div>
 
@@ -193,8 +209,8 @@ export default function ReceiveScreen() {
               >
                 <span>{selectedExchange === ex ? `Address copied for ${ex}` : ex}</span>
                 {selectedExchange === ex
-                  ? <Check size={14} color="var(--bk-success)" strokeWidth={2} />
-                  : <ChevronRight size={14} color="var(--bk-text-muted)" strokeWidth={1.5} />
+                  ? <IconCheck size={14} />
+                  : <IconChevronRight />
                 }
               </Button>
             ))}

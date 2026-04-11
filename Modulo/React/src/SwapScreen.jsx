@@ -23,7 +23,12 @@ import { motion as m } from './motion-tokens';
 const MotionButton = motion.create(Button);
 import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
-import { Delete } from 'lucide-react';
+const IconDelete = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7 4H17V16H7L3 10L7 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M10 8L14 12M14 8L10 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 import iconSettings from './assets/icon-settings.svg';
 import { useIconOverride } from './IconOverrideContext';
 import { ScreenHeader, TokenPill } from './components';
@@ -171,7 +176,7 @@ function Numpad({ onKey }) {
           onPress={() => onKey(key)}
         >
           {key === 'del'
-            ? <Delete size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} aria-hidden="true" />
+            ? <IconDelete size={18} />
             : key
           }
         </MotionButton>

@@ -16,9 +16,28 @@ import { Button } from 'react-aria-components';
 const MotionBackdrop = motion(Button);
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
-import {
-  Loader, X, ExternalLink, ChevronLeft,
-} from 'lucide-react';
+const IconLoader = ({ size = 20, className }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+    <path d="M10 3C6.13 3 3 6.13 3 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconX = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconExternalLink = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M9 5H5C4.45 5 4 5.45 4 6V15C4 15.55 4.45 16 5 16H14C14.55 16 15 15.55 15 15V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 4H16V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 10L16 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import './activity.css';
 
 
@@ -85,7 +104,7 @@ const TX = [
 function TxBadge({ icon1, pending }) {
   if (pending) return (
     <div className="tx-badge tx-badge-pending">
-      <Loader size={15} strokeWidth={1.5} className="tx-spinner" color="var(--bk-text-muted)" aria-hidden="true" />
+      <IconLoader size={15} className="tx-spinner" />
     </div>
   );
   return <img src={icon1} alt="" width="36" height="36" className="tx-token-icon" />;
@@ -119,7 +138,7 @@ function TxDetailSheet({ tx, onClose }) {
           aria-label="Close"
           style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bk-bg-elevated)', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
         >
-          <X size={16} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+          <IconX size={16} />
         </Button>
       </div>
 
@@ -128,7 +147,7 @@ function TxDetailSheet({ tx, onClose }) {
         <div className="tx-detail-focal">
           {tx.pending ? (
             <div className="tx-badge tx-badge-pending tx-badge-lg">
-              <Loader size={24} strokeWidth={1.5} className="tx-spinner" color="var(--bk-text-muted)" aria-hidden="true" />
+              <IconLoader size={24} className="tx-spinner" />
             </div>
           ) : (
             <div className="tx-detail-icons">
@@ -189,7 +208,7 @@ function TxDetailSheet({ tx, onClose }) {
       {/* Explorer link */}
       {!tx.pending && (
         <Button className="tx-explorer-btn" aria-label="View on block explorer" onPress={onClose}>
-          <ExternalLink size={14} strokeWidth={1.5} aria-hidden="true" />
+          <IconExternalLink />
           View on block explorer
         </Button>
       )}
@@ -288,7 +307,7 @@ export default function ActivityScreen() {
       {/* Header */}
       <header className="home-header">
         <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <ChevronLeft size={20} color="var(--bk-text-primary)" strokeWidth={1.5} />
+          <IconChevronLeft />
         </Button>
         <h1 style={{ fontSize: 17, fontWeight: 600, color: 'var(--bk-text-primary)', letterSpacing: '-0.01em', margin: 0 }}>
           Activity

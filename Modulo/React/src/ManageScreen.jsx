@@ -8,7 +8,36 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
-import { ArrowDownToLine, ArrowUpFromLine, Send, Download, Settings } from 'lucide-react';
+const IconArrowDownToLine = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 4V13M10 13L7 10M10 13L13 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 16H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconArrowUpFromLine = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 13V4M10 4L7 7M10 4L13 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 16H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconSend = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M17 3L3 8.5L8.5 11L11 16.5L17 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M8.5 11L17 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconDownload = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 4V13M10 13L7 10M10 13L13 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 16H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconSettings = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 4V7M10 13V16M4 10H7M13 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 import BottomNav from './BottomNav';
 import './manage.css';
 
@@ -16,25 +45,25 @@ const CARDS = [
   {
     id: 'deposit',
     label: 'Deposit',
-    Icon: ArrowDownToLine,
+    Icon: IconArrowDownToLine,
     ariaLabel: 'Deposit funds',
   },
   {
     id: 'withdraw',
     label: 'Withdraw',
-    Icon: ArrowUpFromLine,
+    Icon: IconArrowUpFromLine,
     ariaLabel: 'Withdraw funds',
   },
   {
     id: 'send',
     label: 'Send',
-    Icon: Send,
+    Icon: IconSend,
     ariaLabel: 'Send tokens',
   },
   {
     id: 'receive',
     label: 'Receive',
-    Icon: Download,
+    Icon: IconDownload,
     ariaLabel: 'Receive tokens',
   },
 ];
@@ -81,7 +110,7 @@ export default function ManageScreen() {
           aria-label="Settings"
           onPress={() => navigate('/settings')}
         >
-          <Settings size={20} strokeWidth={1.5} />
+          <IconSettings size={20} />
         </Button>
       </header>
 

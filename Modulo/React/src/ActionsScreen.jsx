@@ -12,7 +12,29 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { Delete, ChevronDown, X, AlertCircle } from 'lucide-react';
+const IconDelete = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M7 4H17V16H7L3 10L7 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M10 8L14 12M14 8L10 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconChevronDown = ({ size = 13 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconX = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconAlertCircle = ({ size = 13 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 7V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="10" cy="13.5" r="0.75" fill="currentColor"/>
+  </svg>
+);
 import { useSwap } from './SwapContext';
 import { useIconOverride } from './IconOverrideContext';
 import { useActions } from './ActionsContext';
@@ -43,7 +65,7 @@ function TokenPill({ token, side }) {
     >
       <span className="token-icon"><img src={token.icon} alt="" width="22" height="22" /></span>
       <span className="token-name">{token.symbol}</span>
-      <ChevronDown size={13} color="var(--bk-text-muted)" strokeWidth={1.5} className="token-chevron" aria-hidden="true" />
+      <IconChevronDown size={13} className="token-chevron" />
     </Button>
   );
 }
@@ -64,7 +86,7 @@ function Numpad({ onKey }) {
       {keys.map(key => (
         <Button key={key} className="numpad-key-btn" aria-label={key === 'del' ? 'Delete' : key} onPress={() => onKey(key)}>
           {key === 'del'
-            ? <Delete size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} aria-hidden="true" />
+            ? <IconDelete size={18} />
             : key
           }
         </Button>
@@ -255,7 +277,7 @@ function TradeTab() {
           </div>
         </div>
         <div className="trade-change-chip" aria-hidden="true">
-          Change <ChevronDown size={12} strokeWidth={2} />
+          Change <IconChevronDown size={12} />
         </div>
       </Button>
 
@@ -521,7 +543,7 @@ function DepositTab() {
         ))}
       </div>
       <div className="actions-notice">
-        <AlertCircle size={13} strokeWidth={1.5} aria-hidden="true" />
+        <IconAlertCircle size={13} />
         Bank transfers may take 1–3 business days to settle.
       </div>
     </div>
@@ -586,7 +608,7 @@ export default function ActionsScreen() {
             aria-label="Close"
             onPress={closeActions}
           >
-            <X size={16} color="var(--bk-text-muted)" strokeWidth={2} aria-hidden="true" />
+            <IconX size={16} />
           </Button>
         </div>
 

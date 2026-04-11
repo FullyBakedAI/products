@@ -18,10 +18,45 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import {
-  X, ArrowUp, ArrowDown,
-  Zap, Landmark, TrendingUp, ExternalLink,
-} from 'lucide-react';
+const IconX = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconArrowUp = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 15V5M10 5L6 9M10 5L14 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconArrowDown = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconZap = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconLandmark = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 16H17M3 8H17M10 4L3 8M10 4L17 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 8V16M10 8V16M14 8V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconTrendingUp = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M3 14L8 9L11 12L17 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 6H17V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconExternalLink = ({ size = 11 }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M9 5H5C4.45 5 4 5.45 4 6V15C4 15.55 4.45 16 5 16H14C14.55 16 15 15.55 15 15V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 4H16V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 10L16 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 import { createChart, AreaSeries } from 'lightweight-charts';
 import './asset.css';
 
@@ -277,7 +312,7 @@ export default function AssetScreen() {
       <div className="swap-header">
         <div className="header-left">
           <Button className="close-btn" aria-label="Back" onPress={() => navigate('/')}>
-            <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} aria-hidden="true" />
+            <IconX />
           </Button>
           <div className="asset-header-title">
             <img src={t.icon} alt="" width="20" height="20" style={{ borderRadius: '50%', display: 'block' }} />
@@ -310,8 +345,8 @@ export default function AssetScreen() {
             {!crosshairPrice && (
               <span className="asset-change-badge" style={{ color: changeColor }}>
                 {t.negative
-                  ? <ArrowDown size={12} strokeWidth={2} aria-hidden="true" />
-                  : <ArrowUp   size={12} strokeWidth={2} aria-hidden="true" />
+                  ? <IconArrowDown size={12} />
+                  : <IconArrowUp   size={12} />
                 }
                 {changeSign}{Math.abs(t.change24h).toFixed(2)}% today
               </span>
@@ -406,9 +441,9 @@ export default function AssetScreen() {
           <div className="portfolio-label">Put it to work</div>
           <div className="asset-opp-list">
             {[
-              { Icon: Zap,        label: 'Stake',         sub: `Up to 6.8% APY · Flexible or locked`,   tab: 'lend'   },
-              { Icon: Landmark,   label: 'Lend & Borrow', sub: 'Earn on idle assets · Use as collateral', tab: 'lend'  },
-              { Icon: TrendingUp, label: 'Trade',          sub: 'Market & limit orders',                  tab: 'trade' },
+              { Icon: IconZap,        label: 'Stake',         sub: `Up to 6.8% APY · Flexible or locked`,   tab: 'lend'   },
+              { Icon: IconLandmark,   label: 'Lend & Borrow', sub: 'Earn on idle assets · Use as collateral', tab: 'lend'  },
+              { Icon: IconTrendingUp, label: 'Trade',          sub: 'Market & limit orders',                  tab: 'trade' },
             ].map(({ Icon, label, sub, tab }, i) => (
               <motion.div
                 key={label}
@@ -439,7 +474,7 @@ export default function AssetScreen() {
           <div className="asset-section-top">
             <div className="portfolio-label">Active positions</div>
             {t.activePositions.map((pos, i) => {
-              const PosIcon = pos.type === 'stake' ? Zap : Landmark;
+              const PosIcon = pos.type === 'stake' ? IconZap : IconLandmark;
               return (
                 <div key={i} className="asset-active-card">
                   <div className="asset-pos-row asset-pos-row-wrap">
@@ -506,7 +541,7 @@ export default function AssetScreen() {
         <div className="asset-contract-row">
           <span className="card-label">Contract</span>
           <Button className="asset-contract-btn" aria-label="View on explorer" onPress={() => navigate('/activity')}>
-            0x2260…1d1e <ExternalLink size={11} strokeWidth={1.5} aria-hidden="true" />
+            0x2260…1d1e <IconExternalLink />
           </Button>
         </div>
 
@@ -518,7 +553,7 @@ export default function AssetScreen() {
           { label: 'Send',    src: iconActionSend, action: () => navigate('/send')                 },
           { label: 'Receive', src: iconActionRecv, action: () => navigate('/receive')              },
           { label: 'Swap',    src: iconActionSwap, action: () => navigate('/swap')                 },
-          { label: 'Actions', Icon: Zap,           action: () => openActions({ asset: id }) },
+          { label: 'Actions', Icon: IconZap,        action: () => openActions({ asset: id }) },
         ].map(({ label, src, Icon, action }) => (
           <motion.div key={label} whileTap={{ scale: 0.88 }}>
             <Button className="asset-bar-btn" aria-label={label} onPress={action}>

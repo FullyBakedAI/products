@@ -11,7 +11,16 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
-import { X, ArrowRight } from 'lucide-react';
+const IconX = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconArrowRight = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import { FinancialInputCard } from './components';
 import './send-amount.css';
 
@@ -93,7 +102,7 @@ export default function SendAmountScreen() {
       {/* Header */}
       <div className="sa-header">
         <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
-          <X size={20} color="var(--bk-text-muted)" strokeWidth={1.5} />
+          <IconX />
         </Button>
         <span className="sa-title">Send to {recipient.name}</span>
         <div style={{ width: 20 }} />
@@ -160,7 +169,7 @@ export default function SendAmountScreen() {
         isDisabled={!hasAmount || overBalance}
       >
         Review
-        <ArrowRight size={18} strokeWidth={1.5} style={{ marginLeft: 6 }} />
+        <IconArrowRight />
       </Button>
     </motion.main>
   );

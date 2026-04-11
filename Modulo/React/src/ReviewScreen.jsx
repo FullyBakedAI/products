@@ -12,7 +12,23 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
-import { ArrowDown, AlertTriangle, ChevronDown } from 'lucide-react';
+const IconArrowDown = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IconAlertTriangle = () => (
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M10 3L17.5 16H2.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M10 9V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="10" cy="14.5" r="0.75" fill="currentColor"/>
+  </svg>
+);
+const IconChevronDown = () => (
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 import './review.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -73,7 +89,7 @@ export default function ReviewScreen() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-            <ArrowDown size={18} strokeWidth={1.5} color="var(--bk-text-muted)" aria-hidden="true" />
+            <IconArrowDown />
           </div>
 
           {isEarnOnly ? (
@@ -121,7 +137,7 @@ export default function ReviewScreen() {
               transition={{ type: 'spring', damping: 20, stiffness: 280 }}
               style={{ display: 'flex' }}
             >
-              <ChevronDown size={14} strokeWidth={2} color="var(--bk-text-muted)" aria-hidden="true" />
+              <IconChevronDown />
             </motion.span>
           </div>
         </Button>
@@ -152,7 +168,7 @@ export default function ReviewScreen() {
       {/* Warning */}
       {warning && (
         <div className="review-warning" style={{ margin: '0 16px 12px' }}>
-          <AlertTriangle size={15} strokeWidth={1.5} aria-hidden="true" />
+          <IconAlertTriangle />
           <span>{warning}</span>
         </div>
       )}
