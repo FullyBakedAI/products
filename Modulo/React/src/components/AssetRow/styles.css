@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   AssetRow — White-Label Component Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.asset-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  width: 100%;
+  font-family: var(--bk-font);
+}
+
+.asset-row-tappable {
+  cursor: pointer;
+  background: transparent;
+  border-radius: var(--bk-radius-md, 12px);
+  padding: 12px;
+  margin: 0 -12px;
+  width: calc(100% + 24px);
+  transition: background 0.12s ease;
+  text-align: left;
+}
+
+.asset-row-tappable[data-hovered] {
+  background: var(--bk-bg-card);
+}
+
+.asset-row-tappable[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.asset-row-tappable[data-pressed] {
+  background: var(--bk-bg-card);
+  opacity: 0.8;
+}
+
+.asset-row-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.asset-row-icon img,
+.asset-row-icon svg {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: block;
+}
+
+.asset-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.asset-row-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.asset-row-chain {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.asset-row-values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.asset-row-amount {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  white-space: nowrap;
+}
+
+.asset-row-usd {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  white-space: nowrap;
+}
+
+.asset-row-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bk-text-muted);
+  flex-shrink: 0;
+}

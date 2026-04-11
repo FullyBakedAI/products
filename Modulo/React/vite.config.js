@@ -68,5 +68,8 @@ export default defineConfig({
     outDir: '../Prototype/modulo',
     emptyOutDir: true,
   },
+  preview: {
+    allowedHosts: true,
+  },
   plugins: [react(), claudeProxyPlugin()],
 });

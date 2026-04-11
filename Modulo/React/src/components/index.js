@@ -14,6 +14,9 @@
  * - TabSwitcher
  * - FinancialInputCard
  * - StatusCard
+ *
+ * Phase 3 Components (extracted):
+ * - AssetRow
  */
 
 export { ScreenHeader } from './ScreenHeader';
@@ -23,3 +26,4 @@ export { TokenPill } from './TokenPill';
 export { TabSwitcher } from './TabSwitcher';
 export { FinancialInputCard } from './FinancialInputCard';
 export { StatusCard } from './StatusCard';
+export { AssetRow } from './AssetRow';

@@ -14,10 +14,15 @@
 
 import { Button } from 'react-aria-components';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 import './styles.css';
 
 const MotionButton = motion.create(Button);
+
+const IconChevronDown = () => (
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export function TokenPill({ token, onPress, appear = false }) {
   return (
@@ -31,13 +36,7 @@ export function TokenPill({ token, onPress, appear = false }) {
         <img src={token.icon} alt="" width="22" height="22" />
       </span>
       <span className="token-pill-name">{token.name}</span>
-      <ChevronDown
-        size={13}
-        color="var(--bk-text-muted)"
-        strokeWidth={1.5}
-        className="token-pill-chevron"
-        aria-hidden="true"
-      />
+      <IconChevronDown />
     </MotionButton>
   );
 }
