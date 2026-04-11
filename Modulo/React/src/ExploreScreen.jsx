@@ -12,6 +12,7 @@ import { Button } from 'react-aria-components';
 import { useActions } from './ActionsContext';
 import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
+import { TabSwitcher } from './components';
 import './explore.css';
 
 import { Search, Star, TrendingUp, Zap } from 'lucide-react';
@@ -120,17 +121,12 @@ export default function ExploreScreen() {
         </div>
 
         {/* Market Tabs */}
-        <div className="tabs" role="tablist" data-bk-component="tab-bar">
-          {TABS.map(tab => (
-            <Button
-              key={tab}
-              className={`tab${activeTab === tab ? ' active' : ''}`}
-              role="tab"
-              aria-selected={activeTab === tab}
-              onPress={() => setActiveTab(tab)}
-            >{tab}</Button>
-          ))}
-        </div>
+        <TabSwitcher
+          tabs={TABS.map(t => ({ id: t, label: t }))}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+          aria-label="Market filter"
+        />
 
         {/* Sort + Chain Filters */}
         <div className="top-header">

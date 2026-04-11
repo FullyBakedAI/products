@@ -13,6 +13,7 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import iconNotif from './assets/icon-notification.svg';
 import iconShare from './assets/icon-share.svg';
+import { StatusCard } from './components';
 import './success.css';
 import './swap.css';
 
@@ -86,23 +87,19 @@ export default function SuccessScreen() {
         </motion.div>
 
         <motion.div
-          className="swap-card success-summary-card"
-          role="region"
-          aria-label="Transaction summary"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.95 } }}
+          style={{ width: '100%' }}
         >
-          {[
-            { label: 'Sent',         value: '0.1 ETH'       },
-            { label: 'Received',     value: '324.10 USDC'   },
-            { label: 'Rate',         value: '1 ETH = $3,241' },
-            { label: 'Network fee',  value: '$0.34'          },
-          ].map(({ label, value }) => (
-            <div key={label} className="card-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '9px 0', margin: 0 }}>
-              <span className="card-label" style={{ margin: 0 }}>{label}</span>
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{value}</span>
-            </div>
-          ))}
+          <StatusCard
+            status="success"
+            details={[
+              { label: 'Sent',        value: '0.1 ETH'        },
+              { label: 'Received',    value: '324.10 USDC'    },
+              { label: 'Rate',        value: '1 ETH = $3,241' },
+              { label: 'Network fee', value: '$0.34'           },
+            ]}
+          />
         </motion.div>
 
         <div className="success-actions">

@@ -1,0 +1,73 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   StatusCard — White-Label Component Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.status-card {
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ── Header (icon + title + subtitle) ───────────────────────────────── */
+
+.status-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 16px;
+  gap: 6px;
+  text-align: center;
+}
+
+.status-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.status-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  line-height: 1.3;
+  font-family: var(--bk-font);
+}
+
+.status-card-subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  line-height: 1.4;
+  font-family: var(--bk-font);
+}
+
+/* ── Detail rows ────────────────────────────────────────────────────── */
+
+.status-card-details {
+  /* row container — no padding, rows carry their own */
+}
+
+.status-card-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--bk-border-subtle);
+}
+
+.status-card-detail-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  font-family: var(--bk-font);
+}
+
+.status-card-detail-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+  font-family: var(--bk-font);
+}

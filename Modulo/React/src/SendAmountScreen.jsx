@@ -12,6 +12,7 @@ import { Button } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
 import { X, ArrowRight } from 'lucide-react';
+import { FinancialInputCard } from './components';
 import './send-amount.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -98,23 +99,19 @@ export default function SendAmountScreen() {
         <div style={{ width: 20 }} />
       </div>
 
-      {/* Amount display */}
+      {/* Amount input card */}
       <div className="sa-amount-display">
-        <div className="sa-amount-row">
-          <span className={`sa-amount-value${!hasAmount ? ' dimmed' : ''}${overBalance ? ' error' : ''}`}>
-            {amount || '0'}
-          </span>
-          <MotionButton className="sa-token-pill" aria-label="Select token" whileTap={{ scale: 0.93 }} onPress={() => setShowTokenPicker(!showTokenPicker)}>
-            <img src={selectedToken.icon} width="22" height="22" alt="" />
-            <span>{selectedToken.symbol}</span>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,4 6,8 10,4" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </MotionButton>
-        </div>
-        <div className="sa-usd-row">
-          <span className="sa-usd">
-            {hasAmount ? `≈ $${usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '\u00A0'}
-          </span>
-        </div>
+        <FinancialInputCard
+          label="Amount"
+          amount={amount}
+          onAmountChange={setAmount}
+          token={selectedToken}
+          onTokenSelect={() => setShowTokenPicker(v => !v)}
+          usdValue={hasAmount
+            ? `≈ $${usdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : ''
+          }
+        />
         <div className="sa-balance-row">
           <span className="sa-balance">Balance: {selectedToken.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })} {selectedToken.symbol}</span>
           <Button className="sa-max-btn" aria-label="Use maximum balance" onPress={handleMax}>MAX</Button>

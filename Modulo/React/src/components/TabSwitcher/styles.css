@@ -1,0 +1,59 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   TabSwitcher — White-Label Component Styles
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.tab-switcher {
+  /* wrapper — no visual chrome */
+}
+
+.tab-switcher-list {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--bk-border-subtle);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab-switcher-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-switcher-tab {
+  position: relative;
+  flex-shrink: 0;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bk-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.tab-switcher-tab[data-selected] {
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+.tab-switcher-tab[data-selected]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--bk-brand-primary);
+  border-radius: 1px;
+}
+
+.tab-switcher-tab[data-focus-visible] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
