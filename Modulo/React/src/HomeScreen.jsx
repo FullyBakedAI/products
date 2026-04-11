@@ -469,13 +469,13 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
         >
-          <button className="action-btn" aria-label="Swap" onClick={() => navigate('/swap')}>
+          <button className="action-btn" aria-label="Swap" onClick={() => openActions({ tab: 'swap' })}>
             <IconRepeat2 />
             <span className="action-label">Swap</span>
           </button>
-          <button className="action-btn" aria-label="Buy" onClick={() => openActions({ tab: 'buy' })}>
+          <button className="action-btn" aria-label="Trade" onClick={() => openActions({ tab: 'trade' })}>
             <IconArrowUpRight />
-            <span className="action-label">Buy</span>
+            <span className="action-label">Trade</span>
           </button>
           <button className="action-btn" aria-label="Send" onClick={() => navigate('/send')}>
             <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />

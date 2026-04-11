@@ -7,7 +7,7 @@
  * Tabs: Swap | Trade | Lend & Borrow | Deposit
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
@@ -560,11 +560,14 @@ const TABS = [
 ];
 
 export default function ActionsScreen() {
-  const { closeActions, tab: initialTab } = useActions();
-  const [activeIdx, setActiveIdx] = useState(() => {
+  const { closeActions, tab: initialTab, isOpen } = useActions();
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  // Sync tab whenever the sheet opens or the requested tab changes
+  useEffect(() => {
     const i = TABS.findIndex(t => t.id === initialTab);
-    return i >= 0 ? i : 0;
-  });
+    setActiveIdx(i >= 0 ? i : 0);
+  }, [initialTab, isOpen]);
 
   const active = TABS[activeIdx].id;
 
