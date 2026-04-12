@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import PasswordGate               from './PasswordGate';
 import { BrandConfigProvider }    from './theme/BrandConfig';
 import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
 import FeaturePanel               from './theme/FeaturePanel';
@@ -169,10 +170,12 @@ function AppInner() {
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <BrandConfigProvider>
-      <FeatureConfigProvider>
-        <AppInner />
-      </FeatureConfigProvider>
-    </BrandConfigProvider>
+    <PasswordGate>
+      <BrandConfigProvider>
+        <FeatureConfigProvider>
+          <AppInner />
+        </FeatureConfigProvider>
+      </BrandConfigProvider>
+    </PasswordGate>
   );
 }

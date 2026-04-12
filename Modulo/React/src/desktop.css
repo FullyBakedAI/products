@@ -252,3 +252,63 @@
     --bk-manage-grid-cols: 4;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Sprint 005 — Desktop consistency pass
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── B1: Hide keypads on desktop — keyboard is available ─────────────── */
+@media (min-width: 768px) {
+  .sa-numpad,
+  .swap-numpad,
+  .numpad,
+  .num-pad { display: none !important; }
+}
+
+/* ── B2: Consistent content widths for all screens ───────────────────── */
+/* Standard screens: 720px centred */
+.desktop-main .send-amount-screen,
+.desktop-main .swap-screen,
+.desktop-main .send-screen,
+.desktop-main .receive-screen,
+.desktop-main .success-screen {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Narrower for form-style confirmation screens */
+.desktop-main .review-sheet {
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Wider for data-heavy screens */
+.desktop-main .explore-screen,
+.desktop-main .activity-screen {
+  max-width: 960px;
+}
+
+/* Full width for desktop layout panels */
+.desktop-main .desktop-panel-content {
+  max-width: none;
+}
+
+/* ── Keyboard-friendly inputs on desktop (numpad screens) ────────────── */
+/* Inputs in numpad screens should be clearly focusable on desktop */
+@media (min-width: 768px) {
+  .sa-amount-display input,
+  .swap-card input,
+  .actions-tab-stack input[type="text"] {
+    cursor: text;
+    caret-color: var(--bk-brand-primary);
+  }
+
+  .sa-amount-display input:focus,
+  .swap-card input:focus,
+  .actions-tab-stack input[type="text"]:focus {
+    outline: 2px solid var(--bk-brand-primary);
+    outline-offset: 2px;
+  }
+}

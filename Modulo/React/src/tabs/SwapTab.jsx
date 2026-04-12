@@ -20,6 +20,9 @@ import {
   Numpad,
   ASSET_ID_TO_TOKEN,
 } from './actions-shared';
+import { FeeBreakdown } from '../components/FeeBreakdown';
+import { TransactionPath } from '../components/TransactionPath';
+import { getPathForTokens } from '../config/transaction-paths';
 
 // MOD-036 — chain-aware gas fees (only used by SwapTab)
 const GAS_FEES = {
@@ -102,6 +105,24 @@ export default function SwapTab() {
             <div className="swap-amount" role="status" aria-live="polite" aria-label="Pay amount">
               <span className="amount-text">{payAmount || '0'}</span>
               <span className="amount-cursor" aria-hidden="true" />
+              {/* Desktop: invisible input layer for keyboard entry */}
+              <input
+                className="swap-amount-keyboard-input"
+                type="text"
+                inputMode="decimal"
+                value={payAmount}
+                aria-label="Enter pay amount"
+                onChange={e => {
+                  const val = e.target.value;
+                  if (/^[0-9]*\.?[0-9]*$/.test(val)) {
+                    setActivePct(null);
+                    setPayAmount(val === '' ? '' : val.startsWith('0') && val.length > 1 && !val.startsWith('0.') ? val.slice(1) : val);
+                  }
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'Backspace') { e.preventDefault(); handleKey('del'); }
+                }}
+              />
             </div>
             <TokenPill token={payToken} side="pay" />
           </div>
@@ -214,6 +235,29 @@ export default function SwapTab() {
               </label>
             </div>
           )}
+
+          {/* Sprint 005: Transaction path visualiser */}
+          <TransactionPath
+            {...getPathForTokens(payToken.symbol, receiveToken.symbol)}
+          />
+
+          {/* Sprint 005: Fee breakdown */}
+          {(() => {
+            const fees = GAS_FEES[activeChain] || GAS_FEES.ethereum;
+            const net = parseFloat(fees.network.replace('$', ''));
+            const pro = parseFloat(fees.protocol.replace('$', ''));
+            const feeTotal = `$${(net + pro).toFixed(2)}`;
+            return (
+              <FeeBreakdown
+                total={feeTotal}
+                items={[
+                  { label: `Network gas (${activeChain.charAt(0).toUpperCase() + activeChain.slice(1)})`, amount: fees.network },
+                  { label: `Bridge fee (Stargate)`, amount: '$0.00' },
+                  { label: `Protocol fee`, amount: fees.protocol },
+                ]}
+              />
+            );
+          })()}
         </>
       )}
 

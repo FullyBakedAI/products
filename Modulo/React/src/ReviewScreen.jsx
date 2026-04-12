@@ -30,6 +30,8 @@ const IconChevronDown = () => (
   </svg>
 );
 import { useFeatures } from './theme/FeatureConfig';
+import { TransactionPath } from './components/TransactionPath';
+import { getPathForTokens } from './config/transaction-paths';
 import './review.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -132,6 +134,15 @@ export default function ReviewScreen() {
           )}
         </div>
       </div>
+
+      {/* Sprint 005: Transaction path — swap only */}
+      {action === 'swap' && from?.symbol && to?.symbol && (
+        <div style={{ margin: '0 0 12px' }}>
+          <TransactionPath
+            {...getPathForTokens(from.symbol, to.symbol)}
+          />
+        </div>
+      )}
 
       {/* Fee breakdown — clean list, no card chrome */}
       <div className="review-fees-section">

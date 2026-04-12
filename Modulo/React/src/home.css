@@ -985,3 +985,129 @@
   margin: 0;
   line-height: 1.5;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Sprint 005 — Autopilot transparency card
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.autopilot-home-card {
+  margin: 0 20px 16px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--bk-brand-primary) 8%, var(--bk-bg-card));
+  border: 1px solid color-mix(in srgb, var(--bk-brand-primary) 25%, var(--bk-border-subtle));
+  border-radius: 16px;
+}
+
+.autopilot-home-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.autopilot-home-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.autopilot-home-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.autopilot-home-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+}
+
+.autopilot-home-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  background: var(--bk-success, #22C55E);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.autopilot-home-action {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-primary);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.autopilot-home-reason {
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.autopilot-home-path-btn {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bk-brand-primary);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.autopilot-home-path-btn[data-pressed] {
+  opacity: 0.7;
+}
+
+.autopilot-home-path-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ── Autopilot path bottom sheet content ───────────────────────────── */
+.autopilot-path-sheet {
+  padding: 8px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.autopilot-path-sheet-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.autopilot-path-sheet-desc {
+  font-size: 14px;
+  color: var(--bk-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+.autopilot-path-sheet-reason {
+  font-size: 13px;
+  color: var(--bk-text-muted);
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--bk-bg-elevated);
+  border-radius: 10px;
+  line-height: 1.5;
+}
+
+.autopilot-path-sheet-reason strong {
+  color: var(--bk-text-secondary);
+}

@@ -17,6 +17,9 @@ import {
   Numpad,
   ASSET_ID_TO_TOKEN,
 } from './actions-shared';
+import { AuditBadge } from '../components/AuditBadge';
+import { getAuditForProtocol } from '../config/protocol-audits';
+import { LTVBar } from '../components/LTVBar';
 
 // Only used by LendBorrowTab
 const LENDING_PLATFORMS = [
@@ -118,9 +121,24 @@ export default function LendBorrowTab() {
                 <div className="asset-opp-info">
                   <div className="token-name-text">
                     {p.name}
-                    {p.verified && <span className="audit-badge">✓ {p.audit}</span>}
                   </div>
                   <div className="token-amount">TVL {p.tvl}</div>
+                  {p.verified && (() => {
+                    const audit = getAuditForProtocol(p.name);
+                    return audit ? (
+                      <AuditBadge
+                        protocolName={p.name}
+                        firm={audit.firm}
+                        year={audit.year}
+                        tvl={audit.tvl}
+                        reportUrl={audit.reportUrl}
+                        summary={audit.summary}
+                        inline
+                      />
+                    ) : (
+                      <span className="audit-badge">✓ {p.audit}</span>
+                    );
+                  })()}
                 </div>
                 <span className="asset-opp-apy">{p.apy}%</span>
                 <span className="asset-opp-apy-label">{p.apyType}</span>
@@ -232,6 +250,17 @@ export default function LendBorrowTab() {
               )}
             </div>
           </div>
+
+          {/* Sprint 005: LTV health bar */}
+          {f.defi.healthFactor && (
+            <LTVBar
+              current={Math.min(85, Math.round(42 + (parseFloat(amount || 0) / 3300) * 43))}
+              warning={75}
+              liquidation={85}
+              borrowAmount={amount ? `$${parseFloat(amount).toLocaleString()}` : '$8,400'}
+              collateralAmount="$20,000"
+            />
+          )}
 
           <div className="swap-card pay-card">
             <div className="card-label">Borrow amount</div>

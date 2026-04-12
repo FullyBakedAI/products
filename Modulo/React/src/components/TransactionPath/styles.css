@@ -1,0 +1,163 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   TransactionPath — Route visualiser
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.tx-path-root {
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 0 16px;
+}
+
+.tx-path-compact {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.tx-path-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tx-path-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bk-text-muted);
+}
+
+.tx-path-time {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+}
+
+.tx-path-steps {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  row-gap: 8px;
+}
+
+.tx-path-step-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Token node ─────────────────────────────────────────────────────── */
+.tx-path-token {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.tx-path-token-icon {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-path-token-symbol {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.tx-path-chain-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--bk-bg-elevated);
+  display: block;
+}
+
+.tx-path-chain-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Protocol / Bridge pills ────────────────────────────────────────── */
+.tx-path-protocol-pill,
+.tx-path-bridge-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tx-path-bridge-pill {
+  background: color-mix(in srgb, var(--bk-warning, #F59E0B) 15%, transparent);
+  color: var(--bk-warning, #F59E0B);
+  border: 1px solid color-mix(in srgb, var(--bk-warning, #F59E0B) 30%, transparent);
+}
+
+.tx-path-protocol-only-pill {
+  background: color-mix(in srgb, var(--bk-brand-primary) 15%, transparent);
+  color: var(--bk-brand-primary);
+  border: 1px solid color-mix(in srgb, var(--bk-brand-primary) 30%, transparent);
+}
+
+/* ── Arrow connector ────────────────────────────────────────────────── */
+.tx-path-arrow {
+  color: var(--bk-text-muted);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Compact variant ────────────────────────────────────────────────── */
+.tx-path-compact .tx-path-token-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.tx-path-compact .tx-path-token-symbol {
+  font-size: 7px;
+}
+
+.tx-path-compact .tx-path-chain-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.tx-path-compact .tx-path-chain-label {
+  font-size: 8px;
+}
+
+.tx-path-compact .tx-path-protocol-pill,
+.tx-path-compact .tx-path-bridge-pill {
+  height: 22px;
+  padding: 0 6px;
+  font-size: 10px;
+}

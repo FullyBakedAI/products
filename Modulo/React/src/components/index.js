@@ -17,6 +17,12 @@
  *
  * Phase 3 Components (extracted):
  * - AssetRow
+ *
+ * Sprint 005 — Trust layer components:
+ * - TransactionPath
+ * - FeeBreakdown
+ * - LTVBar
+ * - AuditBadge
  */
 
 export { ScreenHeader } from './ScreenHeader';
@@ -27,3 +33,7 @@ export { TabSwitcher } from './TabSwitcher';
 export { FinancialInputCard } from './FinancialInputCard';
 export { StatusCard } from './StatusCard';
 export { AssetRow } from './AssetRow';
+export { TransactionPath } from './TransactionPath';
+export { FeeBreakdown } from './FeeBreakdown';
+export { LTVBar } from './LTVBar';
+export { AuditBadge } from './AuditBadge';

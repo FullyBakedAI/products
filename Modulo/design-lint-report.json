@@ -1,0 +1,859 @@
+{
+  "generated": "2026-04-12T12:17:59.550810",
+  "manifest": "/Users/Frank/products/Modulo/design-manifest.json",
+  "src": "/Users/Frank/products/Modulo/React/src",
+  "summary": {
+    "errors": 7,
+    "warnings": 114,
+    "infos": 0
+  },
+  "violations": [
+    {
+      "severity": "WARNING",
+      "file": "main.jsx",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#0D0E17' in inline style \u2014 use a --bk-* token instead",
+      "line": 19
+    },
+    {
+      "severity": "WARNING",
+      "file": "main.jsx",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F04348' in inline style \u2014 use a --bk-* token instead",
+      "line": 19
+    },
+    {
+      "severity": "WARNING",
+      "file": "main.jsx",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#B3B2B8' in inline style \u2014 use a --bk-* token instead",
+      "line": 22
+    },
+    {
+      "severity": "WARNING",
+      "file": "home.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#0D0E17' in CSS \u2014 use a --bk-* token instead",
+      "line": 165
+    },
+    {
+      "severity": "WARNING",
+      "file": "shared.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#0D0E17' in CSS \u2014 use a --bk-* token instead",
+      "line": 12
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#09090E' in CSS \u2014 use a --bk-* token instead",
+      "line": 10
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F5F5F6' in CSS \u2014 use a --bk-* token instead",
+      "line": 16
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#FFFFFF' in CSS \u2014 use a --bk-* token instead",
+      "line": 241
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F8F8FA' in CSS \u2014 use a --bk-* token instead",
+      "line": 288
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F59E0B' in CSS \u2014 use a --bk-* token instead",
+      "line": 408
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F59E0B' in CSS \u2014 use a --bk-* token instead",
+      "line": 618
+    },
+    {
+      "severity": "WARNING",
+      "file": "design-system-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#09090E' in CSS \u2014 use a --bk-* token instead",
+      "line": 1554
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#3b82f6' in CSS \u2014 use a --bk-* token instead",
+      "line": 317
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#6d28d9' in CSS \u2014 use a --bk-* token instead",
+      "line": 318
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#7c3aed' in CSS \u2014 use a --bk-* token instead",
+      "line": 319
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#4f6ef7' in CSS \u2014 use a --bk-* token instead",
+      "line": 320
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#0D0E17' in CSS \u2014 use a --bk-* token instead",
+      "line": 10
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F5F5F6' in CSS \u2014 use a --bk-* token instead",
+      "line": 16
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F5F5FA' in CSS \u2014 use a --bk-* token instead",
+      "line": 507
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#FFFFFF' in CSS \u2014 use a --bk-* token instead",
+      "line": 508
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#F0F0F8' in CSS \u2014 use a --bk-* token instead",
+      "line": 509
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#FFFFFF' in CSS \u2014 use a --bk-* token instead",
+      "line": 510
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#FFFFFF' in CSS \u2014 use a --bk-* token instead",
+      "line": 511
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#E8E8F0' in CSS \u2014 use a --bk-* token instead",
+      "line": 512
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#E2E3EC' in CSS \u2014 use a --bk-* token instead",
+      "line": 514
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#584BEB' in CSS \u2014 use a --bk-* token instead",
+      "line": 517
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#D8D9E8' in CSS \u2014 use a --bk-* token instead",
+      "line": 518
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#EAEBF4' in CSS \u2014 use a --bk-* token instead",
+      "line": 519
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#0D0E17' in CSS \u2014 use a --bk-* token instead",
+      "line": 521
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#4A4A58' in CSS \u2014 use a --bk-* token instead",
+      "line": 522
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#6B6B75' in CSS \u2014 use a --bk-* token instead",
+      "line": 523
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#584BEB' in CSS \u2014 use a --bk-* token instead",
+      "line": 526
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#584BEB' in CSS \u2014 use a --bk-* token instead",
+      "line": 528
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#4A3DE0' in CSS \u2014 use a --bk-* token instead",
+      "line": 528
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#16A34A' in CSS \u2014 use a --bk-* token instead",
+      "line": 530
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#DC2626' in CSS \u2014 use a --bk-* token instead",
+      "line": 531
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#C8C9D8' in CSS \u2014 use a --bk-* token instead",
+      "line": 533
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "hardcoded-color",
+      "message": "Hardcoded colour '#EBEBF8' in CSS \u2014 use a --bk-* token instead",
+      "line": 534
+    },
+    {
+      "severity": "ERROR",
+      "file": "HomeScreen.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'logo-modulo.svg' is not imported or used in HomeScreen",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "HomeScreen.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-action-swap.svg' is not imported or used in HomeScreen",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "HomeScreen.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-action-buy.svg' is not imported or used in HomeScreen",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "HomeScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'tabs' not found in HomeScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "HomeScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'earn-card' not found in HomeScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "BottomNav.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-nav-home.svg' is not imported or used in BottomNav",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "BottomNav.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-nav-search.svg' is not imported or used in BottomNav",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "BottomNav.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-nav-swap.svg' is not imported or used in BottomNav",
+      "line": null
+    },
+    {
+      "severity": "ERROR",
+      "file": "BottomNav.jsx",
+      "rule": "missing-required-asset",
+      "message": "Required asset 'icon-nav-activity.svg' is not imported or used in BottomNav",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "SwapScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-header' not found in SwapScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "AssetScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-card' not found in AssetScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-screen-inner' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-header' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'scroll-content' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-cards' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'swap-card' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ActionsScreen.jsx",
+      "rule": "missing-required-class",
+      "message": "Required CSS class 'bottom-cta-btn' not found in ActionsScreen \u2014 check it's using the system class, not a custom one",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "review.css",
+      "rule": "duplicate-class",
+      "message": "Class '.card-label' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.numpad' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.numpad-key-btn' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.bottom-cta-btn' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.time-btn' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.swap-card' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.swap-cards' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.pct-row' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "actions.css",
+      "rule": "duplicate-class",
+      "message": "Class '.card-label' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "desktop.css",
+      "rule": "duplicate-class",
+      "message": "Class '.screen-wrapper' is already defined in shared.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "desktop.css",
+      "rule": "duplicate-class",
+      "message": "Class '.bottom-nav' is already defined in shared.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "desktop.css",
+      "rule": "duplicate-class",
+      "message": "Class '.home-screen' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "desktop.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-swipe-actions' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "explore.css",
+      "rule": "duplicate-class",
+      "message": "Class '.chain-filters' is already defined in shared.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "asset.css",
+      "rule": "duplicate-class",
+      "message": "Class '.swap-header' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "asset.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-label' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "asset.css",
+      "rule": "duplicate-class",
+      "message": "Class '.card-label' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "asset.css",
+      "rule": "duplicate-class",
+      "message": "Class '.card-label' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "asset.css",
+      "rule": "duplicate-class",
+      "message": "Class '.card-label' is already defined in swap.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.home-screen' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.home-header' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.home-header-actions' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.icon-btn' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-card' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-chart' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-header' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-label' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.time-periods' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.time-btn' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-value' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-dollars' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-cents' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.portfolio-gain' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.gain-text' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.action-row' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.action-btn' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.action-label' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.tabs' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.tab' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-list' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-row-outer' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-swipe-actions' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.swipe-action' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-icon-anchor' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-icon-spacer' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-row' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-row-main' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-icon-lg' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-info' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-name-row' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-name-text' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-amount' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-values' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-usd' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-change' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-yield-bar-row' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-yield-track' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-yield-fill' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.token-yield-label' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-card' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-label' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-value-row' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-value' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-unit' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "v1/home-v1.css",
+      "rule": "duplicate-class",
+      "message": "Class '.earn-btn' is already defined in home.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    },
+    {
+      "severity": "WARNING",
+      "file": "ds/ds-page.css",
+      "rule": "duplicate-class",
+      "message": "Class '.phone' is already defined in shared.css \u2014 use the existing class instead of redefining it",
+      "line": null
+    }
+  ]
+}

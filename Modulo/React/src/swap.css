@@ -449,3 +449,49 @@
 .receive-flash {
   animation: valueUpdate 0.2s ease-out forwards;
 }
+
+/* ── Sprint 005: Keyboard input overlay for desktop ─────────────────── */
+/* Hidden on mobile (numpad handles input), revealed on desktop */
+.swap-amount-keyboard-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border: none;
+  outline: none;
+  font-family: var(--bk-font);
+}
+
+@media (min-width: 768px) {
+  .swap-amount {
+    position: relative;
+    cursor: text;
+  }
+
+  .swap-amount-keyboard-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: text;
+    font-size: 36px;
+    font-weight: 300;
+    color: transparent;
+    caret-color: var(--bk-brand-primary);
+    pointer-events: all;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    font-family: var(--bk-font);
+  }
+
+  .swap-amount:focus-within {
+    outline: 2px solid color-mix(in srgb, var(--bk-brand-primary) 30%, transparent);
+    border-radius: 6px;
+  }
+}

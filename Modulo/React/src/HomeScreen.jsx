@@ -66,6 +66,9 @@ import { useBrandConfig } from './theme/BrandConfig';
 import { useFeatures } from './theme/FeatureConfig';
 
 import SmartNudges       from './SmartNudges';
+import { TransactionPath } from './components/TransactionPath';
+import { BottomSheet } from './components/BottomSheet';
+import { CURRENT_AUTOPILOT_ACTION } from './config/autopilot-activity';
 import iconBrandBadge    from './assets/icon-modulo-badge.svg';
 import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
@@ -163,7 +166,7 @@ function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) 
   const x = useMotionValue(0);
   const navigate = useNavigate();
   const { openActions } = useActions();
-  const isDesktop = useIsD
+  const isDesktop = useIsDesktop();
   const [isSwipeOpen, setIsSwipeOpen] = useState(false);
   const hasDragged = useRef(false);
   const buttonReveal = useTransform(x, [-ACTION_W, -30], [1, 0]);
@@ -315,7 +318,7 @@ export default function HomeScreen() {
   const navigate = useNavigate();
   const { openActions } = useActions();
   const f = useFeatures();
-  const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();
+  const { brandName, logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
   const [activeAssetTab, setActiveAssetTab] = useState('tokens');
@@ -325,6 +328,8 @@ export default function HomeScreen() {
   const [activeChain, setActiveChain] = useState('Arbitrum');
   const [apyTooltipOpen, setApyTooltipOpen] = useState(false);
   const [chainMenuOpen, setChainMenuOpen] = useState(false);
+  const [autopilotActive] = useState(true);
+  const [autopilotPathOpen, setAutopilotPathOpen] = useState(false);
 
   const CHAINS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
   const scrollRef = useRef(null);
@@ -540,6 +545,54 @@ export default function HomeScreen() {
 
         {/* F4: SmartNudges horizontal scroll */}
         {f.home.smartNudges && <SmartNudges />}
+
+        {/* Sprint 005: Autopilot transparency card */}
+        {f.home.autopilotCard && autopilotActive && (
+          <motion.div
+            className="autopilot-home-card"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.18 } }}
+          >
+            <div className="autopilot-home-card-header">
+              <div className="autopilot-home-card-title">
+                <span className="autopilot-home-icon" aria-hidden="true">⚡</span>
+                <span className="autopilot-home-label">Autopilot</span>
+                <span className="autopilot-home-badge">ON</span>
+              </div>
+            </div>
+            <div className="autopilot-home-action">
+              Currently: {CURRENT_AUTOPILOT_ACTION.action}
+            </div>
+            <div className="autopilot-home-reason">
+              Reason: {CURRENT_AUTOPILOT_ACTION.reason}
+            </div>
+            <Button
+              className="autopilot-home-path-btn"
+              onPress={() => setAutopilotPathOpen(true)}
+              aria-label="View transaction path for current autopilot action"
+            >
+              View path →
+            </Button>
+          </motion.div>
+        )}
+
+        {/* Autopilot path bottom sheet */}
+        <BottomSheet isOpen={autopilotPathOpen} onClose={() => setAutopilotPathOpen(false)}>
+          <div className="autopilot-path-sheet">
+            <h2 className="autopilot-path-sheet-title">Autopilot Route</h2>
+            <p className="autopilot-path-sheet-desc">{CURRENT_AUTOPILOT_ACTION.action}</p>
+            <TransactionPath
+              steps={CURRENT_AUTOPILOT_ACTION.path.steps}
+              estimatedTime={CURRENT_AUTOPILOT_ACTION.path.estimatedTime}
+            />
+            <p className="autopilot-path-sheet-reason">
+              <strong>Why:</strong> {CURRENT_AUTOPILOT_ACTION.reason}
+            </p>
+            <Button className="primary-btn" onPress={() => setAutopilotPathOpen(false)} aria-label="Close">
+              Got it
+            </Button>
+          </div>
+        </BottomSheet>
 
         {/* Positions header + sort */}
         <motion.div
