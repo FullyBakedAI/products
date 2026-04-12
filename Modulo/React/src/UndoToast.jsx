@@ -9,6 +9,7 @@ import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, toast as toastAnim } from './motion-tokens';
 import { useUndoToast } from './UndoToastContext';
+import { useFeatures } from './theme/FeatureConfig';
 import './undo-toast.css';
 
 const COUNTDOWN_SECS = 30;
@@ -16,6 +17,7 @@ const RING_R = 13;
 const RING_CIRC = 2 * Math.PI * RING_R;
 
 export default function UndoToast() {
+  const f = useFeatures();
   const { toast, dismiss } = useUndoToast();
   const [timeLeft, setTimeLeft] = useState(COUNTDOWN_SECS);
   const [undone, setUndone] = useState(false);
@@ -49,7 +51,7 @@ export default function UndoToast() {
 
   const dashOffset = RING_CIRC * (1 - timeLeft / COUNTDOWN_SECS);
 
-  return (
+  return f.undoToast ? (
     <AnimatePresence>
       {toast && (
         <motion.div
@@ -116,5 +118,5 @@ export default function UndoToast() {
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  ) : null;
 }

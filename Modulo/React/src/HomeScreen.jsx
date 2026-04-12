@@ -63,6 +63,7 @@ const IconArrowUpRight = ({ size = 20 }) => (
 );
 import { useIconOverride } from './IconOverrideContext';
 import { useBrandConfig } from './theme/BrandConfig';
+import { useFeatures } from './theme/FeatureConfig';
 
 import SmartNudges       from './SmartNudges';
 import iconBrandBadge    from './assets/icon-modulo-badge.svg';
@@ -313,6 +314,7 @@ function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) 
 export default function HomeScreen() {
   const navigate = useNavigate();
   const { openActions } = useActions();
+  const f = useFeatures();
   const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
@@ -343,7 +345,7 @@ export default function HomeScreen() {
   });
 
   // F2: Live balance
-  const { balance, glowing } = useLiveBalance(yieldActive);
+  const { balance, glowing } = useLiveBalance(f.home.liveYield && yieldActive);
 
   const totalPortfolioValue = TOKENS.reduce((sum, t) => sum + parseFloat(t.usd.replace(/[$,]/g, '')), 0);
 
@@ -419,10 +421,12 @@ export default function HomeScreen() {
             </AnimatePresence>
           </div>
 
+          {f.notifications && (
           <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(pre => { setNotifOpen(true); return pre; })}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
             <span className="notif-dot" aria-hidden="true" />
           </Button>
+          )}
           <Button className="icon-btn" aria-label="Settings" onPress={() => navigate('/settings')}>
             <img src={iconSettings} alt="" width="16" height="16" aria-hidden="true" />
           </Button>
@@ -432,7 +436,7 @@ export default function HomeScreen() {
       <div className="scroll-content" ref={scrollRef} onScroll={handleScroll}>
 
         {/* Portfolio Card — F2: live yield counter */}
-        <motion.section
+        {f.home.portfolioChart && <motion.section
           className="portfolio-card"
           data-bk-component="portfolio-metric"
           aria-labelledby="portfolio-heading"
@@ -470,7 +474,7 @@ export default function HomeScreen() {
               ${balanceDollars}
             </span>
             <span className="portfolio-cents" aria-hidden="true">{balanceCents}</span>
-            {yieldActive && (
+            {f.home.liveYield && yieldActive && (
               <span className="portfolio-yield-pulse" aria-label="Yield active">
                 <span className="portfolio-yield-pulse-dot" />
               </span>
@@ -489,7 +493,7 @@ export default function HomeScreen() {
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">
             <span className="alltime-text">+$2,341.18 all time (22.3%)</span>
           </div>
-        </motion.section>
+        </motion.section>}
 
         {/* Action buttons — Swap / Buy / Send / Receive */}
         <motion.div
@@ -516,6 +520,7 @@ export default function HomeScreen() {
         </motion.div>
 
         {/* F1: "Put It All To Work" promo card — spring scale entrance */}
+        {f.home.optimisePromo && (
         <motion.div
           initial={{ opacity: 0, y: 12, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -531,9 +536,10 @@ export default function HomeScreen() {
           </Button>
           </motion.div>
         </motion.div>
+        )}
 
         {/* F4: SmartNudges horizontal scroll */}
-        <SmartNudges />
+        {f.home.smartNudges && <SmartNudges />}
 
         {/* Positions header + sort */}
         <motion.div
@@ -572,7 +578,7 @@ export default function HomeScreen() {
             )}
             {/* Token List */}
             <div className="token-list" role="list" id="token-panel">
-              {sortedTokens.map((t, i) => (
+              {(f.home.assetLimit ? sortedTokens.slice(0, f.home.assetLimit) : sortedTokens).map((t, i) => (
                 <TokenRow
                   key={t.name} t={t} index={i}
                   showApyInfo={i === 0}

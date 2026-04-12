@@ -2,6 +2,7 @@ import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useActions } from './ActionsContext';
 import { useIsDesktop } from './hooks/useIsDesktop';
+import { useFeatures } from './theme/FeatureConfig';
 const IconHome = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M3 9.5L10 3L17 9.5V17H13V13H7V17H3V9.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -33,6 +34,7 @@ const IconSlidersHorizontal = () => (
 );
 
 export default function BottomNav() {
+  const f = useFeatures();
   const isDesktop = useIsDesktop();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -44,6 +46,7 @@ export default function BottomNav() {
 
   return (
     <nav className="bottom-nav" data-bk-component="bottom-nav" aria-label="Main navigation">
+      {f.nav.home && (
       <Button
         className={`nav-btn${pathname === '/' ? ' active' : ''}`}
         aria-label="Home"
@@ -53,7 +56,9 @@ export default function BottomNav() {
         <IconHome />
         <span className="nav-label">Home</span>
       </Button>
+      )}
 
+      {f.nav.explore && (
       <Button
         className={`nav-btn${isActive('/explore') ? ' active' : ''}`}
         aria-label="Markets"
@@ -63,8 +68,10 @@ export default function BottomNav() {
         <IconBarChart3 />
         <span className="nav-label">Markets</span>
       </Button>
+      )}
 
       {/* Centre FAB — primary action */}
+      {f.nav.fab && (
       <Button
         className="nav-btn nav-btn-swap"
         aria-label="Actions"
@@ -72,7 +79,9 @@ export default function BottomNav() {
       >
         <IconZap />
       </Button>
+      )}
 
+      {f.nav.activity && (
       <Button
         className={`nav-btn${isActive('/activity') ? ' active' : ''}`}
         aria-label="Activity"
@@ -82,6 +91,7 @@ export default function BottomNav() {
         <IconClock />
         <span className="nav-label">Activity</span>
       </Button>
+      )}
 
       <Button
         className={`nav-btn${isActive('/manage') ? ' active' : ''}`}

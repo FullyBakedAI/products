@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from '../motion-tokens';
 import { Button } from 'react-aria-components';
 import { useActions } from '../ActionsContext';
+import { useFeatures } from '../theme/FeatureConfig';
 import { SWAP_TOKENS } from '../tokens-data';
 import tokenEth  from '../assets/token-eth.svg';
 import tokenUsdc from '../assets/token-usdc.svg';
@@ -47,6 +48,7 @@ const STAKING_PLATFORMS = {
 };
 
 export default function LendBorrowTab() {
+  const f = useFeatures();
   const navigate = useFlowNavigate();
   const { asset } = useActions();
   const tokenKey = (asset && ASSET_ID_TO_TOKEN[asset]) || 'USDC';
@@ -199,6 +201,8 @@ export default function LendBorrowTab() {
               </div>
             </div>
             <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10, marginTop: 8 }}>
+              {f.defi.healthFactor && (
+              <>
               <Button
                 className="health-factor-btn"
                 aria-label="Health factor details"
@@ -224,6 +228,8 @@ export default function LendBorrowTab() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              </>
+              )}
             </div>
           </div>
 

@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from 'react-aria-components';
 import { useActions } from './ActionsContext';
+import { useFeatures } from './theme/FeatureConfig';
 import SwapTab       from './tabs/SwapTab';
 import TradeTab      from './tabs/TradeTab';
 import LendBorrowTab from './tabs/LendBorrowTab';
@@ -31,17 +32,19 @@ const TABS = [
 ];
 
 export default function ActionsScreen({ variant }) {
+  const f = useFeatures();
   const isPanel = variant === 'panel';
   const { closeActions, tab: initialTab, isOpen } = useActions();
+  const visibleTabs = TABS.filter(t => f.actions[t.id]);
   const [activeIdx, setActiveIdx] = useState(0);
   const closeButtonRef   = useRef(null);   // MOD-002
   const previousFocusRef = useRef(null);   // MOD-002
 
   // Sync tab whenever the sheet opens or the requested tab changes
   useEffect(() => {
-    const i = TABS.findIndex(t => t.id === initialTab);
+    const i = visibleTabs.findIndex(t => t.id === initialTab);
     setActiveIdx(i >= 0 ? i : 0);
-  }, [initialTab, isOpen]);
+  }, [initialTab, isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // MOD-002 — focus management on open/close
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function ActionsScreen({ variant }) {
     }
   }, [isOpen]);
 
-  const active = TABS[activeIdx].id;
+  const active = (visibleTabs[activeIdx] ?? visibleTabs[0])?.id;
 
   return (
     <div className={isPanel ? 'actions-panel-root' : 'actions-overlay'} role="dialog" aria-modal="true" aria-label="Actions">
@@ -85,7 +88,7 @@ export default function ActionsScreen({ variant }) {
         {/* Header row — tabs + close button */}
         <div className="actions-header-row">
           <div className="actions-tab-strip" role="tablist" aria-label="Action type">
-            {TABS.map((t, i) => (
+            {visibleTabs.map((t, i) => (
               <Button
                 key={t.id}
                 className={`actions-tab-pill${activeIdx === i ? ' active' : ''}`}

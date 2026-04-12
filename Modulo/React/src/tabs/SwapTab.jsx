@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from '../motion-tokens';
 import { Button } from 'react-aria-components';
 import { useSwap } from '../SwapContext';
+import { useFeatures } from '../theme/FeatureConfig';
 import { useIconOverride } from '../IconOverrideContext';
 import { useActions } from '../ActionsContext';
 import { SWAP_TOKENS } from '../tokens-data';
@@ -30,6 +31,7 @@ const GAS_FEES = {
 };
 
 export default function SwapTab() {
+  const f = useFeatures();
   const navigate = useFlowNavigate();
   const { asset } = useActions();
   const {
@@ -183,6 +185,7 @@ export default function SwapTab() {
 
       {receiveToken && hasAmount && (
         <>
+          {f.defi.priceImpact && (
           <div className="swap-impact-row">
             <span className="swap-impact-label">
               Price impact:
@@ -192,12 +195,13 @@ export default function SwapTab() {
               Route: {payToken.symbol} → {receiveToken.symbol} via Arbitrum
             </span>
           </div>
-          {priceImpact > 3 && priceImpact <= 10 && (
+          )}
+          {f.defi.priceImpact && priceImpact > 3 && priceImpact <= 10 && (
             <div className="swap-warning swap-warning-amber" role="alert">
               ⚠ High price impact — you may receive significantly less than shown.
             </div>
           )}
-          {priceImpact > 10 && (
+          {f.defi.slippageWarning && priceImpact > 10 && (
             <div className="swap-warning swap-warning-red" role="alert">
               <div>⚠ Very high price impact ({priceImpact.toFixed(1)}%) — this trade may be unfavourable.</div>
               <label className="swap-ack-label">

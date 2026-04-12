@@ -29,6 +29,7 @@ const IconChevronDown = () => (
     <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
+import { useFeatures } from './theme/FeatureConfig';
 import './review.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -47,6 +48,7 @@ const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
 const fmt = (n) => `$${Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function ReviewScreen() {
+  const f = useFeatures();
   const navigate = useNavigate();
   const { state } = useLocation();
   const s = state || DEFAULT_STATE;
@@ -58,7 +60,7 @@ export default function ReviewScreen() {
   // MOD-012: Token approval gate — non-native ERC-20 tokens require approve() before swap
   const isNativeToken = from?.symbol === 'ETH' || from?.symbol === 'BNB';
   const [approvalStatus, setApprovalStatus] = useState('idle'); // 'idle' | 'pending' | 'approved'
-  const needsApproval = !isNativeToken && approvalStatus !== 'approved';
+  const needsApproval = f.defi.tokenApproval && !isNativeToken && approvalStatus !== 'approved';
 
   const handleConfirm = () => navigate('/success', { state: {
     action,
@@ -140,7 +142,7 @@ export default function ReviewScreen() {
         </div>
 
         {/* MOD-011: Deadline row — swap only */}
-        {action === 'swap' && (
+        {f.defi.transactionDeadline && action === 'swap' && (
           <div className="card-bottom" style={{ padding: '8px 0', margin: 0 }}>
             <span className="card-label" style={{ margin: 0 }}>Expires in</span>
             <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{deadline} min</span>
@@ -199,7 +201,7 @@ export default function ReviewScreen() {
       )}
 
       {/* MOD-012: Approval step — shown for non-native tokens before confirm */}
-      {needsApproval && (
+      {f.defi.tokenApproval && needsApproval && (
         <div className="approval-step">
           <div className="approval-step-header">
             <span className="step-number">1</span>

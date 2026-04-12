@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BrandConfigProvider }    from './theme/BrandConfig';
+import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
 import { SwapProvider }           from './SwapContext';
 import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
@@ -123,26 +124,24 @@ function AnimatedRoutes() {
   );
 }
 
-// ── App ───────────────────────────────────────────────────────────────────
-export default function App() {
+// ── AppInner — inside FeatureConfigProvider, handles wallet gate ──────────
+function AppInner() {
+  const f = useFeatures();
   const isDesktop = useIsDesktop();
   const [walletConnected, setWalletConnected] = useState(
-    () => localStorage.getItem('walletConnected') === 'true'
+    () => !f.walletConnection || localStorage.getItem('walletConnected') === 'true'
   );
 
   if (!walletConnected) {
     return (
-      <BrandConfigProvider>
-        <ConnectWalletScreen onConnect={() => {
-          localStorage.setItem('walletConnected', 'true');
-          setWalletConnected(true);
-        }} />
-      </BrandConfigProvider>
+      <ConnectWalletScreen onConnect={() => {
+        localStorage.setItem('walletConnected', 'true');
+        setWalletConnected(true);
+      }} />
     );
   }
 
   return (
-    <BrandConfigProvider>
     <ActionsProvider>
       <IconOverrideProvider>
         <SwapProvider>
@@ -162,6 +161,16 @@ export default function App() {
         </SwapProvider>
       </IconOverrideProvider>
     </ActionsProvider>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────────────
+export default function App() {
+  return (
+    <BrandConfigProvider>
+      <FeatureConfigProvider>
+        <AppInner />
+      </FeatureConfigProvider>
     </BrandConfigProvider>
   );
 }
