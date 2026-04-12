@@ -1,8 +1,8 @@
-/* ═══════════════════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════════════
    Modulo Design Tokens
    Sourced from ../Prototype/modulo-shared.css — tokens only.
    All values via --bk-* CSS custom properties. No hardcoded hex in components.
-   ═══════════════════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -25,7 +25,7 @@
 
   /* Text */
   --bk-text-primary:     #F5F5F6;
-  --bk-text-secondary:   #B3B2B8;
+  --bk-text-secondary:   #B3B1B8;
   --bk-text-muted:       #87878C;
   --bk-text-placeholder: rgba(245, 245, 246, 0.5);
 
@@ -41,7 +41,7 @@
 
   /* Special */
   --bk-pill-bg:          #2A2A3E;
-  --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
+  --bk-earn-card-bg:     rgba(89, 75, 235, 0.18);
   --bk-earn-card-border: rgba(88, 75, 235, 0.2);
 
   /* Logo */
@@ -141,7 +141,7 @@ body {
   margin: 0;
 }
 
-/* ── Real device: fill viewport, drop the frame ──────────────────────── */
+/* ── Real device: fill viewport, drop the frame ────────────────── */
 @media (max-width: 500px), (display-mode: standalone) {
   html, body {
     height: 100%;
