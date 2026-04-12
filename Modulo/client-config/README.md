@@ -16,3 +16,11 @@ Files here are overrides — they let you customise the app's brand and feature 
 3. Run `npm run dev` — the changes take effect immediately.
 
 Changes to these files do not affect the core application code. They are safe to modify and share with clients.
+
+## Presets — version-controlled product scopes
+
+The `presets/` folder contains named product scopes as JSON files. Each preset defines which features are active, making it easy to show a scoped MVP, a Phase 2 build, or the full product vision in a demo.
+
+See `presets/README.md` for the full version-control pattern.
+
+The **⚡ Build** button in the prototype loads these presets by name. You can also create custom presets from the Build panel and commit the downloaded JSON here — your git history becomes a record of product scope decisions over time.

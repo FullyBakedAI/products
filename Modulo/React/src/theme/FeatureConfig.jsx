@@ -1,21 +1,25 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { defaultFeatures } from '../config/features';
 
 const FeatureConfigContext = createContext(defaultFeatures);
 
 export function FeatureConfigProvider({ config = defaultFeatures, children }) {
+  const [liveFeatures, setLiveFeatures] = useState(null);
+
   // Deep merge: client overrides only what they specify
-  const merged = {
-    nav:     { ...defaultFeatures.nav,     ...config.nav },
-    home:    { ...defaultFeatures.home,    ...config.home },
-    actions: { ...defaultFeatures.actions, ...config.actions },
-    defi:    { ...defaultFeatures.defi,    ...config.defi },
-    notifications:    config.notifications    ?? defaultFeatures.notifications,
-    walletConnection: config.walletConnection ?? defaultFeatures.walletConnection,
-    undoToast:        config.undoToast        ?? defaultFeatures.undoToast,
+  const base = liveFeatures ?? config;
+  const resolved = {
+    nav:     { ...defaultFeatures.nav,     ...base.nav },
+    home:    { ...defaultFeatures.home,    ...base.home },
+    actions: { ...defaultFeatures.actions, ...base.actions },
+    defi:    { ...defaultFeatures.defi,    ...base.defi },
+    notifications:    base.notifications    ?? defaultFeatures.notifications,
+    walletConnection: base.walletConnection ?? defaultFeatures.walletConnection,
+    undoToast:        base.undoToast        ?? defaultFeatures.undoToast,
   };
+
   return (
-    <FeatureConfigContext.Provider value={merged}>
+    <FeatureConfigContext.Provider value={{ ...resolved, setFeatures: setLiveFeatures }}>
       {children}
     </FeatureConfigContext.Provider>
   );

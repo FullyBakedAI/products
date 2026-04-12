@@ -75,6 +75,29 @@ See `client-config/features.example.js` for the full list of available flags wit
 
 ---
 
+## Scoping your build
+
+The prototype ships with three preset scopes that show different stages of the product:
+
+- **MVP** — Bitcoin only, swap flow, no portfolio chart, no autopilot
+- **Phase 2** — Adds lending, autopilot, live yield counter, 5-asset view
+- **Full Product** — Everything on
+
+### Using the live builder
+
+Tap the **⚡ Build** button in the bottom-right corner of the prototype to open the MVP Builder panel. Switch presets instantly, or toggle individual features on/off. The prototype updates live — no reload required.
+
+### Saving and versioning presets
+
+Use "Save preset" in the Build panel to download a JSON file. Commit it to `client-config/presets/`. Your git history then records exactly when each feature was added to the product scope — a timestamped record of product evolution.
+
+Preset files are in `client-config/presets/`:
+- `mvp.json` — MVP scope definition
+- `phase-2.json` — Phase 2 scope definition
+- `full-product.json` — Full product (everything on)
+
+---
+
 ## Deploying to Vercel
 
 The app deploys to Vercel in one command. Make sure you have the [Vercel CLI](https://vercel.com/docs/cli) installed (`npm i -g vercel`), then from the `React/` folder:

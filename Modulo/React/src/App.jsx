@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BrandConfigProvider }    from './theme/BrandConfig';
 import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
+import FeaturePanel               from './theme/FeaturePanel';
 import { SwapProvider }           from './SwapContext';
 import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
@@ -157,6 +158,7 @@ function AppInner() {
                 <UndoToast />
               </div>
             )}
+            <FeaturePanel />
           </UndoToastProvider>
         </SwapProvider>
       </IconOverrideProvider>
