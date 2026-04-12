@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
@@ -89,9 +89,10 @@ const IconEdit3 = ({ size = 18 }) => (
   </svg>
 );
 import './settings.css';
+import { useBrandConfig } from './theme/BrandConfig';
 
 import walletAvatar from './assets/wallet-avatar.svg';
-import moduloBadge  from './assets/icon-modulo-badge.svg';
+import iconBrandBadge from './assets/icon-modulo-badge.svg';
 import tokenEth  from './assets/token-eth.svg';
 import tokenSol  from './assets/token-sol.svg';
 import tokenBtc  from './assets/token-btc.svg';
@@ -330,10 +331,11 @@ function HelpPanel({ onBack }) {
 
 /* ── About panel ── */
 function AboutPanel({ onBack }) {
+  const { brandName } = useBrandConfig();
   return (
     <PanelShell title="About Modulo" onBack={onBack}>
       <div className="settings-about-content">
-        <img src={moduloBadge} width="56" height="56" alt="Modulo" className="settings-about-logo" />
+        <img src={iconBrandBadge} width="56" height="56" alt={brandName} className="settings-about-logo" />
         <div className="settings-about-version">v3.0</div>
         <div className="settings-about-tagline">One vault, every chain.</div>
         <div className="settings-about-badge">Built with BakedUX</div>
@@ -363,6 +365,7 @@ function AboutPanel({ onBack }) {
 
 /* ── Wallet detail panel ── */
 function WalletPanel({ onBack }) {
+  const { brandName } = useBrandConfig();
   const [copied, setCopied] = useState(false);
   const fullAddr = '0x7f3e4a2b8c1d9e6f0a5b3c7d2e8f1a4b6c9d0e9A14';
 
@@ -377,7 +380,7 @@ function WalletPanel({ onBack }) {
       <div className="settings-wallet-detail">
         <div className="avatar-wrap" style={{ margin: '0 auto 16px' }}>
           <img className="avatar" src={walletAvatar} alt="" />
-          <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
+          <img className="brand-badge" src={iconBrandBadge} alt={brandName} />
         </div>
         <div className="settings-wallet-name" style={{ textAlign: 'center' }}>modulo</div>
         <div className="settings-wallet-full-addr">{fullAddr}</div>
@@ -431,6 +434,7 @@ const PANELS = {
 
 export default function SettingsScreen() {
   const navigate = useNavigate();
+  const { brandName } = useBrandConfig();
   const [activePanel, setActivePanel] = useState(null);
 
   const PanelComponent = activePanel ? PANELS[activePanel] : null;
@@ -464,11 +468,11 @@ export default function SettingsScreen() {
 
             <div className="scroll-content">
               {/* Wallet card */}
-              <MotionButton className="settings-wallet-card" onPress={() => setActivePanel('wallet')} aria-label="Wallet details" whileTap={{ scale: 0.98 }}>
+              <MotionButton className="settings-wallet-card" onPress={() => setActivePanel('wallet')} aria-label="Wallet details" whileTap={{ scale: tap.card }}>
                 <div className="settings-wallet-left">
                   <div className="avatar-wrap">
                     <img className="avatar" src={walletAvatar} alt="" />
-                    <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
+                    <img className="brand-badge" src={iconBrandBadge} alt={brandName} />
                   </div>
                   <div>
                     <div className="settings-wallet-name">modulo</div>
@@ -483,7 +487,7 @@ export default function SettingsScreen() {
                 <div key={section.label} className="settings-section">
                   <div className="settings-section-label">{section.label}</div>
                   {section.items.map(item => (
-                    <MotionButton key={item.id} className="settings-row" aria-label={item.label} onPress={() => setActivePanel(item.id)} whileTap={{ scale: 0.98 }}>
+                    <MotionButton key={item.id} className="settings-row" aria-label={item.label} onPress={() => setActivePanel(item.id)} whileTap={{ scale: tap.card }}>
                       <item.icon size={18} color="var(--bk-text-secondary)" strokeWidth={1.5} />
                       <div className="settings-row-text">
                         <span className="settings-row-label">{item.label}</span>

@@ -44,8 +44,12 @@
   --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
   --bk-earn-card-border: rgba(88, 75, 235, 0.2);
 
+  /* Logo */
+  --bk-logo-width:       93px;
+  --bk-logo-height:      18px;
+
   /* Typography */
-  --bk-font:             'Inter', sans-serif;
+  --bk-font:             'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 
   /* Motion — standard animation budget */
   --bk-motion-instant:  80ms;
@@ -55,6 +59,37 @@
   --bk-motion-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
   --bk-motion-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
   --bk-motion-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  /* White opacity scale */
+  --bk-white-05: rgba(255,255,255,0.05);
+  --bk-white-07: rgba(255,255,255,0.07);
+  --bk-white-08: rgba(255,255,255,0.08);
+  --bk-white-12: rgba(255,255,255,0.12);
+  --bk-white-15: rgba(255,255,255,0.15);
+  --bk-white-20: rgba(255,255,255,0.20);
+
+  /* Z-index scale */
+  --bk-z-base:    1;
+  --bk-z-card:    2;
+  --bk-z-overlay: 10;
+  --bk-z-modal:   20;
+  --bk-z-toast:   30;
+
+  /* Swipe action colours */
+  --bk-action-swap:  var(--bk-brand-primary);
+  --bk-action-lend:  color-mix(in srgb, var(--bk-brand-primary) 72%, #1a1a40 28%);
+  --bk-action-trade: color-mix(in srgb, var(--bk-brand-primary) 55%, #1a1a40 45%);
+
+  /* Direction tokens */
+  --bk-dir-buy:  var(--bk-success);
+  --bk-dir-sell: var(--bk-error);
+
+  /* White-label override tokens */
+  --bk-yield-color:    var(--bk-brand-primary);
+  --bk-tab-indicator:  var(--bk-brand-primary);
+
+  /* Grid layout */
+  --bk-manage-grid-cols: 2;
 }
 
 /* ── Light theme — apply to phone wrapper only ─────────────────────── */

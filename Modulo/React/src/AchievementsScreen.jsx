@@ -6,7 +6,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
 const IconChevronLeft = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -157,7 +157,7 @@ export default function AchievementsScreen() {
                 role="listitem"
                 aria-label={`${a.title}${a.earned ? `, earned ${a.date}` : ' — not yet earned'}`}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 + i * 0.04 } }}
+                animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: stagger.base + i * stagger.perItem } }}
               >
                 <div className={`achievement-icon-wrap${a.earned ? ' earned' : ''}`} aria-hidden="true">
                   <Icon size={22} strokeWidth={1.5} />

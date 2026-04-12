@@ -14,12 +14,12 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 const IconArrowDown = () => (
   <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="opacity" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 const IconAlertTriangle = () => (
   <svg width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M10 3L17.5 16H2.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M10 3L17.5 16H2.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10 9V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     <circle cx="10" cy="14.5" r="0.75" fill="currentColor"/>
   </svg>
@@ -51,8 +51,25 @@ export default function ReviewScreen() {
   const { state } = useLocation();
   const s = state || DEFAULT_STATE;
   const { action, from, to, fee, rate, warning } = s;
-  const isEarnOnly = !to || action === 'stake' || action === 'lend';
+  const isEarnOnly = !to || action === 'swap' || action === 'stake' || action === 'lend';
   const [feesOpen, setFeesOpen] = useState(false);
+  const deadline = 20; // MOD-011: minutes, swap transactions expire
+
+  // MOD-012: Token approval gate — non-native ERC-20 tokens require approve() before swap
+  const isNativeToken = from?.symbol === 'ETH' || from?.symbol === 'BNB';
+  const [approvalStatus, setApprovalStatus] = useState('idle'); // 'idle' | 'pending' | 'approved'
+  const needsApproval = !isNativeToken && approvalStatus !== 'approved';
+
+  const handleConfirm = () => navigate('/success', { state: {
+    action,
+    summary: `${from.amount} ${from.symbol}${to ? ` for ${to.amount} ${to.symbol}` : ''}`,
+  }});
+
+  // MOD-041: Guard against zero/missing amount state
+  if (!from?.usd || parseFloat(from.usd) <= 0) {
+    navigate(-1);
+    return null;
+  }
 
   return (
     <motion.div
@@ -79,7 +96,7 @@ export default function ReviewScreen() {
             <div className="review-asset-left">
               <img src={from.icon} alt="" width="36" height="36" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
               <div>
-                <div className="card-label" style={{ margin: 0 }}>You give</div>
+                <div className="card-label" style={{ margin: 0 }}>You pay</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--bk-text-primary)', marginTop: 1 }}>
                   {from.amount} {from.symbol}
                 </div>
@@ -122,6 +139,14 @@ export default function ReviewScreen() {
           <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{rate}</span>
         </div>
 
+        {/* MOD-011: Deadline row — swap only */}
+        {action === 'swap' && (
+          <div className="card-bottom" style={{ padding: '8px 0', margin: 0 }}>
+            <span className="card-label" style={{ margin: 0 }}>Expires in</span>
+            <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{deadline} min</span>
+          </div>
+        )}
+
         {/* Collapsible fee section */}
         <Button
           className="review-fee-toggle"
@@ -134,7 +159,7 @@ export default function ReviewScreen() {
             <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--bk-text-primary)' }}>{fee.total}</span>
             <motion.span
               animate={{ rotate: feesOpen ? 180 : 0 }}
-              transition={{ type: 'spring', damping: 20, stiffness: 280 }}
+              transition={{ type: 'spring', damping: 18, stiffness: 300 }}
               style={{ display: 'flex' }}
             >
               <IconChevronDown />
@@ -169,7 +194,38 @@ export default function ReviewScreen() {
       {warning && (
         <div className="review-warning" style={{ margin: '0 16px 12px' }}>
           <IconAlertTriangle />
-          <span>{warning}</span>
+                <span>{warning}</span>
+        </div>
+      )}
+
+      {/* MOD-012: Approval step — shown for non-native tokens before confirm */}
+      {needsApproval && (
+        <div className="approval-step">
+          <div className="approval-step-header">
+            <span className="step-number">1</span>
+            <span className="step-title">Approve {from?.symbol}</span>
+            <span className="step-status">{approvalStatus === 'pending' ? 'Pending...' : 'Required'}</span>
+          </div>
+          <p className="approval-step-desc">
+            Allow Modulo to use your {from?.symbol}. One-time permission for this token.
+          </p>
+          {approvalStatus === 'idle' && (
+            <Button
+              className="primary-btn"
+              onPress={() => {
+                setApprovalStatus('pending');
+                setTimeout(() => setApprovalStatus('approved'), 1500);
+              }}
+            >
+              Approve {from?.symbol}
+            </Button>
+          )}
+          {approvalStatus === 'pending' && (
+            <div className="approval-pending">Awaiting approval transaction...</div>
+          )}
+          {approvalStatus === 'approved' && (
+            <div className="approval-confirmed">✓ {from?.symbol} approved</div>
+          )}
         </div>
       )}
 
@@ -177,12 +233,10 @@ export default function ReviewScreen() {
       <Button
         className="primary-btn"
         aria-label={`Confirm ${action}`}
-        onPress={() => navigate('/success', { state: {
-          action,
-          summary: `${from.amount} ${from.symbol}${to ? ` for ${to.amount} ${to.symbol}` : ''}`,
-        }})}
+        isDisabled={needsApproval}
+        onPress={handleConfirm}
       >
-        Confirm {capitalize(action)}
+        {needsApproval ? `Confirm (approve first)` : `Confirm ${capitalize(action)}`}
       </Button>
 
       <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">

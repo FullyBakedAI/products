@@ -14,14 +14,16 @@
  * Spec: SPEC-swap-aria.md + ../Spec/swap-screen-spec.md
  */
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from 'react-aria-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
+import { useBrandConfig } from './theme/BrandConfig';
 
 const MotionButton = motion.create(Button);
 import { useSwap } from './SwapContext';
+import { useUndoToast } from './UndoToastContext';
 const IconDelete = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M7 4H17V16H7L3 10L7 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -152,7 +154,7 @@ function PercentagePills({ activePct, payToken, onPress }) {
           className={`pct-pill-btn${activePct === pct ? ' active' : ''}`}
           aria-label={`Set amount to ${label}`}
           aria-pressed={activePct === pct}
-          whileTap={{ scale: 0.88 }}
+          whileTap={{ scale: tap.default }}
           onPress={() => onPress(pct)}
         >
           {label}
@@ -187,6 +189,7 @@ function Numpad({ onKey }) {
 // ── Main SwapScreen ───────────────────────────────────────────────────────
 
 export default function SwapScreen() {
+  const { brandName } = useBrandConfig();
   const {
     payToken, receiveToken,
     payAmount, setPayAmount,
@@ -198,6 +201,18 @@ export default function SwapScreen() {
   const flashTimer   = useRef(null);
   const prevReceive  = useRef('');
   const [swappedVisual, setSwappedVisual] = useState(false);
+  const location = useLocation();
+  const { showUndo } = useUndoToast();
+
+  // MOD-044: Show toast if returning from token select without selecting a token
+  useEffect(() => {
+    if (location.state?.fromTokenSelect && !receiveToken) {
+      const timer = setTimeout(() => {
+        showUndo('No token selected');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [receiveToken, location.state]); // eslint-disable-line
 
   // ── Derived CTA state ────────────────────────────────────────────────
   const hasAmount = payAmount && parseFloat(payAmount) > 0;
@@ -249,7 +264,7 @@ export default function SwapScreen() {
   return (
     <motion.div
       role="main"
-      aria-label="Modulo swap screen"
+      aria-label={`${brandName} swap screen`}
       className="swap-screen-inner"
       initial={{ opacity: 0, y: m.modal.offsetEnter }}
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}

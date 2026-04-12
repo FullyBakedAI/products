@@ -86,3 +86,27 @@ export const motion = {
     type: 'spring', damping: 20, stiffness: 300, mass: 0.5,
   },
 };
+
+// ── Tap scale tokens ────────────────────────────────────────────────────────
+// Use these for whileTap={{ scale: tap.X }} to keep press feedback consistent.
+export const tap = {
+  default: 0.96,  // standard buttons, pills, tabs
+  card:    0.97,  // card-level rows, token rows, swipeable rows
+  heavy:   0.90,  // large CTAs, action tiles, action bars
+  numpad:  0.82,  // numpad keys
+};
+
+// ── Stagger delay tokens ─────────────────────────────────────────────────────
+// Use: delay: stagger.base + i * stagger.perItem
+export const stagger = {
+  base:    0.06,
+  perItem: 0.05,
+};
+
+// ── Toast animation token ────────────────────────────────────────────────────
+// For UndoToast and any top-of-screen notification toasts.
+export const toast = {
+  initial: { y: -56, opacity: 0 },
+  animate: { y: 0, opacity: 1, transition: { duration: 0.22, ease: 'easeOut' } },
+  exit:    { y: -56, opacity: 0, transition: { duration: 0.16 } },
+};

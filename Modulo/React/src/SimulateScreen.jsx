@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
@@ -91,7 +91,7 @@ export default function SimulateScreen() {
           aria-selected={tab === 'price'}
           aria-controls="panel-price"
           id="tab-price"
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: tap.default }}
           onPress={() => setTab('price')}
         >
           Price change
@@ -102,7 +102,7 @@ export default function SimulateScreen() {
           aria-selected={tab === 'stake'}
           aria-controls="panel-stake"
           id="tab-stake"
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: tap.default }}
           onPress={() => setTab('stake')}
         >
           If I staked everything

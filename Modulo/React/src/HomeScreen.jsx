@@ -11,7 +11,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
@@ -28,7 +28,7 @@ const IconTrendingUp = ({ size = 18 }) => (
 );
 const IconZap = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 const IconLandmark = ({ size = 18 }) => (
@@ -62,10 +62,10 @@ const IconArrowUpRight = ({ size = 20 }) => (
   </svg>
 );
 import { useIconOverride } from './IconOverrideContext';
+import { useBrandConfig } from './theme/BrandConfig';
 
-import SmartNudges     from './SmartNudges';
-import logoModulo      from './assets/logo-modulo.svg';
-import iconModuloBadge from './assets/icon-modulo-badge.svg';
+import SmartNudges       from './SmartNudges';
+import iconBrandBadge    from './assets/icon-modulo-badge.svg';
 import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
 import iconSettings    from './assets/icon-settings.svg';
@@ -132,9 +132,9 @@ const SWIPE_ACTIONS = [
   { id: 'swap',   label: 'Swap',   Icon: IconRepeat2,    cls: 'swipe-swap'  },
 ];
 
-// ── Feature 2: Live yield counter ────────────────────────────────────────────
+// ── Feature 2: Live yield counter ──────────────────────────────────────
 // $969/yr at 100x display speed so the tick is visible in the prototype.
-// Per 300ms: 969 / 365 / 24 / 3600 / 1000 * 300 * 100 ≈ 0.00922
+// Per 300ms: 969 / 35, 365 / 24 / 3600 / 1000 * 300 * 100 ≈ 0.00922
 const YIELD_TICK_MS    = 300;
 const YIELD_PER_TICK   = (969 / 31_536_000) * YIELD_TICK_MS / 1000 * 100;
 const BASE_BALANCE     = 22_999.83;
@@ -158,11 +158,11 @@ function useLiveBalance(active) {
 
 
 // ── TokenRow ─────────────────────────────────────────────────────────────────
-function TokenRow({ t, index }) {
+function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) {
   const x = useMotionValue(0);
   const navigate = useNavigate();
   const { openActions } = useActions();
-  const isDesktop = useIsDesktop();
+  const isDesktop = useIsD
   const [isSwipeOpen, setIsSwipeOpen] = useState(false);
   const hasDragged = useRef(false);
   const buttonReveal = useTransform(x, [-ACTION_W, -30], [1, 0]);
@@ -197,8 +197,9 @@ function TokenRow({ t, index }) {
     <motion.div
       className="token-row-outer"
       data-bk-component="token-card"
+      role="listitem"
       initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 + index * 0.05 } }}
+      animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: stagger.base + index * stagger.perItem } }}
       style={{ zIndex: isSwipeOpen ? 2 : 'auto' }}
     >
       <div className="token-icon-anchor" aria-hidden="true">
@@ -244,8 +245,18 @@ function TokenRow({ t, index }) {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onTap={handleTap}
-        whileTap={isSwipeOpen ? {} : { scale: 0.985 }}
-        aria-label={`${t.name}: ${t.usd}, ${t.change}, ${(t.yield * 100).toFixed(1)}% APY`}
+        whileTap={isSwipeOpen ? {} : { scale: tap.card }}
+        tabIndex={0}
+        aria-label={`${t.name}: ${t.usd}, ${t.change}, ${(t.yield * 100).toFixed(1)}% APY — press Space or Arrow Left to reveal actions`}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft' || e.key === ' ') {
+            e.preventDefault();
+            snap(true);
+          }
+          if (e.key === 'Escape') {
+            snap(false);
+          }
+        }}
       >
         <div className="token-row-main">
           <div className="token-icon-spacer" aria-hidden="true" />
@@ -277,6 +288,21 @@ function TokenRow({ t, index }) {
             />
           </div>
           <span className="token-yield-label">{(t.yield * 100).toFixed(1)}% APY</span>
+          {showApyInfo && (
+            <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
+              <button
+                className="apy-info-btn"
+                aria-label="What is APY?"
+                onClick={(e) => { e.stopPropagation(); setApyTooltipOpen(v => !v); }}
+              >ⓘ</button>
+              {apyTooltipOpen && (
+                <div className="apy-tooltip" role="tooltip">
+                  <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
+                  <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                </div>
+              )}
+            </span>
+          )}
         </div>
       </motion.div>
     </motion.div>
@@ -287,6 +313,7 @@ function TokenRow({ t, index }) {
 export default function HomeScreen() {
   const navigate = useNavigate();
   const { openActions } = useActions();
+  const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
   const [activeAssetTab, setActiveAssetTab] = useState('tokens');
@@ -294,6 +321,7 @@ export default function HomeScreen() {
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [activeChain, setActiveChain] = useState('Arbitrum');
+  const [apyTooltipOpen, setApyTooltipOpen] = useState(false);
   const [chainMenuOpen, setChainMenuOpen] = useState(false);
 
   const CHAINS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
@@ -317,6 +345,8 @@ export default function HomeScreen() {
   // F2: Live balance
   const { balance, glowing } = useLiveBalance(yieldActive);
 
+  const totalPortfolioValue = TOKENS.reduce((sum, t) => sum + parseFloat(t.usd.replace(/[$,]/g, '')), 0);
+
   // Portfolio count-up on mount (0 → BASE_BALANCE over 600ms)
   const [countedUp, setCountedUp]       = useState(false);
   const [mountBalance, setMountBalance] = useState(0);
@@ -338,7 +368,7 @@ export default function HomeScreen() {
   return (
     <motion.main
       role="main"
-      aria-label="Modulo home screen"
+      aria-label={`${brandName} home screen`}
       className="home-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: m.fade.enter }}
@@ -347,7 +377,7 @@ export default function HomeScreen() {
       {/* Header — collapses on scroll */}
       <header className={`home-header${headerScrolled ? ' home-header--scrolled' : ''}`}>
         <div className="header-logo">
-          <img src={logoModulo} alt="Modulo" width="93" height="18" />
+          <img src={logoSrc} alt={logoAlt} width={logoWidth} height={logoHeight} />
         </div>
         <div className="home-header-actions">
           {/* Network selector */}
@@ -389,7 +419,7 @@ export default function HomeScreen() {
             </AnimatePresence>
           </div>
 
-          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(true)}>
+          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(pre => { setNotifOpen(true); return pre; })}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
             <span className="notif-dot" aria-hidden="true" />
           </Button>
@@ -409,7 +439,7 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
         >
-          <div className="portfolio-chart" aria-hidden="true">
+          <div className="portfolio-chart" role="img" aria-label="Portfolio performance chart">
             <img src={chartLine} alt="" />
           </div>
 
@@ -430,6 +460,7 @@ export default function HomeScreen() {
           {/* F2: animated balance + green pulse dot */}
           <div
             className="portfolio-value"
+            aria="label"
             aria-label={`Portfolio total value: $${balanceDollars}${balanceCents}`}
           >
             <span
@@ -446,19 +477,13 @@ export default function HomeScreen() {
             )}
           </div>
 
-          {/* Gain row with "What if?" pill on the right */}
+          {/* Gain row */}
           <div className="portfolio-gain-row" aria-label="Today's gain: $623.11 (5.08%)">
             <div className="portfolio-gain">
               <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
               <span className="gain-text">$623.11 (5.08%)</span>
             </div>
-            <Button
-              className="portfolio-whatif-btn"
-              aria-label="Open What-if simulator"
-              onPress={() => navigate('/simulate')}
-            >
-              What if? →
-            </Button>
+            {/* Simulator — coming in v2 */}
           </div>
 
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">
@@ -496,7 +521,7 @@ export default function HomeScreen() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ ...m.spring, delay: 0.16 }}
         >
-          <motion.div className="optimise-promo-card" whileTap={{ scale: 0.98 }}>
+          <motion.div className="optimise-promo-card" whileTap={{ scale: tap.card }}>
           <Button aria-label="Put it all to work — optimise all assets" onPress={() => navigate('/optimise')} style={{ all: 'unset', display: 'contents', cursor: 'pointer' }}>
             <div className="optimise-promo-text">
               <div className="optimise-promo-headline">Put it all to work</div>
@@ -529,16 +554,31 @@ export default function HomeScreen() {
               className={`positions-sort-opt${sortBy === 'performance' ? ' active' : ''}`}
               aria-pressed={sortBy === 'performance'}
               onPress={() => setSortBy('performance')}
-            >Perf</Button>
+            >Performance</Button>
           </div>
         </motion.div>
 
         {activeAssetTab === 'tokens' ? (
           <>
+            {/* MOD-020: Onboarding card for empty wallet */}
+            {totalPortfolioValue === 0 && (
+              <div className="onboarding-card">
+                <h3>Welcome to Modulo</h3>
+                <p>Deposit to get started — see your portfolio grow across every chain.</p>
+                <Button className="primary-btn" onPress={() => openActions({ tab: 'deposit' })}>
+                  Deposit
+                </Button>
+              </div>
+            )}
             {/* Token List */}
             <div className="token-list" role="list" id="token-panel">
               {sortedTokens.map((t, i) => (
-                <TokenRow key={t.name} t={t} index={i} />
+                <TokenRow
+                  key={t.name} t={t} index={i}
+                  showApyInfo={i === 0}
+                  apyTooltipOpen={apyTooltipOpen}
+                  setApyTooltipOpen={setApyTooltipOpen}
+                />
               ))}
             </div>
           </>

@@ -515,3 +515,66 @@
   font-weight: 500;
   color: var(--bk-text-muted);
 }
+
+/* ── MOD-021: Risk profile row ──────────────────────────────────────── */
+.risk-profile-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  font-size: 13px;
+  color: var(--bk-text-muted);
+}
+
+.risk-profile-row strong {
+  color: var(--bk-text-primary);
+}
+
+/* ── MOD-025: Chain breakdown ───────────────────────────────────────── */
+.chain-breakdown { margin-top: 8px; }
+
+.chain-breakdown-toggle {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+
+.chain-breakdown-toggle[data-hovered] { color: var(--bk-text-secondary); }
+
+.chain-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--bk-border-card);
+  font-size: 14px;
+}
+
+.chain-breakdown-gas {
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  margin-top: 2px;
+}
+
+.chain-breakdown-bridge-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bk-brand-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.chain-breakdown-bridge-btn[data-hovered] { opacity: 0.75; }

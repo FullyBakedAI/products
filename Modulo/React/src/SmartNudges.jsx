@@ -38,28 +38,28 @@ const NUDGES_DATA = [
   {
     id: 'eth-yield-up',
     Icon: IconTrendingUp,
-    iconColor: 'var(--bk-success)',
+    iconClass: 'nudge-icon--success',
     headline: 'ETH yield up +0.9% on Lido',
     detail: 'Better rate available now',
-    cta: 'Move now',
+    cta: 'Increase yield',
     action: { type: 'actions', tab: 'lend', asset: 'eth' },
   },
   {
     id: 'sol-idle',
     Icon: IconAlertCircle,
-    iconColor: 'var(--bk-brand-primary)',
+    iconClass: 'nudge-icon--brand',
     headline: 'SOL idle for 14 days',
     detail: "Could've earned $12 staking",
-    cta: 'Stake',
+    cta: 'Stake now',
     action: { type: 'actions', tab: 'lend', asset: 'sol' },
   },
   {
     id: 'btc-health',
     Icon: IconLightbulb,
-    iconColor: 'var(--bk-text-muted)',
+    iconClass: 'nudge-icon--muted',
     headline: 'BTC health factor: 3.2×',
     detail: "You're safe — no liquidation risk",
-    cta: 'Details',
+    cta: 'View health',
     action: { type: 'navigate', path: '/asset/btc' },
   },
 ];
@@ -87,13 +87,13 @@ export default function SmartNudges() {
     <section className="smart-nudges-row" aria-label="Smart suggestions">
       <div className="smart-nudges-scroll">
         <AnimatePresence>
-          {nudges.map(({ id, Icon, iconColor, headline, detail, cta, action }) => (
+          {nudges.map(({ id, Icon, iconClass, headline, detail, cta, action }) => (
             <motion.article
               key={id}
               className="nudge-card"
               layout
-              initial={{ opacity: 0, scale: 0.9, x: 16 }}
-              animate={{ opacity: 1, scale: 1, x: 0, transition: m.springTight }}
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0, transition: m.springTight }}
               exit={{ opacity: 0, y: -16, scale: 0.88, transition: { duration: 0.16 } }}
               style={{ position: 'relative' }}
             >
@@ -103,7 +103,7 @@ export default function SmartNudges() {
                 aria-label={`${headline} — ${cta}`}
                 onPress={() => handleAction(action)}
               >
-                <div className="nudge-icon-wrap" aria-hidden="true" style={{ color: iconColor }}>
+                <div className={`nudge-icon-wrap ${iconClass}`} aria-hidden="true">
                   <Icon />
                 </div>
                 <p className="nudge-headline">{headline}</p>
@@ -111,11 +111,12 @@ export default function SmartNudges() {
                 <span className="nudge-cta-label" aria-hidden="true">{cta} →</span>
               </Button>
 
-              {/* Dismiss overlaid top-right */}
+              {/* Dismiss overlaid top-right — interaction-isolated from card button */}
               <Button
                 className="nudge-dismiss-btn"
                 aria-label={`Dismiss: ${headline}`}
                 onPress={() => dismiss(id)}
+                onClick={(e) => e.stopPropagation()}
               >
                 <IconX />
               </Button>

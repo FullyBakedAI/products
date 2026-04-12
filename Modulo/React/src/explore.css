@@ -262,3 +262,41 @@
   padding: 0;
 }
 
+.token-row-explore[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+.sort-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+
+/* ── MOD-024: Yield filter tabs ─────────────────────────────────────── */
+.yield-filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.yield-filter-pill {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  background: var(--bk-bg-elevated);
+  border: none;
+  border-radius: 20px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.yield-filter-pill.active {
+  background: var(--bk-brand-primary);
+  color: #fff;
+  font-weight: 600;
+}

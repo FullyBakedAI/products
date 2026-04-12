@@ -15,8 +15,9 @@ import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import './receive.css';
 
+import { useBrandConfig } from './theme/BrandConfig';
 import walletAvatar from './assets/wallet-avatar.svg';
-import moduloBadge from './assets/icon-modulo-badge.svg';
+import iconBrandBadge from './assets/icon-modulo-badge.svg';
 const IconCheck = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M4 10.5L8 14.5L16 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -57,6 +58,7 @@ const RECEIVE_TOKENS = ['Any token', 'ETH', 'USDC', 'USDT'];
 
 export default function ReceiveScreen() {
   const navigate = useNavigate();
+  const { brandName } = useBrandConfig();
   const [copied, setCopied] = useState(false);
   const [receiveToken, setReceiveToken] = useState('Any token');
   const [selectedExchange, setSelectedExchange] = useState(null);
@@ -69,7 +71,7 @@ export default function ReceiveScreen() {
   return (
     <motion.main
       role="main"
-      aria-label="Modulo receive screen"
+      aria-label={`${brandName} receive screen`}
       className="receive-screen"
       initial={{ opacity: 0, y: m.modal.offsetEnter }}
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
@@ -104,7 +106,7 @@ export default function ReceiveScreen() {
           <div className="address-left">
             <div className="avatar-wrap">
               <img className="avatar" src={walletAvatar} alt="Wallet avatar" />
-              <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
+              <img className="brand-badge" src={iconBrandBadge} alt={brandName} />
             </div>
             <div className="address-text">
               <div className="address-name">modulo</div>

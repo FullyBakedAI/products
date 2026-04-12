@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import './send.css';
 
 const IconScanLine = () => (
@@ -25,10 +25,11 @@ const IconX = () => (
     <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
+import { useBrandConfig } from './theme/BrandConfig';
 import iconSearch from './assets/icon-search.svg';
 import iconCopy from './assets/icon-copy.svg';
 import walletAvatar from './assets/wallet-avatar.svg';
-import moduloBadge from './assets/icon-modulo-badge.svg';
+import iconBrandBadge from './assets/icon-modulo-badge.svg';
 
 const CONTACTS = [
   { id: 1, section: 'Saved',  variant: '',         name: 'modulo.eth',    sub: '0x540e...7262', hasBadge: true,  lastSent: '2 days ago',   lastAmount: '$324', ariaLabel: 'modulo.eth — 0x540e...7262' },
@@ -40,6 +41,7 @@ const SEND_NETWORKS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
 
 export default function SendScreen() {
   const navigate = useNavigate();
+  const { brandName } = useBrandConfig();
   const [network, setNetwork] = useState(SEND_NETWORKS[0]);
 
   function cycleNetwork() {
@@ -50,7 +52,7 @@ export default function SendScreen() {
   return (
     <motion.main
       role="main"
-      aria-label="Modulo send screen"
+      aria-label={`${brandName} send screen`}
       className="send-screen"
       initial={{ opacity: 0, y: m.modal.offsetEnter }}
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
@@ -120,7 +122,7 @@ export default function SendScreen() {
                   key={c.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.16 + i * 0.05 } }}
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: tap.card }}
                 >
                   <Button
                     className={`contact-row${c.variant ? ` avatar-${c.variant}` : ''}`}
@@ -130,7 +132,7 @@ export default function SendScreen() {
                   >
                     <div className="avatar-wrap">
                       <img className="avatar" src={walletAvatar} alt="" />
-                      {c.hasBadge && <img className="modulo-badge" src={moduloBadge} alt="Modulo" />}
+                      {c.hasBadge && <img className="brand-badge" src={iconBrandBadge} alt={brandName} />}
                     </div>
                     <div className="contact-text">
                       <div className="contact-name">{c.name}</div>

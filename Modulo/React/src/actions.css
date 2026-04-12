@@ -35,7 +35,7 @@
   overflow: hidden;
   height: 94%;
   /* Subtle top border */
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid var(--bk-white-07);
   /* Prevent drag from scrolling the page */
   touch-action: none;
 }
@@ -131,7 +131,7 @@
   margin-right: 0 !important;
   width: 100% !important;
   flex-shrink: 0 !important;
-  height: 48px !important;
+  height: 48px;
   padding: 0 16px !important;
 }
 
@@ -230,13 +230,13 @@
 }
 
 .trade-dir-tab.dir-buy-active {
-  background: color-mix(in srgb, var(--bk-success) 16%, var(--bk-bg-base) 84%);
-  color: var(--bk-success);
+  background: color-mix(in srgb, var(--bk-dir-buy) 18%, transparent 82%);
+  color: var(--bk-dir-buy);
 }
 
 .trade-dir-tab.dir-sell-active {
-  background: color-mix(in srgb, var(--bk-error) 16%, var(--bk-bg-base) 84%);
-  color: var(--bk-error);
+  background: color-mix(in srgb, var(--bk-dir-sell) 18%, transparent 82%);
+  color: var(--bk-dir-sell);
 }
 
 /* Order type pill row */
@@ -579,7 +579,7 @@
 
 .actions-deposit-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(var(--bk-manage-grid-cols), 1fr);
   gap: 10px;
 }
 
@@ -625,4 +625,21 @@
 .text-success-bold {
   color: var(--bk-success);
   font-weight: 700;
+}
+
+/* ── MOD-039: Audit badge on lending platform selector ─────────────── */
+.audit-badge {
+  font-size: 11px;
+  color: var(--bk-success);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* ── MOD-011: Swap deadline row ─────────────────────────────────────── */
+.swap-deadline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
 }

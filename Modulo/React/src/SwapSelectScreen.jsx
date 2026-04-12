@@ -9,6 +9,7 @@ import { Button } from 'react-aria-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSwap } from './SwapContext';
 import { useActions } from './ActionsContext';
+import { useBrandConfig } from './theme/BrandConfig';
 import { SWAP_TOKENS, TOKEN_ORDER } from './tokens-data';
 import './swap-select.css';
 
@@ -19,6 +20,7 @@ export default function SwapSelectScreen() {
   const { side }  = useParams();
   const { selectToken, payKey, receiveKey } = useSwap();
   const { openActions } = useActions();
+  const { brandName } = useBrandConfig();
 
   function handleSelect(symbol) {
     selectToken(side, symbol);
@@ -27,7 +29,7 @@ export default function SwapSelectScreen() {
   }
 
   return (
-    <main role="main" aria-label="Modulo select token screen" className="swap-select-screen">
+    <main role="main" aria-label={`${brandName} select token screen`} className="swap-select-screen">
       <div className="drag-handle" aria-hidden="true">
         <div className="drag-handle-pill" />
       </div>

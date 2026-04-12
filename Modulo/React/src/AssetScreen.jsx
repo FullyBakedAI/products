@@ -17,7 +17,7 @@ import { useActions } from './ActionsContext';
 import { useIsDesktop } from './hooks/useIsDesktop';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 const IconX = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -898,6 +898,13 @@ function PriceChart({ symbol, period, negative, onCrosshairPrice }) {
 
 const PERIODS  = ['1D', '1W', '1M', '1Y', 'ALL'];
 const MAX_YIELD = 0.068;
+
+// MOD-025: Chain breakdown mock data
+const CHAIN_BREAKDOWN = [
+  { chain: 'Ethereum', balance: '$1,240', gas: '~$14 to transact', hasBalance: true },
+  { chain: 'Arbitrum', balance: '$580',   gas: '~$0.08 to transact', hasBalance: true },
+  { chain: 'Base',     balance: '$320',   gas: '~$0.04 to transact', hasBalance: true },
+];
 const fmt = (n) => n >= 10000
   ? `$${(n / 1000).toFixed(1)}k`
   : `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -910,6 +917,8 @@ export default function AssetScreen() {
   const [period, setPeriod]             = useState('1D');
   const [crosshairPrice, setCrosshair]  = useState(null);  // floating label value
   const [crosshairX, setCrosshairX]     = useState(null);  // 0–1 normalized
+  const [apyTooltipOpen, setApyTooltipOpen] = useState(false); // MOD-023
+  const [chainBreakdownOpen, setChainBreakdownOpen] = useState(false); // MOD-025
   const [isFavourite, setIsFavourite]   = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('modulo_favourites') || '[]');
@@ -989,6 +998,16 @@ export default function AssetScreen() {
           <span className="asset-earn-apy" style={{ color: lineColor }}>
             {(t.yield * 100).toFixed(1)}% APY
           </span>
+          {/* MOD-023: APY info tooltip */}
+          <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+            <button className="apy-info-btn" aria-label="What is APY?" onClick={() => setApyTooltipOpen(v => !v)}>ⓘ</button>
+            {apyTooltipOpen && (
+              <div className="apy-tooltip" role="tooltip">
+                <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
+                <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+              </div>
+            )}
+          </span>
           <span className="asset-earn-projected">
             {fmt(t.yieldUsd)} projected / year
           </span>
@@ -1064,6 +1083,46 @@ export default function AssetScreen() {
             ))}
           </div>
         )}
+
+        {/* MOD-025: Chain breakdown */}
+        <div className="chain-breakdown">
+          <Button
+            className="chain-breakdown-toggle"
+            aria-expanded={chainBreakdownOpen}
+            aria-controls="chain-breakdown-panel"
+            onPress={() => setChainBreakdownOpen(v => !v)}
+          >
+            Chain breakdown {chainBreakdownOpen ? '▲' : '▼'}
+          </Button>
+          <AnimatePresence initial={false}>
+            {chainBreakdownOpen && (
+              <motion.div
+                id="chain-breakdown-panel"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
+                exit={{ height: 0, opacity: 0, transition: { duration: 0.15 } }}
+                style={{ overflow: 'hidden' }}
+              >
+                {CHAIN_BREAKDOWN.map(c => (
+                  <div key={c.chain} className="chain-breakdown-row">
+                    <div>
+                      <div className="token-name-text">{c.chain}</div>
+                      <div className="chain-breakdown-gas">{c.gas}</div>
+                    </div>
+                    <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--bk-text-primary)' }}>{c.balance}</span>
+                      <Button
+                        className="chain-breakdown-bridge-btn"
+                        aria-label={`Bridge from ${c.chain}`}
+                        onPress={() => {}}
+                      >Bridge</Button>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
@@ -1083,7 +1142,7 @@ export default function AssetScreen() {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...m.fade.enter, delay: 0.12 + i * 0.06 }}
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: tap.card }}
           >
           <Button
             className={`asset-opp-row${i === 0 ? ' first' : i === 3 ? ' last' : ''}`}
@@ -1144,6 +1203,12 @@ export default function AssetScreen() {
     <div className="asset-section-top">
       <div className="portfolio-label">About {t.name}</div>
       <p className="asset-about-text">{t.about}</p>
+      {/* MOD-021: Risk profile */}
+      <div className="risk-profile-row">
+        <span className="risk-item">Volatility: <strong>High</strong></span>
+        <span className="risk-item">Market cap: <strong>#2</strong></span>
+        <span className="risk-item">Audit: <strong>CertiK ✓</strong></span>
+      </div>
     </div>
   );
 
@@ -1276,7 +1341,7 @@ export default function AssetScreen() {
               { label: 'Swap',    src: iconActionSwap, action: () => openActions({ tab: 'swap', asset: id }) },
               { label: 'Actions', Icon: IconZap,        action: () => openActions({ asset: id }) },
             ].map(({ label, src, Icon, action }) => (
-              <motion.div key={label} whileTap={{ scale: 0.88 }}>
+              <motion.div key={label} whileTap={{ scale: tap.heavy }}>
                 <Button className="asset-bar-btn" aria-label={label} onPress={action}>
                   {src
                     ? <img src={src} width="20" height="20" aria-hidden="true" />

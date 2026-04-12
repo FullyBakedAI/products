@@ -14,6 +14,7 @@
 
 import { Button } from 'react-aria-components';
 import { motion } from 'framer-motion';
+import { tap } from '../../motion-tokens';
 import './styles.css';
 
 const MotionButton = motion.create(Button);
@@ -29,7 +30,7 @@ export function TokenPill({ token, onPress, appear = false }) {
     <MotionButton
       className={`token-pill${appear ? ' appear' : ''}`}
       aria-label={`Selected token: ${token.name}, tap to change`}
-      whileTap={{ scale: 0.93 }}
+      whileTap={{ scale: tap.default }}
       onPress={onPress}
     >
       <span className="token-pill-icon">

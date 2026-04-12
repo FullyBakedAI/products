@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
@@ -113,7 +113,7 @@ export default function AutopilotScreen() {
                 key={level.id}
                 className={`autopilot-risk-pill${risk === level.id ? ' active' : ''}`}
                 aria-pressed={risk === level.id}
-                whileTap={{ scale: 0.92 }}
+                whileTap={{ scale: tap.default }}
                 onPress={() => setRisk(level.id)}
               >
                 {level.label}

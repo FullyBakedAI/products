@@ -7,9 +7,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useActions } from './ActionsContext';
+import { useBrandConfig } from './theme/BrandConfig';
 import BottomNav from './BottomNav';
 import { TabSwitcher } from './components';
 import './explore.css';
@@ -41,9 +42,9 @@ const SORT_OPTIONS = ['Volume', 'Price', '% Change', 'APY'];
 
 // Top yield opportunities — shown prominently at the top
 const TOP_YIELDS = [
-  { asset: 'ETH',  icon: tokenEth,  protocol: 'Lido',     apy: 4.2, type: 'stake', tab: 'lend' },
-  { asset: 'USDC', icon: tokenUsdc, protocol: 'Aave v3',  apy: 5.8, type: 'lend',  tab: 'lend' },
-  { asset: 'SOL',  icon: tokenSol,  protocol: 'Marinade', apy: 7.1, type: 'stake', tab: 'lend' },
+  { asset: 'ETH',  icon: tokenEth,  protocol: 'Lido',     apy: 4.2, type: 'stake', tab: 'lend', apyType: 'APY' },
+  { asset: 'USDC', icon: tokenUsdc, protocol: 'Aave v3',  apy: 5.8, type: 'lend',  tab: 'lend', apyType: 'APY' },
+  { asset: 'SOL',  icon: tokenSol,  protocol: 'Marinade', apy: 7.1, type: 'stake', tab: 'lend', apyType: 'APY' },
 ];
 
 const CG = 'https://assets.coingecko.com/coins/images';
@@ -105,12 +106,21 @@ const ALL_TOKENS = [
   { id: 'pyth',  rank: 45, icon: `${CG}/31924/small/pyth.png`,                       name: 'Pyth Network',    symbol: 'PYTH',  volume: '$14M Vol',   price: '$0.08',        change: '+2.10%', changeRaw:  2.10, negative: false, priceRaw:     0.08, sparkline: null,         apy: 0.0, apyType: 'lend'  },
 ];
 
+const PORTFOLIO_ASSETS = ['ETH', 'USDC', 'BTC'];
+
 export default function ExploreScreen() {
   const navigate = useNavigate();
   const { openActions } = useActions();
+  const { brandName } = useBrandConfig();
   const [activeChain, setActiveChain] = useState('All');
   const [activeTab, setActiveTab] = useState('All');
   const [sortBy, setSortBy] = useState('Volume');
+  const [yieldFilter, setYieldFilter] = useState('all'); // MOD-024: 'all' | 'mine'
+  const [apyTooltipOpen, setApyTooltipOpen] = useState(false); // MOD-023
+
+  const filteredYields = yieldFilter === 'mine'
+    ? TOP_YIELDS.filter(y => PORTFOLIO_ASSETS.includes(y.asset))
+    : TOP_YIELDS;
 
   const cycleSort = () => {
     const next = SORT_OPTIONS[(SORT_OPTIONS.indexOf(sortBy) + 1) % SORT_OPTIONS.length];
@@ -134,7 +144,7 @@ export default function ExploreScreen() {
   return (
     <motion.main
       role="main"
-      aria-label="Modulo markets screen"
+      aria-label={`${brandName} markets screen`}
       className="explore-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: m.fade.enter }}
@@ -143,28 +153,43 @@ export default function ExploreScreen() {
       <div className="scroll-content explore-scroll">
 
         {/* Search */}
-        <Button className="search-field explore-search" role="search" aria-label="Search tokens">
-          <IconSearch />
-          <span>Token name or address</span>
-        </Button>
+        <div role="search">
+          <Button className="search-field explore-search" aria-label="Search tokens">
+            <IconSearch />
+            <span>Token name, address, or ENS</span>
+          </Button>
+        </div>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">
           <div className="yield-header">
             <IconTrendingUp />
             <span className="yield-title">Top rates right now</span>
+            {/* MOD-024: Your assets filter */}
+            <div className="yield-filter-tabs" role="group" aria-label="Filter rates">
+              <Button
+                className={`yield-filter-pill${yieldFilter === 'all' ? ' active' : ''}`}
+                aria-pressed={yieldFilter === 'all'}
+                onPress={() => setYieldFilter('all')}
+              >All rates</Button>
+              <Button
+                className={`yield-filter-pill${yieldFilter === 'mine' ? ' active' : ''}`}
+                aria-pressed={yieldFilter === 'mine'}
+                onPress={() => setYieldFilter('mine')}
+              >Your assets</Button>
+            </div>
           </div>
-          {TOP_YIELDS.map((y, i) => (
+          {filteredYields.map((y, i) => (
             <motion.div
               key={y.asset + y.protocol}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ ...m.fade.enter, delay: 0.06 + i * 0.05 }}
+              transition={{ ...m.fade.enter, delay: stagger.base + i * stagger.perItem }}
               whileTap={{ scale: 0.97 }}
             >
               <Button
                 className="yield-row"
-                aria-label={`${y.asset} ${y.apy}% APY on ${y.protocol}`}
+                aria-label={`${y.asset} ${y.apy}% ${y.apyType} on ${y.protocol}`}
                 onPress={() => openActions({ tab: y.tab, asset: y.asset.toLowerCase() })}
               >
                 <img src={y.icon} alt="" width="28" height="28" className="yield-icon" />
@@ -173,7 +198,19 @@ export default function ExploreScreen() {
                   <span className="yield-protocol">{y.protocol} · {y.type === 'stake' ? 'Stake' : 'Lend'}</span>
                 </div>
                 <span className="yield-apy">{y.apy}%</span>
-                <span className="yield-apy-label">APY</span>
+                <span className="yield-apy-label">{y.apyType}</span>
+                {/* MOD-023: APY info tooltip on first yield only */}
+                {i === 0 && (
+                  <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
+                    <button className="apy-info-btn" aria-label="What is APY?" onClick={() => setApyTooltipOpen(v => !v)}>ⓘ</button>
+                    {apyTooltipOpen && (
+                      <div className="apy-tooltip" role="tooltip">
+                        <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
+                        <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                      </div>
+                    )}
+                  </span>
+                )}
               </Button>
             </motion.div>
           ))}
@@ -209,16 +246,16 @@ export default function ExploreScreen() {
         {/* Token List — with APY column */}
         <div className="token-list-explore" role="list" aria-label="Markets">
           {sortedTokens.length === 0 ? (
-            <div style={{ padding: '24px 16px', textAlign: 'center', fontSize: 13, color: 'var(--bk-text-muted)' }}>
-              No tokens match this filter.
+            <div className="empty-state">
+              <p className="empty-state-message">No tokens match this filter.</p>
             </div>
           ) : sortedTokens.map((t, i) => (
             <motion.div
               key={t.id}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ ...m.fade.enter, delay: 0.04 + i * 0.05 }}
-              whileTap={{ scale: 0.985 }}
+              transition={{ ...m.fade.enter, delay: stagger.base + i * stagger.perItem }}
+              whileTap={{ scale: tap.card }}
             >
               <Button
                 className="token-row-explore"
@@ -239,7 +276,7 @@ export default function ExploreScreen() {
                 </div>
                 <div className="token-col-apy">
                   <span className="token-apy-value">{t.apy}%</span>
-                  <span className="token-apy-label">APY</span>
+                  <span className="token-apy-label">{t.apyType === 'borrow' ? 'APR' : 'APY'}</span>
                 </div>
               </Button>
             </motion.div>

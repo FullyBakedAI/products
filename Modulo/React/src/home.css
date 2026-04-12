@@ -19,7 +19,7 @@
   flex-shrink: 0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--bk-z-overlay);
   transition: background 0.2s ease, border-color 0.2s ease, height 0.2s ease;
   background: transparent;
   border-bottom: 1px solid transparent;
@@ -98,7 +98,7 @@
   border: 1px solid var(--bk-border-subtle);
   border-radius: 12px;
   overflow: hidden;
-  z-index: 20;
+  z-index: var(--bk-z-modal);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -198,7 +198,7 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
-  z-index: 1;
+  z-index: var(--bk-z-base);
 }
 
 .portfolio-label {
@@ -249,7 +249,7 @@
   gap: 1px;
   margin-top: 6px;
   position: relative;
-  z-index: 1;
+  z-index: var(--bk-z-base);
 }
 
 .portfolio-dollars {
@@ -412,7 +412,7 @@
   bottom: 0;
   width: 240px;
   display: flex;
-  z-index: 1;
+  z-index: var(--bk-z-base);
 }
 
 .swipe-action {
@@ -434,16 +434,16 @@
 
 .swipe-action:hover { filter: brightness(1.1); }
 
-.swipe-swap  { background: var(--bk-brand-primary); }
-.swipe-lend  { background: color-mix(in srgb, var(--bk-brand-primary) 72%, #1a1a40 28%); }
-.swipe-trade { background: color-mix(in srgb, var(--bk-brand-primary) 44%, #1a1a40 56%); }
+.swipe-swap  { background: var(--bk-action-swap); }
+.swipe-lend  { background: var(--bk-action-lend); }
+.swipe-trade { background: var(--bk-action-trade); }
 
 /* Icon pinned to left — stays visible while row slides */
 .token-icon-anchor {
   position: absolute;
   left: 20px;
   top: 16px;
-  z-index: 2;
+  z-index: var(--bk-z-card);
   pointer-events: none; /* swipe gesture passes through */
 }
 
@@ -574,7 +574,7 @@
   flex: 1;
   height: 3px;
   background: rgba(255,255,255,0.08);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -582,7 +582,7 @@
   height: 100%;
   width: 100%;
   background: var(--bk-brand-primary);
-  border-radius: 2px;
+  border-radius: 4px;
   opacity: 0.65;
 }
 
@@ -602,13 +602,13 @@
   justify-content: space-between;
   margin-top: 2px;
   position: relative;
-  z-index: 1;
+  z-index: var(--bk-z-base);
 }
 
 /* ── Portfolio All-time P&L ─────────────────────────────────────────── */
 .portfolio-alltime {
   position: relative;
-  z-index: 1;
+  z-index: var(--bk-z-base);
   margin-top: 1px;
 }
 .alltime-text {
@@ -846,6 +846,10 @@
   margin-bottom: 6px;
 }
 
+.nudge-icon--success { color: var(--bk-success); }
+.nudge-icon--brand   { color: var(--bk-brand-primary); }
+.nudge-icon--muted   { color: var(--bk-text-muted); }
+
 .nudge-headline {
   font-size: 13px;
   font-weight: 600;
@@ -889,7 +893,7 @@
   border-radius: 4px;
   font-family: var(--bk-font);
   transition: color 0.15s;
-  z-index: 1;
+  z-index: var(--bk-z-base);
 }
 
 .nudge-dismiss-btn[data-hovered] { color: var(--bk-text-secondary); }
@@ -953,3 +957,31 @@
 
 /* Styles live in achievements.css; imported when AchievementsScreen loads.
    The toast is rendered by HomeScreen which imports achievements.css inline. */
+
+/* ── MOD-020: Onboarding card (empty wallet state) ─────────────────── */
+.onboarding-card {
+  margin: 0 20px 16px;
+  padding: 20px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.onboarding-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  margin: 0;
+}
+
+.onboarding-card p {
+  font-size: 14px;
+  color: var(--bk-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}

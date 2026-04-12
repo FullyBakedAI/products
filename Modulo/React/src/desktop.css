@@ -233,3 +233,22 @@
 
 .asset-col-main { min-width: 0; }
 .asset-col-side  { min-width: 0; }
+
+/* ── Tablet transition zone (768–1023px) ─────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .screen-max-width,
+  .home-content,
+  .explore-content,
+  .actions-content,
+  .asset-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* ── Desktop: expand manage grid to 4 columns ───────────────────────── */
+@media (min-width: 1024px) {
+  :root {
+    --bk-manage-grid-cols: 4;
+  }
+}

@@ -1,5 +1,6 @@
 import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useBrandConfig } from './theme/BrandConfig';
 
 const IconHome = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -33,20 +34,21 @@ const IconSettings = () => (
 const NAV = [
   { path: '/',        label: 'Portfolio',  Icon: IconHome    },
   { path: '/explore', label: 'Markets',    Icon: IconCompass },
-  { path: '/manage',  label: 'Manage',     Icon: IconGrid    },
+  { path: '/manage',  label: 'Funds',     Icon: IconGrid    },
 ];
 
 export default function SidebarNav() {
   const navigate  = useNavigate();
   const { pathname } = useLocation();
+  const { brandName } = useBrandConfig();
 
   const isActive = (path) =>
     path === '/' ? pathname === '/' : pathname.startsWith(path);
 
   return (
     <nav className="desktop-sidebar" aria-label="Main navigation">
-      <div className="sidebar-logo" aria-label="Modulo">
-        Modulo
+      <div className="sidebar-logo" aria-label={brandName}>
+        {brandName}
       </div>
 
       <div className="sidebar-nav">
@@ -67,7 +69,7 @@ export default function SidebarNav() {
       <div className="sidebar-divider" role="separator" />
 
       <div className="sidebar-footer">
-        <span className="sidebar-wallet" title="0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b">
+        <span className="sidebar-wallet" title="0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b" aria-label="Wallet address: 0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b">
           0x1a2b…9a0b
         </span>
         <Button

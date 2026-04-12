@@ -85,12 +85,12 @@ export default function BottomNav() {
 
       <Button
         className={`nav-btn${isActive('/manage') ? ' active' : ''}`}
-        aria-label="Manage"
+        aria-label="Funds"
         aria-current={isActive('/manage') ? 'page' : undefined}
         onPress={() => navigate('/manage')}
       >
         <IconSlidersHorizontal />
-        <span className="nav-label">Manage</span>
+        <span className="nav-label">Funds</span>
       </Button>
     </nav>
   );

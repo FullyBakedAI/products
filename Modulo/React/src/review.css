@@ -74,7 +74,7 @@
   width: 100%;
   background: none;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--bk-white-05);
   padding: 8px 0;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -82,3 +82,31 @@
 }
 
 .review-fee-toggle:hover .card-label { color: var(--bk-text-secondary); }
+
+/* MOD-012: Token approval step */
+.approval-step {
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-card);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.approval-step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.step-number {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--bk-brand-primary);
+  color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-title { font-weight: 600; flex: 1; }
+.step-status { font-size: 12px; color: var(--bk-text-muted); }
+.approval-step-desc { font-size: 13px; color: var(--bk-text-muted); margin-bottom: 12px; }
+.approval-pending { font-size: 13px; color: var(--bk-text-muted); font-style: italic; }
+.approval-confirmed { font-size: 13px; color: var(--bk-success); font-weight: 600; }

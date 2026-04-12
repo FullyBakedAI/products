@@ -1,8 +1,11 @@
-/* ═══════════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════
    Modulo Shared Layout & Components
    Phone frame, status bar, bottom nav, shared patterns.
    All values via --bk-* tokens. No hardcoded hex.
-   ═══════════════════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── SVG icon reset — prevents inline baseline gap, stops shrink in flex rows ── */
+svg { display: block; flex-shrink: 0; }
 
 /* ── Global base — prevents white flash on iOS overscroll / load ──── */
 html, body {
@@ -13,7 +16,7 @@ html, body {
   height: 100%;
 }
 
-/* ── Phone Frame ────────────────────────────────────────────────────── */
+/* ── Phone Frame ─────────────────────────────────────────────────────── */
 .phone {
   width: 100%;
   max-width: 402px;
@@ -41,7 +44,7 @@ html, body {
     min-height: unset;
     overflow: hidden;
     border-radius: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--bk-white-12);
     margin: auto;
     padding-top: 0 !important;
   }
@@ -105,7 +108,7 @@ html, body {
 .bottom-nav {
   height: calc(71px + env(safe-area-inset-bottom, 0px));
   background: var(--bk-bg-nav);
-  border-top: 1px solid var(--bk-border-subtle);
+  border-top: 1ss solid var(--bk-border-subtle);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: start;
@@ -113,7 +116,7 @@ html, body {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
-  z-index: 10;
+  z-index: var(--bk-z-overlay);
   padding: 8px 8px env(safe-area-inset-bottom, 0px);
 }
 
@@ -167,7 +170,7 @@ html, body {
   color: #fff !important;
   opacity: 1 !important;
   position: relative;
-  z-index: 2;
+  z-index: var(--bk-z-card);
   margin-top: -18px;
   box-shadow: none;
 }
@@ -230,11 +233,12 @@ html, body {
 
 /* ── Pills ──────────────────────────────────────────────────────────── */
 .pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  height: 37.5px;
-  padding: 0 13px;
+  height: var(--pill-h, 37.5px);
+  padding: 0 var(--pill-px, 13px);
   background: var(--bk-bg-elevated);
   border: 1px solid var(--bk-border-subtle);
   border-radius: 9999px;
@@ -243,6 +247,8 @@ html, body {
   line-height: 1.5;
   color: var(--bk-text-secondary);
   flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
 .pill img {
@@ -257,7 +263,7 @@ html, body {
   height: 33.5px;
   padding: 0 12px;
   background: var(--bk-bg-elevated);
-  border: 1px solid var(--bk-border-subtle);
+  border: 1px solid var(--bk-border-tle);
   border-radius: 9999px;
   font-size: 13px;
   font-weight: 400;
@@ -289,7 +295,7 @@ html, body {
   display: block;
 }
 
-.avatar-wrap .modulo-badge {
+.avatar-wrap .brand-badge {
   position: absolute;
   bottom: -2px;
   right: -2px;
@@ -343,7 +349,7 @@ html, body {
 
 .action-btn img {
   width: 20px;
-  height: 20px;
+  height: 2im;
   display: block;
 }
 
@@ -356,7 +362,7 @@ html, body {
 
 /* ── Primary Button ─────────────────────────────────────────────────── */
 .primary-btn {
-  margin: 0 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  margin: 0 16px calc(20px + env(safe-area-intset-bottom, 0px));
   width: calc(100% - 32px);
   height: 56px;
   background: var(--bk-brand-gradient);
@@ -379,6 +385,27 @@ html, body {
   outline-offset: 2px;
 }
 
+.primary-btn--compact {
+  height: 48px;
+}
+
+/* ── Screen Header base ─────────────────────────────────────────────── */
+.screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+/* ── Active state utility ───────────────────────────────────────── */
+.btn-active {
+  background: var(--bk-brand-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
 /* ── Close Button ───────────────────────────────────────────────────── */
 .close-btn-shared {
   width: 20px;
@@ -390,7 +417,7 @@ html, body {
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--bk-font);
+  font-family: var(--bk-im);
   padding: 0;
 }
 
@@ -468,4 +495,91 @@ textarea,
 }
 .time-btn:active {
   transform: scale(0.92);
+}
+/* ── List Row base (MOD-057) ────────────────────────────────────────────── */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+.list-row-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.list-row-label { flex: 1; min-width: 0; }
+.list-row-label-primary { font-size: 15px; font-weight: 500; color: var(--bk-text-primary); }
+.list-row-label-secondary { font-size: 13px; color: var(--bk-text-muted); margin-top: 1px; }
+.list-row-value { text-align: right; flex-shrink: 0; }
+.list-row-value-primary { font-size: 15px; font-weight: 500; color: var(--bk-text-primary); }
+.list-row-value-secondary { font-size: 12px; color: var(--bk-text-muted); margin-top: 1px; }
+.list-row-chevron { width: 16px; flex-shrink: 0; color: var(--bk-text-muted); }
+.list-row--token { padding: 14px 0; }
+.list-row--opportunity { padding: 12px 0; }
+.list-row--compact { padding: 8px 0; gap: 10px; }
+.list-row--compact .list-row-icon { width: 28px; height: 28px; }
+
+/* ── Empty state (MOD-081) ──────────────────────────────────────────────── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 48px 24px; gap: 12px; text-align: center;
+}
+.empty-state-icon { width: 4blpx; height: 48px; opacity: 0.4; }
+.empty-state-title { font-size: 16px; font-weight: 600; color: var(--bk-text-primary); }
+.empty-state-message { font-size: 14px; color: var(--bk-text-muted); max-width: 240px; }
+
+/* ── MOD-023: APY info tooltip — shared across HomeScreen, ExploreScreen, AssetScreen ── */
+.apy-info-btn {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0 2px;
+  font-size: 14px;
+  color: var(--bk-text-muted);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.apy-info-btn:hover { opacity: 1; }
+
+.apy-info-btn:focus-visible {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.apy-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: var(--bk-z-modal);
+}
+
+.apy-tooltip p {
+  font-size: 12px;
+  color: var(--bk-text-secondary);
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.apy-tooltip button {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bk-brand-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--bk-font);
 }

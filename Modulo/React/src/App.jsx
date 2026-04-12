@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { BrandConfigProvider }    from './theme/BrandConfig';
 import { SwapProvider }           from './SwapContext';
 import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
@@ -7,6 +9,7 @@ import { ActionsProvider, useActions } from './ActionsContext';
 import { motion as m }            from './motion-tokens';
 import { useIsDesktop }           from './hooks/useIsDesktop';
 import DesktopLayout              from './DesktopLayout';
+import ConnectWalletScreen        from './ConnectWalletScreen';
 import './shared.css';
 import HomeScreen         from './HomeScreen';
 import ExploreScreen      from './ExploreScreen';
@@ -123,8 +126,23 @@ function AnimatedRoutes() {
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
   const isDesktop = useIsDesktop();
+  const [walletConnected, setWalletConnected] = useState(
+    () => localStorage.getItem('walletConnected') === 'true'
+  );
+
+  if (!walletConnected) {
+    return (
+      <BrandConfigProvider>
+        <ConnectWalletScreen onConnect={() => {
+          localStorage.setItem('walletConnected', 'true');
+          setWalletConnected(true);
+        }} />
+      </BrandConfigProvider>
+    );
+  }
 
   return (
+    <BrandConfigProvider>
     <ActionsProvider>
       <IconOverrideProvider>
         <SwapProvider>
@@ -144,5 +162,6 @@ export default function App() {
         </SwapProvider>
       </IconOverrideProvider>
     </ActionsProvider>
+    </BrandConfigProvider>
   );
 }

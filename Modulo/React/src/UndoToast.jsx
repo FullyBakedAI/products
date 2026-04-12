@@ -7,7 +7,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, toast as toastAnim } from './motion-tokens';
 import { useUndoToast } from './UndoToastContext';
 import './undo-toast.css';
 
@@ -58,9 +58,9 @@ export default function UndoToast() {
           aria-live="polite"
           aria-atomic="true"
           aria-label={undone ? 'Action reversed' : toast.message}
-          initial={{ y: -80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1, transition: { ...m.modal.enter, duration: 0.26 } }}
-          exit={{ y: -80, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
+          initial={toastAnim.initial}
+          animate={toastAnim.animate}
+          exit={toastAnim.exit}
         >
           <span className="undo-message">
             {undone ? 'Reversed ✓' : toast.message}

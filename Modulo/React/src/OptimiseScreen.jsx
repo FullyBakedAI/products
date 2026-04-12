@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, animate } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 const IconChevronLeft = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -140,7 +140,7 @@ export default function OptimiseScreen() {
                   opacity: m.valueUpdate,
                   y: { ...m.fade.enter, delay: 0.06 + i * 0.05 },
                 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: tap.card }}
               >
                 <Button
                   className="optimise-row-btn"

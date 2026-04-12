@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionBackdrop = motion(Button);
@@ -223,7 +223,7 @@ function TxRow({ tx, delay, onTap, onAction }) {
       role="listitem"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay } }}
-      whileTap={{ scale: 0.985 }}
+      whileTap={{ scale: tap.card }}
     >
       <Button
         className="tx-row activity-tx-row"

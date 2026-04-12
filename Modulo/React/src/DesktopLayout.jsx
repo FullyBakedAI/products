@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { motion as m } from './motion-tokens';
 import SidebarNav from './SidebarNav';
 import ActionsScreen from './ActionsScreen';
 import UndoToast from './UndoToast';
@@ -20,8 +21,8 @@ export default function DesktopLayout({ children }) {
           <motion.aside
             className="desktop-panel"
             initial={{ x: 340, opacity: 0 }}
-            animate={{ x: 0, opacity: 1, transition: { type: 'spring', stiffness: 340, damping: 32 } }}
-            exit={{ x: 340, opacity: 0, transition: { duration: 0.18 } }}
+            animate={{ x: 0, opacity: 1, transition: m.modal.enter }}
+            exit={{ x: 340, opacity: 0, transition: { type: 'spring', stiffness: 280, damping: 26 } }}
           >
             <ActionsScreen variant="panel" />
           </motion.aside>
