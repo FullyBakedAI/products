@@ -945,8 +945,59 @@ export default function StudioTab() {
 
   const selectedCompDef = selectedComp ? COMPONENT_REGISTRY.find(c => c.id === selectedComp) : null;
 
+  function downloadInventory() {
+    const inventory = COMPONENT_REGISTRY.map(c => ({
+      id: c.id,
+      name: c.name,
+      group: c.group,
+      description: c.description,
+      tokens: c.tokens,
+    }));
+    const md = [
+      '# Modulo Component Inventory',
+      `Generated ${new Date().toISOString().slice(0,10)}`,
+      '',
+      ...COMP_GROUPS.map(group => {
+        const items = inventory.filter(c => c.group === group);
+        return [
+          `## ${group}`,
+          ...items.map(c => [
+            `### ${c.name}`,
+            c.description,
+            c.tokens.length ? `**Tokens:** ${c.tokens.join(', ')}` : '',
+            '',
+          ].filter(Boolean).join('\n')),
+        ].join('\n');
+      }),
+    ].join('\n');
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'modulo-component-inventory.md';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="ds-studio-layout">
+
+      {/* ── Leave-behind header ── */}
+      <div className="ds-studio-leave-behind">
+        <div className="ds-slb-content">
+          <p className="ds-slb-text">
+            This design system is your deliverable. Every component here is white-label ready,
+            accessible (WCAG 2.1 AA), and wired to the BakeKit token system.
+            Fork it, theme it, ship it.
+          </p>
+          <button className="ds-slb-download" onClick={downloadInventory} type="button">
+            Download component inventory ↓
+          </button>
+        </div>
+      </div>
+
+      {/* ── Main area (phone + sidebar) ── */}
+      <div className="ds-studio-main">
 
       {/* ── Phone area ── */}
       <div className="ds-studio-phone-area">
@@ -1026,6 +1077,8 @@ export default function StudioTab() {
       {selectedCompDef && (
         <ComponentOverlay comp={selectedCompDef} onClose={handleCloseComp} />
       )}
+
+      </div>{/* end ds-studio-main */}
 
     </div>
   );

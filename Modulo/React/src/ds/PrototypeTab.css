@@ -1,0 +1,116 @@
+/* ─────────────────────────────────────────────────────────────────
+   PrototypeTab — phone-frame prototype viewer
+   ───────────────────────────────────────────────────────────────── */
+
+.proto-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 24px 40px;
+  min-height: 100%;
+  gap: 24px;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────────── */
+.proto-top-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.proto-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--bk-white-12, rgba(255,255,255,0.12));
+  background: var(--bk-bg-card, rgba(255,255,255,0.05));
+  color: var(--bk-text-primary, #F5F5F6);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.proto-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.proto-btn-ghost {
+  background: transparent;
+  color: var(--bk-text-muted, #8B8A92);
+}
+
+.proto-btn-ghost:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--bk-text-primary, #F5F5F6);
+}
+
+/* ── Stage ───────────────────────────────────────────────────────── */
+.proto-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── Phone frame ─────────────────────────────────────────────────── */
+.proto-frame {
+  width: 390px;
+  height: 844px;
+  border-radius: 44px;
+  border: 8px solid var(--bk-white-12, rgba(255,255,255,0.12));
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+  position: relative;
+  background: #000;
+  flex-shrink: 0;
+}
+
+.proto-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 38px;
+  display: block;
+}
+
+/* ── Notch ───────────────────────────────────────────────────────── */
+.proto-notch {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 32px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.proto-notch-pill {
+  width: 60px;
+  height: 6px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 3px;
+}
+
+/* ── Hint ────────────────────────────────────────────────────────── */
+.proto-hint {
+  font-size: 12px;
+  color: var(--bk-text-muted, #8B8A92);
+  text-align: center;
+  margin: 0;
+}
+
+.proto-hint strong {
+  color: var(--bk-brand-primary, #584BEB);
+  font-weight: 600;
+}

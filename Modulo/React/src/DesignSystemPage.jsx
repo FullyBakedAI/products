@@ -1,12 +1,15 @@
 /**
- * DesignSystemPage — shell with tab navigation.
- * Tabs: Brand | Studio | Rules | Agentic Guide
+ * DesignSystemPage — client-facing deliverable shell.
+ * Tabs: Prototype | Build | Brand | Components | Rules | Agentic Guide
  * Route: rendered when hash === #/ds (outside HashRouter)
+ * Default tab: prototype
  */
 import { useState, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTokenOverride } from './TokenOverrideContext';
+import PrototypeTab    from './ds/PrototypeTab';
+import BuildTab        from './ds/BuildTab';
 import BrandTab        from './ds/BrandTab';
 import StudioTab       from './ds/StudioTab';
 import RulesTab        from './ds/RulesTab';
@@ -15,15 +18,17 @@ import logoModulo      from './assets/logo-modulo.svg';
 import './ds/ds-page.css';
 
 const NAV_ITEMS = [
-  { id: 'brand',  label: 'Brand' },
-  { id: 'studio', label: 'Studio' },
-  { id: 'rules',  label: 'Rules' },
-  { id: 'brief',  label: 'Agentic Guide' },
+  { id: 'prototype', label: 'Prototype' },
+  { id: 'build',     label: 'Build' },
+  { id: 'brand',     label: 'Brand' },
+  { id: 'studio',    label: 'Components' },
+  { id: 'rules',     label: 'Rules' },
+  { id: 'brief',     label: 'Agentic Guide' },
 ];
 
 export default function DesignSystemPage() {
   const { hasDraft, draft, saveOverrides, discardChanges, getToken } = useTokenOverride();
-  const [activeSection, setActiveSection] = useState('brand');
+  const [activeSection, setActiveSection] = useState('prototype');
   const draftCount = Object.keys(draft).length;
   const brand      = getToken('--bk-brand-primary');
 
@@ -36,10 +41,12 @@ export default function DesignSystemPage() {
   }, []);
 
   const SECTIONS = {
-    brand:  <BrandTab />,
-    studio: <StudioTab />,
-    rules:  <RulesTab />,
-    brief:  <AgenticGuideTab />,
+    prototype: <PrototypeTab />,
+    build:     <BuildTab />,
+    brand:     <BrandTab />,
+    studio:    <StudioTab />,
+    rules:     <RulesTab />,
+    brief:     <AgenticGuideTab />,
   };
 
   // Studio tab has its own full-height layout — don't overflow-scroll on that tab
@@ -52,7 +59,16 @@ export default function DesignSystemPage() {
       <header className="ds-header">
         <div className="ds-header-left">
           <img src={logoModulo} alt="Modulo" height="14" style={{ opacity: 0.55 }} />
-          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--bk-brand-primary)', opacity: 0.7, marginLeft: 8 }}>v3.0</span>
+          <span className="ds-header-title">Design System</span>
+          <a
+            href="https://fullybaked.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ds-bakekit-badge"
+            title="Built with BakeKit by Fully Baked"
+          >
+            Powered by BakeKit
+          </a>
         </div>
         <div className="ds-header-right">
           <AnimatePresence>
