@@ -35,11 +35,9 @@ function Root() {
   const [hash, setHash] = useState(() => {
     const current = window.location.hash;
     if (!current || current === '#' || current === '#/') {
-      const saved = localStorage.getItem('modulo_route');
-      if (saved && saved !== '#/' && saved !== '#' && !saved.startsWith('#/ds')) {
-        window.location.hash = saved;
-        return saved;
-      }
+      // Default landing is the design system deliverable
+      window.location.hash = '/ds';
+      return '#/ds';
     }
     return current;
   });
