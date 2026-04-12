@@ -54,6 +54,7 @@ export function BrandProvider({ theme, children }) {
 
       --bk-success: ${theme.success};
       --bk-error: ${theme.error};
+      --bk-warning: ${theme.warning};
 
       --bk-status-bar-dim: ${theme.statusBarDim};
       --bk-pill-bg: ${theme.pillBg};

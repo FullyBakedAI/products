@@ -211,7 +211,7 @@ function SecurityPanel({ onBack }) {
         />
       </div>
       <div className="settings-section">
-        <Button className="settings-row" aria-label="Connected apps">
+        <Button className="settings-row" aria-label="Connected apps" onPress={() => alert('Connected apps — coming soon')}>
           <IconGlobe size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">Connected apps</span>
@@ -299,12 +299,23 @@ function AppearancePanel({ onBack }) {
 }
 
 /* ── Help panel ── */
+const HELP_LINKS = {
+  'FAQ':             'https://help.modulo.app/faq',
+  'Contact Support': 'https://help.modulo.app/support',
+  'Report a Bug':    'https://github.com/modulo-app/feedback/issues/new',
+};
+
 function HelpPanel({ onBack }) {
   return (
     <PanelShell title="Help & Support" onBack={onBack}>
       <div className="settings-section">
-        {['FAQ', 'Contact Support', 'Report a Bug'].map(label => (
-          <Button key={label} className="settings-row" aria-label={label}>
+        {Object.entries(HELP_LINKS).map(([label, url]) => (
+          <Button
+            key={label}
+            className="settings-row"
+            aria-label={label}
+            onPress={() => window.open(url, '_blank', 'noopener,noreferrer')}
+          >
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
@@ -328,8 +339,17 @@ function AboutPanel({ onBack }) {
         <div className="settings-about-badge">Built with BakedUX</div>
       </div>
       <div className="settings-section">
-        {['Terms', 'Privacy', 'Licenses'].map(label => (
-          <Button key={label} className="settings-row" aria-label={label}>
+        {[
+          { label: 'Terms',    url: 'https://modulo.app/terms'   },
+          { label: 'Privacy',  url: 'https://modulo.app/privacy' },
+          { label: 'Licenses', url: 'https://modulo.app/oss'     },
+        ].map(({ label, url }) => (
+          <Button
+            key={label}
+            className="settings-row"
+            aria-label={label}
+            onPress={() => window.open(url, '_blank', 'noopener,noreferrer')}
+          >
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
@@ -359,7 +379,7 @@ function WalletPanel({ onBack }) {
           <img className="avatar" src={walletAvatar} alt="" />
           <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
         </div>
-        <div className="settings-wallet-name" style={{ textAlign: 'center' }}>modulo.eth</div>
+        <div className="settings-wallet-name" style={{ textAlign: 'center' }}>modulo</div>
         <div className="settings-wallet-full-addr">{fullAddr}</div>
       </div>
       <div className="settings-section">
@@ -369,13 +389,21 @@ function WalletPanel({ onBack }) {
             <span className="settings-row-label">{copied ? 'Copied!' : 'Copy address'}</span>
           </div>
         </Button>
-        <Button className="settings-row" aria-label="View on explorer">
+        <Button
+          className="settings-row"
+          aria-label="View on explorer"
+          onPress={() => window.open(`https://etherscan.io/address/${fullAddr}`, '_blank', 'noopener,noreferrer')}
+        >
           <IconExternalLink size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">View on explorer</span>
           </div>
         </Button>
-        <Button className="settings-row" aria-label="Rename wallet">
+        <Button
+          className="settings-row"
+          aria-label="Rename wallet"
+          onPress={() => alert('Rename wallet — coming soon')}
+        >
           <IconEdit3 size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">Rename wallet</span>
@@ -443,7 +471,7 @@ export default function SettingsScreen() {
                     <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
                   </div>
                   <div>
-                    <div className="settings-wallet-name">modulo.eth</div>
+                    <div className="settings-wallet-name">modulo</div>
                     <div className="settings-wallet-addr">0x7f3e...9A14</div>
                   </div>
                 </div>

@@ -432,7 +432,7 @@
 }
 
 .bottom-cta-btn.cta-ready[data-hovered] {
-  background: #6a5df0 !important;
+  background: color-mix(in srgb, var(--bk-brand-primary) 80%, white 20%) !important;
 }
 
 .bottom-cta-btn[data-focused] {

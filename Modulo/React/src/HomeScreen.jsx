@@ -5,20 +5,20 @@
  *   F2 — Live yield counter on portfolio balance
  *   F3 — Autopilot inline toggle card
  *   F4 — SmartNudges horizontal scroll
- *   F6 — Achievements icon in header + milestone toast
  *
  * All colours via --bk-* tokens. All data mocked.
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, useMotionValue, animate, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
+import { useIsDesktop } from './hooks/useIsDesktop';
 import BottomNav from './BottomNav';
+import NotificationsPanel from './NotificationsPanel';
 import './home.css';
-import './achievements.css'; // achievement-toast styles
 
 const IconTrendingUp = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -43,12 +43,6 @@ const IconSlidersHorizontal = ({ size = 18 }) => (
     <circle cx="7" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
     <circle cx="13" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/>
     <circle cx="8" cy="14" r="2" stroke="currentColor" strokeWidth="1.5"/>
-  </svg>
-);
-const IconTrophy = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M7 17H13M10 13V17M6 3H14V9C14 11.21 12.21 13 10 13C7.79 13 6 11.21 6 9V3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-    <path d="M6 5H3V7C3 8.66 4.34 10 6 10M14 5H17V7C17 8.66 15.66 10 14 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 const IconChevronRight = ({ size = 14 }) => (
@@ -130,14 +124,12 @@ const TOKENS = [
 ];
 
 const MAX_YIELD  = Math.max(...TOKENS.map(t => t.yield));
-const ACTION_W   = 300;
+const ACTION_W   = 240;
 
 const SWIPE_ACTIONS = [
-  { id: 'stake',   label: 'Stake',   Icon: IconZap,               cls: 'swipe-stake'   },
-  { id: 'trade',   label: 'Trade',   Icon: IconTrendingUp,        cls: 'swipe-trade'   },
-  { id: 'lend',    label: 'Lending', Icon: IconLandmark,          cls: 'swipe-lending' },
-  { id: 'swap',    label: 'Swap',    Icon: IconRepeat2,           cls: 'swipe-swap'    },
-  { id: 'manage',  label: 'Manage',  Icon: IconSlidersHorizontal, cls: 'swipe-manage'  },
+  { id: 'trade',  label: 'Trade',  Icon: IconTrendingUp, cls: 'swipe-trade' },
+  { id: 'lend',   label: 'Lend',   Icon: IconLandmark,   cls: 'swipe-lend'  },
+  { id: 'swap',   label: 'Swap',   Icon: IconRepeat2,    cls: 'swipe-swap'  },
 ];
 
 // ── Feature 2: Live yield counter ────────────────────────────────────────────
@@ -164,61 +156,38 @@ function useLiveBalance(active) {
   return { balance, glowing };
 }
 
-// ── Feature 6: Achievement milestone toast ───────────────────────────────────
-function AchievementToast({ onClose, navigate }) {
-  return (
-    <motion.div
-      className="achievement-toast"
-      role="status"
-      aria-live="polite"
-      aria-label="Achievement unlocked: Century Club"
-      initial={{ y: 80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1, transition: { ...m.modal.enter, duration: 0.28 } }}
-      exit={{ y: 80, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
-      whileTap={{ scale: 0.97 }}
-    >
-      <div className="confetti-burst" aria-hidden="true">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="confetti-particle" />
-        ))}
-      </div>
-      <Button
-        className="achievement-toast-content"
-        aria-label="Achievement unlocked: Century Club — tap to view achievements"
-        onPress={() => { navigate('/achievements'); onClose(); }}
-        style={{ all: 'unset', display: 'flex', alignItems: 'center', width: '100%', cursor: 'pointer', gap: '12px' }}
-      >
-        <div className="achievement-toast-icon" aria-hidden="true">
-          <IconTrendingUp size={18} />
-        </div>
-        <div className="achievement-toast-text" style={{ flex: 1 }}>
-          <div className="achievement-toast-label">Achievement unlocked</div>
-          <div className="achievement-toast-title">Century Club 🎉</div>
-        </div>
-        <IconChevronRight size={14} />
-      </Button>
-    </motion.div>
-  );
-}
 
 // ── TokenRow ─────────────────────────────────────────────────────────────────
 function TokenRow({ t, index }) {
   const x = useMotionValue(0);
   const navigate = useNavigate();
   const { openActions } = useActions();
+  const isDesktop = useIsDesktop();
+  const [isSwipeOpen, setIsSwipeOpen] = useState(false);
+  const hasDragged = useRef(false);
+  const buttonReveal = useTransform(x, [-ACTION_W, -30], [1, 0]);
 
   function snap(open) {
-    animate(x, open ? -ACTION_W : 0, { type: 'spring', stiffness: 260, damping: 26, mass: 0.7 });
+    setIsSwipeOpen(open);
+    animate(x, open ? -ACTION_W : 0, { type: 'spring', stiffness: 340, damping: 30, mass: 0.6 });
+  }
+
+  function handleDragStart() {
+    hasDragged.current = true;
   }
 
   function handleDragEnd(_, info) {
-    const open = info.velocity.x < -300 || info.offset.x < -(ACTION_W / 2);
+    const open = info.velocity.x < -500 || info.offset.x < -(ACTION_W * 0.35);
     snap(open);
+    // Clear drag flag after spring settles so tap doesn't fire navigate
+    setTimeout(() => { hasDragged.current = false; }, 350);
   }
 
   function handleTap() {
-    if (Math.abs(x.get()) > 5) {
+    if (hasDragged.current || Math.abs(x.get()) > 8) {
       snap(false);
+    } else if (isDesktop) {
+      openActions({ asset: t.id });
     } else {
       navigate(`/asset/${t.id}`);
     }
@@ -230,6 +199,7 @@ function TokenRow({ t, index }) {
       data-bk-component="token-card"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.12 + index * 0.05 } }}
+      style={{ zIndex: isSwipeOpen ? 2 : 'auto' }}
     >
       <div className="token-icon-anchor" aria-hidden="true">
         <img className="token-icon-lg" src={t.icon} alt="" />
@@ -244,23 +214,23 @@ function TokenRow({ t, index }) {
 
       <div className="token-swipe-actions">
         {SWIPE_ACTIONS.map(({ id, label, Icon, cls }) => (
-          <Button
-            key={id}
-            className={`swipe-action ${cls}`}
-            aria-label={`${label} ${t.name}`}
-            onPress={() => {
-              snap(false);
-              setTimeout(() => {
-                if (id === 'swap')        openActions({ tab: 'swap', asset: t.id });
-                else if (id === 'manage') navigate(`/asset/${t.id}`);
-                else if (id === 'stake')  openActions({ tab: 'lend', asset: t.id });
-                else                      openActions({ tab: id, asset: t.id });
-              }, 280);
-            }}
-          >
-            <Icon size={18} strokeWidth={1.5} />
-            <span>{label}</span>
-          </Button>
+          <motion.div key={id} style={{ flex: 1, display: 'flex', opacity: buttonReveal, scale: buttonReveal }}>
+            <Button
+              className={`swipe-action ${cls}`}
+              aria-label={`${label} ${t.name}`}
+              onPress={() => {
+                snap(false);
+                setTimeout(() => {
+                  if (id === 'swap')  openActions({ tab: 'swap',  asset: t.id });
+                  else if (id === 'lend')  openActions({ tab: 'lend',  asset: t.id });
+                  else                     openActions({ tab: 'trade', asset: t.id });
+                }, 260);
+              }}
+            >
+              <Icon size={20} strokeWidth={1.5} />
+              <span>{label}</span>
+            </Button>
+          </motion.div>
         ))}
       </div>
 
@@ -271,9 +241,10 @@ function TokenRow({ t, index }) {
         dragConstraints={{ left: -ACTION_W, right: 0 }}
         dragElastic={0.05}
         dragMomentum={false}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onTap={handleTap}
-        whileTap={{ scale: 0.985 }}
+        whileTap={isSwipeOpen ? {} : { scale: 0.985 }}
         aria-label={`${t.name}: ${t.usd}, ${t.change}, ${(t.yield * 100).toFixed(1)}% APY`}
       >
         <div className="token-row-main">
@@ -318,10 +289,14 @@ export default function HomeScreen() {
   const { openActions } = useActions();
   const [activePeriod, setActivePeriod] = useState('1D');
   const [yieldActive] = useState(true); // F2: yield counter always on in demo
-  const [showAchievementToast, setShowAchievementToast] = useState(false);
   const [activeAssetTab, setActiveAssetTab] = useState('tokens');
   const [sortBy, setSortBy] = useState('size'); // 'size' | 'performance'
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [activeChain, setActiveChain] = useState('Arbitrum');
+  const [chainMenuOpen, setChainMenuOpen] = useState(false);
+
+  const CHAINS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
   const scrollRef = useRef(null);
   useIconOverride();
 
@@ -359,11 +334,6 @@ export default function HomeScreen() {
   const balanceDollars = Math.floor(activeBalance).toLocaleString('en-US');
   const balanceCents   = (activeBalance % 1).toFixed(4).slice(1); // ".8312"
 
-  // F6: Demo achievement toast — fires 4s after mount
-  useEffect(() => {
-    const id = setTimeout(() => setShowAchievementToast(true), 4000);
-    return () => clearTimeout(id);
-  }, []);
 
   return (
     <motion.main
@@ -380,16 +350,48 @@ export default function HomeScreen() {
           <img src={logoModulo} alt="Modulo" width="93" height="18" />
         </div>
         <div className="home-header-actions">
-          <Button
-            className="icon-btn"
-            aria-label="Achievements"
-            onPress={() => navigate('/achievements')}
-            style={{ color: 'var(--bk-text-muted)' }}
-          >
-            <IconTrophy />
-          </Button>
-          <Button className="icon-btn" aria-label="Notifications" onPress={() => navigate('/activity')}>
+          {/* Network selector */}
+          <div className="network-pill-wrap" style={{ position: 'relative' }}>
+            <Button
+              className="network-pill"
+              aria-label={`Network: ${activeChain}. Tap to switch.`}
+              aria-haspopup="listbox"
+              aria-expanded={chainMenuOpen}
+              onPress={() => setChainMenuOpen(v => !v)}
+            >
+              <span className="network-dot" aria-hidden="true" />
+              <span className="network-label">{activeChain}</span>
+              <span className={`network-chevron${chainMenuOpen ? ' open' : ''}`} aria-hidden="true">›</span>
+            </Button>
+            <AnimatePresence>
+              {chainMenuOpen && (
+                <motion.div
+                  className="network-menu"
+                  role="listbox"
+                  aria-label="Select network"
+                  initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1, transition: m.springTight }}
+                  exit={{ opacity: 0, y: -4, scale: 0.96, transition: { duration: 0.12 } }}
+                >
+                  {CHAINS.map(chain => (
+                    <Button key={chain}
+                      className={`network-menu-item${chain === activeChain ? ' active' : ''}`}
+                      role="option"
+                      aria-selected={chain === activeChain}
+                      onPress={() => { setActiveChain(chain); setChainMenuOpen(false); }}
+                    >
+                      <span className="network-dot" aria-hidden="true" />
+                      {chain}
+                    </Button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(true)}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
+            <span className="notif-dot" aria-hidden="true" />
           </Button>
           <Button className="icon-btn" aria-label="Settings" onPress={() => navigate('/settings')}>
             <img src={iconSettings} alt="" width="16" height="16" aria-hidden="true" />
@@ -496,7 +498,6 @@ export default function HomeScreen() {
         >
           <motion.div className="optimise-promo-card" whileTap={{ scale: 0.98 }}>
           <Button aria-label="Put it all to work — optimise all assets" onPress={() => navigate('/optimise')} style={{ all: 'unset', display: 'contents', cursor: 'pointer' }}>
-            <img src={iconModuloBadge} alt="" aria-hidden="true" style={{ width: 28, height: 28, flexShrink: 0, objectFit: 'contain' }} />
             <div className="optimise-promo-text">
               <div className="optimise-promo-headline">Put it all to work</div>
               <div className="optimise-promo-sub">Estimated +$969/yr · 4.2% avg APY across 4 protocols</div>
@@ -560,17 +561,11 @@ export default function HomeScreen() {
 
       </div>
 
-      {/* F6: Achievement milestone toast */}
-      <AnimatePresence>
-        {showAchievementToast && (
-          <AchievementToast
-            onClose={() => setShowAchievementToast(false)}
-            navigate={navigate}
-          />
-        )}
-      </AnimatePresence>
-
       <BottomNav />
+
+      <AnimatePresence>
+        {notifOpen && <NotificationsPanel onClose={() => setNotifOpen(false)} />}
+      </AnimatePresence>
     </motion.main>
   );
 }

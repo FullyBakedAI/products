@@ -6,7 +6,7 @@
 
 /* ── Global base — prevents white flash on iOS overscroll / load ──── */
 html, body {
-  background: #0D0E17;
+  background: var(--bk-bg-base, #0D0E17);
   color-scheme: dark;
   margin: 0;
   padding: 0;
@@ -47,79 +47,12 @@ html, body {
   }
 }
 
-/* Status bar visibility controlled at definition above (mobile-first display:none) */
 
-/* Hidden by default (mobile-first). Desktop preview reveals it. */
-.status-bar {
-  height: 37px;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  flex-shrink: 0;
-}
-
-@media (min-width: 501px) {
-  .status-bar { display: flex; }
-}
-
-.status-time {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--bk-text-primary);
-}
-
-.status-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.signal-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.signal-bar {
-  width: 3px;
-  border-radius: 1px;
-}
-
-.signal-bar:nth-child(1) { height: 4px;  background: var(--bk-status-bar-dim); }
-.signal-bar:nth-child(2) { height: 6px;  background: var(--bk-status-bar-dim); }
-.signal-bar:nth-child(3) { height: 9px;  background: var(--bk-text-primary); }
-.signal-bar:nth-child(4) { height: 12px; background: var(--bk-text-primary); }
-
-.battery {
-  width: 24px;
-  height: 12px;
-  border: 1.5px solid var(--bk-text-primary);
-  border-radius: 3px;
-  position: relative;
-  padding: 2px;
-  display: flex;
-  align-items: center;
-}
-
-.battery::after {
-  content: '';
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 5px;
-  background: var(--bk-text-primary);
-  border-radius: 0 1px 1px 0;
-}
-
-.battery-fill {
-  width: 75%;
-  height: 100%;
-  background: var(--bk-text-primary);
-  border-radius: 1px;
+/* ── Desktop: hide phone frame — DesktopLayout renders instead ──────── */
+@media (min-width: 1024px) {
+  .phone {
+    display: none;
+  }
 }
 
 /* ── Real device: fill viewport, no frame ───────────────────────────── */
@@ -129,6 +62,13 @@ html, body {
     height: 100dvh;
     border-radius: 0;
     box-shadow: none;
+  }
+
+  /* Reserve space for the OS status bar on real devices.
+     max() picks whichever is larger: the actual safe-area inset (notch/island)
+     or 47px (flat-screen iPhones where the browser handles the bar itself). */
+  .screen-wrapper {
+    padding-top: max(env(safe-area-inset-top, 0px), 47px);
   }
 }
 
@@ -141,11 +81,11 @@ html, body {
   height: 100%;
   overflow: hidden;
   will-change: transform, opacity;
-  /* Safe-area inset — applies to every screen automatically.
-     box-sizing:border-box keeps the border-box at exactly 100dvh so
-     BottomNav stays pinned. padding-top pushes content below the notch. */
+  /* Safe-area inset — desktop preview uses no top offset (no device chrome).
+     On real mobile (max-width: 500px or standalone PWA), a minimum 47px
+     is enforced so content never sits under the OS status bar. */
   box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: 0;
 }
 
 /* ── Scrollable Content ─────────────────────────────────────────────── */
@@ -189,14 +129,12 @@ html, body {
   font-family: var(--bk-font);
   padding: 4px 0;
   color: var(--bk-text-muted);
-  opacity: 0.5;
-  transition: opacity 0.15s, color 0.15s;
+  transition: color 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
 
 .nav-btn.active {
-  color: var(--bk-text-primary);
-  opacity: 1;
+  color: var(--bk-brand-primary);
 }
 
 .nav-label {
@@ -231,7 +169,7 @@ html, body {
   position: relative;
   z-index: 2;
   margin-top: -18px;
-  box-shadow: 0 4px 24px color-mix(in srgb, var(--bk-brand-primary) 50%, transparent);
+  box-shadow: none;
 }
 
 .nav-btn-swap[data-focused] {
@@ -258,9 +196,9 @@ html, body {
 
 /* ── Search Field ───────────────────────────────────────────────────── */
 .search-field {
-  height: 48.5px;
-  background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle);
+  height: 52px;
+  background: var(--bk-bg-elevated);
+  border: 1px solid color-mix(in srgb, var(--bk-brand-primary) 22%, var(--bk-border-subtle));
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -279,7 +217,7 @@ html, body {
   width: 16px;
   height: 16px;
   display: block;
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
 .search-field span,
@@ -507,7 +445,7 @@ textarea,
 
 /* Bottom nav buttons */
 .nav-btn {
-  transition: transform 0.1s ease, opacity 0.15s, color 0.15s;
+  transition: transform 0.1s ease, color 0.15s;
 }
 .nav-btn:active {
   transform: scale(0.88);

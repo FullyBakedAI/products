@@ -43,6 +43,7 @@ const moduloTheme = {
   // Semantic
   success: '#22C55E',
   error: '#F04348',
+  warning: '#F59E0B',
 
   // Special
   overlay: 'rgba(0, 0, 0, 0.6)',

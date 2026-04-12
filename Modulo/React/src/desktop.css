@@ -1,0 +1,235 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Modulo Desktop Layout
+   All desktop overrides live here — mobile CSS untouched.
+   All values via --bk-* tokens. No hardcoded hex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Root layout ─────────────────────────────────────────────────────── */
+.desktop-root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bk-bg-outer);
+  overflow: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+.desktop-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--bk-bg-base);
+  border-right: 1px solid var(--bk-border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  gap: 0;
+}
+
+.sidebar-logo {
+  padding: 0 8px 24px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+  font-family: var(--bk-font);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  width: 100%;
+  text-align: left;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
+}
+
+.sidebar-nav-item:hover {
+  background: var(--bk-bg-elevated);
+  color: var(--bk-text-secondary);
+}
+
+.sidebar-nav-item.active {
+  background: var(--bk-brand-dim);
+  color: var(--bk-brand-primary);
+  font-weight: 600;
+}
+
+.sidebar-nav-item[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--bk-border-subtle);
+  margin: 16px 0;
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.sidebar-wallet {
+  flex: 1;
+  font-size: 12px;
+  color: var(--bk-text-muted);
+  font-family: var(--bk-font);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-settings-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bk-bg-elevated);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bk-text-muted);
+  flex-shrink: 0;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
+}
+
+.sidebar-settings-btn:hover {
+  background: var(--bk-bg-card);
+  color: var(--bk-text-primary);
+}
+
+.sidebar-settings-btn[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: 2px;
+}
+
+/* ── Main content ─────────────────────────────────────────────────────── */
+.desktop-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bk-bg-base);
+  position: relative;
+  min-width: 0;
+}
+
+/* All existing screens scroll in this column — reset phone-specific constraints */
+.desktop-main .screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+/* ── Right panel ──────────────────────────────────────────────────────── */
+.desktop-panel {
+  width: 340px;
+  flex-shrink: 0;
+  background: var(--bk-bg-base);
+  border-left: 1px solid var(--bk-border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Adapt ActionsScreen for panel mode — no overlay chrome */
+.desktop-panel .actions-overlay {
+  position: static;
+  height: 100%;
+}
+
+.desktop-panel .actions-backdrop {
+  display: none;
+}
+
+.desktop-panel .actions-sheet {
+  border-radius: 0;
+  height: 100%;
+  border-top: none;
+}
+
+/* Panel root — desktop ActionsScreen variant="panel" */
+.actions-panel-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.actions-panel-root .actions-sheet {
+  flex: 1;
+  border-radius: 0;
+  border-top: none;
+  overflow-y: auto;
+}
+
+/* ── Screen overrides — remove phone-specific constraints on desktop ─── */
+
+/* Hide bottom nav — sidebar replaces it */
+.desktop-main .bottom-nav {
+  display: none;
+}
+
+/* HomeScreen — full width, remove max-width caps */
+.desktop-main .home-screen {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 32px 32px;
+}
+
+/* Remove swipe actions on desktop — click row to open panel instead */
+.desktop-main .token-swipe-actions {
+  display: none;
+}
+
+/* ExploreScreen */
+.desktop-main .explore-screen {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* ManageScreen */
+.desktop-main .manage-screen {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* AssetScreen — two column */
+.desktop-main .asset-screen {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+}
+
+/* ── AssetScreen two-column grid ─────────────────────────────────────── */
+.asset-screen-desktop {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.asset-col-main { min-width: 0; }
+.asset-col-side  { min-width: 0; }

@@ -14,7 +14,6 @@ import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionBackdrop = motion(Button);
-import StatusBar from './StatusBar';
 import BottomNav from './BottomNav';
 const IconLoader = ({ size = 20, className }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
@@ -302,8 +301,6 @@ export default function ActivityScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       {/* Header */}
       <header className="home-header">
         <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>

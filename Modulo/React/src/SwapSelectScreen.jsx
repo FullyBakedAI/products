@@ -7,7 +7,6 @@
 
 import { Button } from 'react-aria-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
 import { useActions } from './ActionsContext';
 import { SWAP_TOKENS, TOKEN_ORDER } from './tokens-data';
@@ -29,8 +28,6 @@ export default function SwapSelectScreen() {
 
   return (
     <main role="main" aria-label="Modulo select token screen" className="swap-select-screen">
-      <StatusBar />
-
       <div className="drag-handle" aria-hidden="true">
         <div className="drag-handle-pill" />
       </div>

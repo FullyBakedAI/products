@@ -1,6 +1,7 @@
 import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useActions } from './ActionsContext';
+import { useIsDesktop } from './hooks/useIsDesktop';
 const IconHome = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M3 9.5L10 3L17 9.5V17H13V13H7V17H3V9.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -32,9 +33,12 @@ const IconSlidersHorizontal = () => (
 );
 
 export default function BottomNav() {
+  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { openActions } = useActions();
+
+  if (isDesktop) return null;
 
   const isActive = (path) => pathname === path || pathname.startsWith(path + '/');
 

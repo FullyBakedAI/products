@@ -13,7 +13,6 @@ import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
-import StatusBar from './StatusBar';
 import './send.css';
 
 const IconScanLine = () => (
@@ -57,8 +56,6 @@ export default function SendScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       {/* Drag Handle */}
       <div className="drag-handle" aria-hidden="true">
         <div className="drag-handle-pill" />

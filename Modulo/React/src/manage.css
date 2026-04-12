@@ -65,20 +65,19 @@
   gap: 12px;
 }
 
-/* ── Action Card ─────────────────────────────────────────────────────── */
+/* ── Action Card — matches Actions DepositTab style ──────────────────── */
 .manage-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  align-items: flex-start;
   width: 100%;
-  height: 100px;
+  padding: 18px 16px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-subtle);
   border-radius: 16px;
   cursor: pointer;
   font-family: var(--bk-font);
+  text-align: left;
   transition: background 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -94,12 +93,22 @@
 
 .manage-card-icon {
   color: var(--bk-text-primary);
+  margin-bottom: 10px;
+  opacity: 0.9;
   flex-shrink: 0;
 }
 
 .manage-card-label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--bk-text-primary);
+  margin-bottom: 4px;
   line-height: 1.3;
+}
+
+.manage-card-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--bk-text-muted);
+  line-height: 1.4;
 }

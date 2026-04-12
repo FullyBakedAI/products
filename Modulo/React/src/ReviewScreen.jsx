@@ -67,17 +67,17 @@ export default function ReviewScreen() {
       {/* drag-handle from shared.css */}
       <div className="drag-handle"><div className="drag-handle-pill" /></div>
 
-      <h1 className="swap-title" style={{ textAlign: 'center', padding: '4px 20px 16px' }}>
+      <h1 className="swap-title" style={{ textAlign: 'center', padding: '2px 20px 10px' }}>
         Review {capitalize(action)}
       </h1>
 
       {/* Summary — card chrome for visual weight on confirmation step */}
-      <div className="swap-cards" style={{ paddingBottom: 12 }}>
+      <div className="swap-cards" style={{ paddingBottom: 8 }}>
         <div className="swap-card">
           {/* You give */}
           <div className="review-asset-row">
             <div className="review-asset-left">
-              <img src={from.icon} alt="" width="40" height="40" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
+              <img src={from.icon} alt="" width="36" height="36" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
               <div>
                 <div className="card-label" style={{ margin: 0 }}>You give</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--bk-text-primary)', marginTop: 1 }}>
@@ -88,7 +88,7 @@ export default function ReviewScreen() {
             <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-text-secondary)' }}>{fmt(from.usd)}</span>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '6px 0' }}>
             <IconArrowDown />
           </div>
 
@@ -100,7 +100,7 @@ export default function ReviewScreen() {
           ) : (
             <div className="review-asset-row">
               <div className="review-asset-left">
-                <img src={to.icon} alt="" width="40" height="40" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
+                <img src={to.icon} alt="" width="36" height="36" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
                 <div>
                   <div className="card-label" style={{ margin: 0 }}>You receive</div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--bk-text-primary)', marginTop: 1 }}>
@@ -117,7 +117,7 @@ export default function ReviewScreen() {
       {/* Fee breakdown — clean list, no card chrome */}
       <div className="review-fees-section">
         {/* Rate row */}
-        <div className="card-bottom" style={{ padding: '10px 0', margin: 0 }}>
+        <div className="card-bottom" style={{ padding: '8px 0', margin: 0 }}>
           <span className="card-label" style={{ margin: 0 }}>Rate</span>
           <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-secondary)' }}>{rate}</span>
         </div>

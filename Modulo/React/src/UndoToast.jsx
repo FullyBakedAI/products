@@ -1,6 +1,6 @@
 /**
- * UndoToast — bottom toast with SVG countdown ring (Feature 7)
- * Slides up after any transaction. Depletes over 30s.
+ * UndoToast — top toast with SVG countdown ring (Feature 7)
+ * Slides down from top after any transaction. Depletes over 30s.
  * Tapping "Undo" reverses the action and shows "Reversed ✓".
  */
 
@@ -58,9 +58,9 @@ export default function UndoToast() {
           aria-live="polite"
           aria-atomic="true"
           aria-label={undone ? 'Action reversed' : toast.message}
-          initial={{ y: 96, opacity: 0 }}
+          initial={{ y: -80, opacity: 0 }}
           animate={{ y: 0, opacity: 1, transition: { ...m.modal.enter, duration: 0.26 } }}
-          exit={{ y: 96, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
+          exit={{ y: -80, opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
         >
           <span className="undo-message">
             {undone ? 'Reversed ✓' : toast.message}

@@ -20,6 +20,18 @@
 /* ── Search Field override ──────────────────────────────────────────── */
 .explore-search {
   margin: 0 20px 16px;
+  width: calc(100% - 40px);
+}
+
+.explore-search svg {
+  color: var(--bk-text-muted);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ── Tab strip — remove underline in explore context ───────────────── */
+.explore-screen .tab-switcher-list {
+  border-bottom: none;
 }
 
 /* ── Yield Section ─────────────────────────────────────────────────── */

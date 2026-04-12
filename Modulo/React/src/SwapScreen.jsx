@@ -21,7 +21,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 
 const MotionButton = motion.create(Button);
-import StatusBar from './StatusBar';
 import { useSwap } from './SwapContext';
 const IconDelete = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -256,8 +255,6 @@ export default function SwapScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       <ScreenHeader
         title="Swap"
         onClose={() => navigate('/')}

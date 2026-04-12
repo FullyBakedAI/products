@@ -45,24 +45,28 @@ const CARDS = [
   {
     id: 'deposit',
     label: 'Deposit',
+    sub: 'Add funds via crypto or bank transfer',
     Icon: IconArrowDownToLine,
     ariaLabel: 'Deposit funds',
   },
   {
     id: 'withdraw',
     label: 'Withdraw',
+    sub: 'Move funds to an external wallet or bank',
     Icon: IconArrowUpFromLine,
     ariaLabel: 'Withdraw funds',
   },
   {
     id: 'send',
     label: 'Send',
+    sub: 'Transfer tokens to another address',
     Icon: IconSend,
     ariaLabel: 'Send tokens',
   },
   {
     id: 'receive',
     label: 'Receive',
+    sub: 'Get a deposit address or QR code',
     Icon: IconDownload,
     ariaLabel: 'Receive tokens',
   },
@@ -89,7 +93,7 @@ export default function ManageScreen() {
 
   function handlePress(id) {
     if (id === 'deposit')  openActions({ tab: 'deposit' });
-    else if (id === 'withdraw') openActions({ tab: 'withdraw' });
+    else if (id === 'withdraw') openActions({ tab: 'lend' });
     else if (id === 'send')    navigate('/send');
     else if (id === 'receive') navigate('/receive');
   }
@@ -121,9 +125,9 @@ export default function ManageScreen() {
           initial="initial"
           animate="animate"
         >
-          {CARDS.map(({ id, label, Icon, ariaLabel }) => (
+          {CARDS.map(({ id, label, sub, Icon, ariaLabel }) => (
             <motion.div key={id} variants={springStagger.item}>
-              <motion.div whileTap={{ scale: 0.95 }}>
+              <motion.div whileTap={{ scale: 0.97 }}>
                 <Button
                   className="manage-card"
                   aria-label={ariaLabel}
@@ -131,6 +135,7 @@ export default function ManageScreen() {
                 >
                   <Icon size={24} strokeWidth={1.5} className="manage-card-icon" />
                   <span className="manage-card-label">{label}</span>
+                  <span className="manage-card-sub">{sub}</span>
                 </Button>
               </motion.div>
             </motion.div>

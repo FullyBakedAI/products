@@ -130,18 +130,6 @@ export default function SuccessScreen() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ ...m.springTight, delay: 1.12 }}
-            whileTap={{ scale: 0.97 }}
-            style={{ width: '100%' }}
-          >
-            <Button className="success-nudge-btn" aria-label={`Set a price alert for ${action === 'swap' ? 'this token' : action}`} onPress={() => navigate('/settings')}>
-              <img src={iconNotif} width="14" height="14" aria-hidden="true" /> Set a price alert
-            </Button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ ...m.springTight, delay: 1.18 }}
             whileTap={{ scale: 0.97 }}
             style={{ width: '100%' }}

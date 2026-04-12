@@ -39,11 +39,11 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  background: color-mix(in srgb, var(--bk-warning) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bk-warning) 25%, transparent);
   border-radius: 12px;
   padding: 11px 14px;
-  color: #f59e0b;
+  color: var(--bk-warning);
   font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
@@ -75,7 +75,7 @@
   background: none;
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 10px 0;
+  padding: 8px 0;
   cursor: pointer;
   font-family: var(--bk-font);
   gap: 8px;

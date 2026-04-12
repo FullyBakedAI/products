@@ -5,6 +5,8 @@ import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
 import { ActionsProvider, useActions } from './ActionsContext';
 import { motion as m }            from './motion-tokens';
+import { useIsDesktop }           from './hooks/useIsDesktop';
+import DesktopLayout              from './DesktopLayout';
 import './shared.css';
 import HomeScreen         from './HomeScreen';
 import ExploreScreen      from './ExploreScreen';
@@ -113,8 +115,6 @@ function AnimatedRoutes() {
           <Route path="/manage"              element={<ManageScreen />} />
         </Routes>
 
-        {/* F7: UndoToast — rendered inside .phone so positioning is relative to the frame */}
-        <UndoToast />
       </motion.div>
     </AnimatePresence>
   );
@@ -122,15 +122,24 @@ function AnimatedRoutes() {
 
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
+  const isDesktop = useIsDesktop();
+
   return (
     <ActionsProvider>
       <IconOverrideProvider>
         <SwapProvider>
           <UndoToastProvider>
-            <div className="phone">
-              <AnimatedRoutes />
-              <ActionsOverlay />
-            </div>
+            {isDesktop ? (
+              <DesktopLayout>
+                <AnimatedRoutes />
+              </DesktopLayout>
+            ) : (
+              <div className="phone">
+                <AnimatedRoutes />
+                <ActionsOverlay />
+                <UndoToast />
+              </div>
+            )}
           </UndoToastProvider>
         </SwapProvider>
       </IconOverrideProvider>

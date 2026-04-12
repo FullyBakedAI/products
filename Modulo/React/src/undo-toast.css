@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   UndoToast — global bottom overlay (Feature 7)
+   UndoToast — global top overlay
    All values via --bk-* tokens. No hardcoded hex.
    ═══════════════════════════════════════════════════════════════════════ */
 
 .undo-toast {
   position: absolute;
-  bottom: 88px; /* above bottom nav */
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
   left: 20px;
   right: 20px;
   z-index: 200;

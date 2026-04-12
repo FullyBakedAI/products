@@ -35,11 +35,11 @@
   --bk-brand-gradient:   linear-gradient(135deg, #584BEB 0%, #4A3DE0 100%);
 
   /* Semantic */
-  --bk-success:          #22C55E;
-  --bk-error:            #F04348;
+  --bk-success:          #34D974;
+  --bk-error:            #F5565A;
+  --bk-warning:          #F5A623;
 
   /* Special */
-  --bk-status-bar-dim:   #3A3B4E;
   --bk-pill-bg:          #2A2A3E;
   --bk-earn-card-bg:     rgba(88, 75, 235, 0.18);
   --bk-earn-card-border: rgba(88, 75, 235, 0.2);
@@ -84,8 +84,8 @@
 
   --bk-success:          #16A34A;
   --bk-error:            #DC2626;
+  --bk-warning:          #D97706;
 
-  --bk-status-bar-dim:   #C8C9D8;
   --bk-pill-bg:          #EBEBF8;
   --bk-earn-card-bg:     rgba(88, 75, 235, 0.06);
   --bk-earn-card-border: rgba(88, 75, 235, 0.15);

@@ -43,6 +43,87 @@
   gap: 14px;
 }
 
+/* ── Network selector ───────────────────────────────────────────────── */
+.network-pill-wrap { position: relative; }
+
+.network-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  background: var(--bk-bg-elevated);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.network-pill[data-hovered] {
+  border-color: var(--bk-brand-primary);
+  color: var(--bk-text-primary);
+}
+
+.network-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bk-success);
+  flex-shrink: 0;
+}
+
+.network-label { white-space: nowrap; }
+
+.network-chevron {
+  display: inline-block;
+  transition: transform 0.18s ease;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--bk-text-muted);
+}
+
+.network-chevron.open { transform: rotate(90deg); }
+
+.network-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  background: var(--bk-bg-card);
+  border: 1px solid var(--bk-border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.network-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bk-text-secondary);
+  cursor: pointer;
+  font-family: var(--bk-font);
+  text-align: left;
+  transition: background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.network-menu-item[data-hovered] { background: var(--bk-bg-elevated); }
+.network-menu-item.active { color: var(--bk-text-primary); font-weight: 600; }
+.network-menu-item.active .network-dot { background: var(--bk-success); }
+
 .icon-btn {
   display: flex;
   align-items: center;
@@ -66,6 +147,23 @@
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+/* Notification bell with dot */
+.notif-btn {
+  position: relative;
+}
+
+.notif-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bk-error);
+  border: 1.5px solid var(--bk-bg-base, #0D0E17);
+  display: block;
 }
 
 [data-rac] {
@@ -306,18 +404,20 @@
   overflow: hidden;
 }
 
-/* Swipe action buttons — sit behind the row */
+/* Swipe action buttons — revealed as row slides left */
 .token-swipe-actions {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  width: 300px;
+  width: 240px;
   display: flex;
+  z-index: 1;
 }
 
 .swipe-action {
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -334,11 +434,9 @@
 
 .swipe-action:hover { filter: brightness(1.1); }
 
-.swipe-stake   { background: var(--bk-brand-primary); }
-.swipe-trade   { background: #3b82f6; }
-.swipe-lending { background: #6d28d9; }
-.swipe-swap    { background: #7c3aed; }
-.swipe-manage  { background: #4f6ef7; }
+.swipe-swap  { background: var(--bk-brand-primary); }
+.swipe-lend  { background: color-mix(in srgb, var(--bk-brand-primary) 72%, #1a1a40 28%); }
+.swipe-trade { background: color-mix(in srgb, var(--bk-brand-primary) 44%, #1a1a40 56%); }
 
 /* Icon pinned to left — stays visible while row slides */
 .token-icon-anchor {
@@ -469,7 +567,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 20px 13px;
+  padding: 0 20px 12px;
 }
 
 .token-yield-track {
@@ -704,19 +802,37 @@
   flex-shrink: 0;
   width: 200px;
   background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle);
   border-radius: 16px;
-  padding: 14px 14px 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Whole card is one button */
+.nudge-card-body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 14px 14px 12px;
+  width: 100%;
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s;
 }
 
-.nudge-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
+.nudge-card-body[data-hovered] {
+  background: var(--bk-bg-card-alt);
+}
+
+.nudge-card-body[data-focused] {
+  outline: 2px solid var(--bk-brand-primary);
+  outline-offset: -2px;
 }
 
 .nudge-icon-wrap {
@@ -727,6 +843,7 @@
   height: 24px;
   border-radius: 6px;
   background: var(--bk-bg-elevated);
+  margin-bottom: 6px;
 }
 
 .nudge-headline {
@@ -735,6 +852,7 @@
   color: var(--bk-text-primary);
   line-height: 1.35;
   margin: 0;
+  padding-right: 20px; /* space for dismiss button */
 }
 
 .nudge-detail {
@@ -745,33 +863,21 @@
   margin: 0;
 }
 
-.nudge-cta-btn {
-  margin-top: 8px;
-  align-self: flex-start;
-  height: 28px;
-  padding: 0 12px;
-  background: var(--bk-brand-primary);
-  border: none;
-  border-radius: 8px;
+.nudge-cta-label {
+  display: inline-block;
+  margin-top: 10px;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  font-family: var(--bk-font);
-  display: flex;
-  align-items: center;
+  color: var(--bk-brand-primary);
 }
 
-.nudge-cta-btn[data-hovered] { opacity: 0.88; }
-
-.nudge-cta-btn[data-focused] {
-  outline: 2px solid var(--bk-text-primary);
-  outline-offset: 2px;
-}
-
+/* Dismiss overlaid top-right */
 .nudge-dismiss-btn {
-  width: 20px;
-  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
   background: none;
   border: none;
   cursor: pointer;
@@ -783,6 +889,7 @@
   border-radius: 4px;
   font-family: var(--bk-font);
   transition: color 0.15s;
+  z-index: 1;
 }
 
 .nudge-dismiss-btn[data-hovered] { color: var(--bk-text-secondary); }
@@ -835,12 +942,9 @@
   transform: scale(0.95);
 }
 
-.nudge-cta-btn {
-  transition: transform 0.1s ease, opacity 0.1s;
-}
-.nudge-cta-btn:active {
-  transform: scale(0.94);
-  opacity: 0.85;
+.nudge-card-body:active {
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

@@ -13,7 +13,6 @@ import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m } from './motion-tokens';
-import StatusBar from './StatusBar';
 import './receive.css';
 
 import walletAvatar from './assets/wallet-avatar.svg';
@@ -76,8 +75,6 @@ export default function ReceiveScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      <StatusBar />
-
       {/* Drag Handle */}
       <div className="drag-handle" aria-hidden="true">
         <div className="drag-handle-pill" />
@@ -110,7 +107,7 @@ export default function ReceiveScreen() {
               <img className="modulo-badge" src={moduloBadge} alt="Modulo" />
             </div>
             <div className="address-text">
-              <div className="address-name">modulo.eth</div>
+              <div className="address-name">modulo</div>
               <div className="address-hash">0x7f3e...9A14</div>
             </div>
           </div>

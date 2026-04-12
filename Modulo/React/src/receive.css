@@ -217,14 +217,14 @@
   gap: 8px;
   margin: 16px 20px 0;
   padding: 10px 12px;
-  background: rgba(234, 179, 8, 0.08);
-  border: 1px solid rgba(234, 179, 8, 0.2);
+  background: color-mix(in srgb, var(--bk-warning) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bk-warning) 20%, transparent);
   border-radius: 10px;
   font-size: 12px;
   font-weight: 400;
   color: var(--bk-text-secondary);
   line-height: 1.5;
 }
-.receive-warning svg { color: #EAB308; flex-shrink: 0; margin-top: 2px; }
+.receive-warning svg { color: var(--bk-warning); flex-shrink: 0; margin-top: 2px; }
 
 /* primary-btn in shared.css */

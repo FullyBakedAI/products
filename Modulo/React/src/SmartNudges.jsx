@@ -1,7 +1,6 @@
 /**
  * SmartNudges — horizontal scrollable nudge cards (Feature 4)
- * Rendered on HomeScreen between the optimise/autopilot cards and token list.
- * Each card is dismissable. Max 3 shown at once.
+ * Entire card is tappable. Dismiss button overlaid top-right.
  */
 
 import { useState } from 'react';
@@ -74,13 +73,18 @@ export default function SmartNudges() {
     setNudges(prev => prev.filter(n => n.id !== id));
   }
 
+  function handleAction(action) {
+    if (action.type === 'actions') {
+      openActions({ tab: action.tab, asset: action.asset });
+    } else {
+      navigate(action.path);
+    }
+  }
+
   if (nudges.length === 0) return null;
 
   return (
-    <section
-      className="smart-nudges-row"
-      aria-label="Smart suggestions"
-    >
+    <section className="smart-nudges-row" aria-label="Smart suggestions">
       <div className="smart-nudges-scroll">
         <AnimatePresence>
           {nudges.map(({ id, Icon, iconColor, headline, detail, cta, action }) => (
@@ -91,31 +95,29 @@ export default function SmartNudges() {
               initial={{ opacity: 0, scale: 0.9, x: 16 }}
               animate={{ opacity: 1, scale: 1, x: 0, transition: m.springTight }}
               exit={{ opacity: 0, y: -16, scale: 0.88, transition: { duration: 0.16 } }}
-              aria-label={headline}
+              style={{ position: 'relative' }}
             >
-              <div className="nudge-card-top">
-                <div className="nudge-icon-wrap" aria-hidden="true" style={{ color: iconColor }}>
-                  <Icon size={15} strokeWidth={1.5} />
-                </div>
-                <Button
-                  className="nudge-dismiss-btn"
-                  aria-label={`Dismiss: ${headline}`}
-                  onPress={() => dismiss(id)}
-                >
-                  <IconX />
-                </Button>
-              </div>
-              <p className="nudge-headline">{headline}</p>
-              <p className="nudge-detail">{detail}</p>
+              {/* Whole card is tappable */}
               <Button
-                className="nudge-cta-btn"
-                aria-label={`${cta} — ${headline}`}
-                onPress={() => action.type === 'actions'
-                  ? openActions({ tab: action.tab, asset: action.asset })
-                  : navigate(action.path)
-                }
+                className="nudge-card-body"
+                aria-label={`${headline} — ${cta}`}
+                onPress={() => handleAction(action)}
               >
-                {cta}
+                <div className="nudge-icon-wrap" aria-hidden="true" style={{ color: iconColor }}>
+                  <Icon />
+                </div>
+                <p className="nudge-headline">{headline}</p>
+                <p className="nudge-detail">{detail}</p>
+                <span className="nudge-cta-label" aria-hidden="true">{cta} →</span>
+              </Button>
+
+              {/* Dismiss overlaid top-right */}
+              <Button
+                className="nudge-dismiss-btn"
+                aria-label={`Dismiss: ${headline}`}
+                onPress={() => dismiss(id)}
+              >
+                <IconX />
               </Button>
             </motion.article>
           ))}
