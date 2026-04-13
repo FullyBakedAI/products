@@ -557,7 +557,11 @@ export default function HomeScreen() {
               <div className="autopilot-home-card-title">
                 <span className="autopilot-home-icon" aria-hidden="true">⚡</span>
                 <span className="autopilot-home-label">Autopilot</span>
-                <span className="autopilot-home-badge">ON</span>
+                <Button
+                  className="autopilot-home-badge"
+                  onPress={() => navigate('/autopilot')}
+                  aria-label="Autopilot is on — view autopilot settings"
+                >ON</Button>
               </div>
             </div>
             <div className="autopilot-home-action">

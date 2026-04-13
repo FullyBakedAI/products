@@ -92,10 +92,10 @@ export default function ManageScreen() {
   const { openActions } = useActions();
 
   function handlePress(id) {
-    if (id === 'deposit')  openActions({ tab: 'deposit' });
-    else if (id === 'withdraw') openActions({ tab: 'lend' });
-    else if (id === 'send')    navigate('/send');
-    else if (id === 'receive') navigate('/receive');
+    if (id === 'deposit')       navigate('/receive');
+    else if (id === 'withdraw') navigate('/send');
+    else if (id === 'send')     navigate('/send');
+    else if (id === 'receive')  navigate('/receive');
   }
 
   return (

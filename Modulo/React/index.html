@@ -67,7 +67,7 @@
         }
         document.getElementById('pw-btn').addEventListener('click', attempt);
         document.getElementById('pw-input').addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') attempt();
+          if (e.key === 'Enter') { attempt(); return; }
           document.getElementById('pw-error').style.display = 'none';
         });
       })();

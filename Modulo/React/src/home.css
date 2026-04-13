@@ -1033,6 +1033,15 @@
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.12s;
+}
+
+.autopilot-home-badge:active {
+  opacity: 0.75;
 }
 
 .autopilot-home-action {

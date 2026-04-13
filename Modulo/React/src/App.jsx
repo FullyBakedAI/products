@@ -67,6 +67,8 @@ function getVariants(pathname) {
 }
 
 // ── Actions overlay (sits on top of whatever screen is active) ───────────
+// The screen-wrapper mounts/unmounts with no y-transform so it never moves
+// the background. The slide animation lives on actions-sheet inside ActionsScreen.
 function ActionsOverlay() {
   const { isOpen } = useActions();
   return (
@@ -75,10 +77,8 @@ function ActionsOverlay() {
         <motion.div
           className="screen-wrapper"
           style={{ zIndex: 10 }}
-          variants={sheetVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 1, transition: { duration: 0.22 } }}
         >
           <ActionsScreen />
         </motion.div>

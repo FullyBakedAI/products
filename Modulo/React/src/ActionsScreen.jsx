@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { motion as m } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useActions } from './ActionsContext';
 import { useFeatures } from './theme/FeatureConfig';
@@ -63,11 +64,18 @@ export default function ActionsScreen({ variant }) {
 
       {/* Dark backdrop — tap to dismiss (mobile overlay only) */}
       {!isPanel && (
-        <Button
-          className="actions-backdrop"
-          aria-label="Close actions"
-          onPress={closeActions}
-        />
+        <motion.div
+          style={{ flex: 1, display: 'flex' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.18 } }}
+          exit={{ opacity: 0, transition: { duration: 0.15 } }}
+        >
+          <Button
+            className="actions-backdrop"
+            aria-label="Close actions"
+            onPress={closeActions}
+          />
+        </motion.div>
       )}
 
       {/* Sheet with drag-to-dismiss (mobile) or static panel (desktop) */}
@@ -77,6 +85,9 @@ export default function ActionsScreen({ variant }) {
         dragConstraints={isPanel ? undefined : { top: 0 }}
         dragElastic={isPanel ? undefined : { top: 0, bottom: 0.3 }}
         onDragEnd={isPanel ? undefined : ((_, info) => { if (info.offset.y > 80) closeActions(); })}
+        initial={isPanel ? undefined : { y: '100%' }}
+        animate={isPanel ? undefined : { y: 0, transition: m.sheet.enter }}
+        exit={isPanel ? undefined : { y: '100%', transition: m.sheet.exit }}
       >
         {/* Drag handle (mobile only) */}
         {!isPanel && (
