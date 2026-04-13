@@ -1,0 +1,36 @@
+name: Deploy Modulo to Vercel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Modulo/React/**'
+      - 'Modulo/Prototype/vercel/**'
+      - 'Modulo/client-config/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Modulo/React/package-lock.json
+
+      - name: Install dependencies
+        working-directory: Modulo/React
+        run: npm ci
+
+      - name: Build
+        working-directory: Modulo/React
+        run: npm run build
+
+      - name: Deploy to Vercel
+        working-directory: Modulo/Prototype/vercel
+        run: npx vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
