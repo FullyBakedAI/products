@@ -202,11 +202,11 @@ export default function ExploreScreen() {
                 {/* MOD-023: APY info tooltip on first yield only */}
                 {i === 0 && (
                   <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
-                    <button className="apy-info-btn" aria-label="What is APY?" onClick={() => setApyTooltipOpen(v => !v)}>ⓘ</button>
+                    <Button className="apy-info-btn" aria-label="What is APY?" onPress={() => setApyTooltipOpen(v => !v)}>ⓘ</Button>
                     {apyTooltipOpen && (
                       <div className="apy-tooltip" role="tooltip">
                         <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
-                        <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                        <Button onPress={() => setApyTooltipOpen(false)}>Got it</Button>
                       </div>
                     )}
                   </span>

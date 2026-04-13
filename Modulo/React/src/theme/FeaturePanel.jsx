@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Button, Switch } from 'react-aria-components';
 import { useFeatures } from './FeatureConfig';
 import { defaultFeatures } from '../config/features';
 import './FeaturePanel.css';
@@ -67,17 +68,12 @@ const BUILTIN_PRESETS = [
 // ── Toggle switch component ─────────────────────────────────────────────────
 function ToggleSwitch({ checked, onChange, label }) {
   return (
-    <div className="bk-toggle-row">
+    <Switch isSelected={checked} onChange={onChange} className="bk-toggle-row">
       <span className="bk-toggle-label">{label}</span>
-      <label className="bk-toggle-switch" aria-label={label}>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={e => onChange(e.target.checked)}
-        />
+      <span className="bk-toggle-switch" aria-hidden="true">
         <span className="bk-toggle-track" />
-      </label>
-    </div>
+      </span>
+    </Switch>
   );
 }
 
@@ -93,14 +89,13 @@ function AssetLimitControl({ value, onChange }) {
       <span className="bk-toggle-label">Asset limit</span>
       <div className="bk-segment-control">
         {OPTIONS.map(opt => (
-          <button
+          <Button
             key={String(opt.value)}
             className={`bk-segment-btn${value === opt.value ? ' is-active' : ''}`}
-            onClick={() => onChange(opt.value)}
-            type="button"
+            onPress={() => onChange(opt.value)}
           >
             {opt.label}
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -122,8 +117,9 @@ export default function FeaturePanel() {
   const context = useFeatures();
   const { setFeatures } = context;
 
-  // Don't render on design system page
-  if (window.location.hash === '#/ds') return null;
+  // Don't render on design system page or inside the DS page iframe
+  if (window.location.hash.startsWith('#/ds')) return null;
+  if (window.self !== window.top) return null;
 
   // Current resolved features (without setFeatures)
   const f = {
@@ -193,14 +189,13 @@ export default function FeaturePanel() {
   return (
     <>
       {/* Floating trigger */}
-      <button
+      <Button
         className="bk-builder-trigger"
-        onClick={() => setOpen(true)}
+        onPress={() => setOpen(true)}
         aria-label="Open MVP builder"
-        type="button"
       >
         ⚡ Build
-      </button>
+      </Button>
 
       {/* Backdrop */}
       {open && (
@@ -222,14 +217,13 @@ export default function FeaturePanel() {
         {/* Header */}
         <div className="bk-builder-header">
           <h2>MVP Builder</h2>
-          <button
+          <Button
             className="bk-builder-close"
-            onClick={() => setOpen(false)}
+            onPress={() => setOpen(false)}
             aria-label="Close MVP builder"
-            type="button"
           >
             ✕
-          </button>
+          </Button>
         </div>
 
         {/* Scrollable body */}
@@ -240,14 +234,13 @@ export default function FeaturePanel() {
             <div className="bk-builder-presets-label">Presets</div>
             <div className="bk-builder-preset-pills">
               {allPresets.map(preset => (
-                <button
+                <Button
                   key={preset.id}
                   className={`bk-preset-pill${activePresetId === preset.id ? ' is-active' : ''}`}
-                  onClick={() => applyPreset(preset)}
-                  type="button"
+                  onPress={() => applyPreset(preset)}
                 >
                   {preset.name}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -297,12 +290,12 @@ export default function FeaturePanel() {
 
         {/* Footer */}
         <div className="bk-builder-footer">
-          <button className="bk-builder-btn is-primary" onClick={savePreset} type="button">
+          <Button className="bk-builder-btn is-primary" onPress={savePreset}>
             Save preset
-          </button>
-          <button className="bk-builder-btn" onClick={exportConfig} type="button">
+          </Button>
+          <Button className="bk-builder-btn" onPress={exportConfig}>
             Export config
-          </button>
+          </Button>
         </div>
       </div>
     </>

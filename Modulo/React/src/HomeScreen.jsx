@@ -294,15 +294,15 @@ function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) 
           <span className="token-yield-label">{(t.yield * 100).toFixed(1)}% APY</span>
           {showApyInfo && (
             <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-              <button
+              <Button
                 className="apy-info-btn"
                 aria-label="What is APY?"
-                onClick={(e) => { e.stopPropagation(); setApyTooltipOpen(v => !v); }}
-              >ⓘ</button>
+                onPress={(e) => { setApyTooltipOpen(v => !v); }}
+              >ⓘ</Button>
               {apyTooltipOpen && (
                 <div className="apy-tooltip" role="tooltip">
                   <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
-                  <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                  <Button onPress={() => setApyTooltipOpen(false)}>Got it</Button>
                 </div>
               )}
             </span>
@@ -506,22 +506,22 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
         >
-          <button className="action-btn" aria-label="Swap" onClick={() => openActions({ tab: 'swap' })}>
+          <Button className="action-btn" aria-label="Swap" onPress={() => openActions({ tab: 'swap' })}>
             <IconRepeat2 />
             <span className="action-label">Swap</span>
-          </button>
-          <button className="action-btn" aria-label="Trade" onClick={() => openActions({ tab: 'trade' })}>
+          </Button>
+          <Button className="action-btn" aria-label="Trade" onPress={() => openActions({ tab: 'trade' })}>
             <IconArrowUpRight />
             <span className="action-label">Trade</span>
-          </button>
-          <button className="action-btn" aria-label="Send" onClick={() => navigate('/send')}>
+          </Button>
+          <Button className="action-btn" aria-label="Send" onPress={() => navigate('/send')}>
             <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Send</span>
-          </button>
-          <button className="action-btn" aria-label="Receive" onClick={() => navigate('/receive')}>
+          </Button>
+          <Button className="action-btn" aria-label="Receive" onPress={() => navigate('/receive')}>
             <img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Receive</span>
-          </button>
+          </Button>
         </motion.div>
 
         {/* F1: "Put It All To Work" promo card — spring scale entrance */}

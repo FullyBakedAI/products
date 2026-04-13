@@ -1,10 +1,39 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { defaultFeatures } from '../config/features';
+
+const LS_KEY = 'modulo_build_features';
 
 const FeatureConfigContext = createContext(defaultFeatures);
 
 export function FeatureConfigProvider({ config = defaultFeatures, children }) {
-  const [liveFeatures, setLiveFeatures] = useState(null);
+  const [liveFeatures, setLiveFeatures] = useState(() => {
+    try {
+      const stored = localStorage.getItem(LS_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  });
+
+  // Listen for postMessage from DS page (PrototypeTab build panel)
+  useEffect(() => {
+    function onMessage(e) {
+      if (e.data?.type === 'SET_FEATURES' && e.data.features) {
+        setLiveFeatures(e.data.features);
+      }
+    }
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
+  // Also listen for localStorage changes (cross-frame, same origin)
+  useEffect(() => {
+    function onStorage(e) {
+      if (e.key === LS_KEY && e.newValue) {
+        try { setLiveFeatures(JSON.parse(e.newValue)); } catch {}
+      }
+    }
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   // Deep merge: client overrides only what they specify
   const base = liveFeatures ?? config;

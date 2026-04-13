@@ -1,14 +1,34 @@
 /* ─────────────────────────────────────────────────────────────────
-   PrototypeTab — phone-frame prototype viewer
+   PrototypeTab — phone frame + build panel side-by-side
    ───────────────────────────────────────────────────────────────── */
 
 .proto-tab {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Main row: phone + panel ─────────────────────────────────────── */
+.proto-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  gap: 0;
+  height: 100%;
+}
+
+/* ── Phone column ────────────────────────────────────────────────── */
+.proto-phone-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  overflow-y: auto;
   padding: 24px 24px 40px;
-  min-height: 100%;
-  gap: 24px;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.06) transparent;
 }
 
 /* ── Top bar ─────────────────────────────────────────────────────── */
@@ -16,6 +36,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .proto-btn {
@@ -47,14 +68,6 @@
 .proto-btn-ghost:hover {
   background: rgba(255,255,255,0.05);
   color: var(--bk-text-primary, #F5F5F6);
-}
-
-/* ── Stage ───────────────────────────────────────────────────────── */
-.proto-stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
 }
 
 /* ── Phone frame ─────────────────────────────────────────────────── */
@@ -102,15 +115,235 @@
   border-radius: 3px;
 }
 
-/* ── Hint ────────────────────────────────────────────────────────── */
-.proto-hint {
-  font-size: 12px;
-  color: var(--bk-text-muted, #8B8A92);
-  text-align: center;
-  margin: 0;
+/* ── Build panel ─────────────────────────────────────────────────── */
+.proto-build-panel {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  background: rgba(10,10,16,0.6);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
-.proto-hint strong {
-  color: var(--bk-brand-primary, #584BEB);
+.proto-build-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.05) transparent;
+}
+
+.proto-build-header {
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
+}
+
+.proto-build-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bk-text-primary, #F5F5F6);
+}
+
+.proto-build-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--bk-text-muted, #8B8A92);
+  margin-top: 2px;
+}
+
+.proto-build-section {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.proto-build-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 2px;
+}
+
+/* ── Preset buttons ──────────────────────────────────────────────── */
+.proto-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.proto-preset-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.12s, border-color 0.12s;
+  text-align: left;
+  width: 100%;
+}
+
+.proto-preset-btn:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.proto-preset-btn.is-active {
+  border-color: var(--bk-brand-primary, #584BEB);
+  background: rgba(88,75,235,0.12);
+}
+
+.proto-preset-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.proto-preset-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, border-color 0.12s;
+  color: #fff;
+}
+
+.proto-preset-btn.is-active .proto-preset-check {
+  background: var(--bk-brand-primary, #584BEB);
+  border-color: var(--bk-brand-primary, #584BEB);
+}
+
+.proto-preset-name {
+  display: block;
+  font-size: 12px;
   font-weight: 600;
+  color: var(--bk-text-primary, #F5F5F6);
+}
+
+.proto-preset-desc {
+  display: block;
+  font-size: 10px;
+  color: var(--bk-text-muted, #8B8A92);
+  margin-top: 1px;
+}
+
+.proto-preset-delete {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.3);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.12s, color 0.12s;
+}
+
+.proto-preset-delete:hover {
+  background: rgba(255,60,60,0.15);
+  color: #ff6b6b;
+}
+
+/* ── Toggle rows ─────────────────────────────────────────────────── */
+.proto-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 1px 0;
+}
+
+.proto-toggle-label {
+  font-size: 12px;
+  color: var(--bk-text-primary, #F5F5F6);
+}
+
+.proto-toggle-track {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.18s;
+  cursor: pointer;
+}
+
+.proto-toggle-track.is-on {
+  background: var(--bk-brand-primary, #584BEB);
+}
+
+.proto-toggle-thumb {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: left 0.18s;
+}
+
+.proto-toggle-track.is-on .proto-toggle-thumb {
+  left: 17px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.proto-build-footer {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+}
+
+.proto-save-btn {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--bk-brand-primary, #584BEB);
+  background: rgba(88,75,235,0.12);
+  color: var(--bk-brand-primary, #584BEB);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.proto-save-btn:hover {
+  background: rgba(88,75,235,0.22);
+}
+
+.proto-save-msg {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bk-success, #22c55e);
 }

@@ -8,10 +8,10 @@
 }
 .connect-wallet-content { width: 100%; max-width: 360px; text-align: center; }
 .connect-wallet-logo { margin-bottom: 32px; }
-.logo-mark {
-  width: 64px; height: 64px;
-  background: var(--bk-brand-primary);
-  border-radius: 16px;
+.logo-wordmark {
+  height: 22px;
+  width: auto;
+  display: block;
   margin: 0 auto;
 }
 .connect-wallet-title {

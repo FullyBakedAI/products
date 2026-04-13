@@ -5,9 +5,9 @@
 import { useState } from 'react';
 import { useFeatures } from '../theme/FeatureConfig';
 import { defaultFeatures } from '../config/features';
-import mvpJson       from '../../client-config/presets/mvp.json';
-import phase2Json    from '../../client-config/presets/phase-2.json';
-import fullJson      from '../../client-config/presets/full-product.json';
+import mvpJson       from '../../../client-config/presets/mvp.json';
+import phase2Json    from '../../../client-config/presets/phase-2.json';
+import fullJson      from '../../../client-config/presets/full-product.json';
 import './BuildTab.css';
 
 // ── Preset definitions ────────────────────────────────────────────────────────

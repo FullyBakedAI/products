@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import SplashScreen from './SplashScreen';
 import PasswordGate               from './PasswordGate';
 import { BrandConfigProvider }    from './theme/BrandConfig';
 import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
@@ -169,11 +170,30 @@ function AppInner() {
 
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
+  // Only show splash on top-level frame (not inside the DS page iframe)
+  const isTopFrame = window.self === window.top;
+  const [splashDone, setSplashDone] = useState(false);
+  const handleSplashDone = useCallback(() => setSplashDone(true), []);
+
   return (
     <PasswordGate>
       <BrandConfigProvider>
         <FeatureConfigProvider>
-          <AppInner />
+          <AnimatePresence mode="wait">
+            {isTopFrame && !splashDone ? (
+              <SplashScreen key="splash" onDone={handleSplashDone} />
+            ) : (
+              <motion.div
+                key="app"
+                style={{ position: 'relative', width: '100%', height: '100%' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25 }}
+              >
+                <AppInner />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </FeatureConfigProvider>
       </BrandConfigProvider>
     </PasswordGate>
