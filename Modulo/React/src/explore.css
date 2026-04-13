@@ -18,9 +18,34 @@
 }
 
 /* ── Search Field override ──────────────────────────────────────────── */
-.explore-search {
+.explore-search-field {
   margin: 0 20px 16px;
   width: calc(100% - 40px);
+  display: block;
+}
+
+.explore-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  width: 100%;
+}
+
+.explore-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--bk-font);
+  font-size: 14px;
+  color: var(--bk-text-primary);
+  min-width: 0;
+}
+
+.explore-search-input::placeholder {
+  color: var(--bk-text-muted);
+  opacity: 0.6;
 }
 
 .explore-search svg {

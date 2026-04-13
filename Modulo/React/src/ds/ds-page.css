@@ -1137,6 +1137,22 @@
   margin-top: 2px;
 }
 
+/* Component kind badges */
+.ds-kind-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.ds-kind-component  { background: rgba(88,  75, 235, 0.14); color: #A89CF7; }
+.ds-kind-standalone { background: rgba(52, 217, 116, 0.12); color: #34D974; }
+.ds-kind-primitive  { background: rgba(245,158,  11, 0.12); color: #F59E0B; }
+.ds-kind-pattern    { background: rgba(135,135, 140, 0.10); color: #87878C; }
+
 .ds-comp-overlay-close {
   width: 28px;
   height: 28px;

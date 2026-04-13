@@ -9,9 +9,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
 
-const MotionButton = motion.create(Button);
 const IconChevronLeft = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -83,40 +82,26 @@ export default function SimulateScreen() {
         <div aria-hidden="true" style={{ width: 20 }} />
       </header>
 
-      {/* Tab bar */}
-      <div className="simulate-tabs" role="tablist" aria-label="Simulator mode">
-        <MotionButton
-          className={`simulate-tab${tab === 'price' ? ' active' : ''}`}
-          role="tab"
-          aria-selected={tab === 'price'}
-          aria-controls="panel-price"
-          id="tab-price"
-          whileTap={{ scale: tap.default }}
-          onPress={() => setTab('price')}
-        >
-          Price change
-        </MotionButton>
-        <MotionButton
-          className={`simulate-tab${tab === 'stake' ? ' active' : ''}`}
-          role="tab"
-          aria-selected={tab === 'stake'}
-          aria-controls="panel-stake"
-          id="tab-stake"
-          whileTap={{ scale: tap.default }}
-          onPress={() => setTab('stake')}
-        >
-          If I staked everything
-        </MotionButton>
-      </div>
+      <Tabs
+        selectedKey={tab}
+        onSelectionChange={key => setTab(key)}
+        className="simulate-tabs-root"
+      >
+        <TabList className="simulate-tabs" aria-label="Simulator mode">
+          <Tab id="price" className={({ isSelected }) => `simulate-tab${isSelected ? ' active' : ''}`}>
+            Price change
+          </Tab>
+          <Tab id="stake" className={({ isSelected }) => `simulate-tab${isSelected ? ' active' : ''}`}>
+            If I staked everything
+          </Tab>
+        </TabList>
 
-      <div className="scroll-content">
-        <AnimatePresence mode="wait" initial={false}>
-          {tab === 'price' ? (
+        <div className="scroll-content">
+          <AnimatePresence mode="wait" initial={false}>
+          <TabPanel id="price" key="price">
+          {tab === 'price' && (
             <motion.div
-              key="price"
-              id="panel-price"
-              role="tabpanel"
-              aria-labelledby="tab-price"
+              key="price-inner"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0, transition: m.fade.enter }}
               exit={{ opacity: 0, transition: m.fade.exit }}
@@ -222,12 +207,12 @@ export default function SimulateScreen() {
                 })}
               </div>
             </motion.div>
-          ) : (
+          )}
+          </TabPanel>
+          <TabPanel id="stake" key="stake">
+          {tab === 'stake' && (
             <motion.div
-              key="stake"
-              id="panel-stake"
-              role="tabpanel"
-              aria-labelledby="tab-stake"
+              key="stake-inner"
               className="simulate-stake-tab"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0, transition: m.fade.enter }}
@@ -301,8 +286,10 @@ export default function SimulateScreen() {
               </Button>
             </motion.div>
           )}
-        </AnimatePresence>
-      </div>
+          </TabPanel>
+          </AnimatePresence>
+        </div>
+      </Tabs>
     </motion.main>
   );
 }

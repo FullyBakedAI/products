@@ -80,7 +80,7 @@ export default function DesignSystemPage() {
       <header className="ds-header">
         <div className="ds-header-left">
           <img src={logoModulo} alt="Modulo" height="14" style={{ opacity: 0.55 }} />
-          <span className="ds-header-title">Design System</span>
+          <span className="ds-header-title">Product Library</span>
           <a
             href="https://fullybaked.ai"
             target="_blank"

@@ -1,263 +1,476 @@
 /**
  * Component registry — the BakeKit / Modulo component inventory.
  * Shared between StudioTab (gallery + demos) and AgenticGuideTab (component skills).
+ *
+ * kind:
+ *   'component' — extracted, importable from './components'
+ *   'standalone' — standalone file, not in /components/ (e.g. BottomNav, theme contexts)
+ *   'primitive'  — React ARIA primitive used directly (react-aria-components)
+ *   'pattern'    — design pattern; inline JSX, no single extracted component file
  */
 
 export const COMP_GROUPS = ['Actions', 'Feedback', 'Forms', 'Cards', 'Navigation', 'DeFi'];
 
 export const COMPONENT_REGISTRY = [
+
+  // ── Actions ──────────────────────────────────────────────────────────────────
+
   {
-    id: 'button', group: 'Actions', name: 'AppButton',
-    description: 'White-label button wrapping React ARIA Button. Consolidates primary, action, icon, and close variants into a single component. Full keyboard navigation, focus management, and screen reader support via react-aria-components.',
+    id: 'button', group: 'Actions', name: 'AppButton', kind: 'component',
+    description: 'White-label button wrapping React ARIA Button. Consolidates primary, action, icon, and close variants into one component. Full keyboard navigation, focus management, and screen reader support.',
     usage: 'One primary button per screen. Use action variant for swap/send CTAs. Use icon variant for icon-only buttons — always pass aria-label. Destructive flows require a confirmation step.',
-    notes: 'Minimum 44px touch target via CSS. Always label with an imperative verb (Swap, Send, Confirm). Never disable without communicating why via a tooltip or inline message.',
-    tokens: ['--bk-brand-primary', '--bk-bg-card', '--bk-border-subtle', '--bk-text-primary', '--bk-font'],
-    jsx: `import { AppButton } from './components';\n\n<AppButton variant="primary" onPress={handleSubmit}>\n  Confirm Swap\n</AppButton>\n\n// Icon-only\n<AppButton variant="icon" aria-label="Close" onPress={onClose}>\n  <CloseIcon />\n</AppButton>`,
+    notes: 'Minimum 44px touch target enforced via CSS. Always label with an imperative verb (Swap, Send, Confirm). Never disable without communicating why.',
+    tokens: ['--bk-brand-primary', '--bk-bg-card', '--bk-bg-elevated', '--bk-border-subtle', '--bk-text-primary', '--bk-font'],
+    jsx: `import { AppButton } from './components';
+
+<AppButton variant="primary" onPress={handleSubmit}>
+  Confirm Swap
+</AppButton>
+
+// Icon-only — aria-label required
+<AppButton variant="icon" aria-label="Close" onPress={onClose}>
+  <CloseIcon />
+</AppButton>`,
   },
+
+  // ── Feedback ─────────────────────────────────────────────────────────────────
+
   {
-    id: 'toast', group: 'Feedback', name: 'Toast',
-    description: 'Non-blocking status messages that appear at the top of the screen. Three types: success (transaction confirmed), pending (waiting for chain), error (transaction failed or rejected).',
+    id: 'toast', group: 'Feedback', name: 'Toast', kind: 'pattern',
+    description: 'Non-blocking status messages that appear at the top of the screen. Three types: success (transaction confirmed), pending (waiting for chain), error (transaction failed or rejected). Powered by the sonner library.',
     usage: 'Fire after any async operation completes. Auto-dismiss after 3.2 seconds. Stack if multiple fire simultaneously.',
     notes: 'Copy must be specific — say what happened. Never use for warnings requiring action; use a modal instead.',
     tokens: ['--bk-bg-elevated', '--bk-border-subtle', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary'],
-    jsx: `import { toast } from 'sonner';\n\ntoast.success('Transaction confirmed');`,
+    jsx: `import { toast } from 'sonner';
+
+toast.success('Transaction confirmed');
+toast.error('Slippage too high');`,
   },
+
   {
-    id: 'bottom-sheet', group: 'Feedback', name: 'Bottom sheet',
-    description: 'Modal overlay that slides up from the bottom using a spring animation. Used for token selection, contextual detail panels, and lightweight confirmations.',
-    usage: 'Token selection, contextual detail panels, lightweight confirmations.',
-    notes: 'Maximum 60% viewport height on mobile. Always include a close affordance. Tapping the backdrop dismisses.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-text-primary'],
-    jsx: '',
+    id: 'aria-dialog', group: 'Feedback', name: 'Dialog', kind: 'primitive',
+    description: 'React ARIA Dialog from react-aria-components. Provides role="dialog", focus management (Tab cycles within the dialog), and Escape key dismissal. Used inside animated motion.div sheets.',
+    usage: 'ActivityScreen transaction detail sheet. ReviewScreen confirmation sheet. Any bottom sheet where focus should be trapped inside.',
+    notes: 'Place Dialog inside the motion.div (not around it) to preserve Framer Motion animations. Set style={{ outline: "none", display: "contents" }} so the Dialog wrapper is invisible. Do NOT manually add role="dialog" to the motion.div when using Dialog.',
+    tokens: [],
+    jsx: `import { Dialog } from 'react-aria-components';
+
+// Inside a motion.div sheet:
+<motion.div className="tx-detail-sheet" aria-modal="true" {...motionProps}>
+  <Dialog aria-label="Transaction details" style={{ outline: 'none', display: 'contents' }}>
+    {/* sheet content — focus trapped here */}
+  </Dialog>
+</motion.div>`,
   },
+
   {
-    id: 'skeleton', group: 'Feedback', name: 'Skeleton loader',
+    id: 'bottom-sheet', group: 'Feedback', name: 'BottomSheet', kind: 'component',
+    description: 'Animated slide-up drawer with backdrop overlay. ESC key and backdrop tap dismiss it. Includes an optional drag handle pill.',
+    usage: 'Token selection, contextual detail panels, lightweight confirmations. Used in swap, send, receive, review, actions screens.',
+    notes: 'Maximum 60% viewport height on mobile. Always include a close affordance. showDragHandle defaults to true.',
+    tokens: ['--bk-overlay', '--bk-bg-base', '--bk-border-subtle'],
+    jsx: `import { BottomSheet } from './components';
+
+<BottomSheet isOpen={isOpen} onClose={() => setOpen(false)}>
+  <div>Sheet content</div>
+</BottomSheet>`,
+  },
+
+  {
+    id: 'skeleton', group: 'Feedback', name: 'Skeleton loader', kind: 'pattern',
     description: 'Structure-preserving placeholder shown while data loads. Shimmer animation signals active loading state. Prevents layout shift when content arrives.',
     usage: 'Use instead of spinners. Match the skeleton shape to the content it stands in for.',
     notes: 'Escalate to an error state if data has not arrived after 3 seconds. Never show a skeleton indefinitely.',
     tokens: ['--bk-bg-card', '--bk-border-subtle'],
     jsx: '',
   },
+
   {
-    id: 'badge', group: 'Feedback', name: 'Status badge',
-    description: 'Inline status indicator for transaction and portfolio states. Colour-coded: success green, brand purple for pending, error red.',
+    id: 'badge', group: 'Feedback', name: 'Status badge', kind: 'pattern',
+    description: 'Inline status indicator for transaction and portfolio states. Colour-coded: success green, brand purple for pending, error red. Inline HTML — not an extracted component.',
     usage: 'Transaction lists, confirmation screens, activity feeds.',
     notes: 'Text should be a noun (Confirmed, Pending, Failed), not a verb. Never use for navigation or actions.',
     tokens: ['--bk-success', '--bk-error', '--bk-brand-primary'],
-    jsx: '',
+    jsx: `// Inline pattern — no component import needed
+<span className="status-badge status-badge--success">Confirmed</span>
+<span className="status-badge status-badge--pending">Pending</span>
+<span className="status-badge status-badge--error">Failed</span>`,
   },
+
+  // ── Forms ─────────────────────────────────────────────────────────────────────
+
   {
-    id: 'input', group: 'Forms', name: 'Input field',
-    description: 'Text input with focus, error, and disabled states. Border colour and box shadow communicate state without relying on colour alone.',
-    usage: 'Wallet addresses, search fields, name inputs. Use token pill for amount inputs.',
-    notes: 'Always pair with a visible label. Inline validation only after first blur — not on every keystroke.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-error'],
-    jsx: '',
+    id: 'input', group: 'Forms', name: 'TextField + Input', kind: 'primitive',
+    description: 'Text input using React ARIA TextField + Input from react-aria-components. Provides accessible label association, error messaging, and keyboard focus management. Never use a raw <input> element.',
+    usage: 'ExploreScreen search field. SendScreen wallet address input. SwapSelectScreen token search. Any text-entry field in the app.',
+    notes: 'Always pair with aria-label or a visible Label child. Raw <input> elements are prohibited — they lack accessible label binding. Import from react-aria-components (not @react-aria/textfield hooks).',
+    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-error', '--bk-text-primary'],
+    jsx: `import { TextField, Label, Input } from 'react-aria-components';
+
+<TextField value={address} onChange={setAddress}>
+  <Label>Recipient address</Label>
+  <Input placeholder="0x…" />
+</TextField>`,
   },
+
   {
-    id: 'financial-input', group: 'Forms', name: 'FinancialInputCard',
+    id: 'aria-tabs', group: 'Forms', name: 'Tabs', kind: 'primitive',
+    description: 'React ARIA Tabs + TabList + Tab + TabPanel from react-aria-components. Arrow key navigation between tabs is provided automatically. Used for within-screen content switching where keyboard nav matters.',
+    usage: 'SimulateScreen (Price change / If I staked everything tabs). Any tab interface where keyboard arrow-key navigation is required.',
+    notes: 'TabSwitcher component wraps this for simple cases. Use Tabs directly when you need AnimatePresence on the TabPanel content or custom animation per-panel. selectedKey + onSelectionChange for controlled state.',
+    tokens: ['--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle', '--bk-font'],
+    jsx: `import { Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
+
+<Tabs selectedKey={tab} onSelectionChange={setTab}>
+  <TabList aria-label="Simulator mode">
+    <Tab id="price" className={({ isSelected }) => \`simulate-tab\${isSelected ? ' active' : ''}\`}>
+      Price change
+    </Tab>
+    <Tab id="stake" className={({ isSelected }) => \`simulate-tab\${isSelected ? ' active' : ''}\`}>
+      If I staked everything
+    </Tab>
+  </TabList>
+  <TabPanel id="price">{/* panel content */}</TabPanel>
+  <TabPanel id="stake">{/* panel content */}</TabPanel>
+</Tabs>`,
+  },
+
+  {
+    id: 'financial-input', group: 'Forms', name: 'FinancialInputCard', kind: 'component',
     description: 'Card containing a numeric amount input, token selector button, and USD value display. Covers the amount-entry pattern in swap, send, and lend flows. Uses React ARIA TextField + Input with inputMode="decimal".',
     usage: 'Swap screen (You pay / You receive). Send screen amount entry. Lend/Borrow amount input.',
     notes: 'Numeric field uses inputMode="decimal" so mobile shows the decimal keyboard. USD equivalent should update on every keystroke. Never round the displayed amount.',
-    tokens: ['--bk-bg-card', '--bk-border-card', '--bk-text-primary', '--bk-text-muted', '--bk-text-placeholder', '--bk-pill-bg', '--bk-border-pill', '--bk-font'],
-    jsx: `import { FinancialInputCard } from './components';\n\n<FinancialInputCard\n  label="You pay"\n  amount={amount}\n  onAmountChange={setAmount}\n  token={{ icon: ethIcon, symbol: 'ETH' }}\n  onTokenSelect={() => navigate('/swap/select/pay')}\n  usdValue={\`≈ $\${usdEquivalent}\`}\n/>`,
+    tokens: ['--bk-bg-card', '--bk-bg-card-alt', '--bk-border-card', '--bk-pill-bg', '--bk-border-pill', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-text-placeholder', '--bk-font'],
+    jsx: `import { FinancialInputCard } from './components';
+
+<FinancialInputCard
+  label="You pay"
+  amount={amount}
+  onAmountChange={setAmount}
+  token={{ icon: ethIcon, symbol: 'ETH' }}
+  onTokenSelect={() => navigate('/swap/select/pay')}
+  usdValue={\`≈ $\${usdEquivalent}\`}
+/>`,
   },
+
   {
-    id: 'token-pill', group: 'Forms', name: 'Token pill',
-    description: 'Token selector chip showing icon, symbol, and a chevron dropdown affordance. Used inside swap cards and amount inputs to let users select which token they are working with.',
+    id: 'token-pill', group: 'Forms', name: 'TokenPill', kind: 'component',
+    description: 'Interactive button representing a selected cryptocurrency token. Shows icon, symbol, and a chevron dropdown affordance. Supports an appear animation on mount.',
     usage: 'Anywhere the user selects a specific token. Tapping opens a bottom sheet with the full token list.',
-    notes: 'Token icon from official source — never approximate with Lucide icons. Always show symbol, never full name.',
-    tokens: ['--bk-brand-primary', '--bk-text-primary'],
-    jsx: '',
+    notes: 'Token icon from official source — never approximate with Lucide icons. Always show symbol, never full name. Pass appear={true} on first render to animate in.',
+    tokens: ['--bk-pill-bg', '--bk-border-pill', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-bg-card', '--bk-font'],
+    jsx: `import { TokenPill } from './components';
+
+<TokenPill
+  token={{ id: 'eth', name: 'ETH', icon: tokenEthSvg }}
+  onPress={() => navigate('/swap/select/pay')}
+  appear
+/>`,
   },
+
   {
-    id: 'aria-switch', group: 'Forms', name: 'Switch',
-    description: 'React ARIA Switch from react-aria-components. Used for binary on/off toggles — autopilot enable, notification preferences, feature flags. Accessible toggle with [data-selected] state styling and full keyboard support.',
-    usage: 'Settings screen toggles. Autopilot enable/disable. Any binary preference.',
-    notes: 'Import from react-aria-components (not the old @react-aria/switch hook). Style via [data-selected] and [data-focused] CSS attribute selectors — no className juggling.',
+    id: 'aria-switch', group: 'Forms', name: 'Switch', kind: 'primitive',
+    description: 'React ARIA Switch from react-aria-components. Renders with aria-checked semantics (correct for toggles) — not aria-pressed. Full keyboard support (Space to toggle) and [data-selected] state styling.',
+    usage: 'Settings screen toggles. Autopilot enable/disable. Collateral enable toggle in Borrow tab (LendBorrowTab). Any binary on/off preference.',
+    notes: 'Import from react-aria-components (not @react-aria/switch). Style via [data-selected] and [data-focused] CSS attribute selectors. Never use Button with aria-pressed for a toggle — use Switch.',
     tokens: ['--bk-brand-primary', '--bk-bg-card', '--bk-border-subtle', '--bk-text-primary'],
-    jsx: `import { Switch } from 'react-aria-components';\n\n<Switch\n  isSelected={enabled}\n  onChange={setEnabled}\n  className="settings-toggle"\n>\n  Autopilot\n</Switch>`,
+    jsx: `import { Switch } from 'react-aria-components';
+
+<Switch
+  isSelected={enabled}
+  onChange={setEnabled}
+  className="settings-toggle"
+>
+  Autopilot
+</Switch>`,
   },
+
   {
-    id: 'aria-textfield', group: 'Forms', name: 'TextField',
-    description: 'React ARIA TextField + Input from react-aria-components. Used for wallet address entry, search inputs, and name fields. Provides accessible label association, error messaging, and focus management out of the box.',
-    usage: 'SendScreen wallet address input. SwapSelectScreen search field. Any text-entry that needs a visible label and inline validation.',
-    notes: 'Always pair TextField with a visible Label. Use errorMessage prop for inline validation — show only after first blur. For numeric amounts use FinancialInputCard instead.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-error', '--bk-text-primary'],
-    jsx: `import { TextField, Label, Input } from 'react-aria-components';\n\n<TextField value={address} onChange={setAddress}>\n  <Label>Recipient address</Label>\n  <Input placeholder="0x…" />\n</TextField>`,
-  },
-  {
-    id: 'pct-pills', group: 'Forms', name: 'Percentage pills',
-    description: 'Preset amount selectors (25%, 50%, 75%, Max). Allow quick entry without using the keyboard. Active pill highlighted in brand colour.',
+    id: 'pct-pills', group: 'Forms', name: 'Percentage pills', kind: 'pattern',
+    description: 'Preset amount selectors (25%, 50%, 75%, Max). Allow quick entry without using the keyboard. Active pill highlighted in brand colour. Inline pattern — not an extracted component.',
     usage: 'Below amount inputs in Swap and Send screens only.',
     notes: 'Max must calculate from available balance in real time. Never hardcode a value.',
     tokens: ['--bk-brand-primary'],
-    jsx: '',
+    jsx: `// Inline pattern — no component import needed
+{['25%', '50%', '75%', 'Max'].map(label => (
+  <Button
+    key={label}
+    className={\`pct-pill\${active === label ? ' active' : ''}\`}
+    onPress={() => setActive(label)}
+  >
+    {label}
+  </Button>
+))}`,
   },
+
+  // ── Cards ─────────────────────────────────────────────────────────────────────
+
   {
-    id: 'asset-row', group: 'Cards', name: 'AssetRow',
+    id: 'asset-row', group: 'Cards', name: 'AssetRow', kind: 'component',
     description: 'Row displaying a token/asset with icon, name, chain badge, token amount, and USD value. Tappable when onPress is provided (wraps in React ARIA Button); renders as a plain div when display-only.',
     usage: 'Send screen token selector list. Receive screen asset list. Any context where the user picks from a list of their held assets.',
-    notes: 'When interactive, auto-generates an aria-label combining name, chain, amount, and value. Always pass a chain string when the product is multi-chain.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted'],
-    jsx: `import { AssetRow } from './components';\n\n// Tappable\n<AssetRow\n  icon={<img src={ethIcon} alt="" />}\n  name="Ethereum"\n  chain="Mainnet"\n  amount="1.24 ETH"\n  usdValue="$3,200"\n  onPress={() => navigate('/asset/eth')}\n/>\n\n// Display-only\n<AssetRow icon={...} name="USDC" amount="921.25 USDC" usdValue="$921.25" />`,
+    notes: 'When interactive, auto-generates an aria-label combining name, chain, amount, and value. Always pass chain when the product is multi-chain.',
+    tokens: ['--bk-bg-card', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-font', '--bk-radius-md'],
+    jsx: `import { AssetRow } from './components';
+
+// Tappable
+<AssetRow
+  icon={<img src={ethIcon} alt="" />}
+  name="Ethereum"
+  chain="Mainnet"
+  amount="1.24 ETH"
+  usdValue="$3,200"
+  onPress={() => navigate('/asset/eth')}
+/>
+
+// Display-only (omit onPress)
+<AssetRow icon={...} name="USDC" amount="921.25 USDC" usdValue="$921.25" />`,
   },
+
   {
-    id: 'token-card', group: 'Cards', name: 'Token card',
-    description: 'Portfolio row showing token icon, name, balance, current USD value, and 24h change. The primary data unit of the portfolio list.',
+    id: 'token-card', group: 'Cards', name: 'Token card', kind: 'pattern',
+    description: 'Portfolio row showing token icon, name, balance, current USD value, and 24h change. The primary data unit of the home screen portfolio list. Inline pattern — not an extracted component.',
     usage: 'Home screen portfolio list. Tapping drills into token detail.',
     notes: 'Positive change in success green. Negative in error red. Zero or undefined in muted text.',
     tokens: ['--bk-bg-base', '--bk-text-primary', '--bk-text-muted', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-border-subtle'],
-    jsx: `<div className="token-row-outer">\n  {/* token row content */}\n</div>`,
+    jsx: `<div className="token-row-outer">
+  {/* token row content */}
+</div>`,
   },
+
   {
-    id: 'swap-card', group: 'Cards', name: 'Swap card',
-    description: 'The pay/receive surface in the swap flow. Shows amount (large numeral), selected token (pill), and fiat equivalent. Two instances stack with the direction toggle between them.',
-    usage: 'Swap screen only. Always appear as a pair.',
-    notes: 'Amount accepts numeric input only. USD equivalent updates on every keystroke. Never round the displayed amount.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
-    jsx: '',
+    id: 'status-card', group: 'Cards', name: 'StatusCard', kind: 'component',
+    description: 'Card displaying operation status with an inline SVG icon, title, subtitle, and key-value detail rows. All sections optional. Colour-coded by status: success green, pending brand, error red.',
+    usage: 'Success screen after transaction, pending confirmation states, error recovery screens.',
+    notes: 'Status icons are inline SVGs (aria-hidden). success uses --bk-success, error uses --bk-error, pending uses --bk-text-muted.',
+    tokens: ['--bk-bg-card', '--bk-border-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted', '--bk-text-secondary', '--bk-success', '--bk-error', '--bk-font'],
+    jsx: `import { StatusCard } from './components';
+
+<StatusCard
+  status="success"
+  title="Swap complete"
+  subtitle="0.5 ETH → 1,250 USDC"
+  details={[
+    { label: 'Fee',  value: '$2.40'   },
+    { label: 'Time', value: '~12 sec' },
+  ]}
+/>`,
   },
+
+  // ── Navigation ────────────────────────────────────────────────────────────────
+
   {
-    id: 'bottom-nav', group: 'Navigation', name: 'Bottom nav',
-    description: 'Four-item navigation bar anchored to the bottom of the viewport. Active item in brand colour with filled icon weight.',
-    usage: 'Persistent on all primary screens. Hidden on modal sheets and linear confirmation flows.',
-    notes: 'Labels always visible — no label-on-active-only patterns. 44px tap targets. Four items maximum.',
-    tokens: ['--bk-bg-nav', '--bk-brand-primary', '--bk-text-muted', '--bk-border-subtle', '--bk-brand-gradient'],
-    jsx: `import BottomNav from './BottomNav';\n\n<BottomNav />`,
+    id: 'bottom-nav', group: 'Navigation', name: 'BottomNav', kind: 'standalone',
+    description: 'Five-item navigation bar anchored to the bottom of the viewport. Four labelled tabs (Home, Markets, Activity, Funds) plus a centre FAB for the primary action (Actions/Swap). Each item is feature-gated via useFeatures(). Hidden on desktop.',
+    usage: 'Persistent on all primary screens. Hidden on modal sheets and linear confirmation flows. Rendered once in App.jsx.',
+    notes: 'Each tab controlled by feature flags: f.nav.home, f.nav.explore, f.nav.fab, f.nav.activity. The Funds tab is always visible. Active state uses aria-current="page". Never shows on desktop.',
+    tokens: ['--bk-bg-nav', '--bk-brand-primary', '--bk-brand-gradient', '--bk-text-muted', '--bk-border-subtle', '--bk-font', '--bk-z-overlay', '--bk-z-card'],
+    jsx: `import BottomNav from './BottomNav';
+
+// Rendered once, inside the main layout — not per-screen
+<BottomNav />`,
   },
+
   {
-    id: 'feature-config', group: 'Navigation', name: 'FeatureConfig',
-    description: 'React context system for toggling features on/off without code changes. FeatureConfigProvider accepts a partial config — only specify overrides, defaults fill the rest. useFeatures() hook reads the current state anywhere in the tree.',
+    id: 'screen-header', group: 'Navigation', name: 'ScreenHeader', kind: 'component',
+    description: 'Standardised top navigation bar with back/close buttons, title, and optional right-side slot. Supports transparent mode for hero/overlay screens. Consolidates the header pattern used across 10+ screens.',
+    usage: 'All secondary screens — asset detail, settings, review, send. Pass onBack for drill-in screens, onClose for modal overlays.',
+    notes: 'Always include a title. rightSlot is for contextual actions (settings gear, share). Use transparent variant when screen has a hero image or gradient header.',
+    tokens: ['--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-font'],
+    jsx: `import { ScreenHeader } from './components';
+
+<ScreenHeader
+  title="Send"
+  onBack={() => navigate(-1)}
+  rightSlot={
+    <Button aria-label="Settings" onPress={() => navigate('/settings')}>
+      <SettingsIcon />
+    </Button>
+  }
+/>`,
+  },
+
+  {
+    id: 'tab-bar', group: 'Navigation', name: 'TabSwitcher', kind: 'component',
+    description: 'Segmented tab control using React ARIA TabList + Tab. Parent manages selection state; component fires onChange on selection. Active state via [data-selected] attribute — no manual class toggling needed.',
+    usage: 'Within-screen content switching. Explore uses this for category filtering. Lend/Borrow uses it for the Lend vs Borrow sub-tabs.',
+    notes: 'Not a substitute for BottomNav. Should switch content, not navigate to new screens. Four tabs maximum.',
+    tokens: ['--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle', '--bk-font'],
+    jsx: `import { TabSwitcher } from './components';
+
+const [tab, setTab] = useState('all');
+
+<TabSwitcher
+  tabs={[
+    { id: 'all',     label: 'All'     },
+    { id: 'staking', label: 'Staking' },
+    { id: 'lending', label: 'Lending' },
+  ]}
+  activeTab={tab}
+  onChange={setTab}
+/>`,
+  },
+
+  {
+    id: 'feature-config', group: 'Navigation', name: 'FeatureConfig', kind: 'standalone',
+    description: 'React context system for toggling features on/off without code changes. FeatureConfigProvider accepts a partial config — only specify overrides, defaults fill the rest. useFeatures() hook reads current state anywhere in the tree.',
     usage: 'Wrap the app root in FeatureConfigProvider. Use useFeatures() in any component to conditionally render based on flags. Use FeaturePanel for interactive live editing.',
-    notes: 'Deep-merge pattern: { ...defaultFeatures.nav, ...config.nav }. setFeatures() replaces the entire live state — always spread existing features when doing partial updates from toggles.',
+    notes: 'Deep-merge pattern: { ...defaultFeatures.nav, ...config.nav }. setFeatures() replaces entire live state — always spread existing features when doing partial updates from toggles.',
     tokens: ['--bk-z-modal', '--bk-white-12', '--bk-white-05'],
-    jsx: `import { useFeatures } from './theme/FeatureConfig';\n\nconst f = useFeatures();\n{f.nav.autopilot && <AutopilotTab />}`,
+    jsx: `import { useFeatures } from './theme/FeatureConfig';
+
+const f = useFeatures();
+{f.nav.autopilot && <AutopilotTab />}`,
   },
+
   {
-    id: 'feature-panel', group: 'Navigation', name: 'FeaturePanel',
+    id: 'feature-panel', group: 'Navigation', name: 'FeaturePanel', kind: 'standalone',
     description: 'Interactive MVP builder panel. Floating trigger opens a slide-out drawer with live toggle switches for every feature flag. Ships with MVP, Phase 2, and Full Product presets. Saves custom presets to localStorage and exports as JSON.',
     usage: 'Render once inside FeatureConfigProvider, after the main route content. Appears as a floating "Build" badge. Only shows outside the design system page.',
     notes: 'Preset JSON files live in client-config/presets/. Version-control them — git history becomes the product scope history.',
     tokens: ['--bk-surface-2', '--bk-white-12', '--bk-white-05', '--bk-z-modal', '--bk-action-swap'],
-    jsx: `import FeaturePanel from './theme/FeaturePanel';\n\n// Inside AppInner (inside FeatureConfigProvider):\n<FeaturePanel />`,
+    jsx: `import FeaturePanel from './theme/FeaturePanel';
+
+// Inside AppInner (inside FeatureConfigProvider):
+<FeaturePanel />`,
   },
+
   {
-    id: 'brand-config', group: 'Navigation', name: 'BrandConfig',
+    id: 'brand-config', group: 'Navigation', name: 'BrandConfig', kind: 'standalone',
     description: 'White-label brand configuration context. Controls logo src, alt, width, height, and brand name throughout the app. BrandConfigProvider accepts a config override object.',
     usage: 'Wrap app root in BrandConfigProvider. Use useBrandConfig() wherever logo or brand name appears.',
     notes: 'Mirror of FeatureConfig pattern. For white-labelling: update defaultConfig in BrandConfig.jsx or pass config prop to provider.',
     tokens: [],
-    jsx: `import { useBrandConfig } from './theme/BrandConfig';\n\nconst { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();`,
+    jsx: `import { useBrandConfig } from './theme/BrandConfig';
+
+const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();`,
   },
+
+  // ── DeFi ─────────────────────────────────────────────────────────────────────
+
   {
-    id: 'tab-bar', group: 'Navigation', name: 'TabSwitcher',
-    description: 'Segmented tab control using React ARIA TabList + Tab. Parent manages selection state; component fires onChange on selection. Active state via [data-selected] attribute — no manual class toggling needed.',
-    usage: 'Within-screen content switching. Explore uses this for category filtering. Lend/Borrow uses it for the Lend vs Borrow sub-tabs.',
-    notes: 'Not a substitute for bottom nav. Should switch content, not navigate to new screens. Four tabs maximum. Uses react-aria-components Tabs primitives.',
-    tokens: ['--bk-text-muted', '--bk-text-primary', '--bk-brand-primary', '--bk-border-subtle', '--bk-font'],
-    jsx: `import { TabSwitcher } from './components';\n\nconst [tab, setTab] = useState('all');\n\n<TabSwitcher\n  tabs={[\n    { id: 'all',     label: 'All'     },\n    { id: 'staking', label: 'Staking' },\n    { id: 'lending', label: 'Lending' },\n  ]}\n  activeTab={tab}\n  onChange={setTab}\n/>`,
-  },
-  {
-    id: 'tx-row', group: 'DeFi', name: 'Transaction row',
-    description: 'Activity list item showing type (sent/received/swapped), counterparty address, token amounts, and fiat values. Icon and colour encode the transaction direction.',
+    id: 'tx-row', group: 'DeFi', name: 'Transaction row', kind: 'pattern',
+    description: 'Activity list item showing type (sent/received/swapped), counterparty address, token amounts, and fiat values. Icon and colour encode the transaction direction. Inline pattern — not an extracted component.',
     usage: 'Activity feed, portfolio detail, transaction history.',
     notes: 'Timestamp in relative format for <7 days, absolute thereafter. Never truncate or round amounts.',
     tokens: ['--bk-bg-card', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
     jsx: '',
   },
+
   {
-    id: 'step-progress', group: 'DeFi', name: 'Step progress',
-    description: 'Three-step linear indicator for transaction flows: Review → Approve → Confirm on-chain. Steps render as done (filled), active (brand), or pending (outline).',
+    id: 'step-progress', group: 'DeFi', name: 'Step progress', kind: 'pattern',
+    description: 'Three-step linear indicator for transaction flows: Review → Approve → Confirm on-chain. Steps render as done (filled), active (brand), or pending (outline). Inline pattern — not an extracted component.',
     usage: 'Swap confirmation flow. Send confirmation flow.',
     notes: 'Never skip steps or show all as done simultaneously. Be honest about the current on-chain state.',
     tokens: ['--bk-success', '--bk-brand-primary', '--bk-border-subtle', '--bk-text-primary'],
     jsx: '',
   },
+
   {
-    id: 'confirm-summary', group: 'DeFi', name: 'Confirmation summary',
-    description: 'Pre-execution summary card showing the complete transaction: token pair, amounts, exchange rate, network fee, and the final CTA.',
+    id: 'confirm-summary', group: 'DeFi', name: 'Confirmation summary', kind: 'pattern',
+    description: 'Pre-execution summary card showing the complete transaction: token pair, amounts, exchange rate, network fee, and the final CTA. Inline pattern — not an extracted component.',
     usage: 'Swap confirmation. Send confirmation.',
     notes: 'Exchange rate must refresh if stale >15s. Show slippage tolerance. Never round amounts on this surface.',
     tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-success', '--bk-text-primary', '--bk-text-muted'],
     jsx: '',
   },
+
   {
-    id: 'portfolio-metric', group: 'DeFi', name: 'Portfolio metric',
-    description: 'Hero value block for total portfolio value with 24h change. Large numeral hierarchy establishes the dominant visual weight on the Home screen.',
+    id: 'swap-card', group: 'DeFi', name: 'Swap card', kind: 'pattern',
+    description: 'The pay/receive surface in the swap flow. A pair of FinancialInputCard instances with a direction toggle between them. Inline pattern — not a standalone extracted component.',
+    usage: 'Swap screen only. Always appear as a pair.',
+    notes: 'Amount accepts numeric input only. USD equivalent updates on every keystroke. Use FinancialInputCard for the individual cards.',
+    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
+    jsx: '',
+  },
+
+  {
+    id: 'portfolio-metric', group: 'DeFi', name: 'Portfolio metric', kind: 'pattern',
+    description: 'Hero value block for total portfolio value with 24h change. Large numeral hierarchy establishes the dominant visual weight on the Home screen. Inline pattern — not an extracted component.',
     usage: 'Home screen hero area. Portfolio detail header.',
     notes: 'Locale-formatted currency. Animated count-up on first load. Change indicator always includes sign (+ or −).',
     tokens: ['--bk-bg-card', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary'],
     jsx: '',
   },
+
   {
-    id: 'wallet-chip', group: 'DeFi', name: 'Wallet address chip',
-    description: 'Compact address display with identicon, truncated address, copy action, and optional network badges.',
+    id: 'wallet-chip', group: 'DeFi', name: 'Wallet address chip', kind: 'pattern',
+    description: 'Compact address display with identicon, truncated address, copy action, and optional network badges. Inline pattern — not an extracted component.',
     usage: 'Receive screen, transaction detail, address confirmation flows.',
     notes: 'Always truncate to 0x4a3f…c12d format. Copy to clipboard with confirmation feedback.',
     tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
     jsx: '',
   },
-  {
-    id: 'screen-header', group: 'Navigation', name: 'Screen header',
-    description: 'Standardised top navigation bar with back/close buttons and title. Consolidates the header pattern used across 10+ screens. Supports transparent mode for hero/overlay screens.',
-    usage: 'All secondary screens — asset detail, settings, review, send. Pass onBack for drill-in screens, onClose for modal overlays.',
-    notes: 'Always include a title. rightSlot is for contextual actions (settings gear, share). Use transparent variant when screen has a hero image or gradient header.',
-    tokens: ['--bk-text-primary', '--bk-text-muted', '--bk-bg-base', '--bk-border-subtle'],
-    jsx: `import { ScreenHeader } from './components/ScreenHeader';
 
-<ScreenHeader title="Send" onBack={() => navigate(-1)} />`,
-  },
   {
-    id: 'status-card', group: 'Cards', name: 'Status card',
-    description: 'Card displaying a transaction or operation status. Shows status icon, title, subtitle, and key-value detail rows. Colour-coded by status: success green, pending brand, error red.',
-    usage: 'Success screen after transaction, pending confirmation states, error recovery screens.',
-    notes: 'All props optional — gracefully omits empty sections. Status icon auto-selects based on status prop.',
-    tokens: ['--bk-bg-card', '--bk-border-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted', '--bk-success', '--bk-error'],
-    jsx: `import { StatusCard } from './components/StatusCard';
-
-<StatusCard status="success" title="Swap Complete" subtitle="0.5 ETH → 1,250 USDC" />`,
-  },
-  {
-    id: 'audit-badge', group: 'DeFi', name: 'Audit badge',
+    id: 'audit-badge', group: 'DeFi', name: 'AuditBadge', kind: 'component',
     description: 'Protocol audit status pill. Shows audit firm and year inline. Tapping opens a BottomSheet with TVL, full report link, and audit summary.',
     usage: 'Platform/protocol selector rows, asset detail screens, lending platform cards.',
     notes: 'Returns null if no firm provided. Use inline prop for compact rendering inside list rows.',
-    tokens: ['--bk-success', '--bk-bg-card', '--bk-border-subtle', '--bk-text-primary'],
-    jsx: `import { AuditBadge } from './components/AuditBadge';
+    tokens: ['--bk-success', '--bk-bg-elevated', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-text-secondary', '--bk-font'],
+    jsx: `import { AuditBadge } from './components';
 
-<AuditBadge protocolName="Aave v3" firm="CertiK" year={2024} tvl="\$12.4B" inline />`,
+<AuditBadge
+  protocolName="Aave v3"
+  firm="CertiK"
+  year={2024}
+  tvl="$12.4B"
+  inline
+/>`,
   },
+
   {
-    id: 'fee-breakdown', group: 'DeFi', name: 'Fee breakdown',
-    description: 'Expandable fee summary. Collapsed shows total; tapping expands to itemised list with animated chevron. Full ARIA-expanded and list semantics.',
+    id: 'fee-breakdown', group: 'DeFi', name: 'FeeBreakdown', kind: 'component',
+    description: 'Expandable fee summary. Collapsed shows total; tapping expands to itemised list with animated chevron. Full aria-expanded and list semantics.',
     usage: 'Review screen, swap confirmation, any transaction summary where fees need transparency.',
     notes: 'Always show the total even when collapsed. Items array should include network fee, protocol fee, and any other line items.',
-    tokens: ['--bk-bg-card', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
-    jsx: `import { FeeBreakdown } from './components/FeeBreakdown';
+    tokens: ['--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-text-secondary', '--bk-font'],
+    jsx: `import { FeeBreakdown } from './components';
 
-<FeeBreakdown total="\$3.28" items={[{ label: 'Network', amount: '\$2.40' }, { label: 'Protocol', amount: '\$0.88' }]} />`,
+<FeeBreakdown
+  total="$3.28"
+  items={[
+    { label: 'Network',  amount: '$2.40' },
+    { label: 'Protocol', amount: '$0.88' },
+  ]}
+/>`,
   },
+
   {
-    id: 'ltv-bar', group: 'DeFi', name: 'LTV bar',
+    id: 'ltv-bar', group: 'DeFi', name: 'LTVBar', kind: 'component',
     description: 'Loan-to-Value health bar with animated fill, warning/liquidation threshold markers, and colour-coded status. Help button opens an explanation BottomSheet.',
     usage: 'Borrow tab, lending position detail, portfolio risk overview.',
-    notes: 'Defaults: warning at 75%%, liquidation at 85%%. Colour transitions automatically: green (safe) → amber (warning) → red (at risk). Always show borrow + collateral amounts when available.',
-    tokens: ['--bk-success', '--bk-warning', '--bk-error', '--bk-bg-card', '--bk-text-primary', '--bk-text-muted'],
-    jsx: `import { LTVBar } from './components/LTVBar';
+    notes: 'Defaults: warning at 75%, liquidation at 85%. Colour transitions automatically: green (safe) → amber (warning) → red (at risk). Always show borrow + collateral amounts when available.',
+    tokens: ['--bk-success', '--bk-warning', '--bk-error', '--bk-brand-primary', '--bk-bg-elevated', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted', '--bk-text-secondary', '--bk-font'],
+    jsx: `import { LTVBar } from './components';
 
-<LTVBar current={42} warning={75} liquidation={85} borrowAmount="\$8,400" collateralAmount="\$20,000" />`,
+<LTVBar
+  current={42}
+  warning={75}
+  liquidation={85}
+  borrowAmount="$8,400"
+  collateralAmount="$20,000"
+/>`,
   },
+
   {
-    id: 'tx-path', group: 'DeFi', name: 'Transaction path',
+    id: 'tx-path', group: 'DeFi', name: 'TransactionPath', kind: 'component',
     description: 'Asset route visualiser. Shows how a swap moves through tokens, bridges, and protocols with chain-coloured dots, arrow connectors, and estimated time.',
     usage: 'Swap review, cross-chain bridge confirmation, autopilot route display.',
     notes: 'Supports three step types: token (with chain), bridge, and protocol. Use compact mode for inline display in list rows. Returns null if steps array is empty.',
-    tokens: ['--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
-    jsx: `import { TransactionPath } from './components/TransactionPath';
+    tokens: ['--bk-bg-card', '--bk-bg-elevated', '--bk-brand-primary', '--bk-warning', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted'],
+    jsx: `import { TransactionPath } from './components';
 
-<TransactionPath steps={[{ type: 'token', symbol: 'ETH', chain: 'Ethereum' }, { type: 'bridge', name: 'Stargate' }, { type: 'token', symbol: 'ETH', chain: 'Arbitrum' }]} estimatedTime="~45 sec" />`,
+<TransactionPath
+  steps={[
+    { type: 'token',    symbol: 'ETH',  chain: 'Ethereum' },
+    { type: 'bridge',   name: 'Stargate' },
+    { type: 'token',    symbol: 'ETH',  chain: 'Arbitrum' },
+  ]}
+  estimatedTime="~45 sec"
+/>`,
   },
+
 ];
 
 export const COMP_CONTROLS = {
@@ -267,7 +480,7 @@ export const COMP_CONTROLS = {
   input:           [{ id: 'state',   label: 'State',        options: ['default','focused','error','disabled'],      def: 'default' }],
   'token-card':    [{ id: 'token',   label: 'Token',        options: ['ETH','BTC','USDC','SOL'],                    def: 'ETH' },
                    { id: 'trend',    label: 'Trend',        options: ['up','down'],                                 def: 'up' }],
-  'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Explore','Activity','Swap'],          def: 'Home' }],
+  'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Markets','Activity','Funds'],         def: 'Home' }],
   'tx-row':        [{ id: 'type',    label: 'Type',         options: ['sent','received','swapped'],                 def: 'sent' }],
   'step-progress': [{ id: 'step',    label: 'Current step', options: ['Review','Approve','Confirm'],                def: 'Approve' }],
   'status-card':   [{ id: 'status',  label: 'Status',       options: ['success','pending','error'],                 def: 'success' }],

@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, Dialog } from 'react-aria-components';
 
 const MotionBackdrop = motion(Button);
 import BottomNav from './BottomNav';
@@ -119,13 +119,12 @@ function TxDetailSheet({ tx, onClose }) {
   return (
     <motion.div
       className="tx-detail-sheet"
-      role="dialog"
       aria-modal="true"
-      aria-label={`${tx.label} details`}
       initial={{ y: '100%' }}
       animate={{ y: 0, transition: m.sheet.enter }}
       exit={{ y: '100%', transition: m.sheet.exit }}
     >
+      <Dialog aria-label={`${tx.label} details`} style={{ outline: 'none', display: 'contents' }}>
       <div className="drag-handle"><div className="drag-handle-pill" /></div>
 
       {/* Header */}
@@ -211,6 +210,7 @@ function TxDetailSheet({ tx, onClose }) {
           View on block explorer
         </Button>
       )}
+      </Dialog>
     </motion.div>
   );
 }

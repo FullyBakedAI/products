@@ -10,6 +10,12 @@ import * as LucideIcons from 'lucide-react';
 import { COMPONENT_REGISTRY, COMP_CONTROLS, COMP_GROUPS } from './component-registry';
 import { TOKEN_DEFINITIONS, BUILTIN_THEMES, useTokenOverride } from '../TokenOverrideContext';
 import { useIconOverride } from '../IconOverrideContext';
+import { Switch, Tabs, TabList, Tab, TabPanel, Dialog } from 'react-aria-components';
+import {
+  ScreenHeader, AppButton, BottomSheet, TokenPill,
+  FinancialInputCard, StatusCard, AssetRow,
+  TransactionPath, FeeBreakdown, LTVBar, AuditBadge,
+} from '../components';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Key tokens shown in sidebar (8 most impactful)
@@ -577,6 +583,190 @@ function ComponentDemoStage({ comp, controls }) {
         </div>
       );
 
+    case 'financial-input': {
+      const [amt, setAmt] = useState('0.5');
+      return (
+        <div style={{ width: '100%', maxWidth: 300 }}>
+          <FinancialInputCard
+            label="You pay"
+            amount={amt}
+            onAmountChange={setAmt}
+            token={{ symbol: 'ETH' }}
+            onTokenSelect={() => {}}
+            usdValue={`≈ $${(parseFloat(amt || 0) * 1842.5).toFixed(2)}`}
+          />
+        </div>
+      );
+    }
+
+    case 'asset-row': {
+      return (
+        <div style={{ width: '100%', maxWidth: 300, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <AssetRow
+            icon={<div style={{ width: 32, height: 32, borderRadius: '50%', background: '#627EEA' }} />}
+            name="Ethereum" chain="Mainnet" amount="1.14 ETH" usdValue="$3,200"
+            onPress={() => {}}
+          />
+          <AssetRow
+            icon={<div style={{ width: 32, height: 32, borderRadius: '50%', background: brand }} />}
+            name="USDC" chain="Arbitrum" amount="921.25 USDC" usdValue="$921"
+          />
+        </div>
+      );
+    }
+
+    case 'status-card': {
+      const s = controls.status || 'success';
+      return (
+        <div style={{ width: '100%', maxWidth: 300 }}>
+          <StatusCard
+            status={s}
+            title={s === 'success' ? 'Swap complete' : s === 'pending' ? 'Transaction pending' : 'Transaction failed'}
+            subtitle={s === 'success' ? '0.5 ETH → 921.25 USDC' : s === 'pending' ? 'Waiting for confirmation…' : 'Slippage too high'}
+            details={s === 'success' ? [{ label: 'Fee', value: '$2.40' }, { label: 'Time', value: '~12 sec' }] : []}
+          />
+        </div>
+      );
+    }
+
+    case 'screen-header':
+      return (
+        <div style={{ width: '100%', maxWidth: 300, border: `1px solid ${border}`, borderRadius: 10, overflow: 'hidden' }}>
+          <ScreenHeader
+            title="Send"
+            onBack={() => {}}
+            rightSlot={<LucideIcons.Settings size={18} color={textM} />}
+          />
+          <div style={{ padding: '12px 16px', fontSize: 12, color: textM }}>Screen content below header…</div>
+        </div>
+      );
+
+    case 'audit-badge':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start' }}>
+          <AuditBadge protocolName="Aave v3" firm="CertiK" year={2024} tvl="$12.4B" />
+          <AuditBadge protocolName="Compound" firm="OpenZeppelin" year={2023} tvl="$2.1B" inline />
+        </div>
+      );
+
+    case 'fee-breakdown':
+      return (
+        <div style={{ width: '100%', maxWidth: 300 }}>
+          <FeeBreakdown
+            total="$3.28"
+            items={[
+              { label: 'Network fee', amount: '$2.40' },
+              { label: 'Protocol fee', amount: '$0.88' },
+            ]}
+          />
+        </div>
+      );
+
+    case 'ltv-bar': {
+      const ltv = parseInt(controls.current || '42', 10);
+      return (
+        <div style={{ width: '100%', maxWidth: 300 }}>
+          <LTVBar
+            current={ltv}
+            warning={75}
+            liquidation={85}
+            borrowAmount="$8,400"
+            collateralAmount="$20,000"
+          />
+        </div>
+      );
+    }
+
+    case 'tx-path':
+      return (
+        <div style={{ width: '100%', maxWidth: 300 }}>
+          <TransactionPath
+            steps={[
+              { type: 'token',    symbol: 'ETH',  chain: 'Ethereum' },
+              { type: 'bridge',   name: 'Stargate' },
+              { type: 'token',    symbol: 'ETH',  chain: 'Arbitrum' },
+            ]}
+            estimatedTime="~45 sec"
+          />
+        </div>
+      );
+
+    case 'aria-switch': {
+      const [on, setOn] = useState(true);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[['Autopilot', on, setOn], ['Notifications', false, () => {}], ['Dark mode', true, () => {}]].map(([label, val, setter], i) => (
+            <Switch
+              key={label}
+              isSelected={i === 0 ? on : val}
+              onChange={i === 0 ? setter : undefined}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 13, color: textP, fontFamily: 'inherit' }}
+            >
+              <div style={{ width: 36, height: 20, borderRadius: 10, background: (i === 0 ? on : val) ? brand : border, transition: 'background 0.2s', position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: (i === 0 ? on : val) ? 19 : 3, transition: 'left 0.2s' }} />
+              </div>
+              {label}
+            </Switch>
+          ))}
+        </div>
+      );
+    }
+
+    case 'aria-tabs': {
+      const [t, setT] = useState('a');
+      return (
+        <Tabs selectedKey={t} onSelectionChange={setT} style={{ width: '100%', maxWidth: 280 }}>
+          <TabList style={{ display: 'flex', gap: 4, marginBottom: 10, borderBottom: `1px solid ${border}`, paddingBottom: 6 }}>
+            {['All', 'Staking', 'Lending'].map(id => (
+              <Tab key={id} id={id} style={({ isSelected }) => ({ padding: '4px 10px', fontSize: 12, fontWeight: 600, borderRadius: 6, border: 'none', background: isSelected ? `${brand}18` : 'transparent', color: isSelected ? brand : textM, cursor: 'pointer', fontFamily: 'inherit' })}>
+                {id}
+              </Tab>
+            ))}
+          </TabList>
+          {['All', 'Staking', 'Lending'].map(id => (
+            <TabPanel key={id} id={id}>
+              <div style={{ fontSize: 12, color: textM, padding: '4px 2px' }}>{id} tab content — arrow keys switch tabs</div>
+            </TabPanel>
+          ))}
+        </Tabs>
+      );
+    }
+
+    case 'aria-dialog': {
+      const [open, setOpen] = useState(false);
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+          <button
+            onClick={() => setOpen(true)}
+            style={{ background: brand, color: '#fff', border: 'none', borderRadius: 8, padding: '8px 18px', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            Open dialog
+          </button>
+          {open && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 9999 }} onClick={() => setOpen(false)}>
+              <div style={{ background: bgCard, borderRadius: '16px 16px 0 0', padding: 24, width: '100%', maxWidth: 390 }} onClick={e => e.stopPropagation()}>
+                <Dialog aria-label="Demo dialog" style={{ outline: 'none' }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: textP, marginBottom: 8 }}>Dialog demo</div>
+                  <div style={{ fontSize: 13, color: textM, marginBottom: 16 }}>Focus is trapped here. Tab cycles within the dialog. ESC or the button below closes it.</div>
+                  <button onClick={() => setOpen(false)} style={{ background: brand, color: '#fff', border: 'none', borderRadius: 8, padding: '9px 20px', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>Close</button>
+                </Dialog>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'feature-config':
+    case 'feature-panel':
+    case 'brand-config':
+      return (
+        <div style={{ fontSize: 12, color: textM, textAlign: 'center', padding: '8px 0', lineHeight: 1.6 }}>
+          Context provider — no visual output.<br />
+          <span style={{ color: brand }}>See JSX example below.</span>
+        </div>
+      );
+
     default:
       return <div style={{ color: 'var(--bk-text-muted)', fontSize: 12 }}>Demo coming soon</div>;
   }
@@ -633,7 +823,17 @@ function ComponentOverlay({ comp, onClose }) {
           <div className="ds-comp-overlay-header">
             <div>
               <div className="ds-comp-overlay-title">{comp.name}</div>
-              <div className="ds-comp-overlay-group">{comp.group}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <span className="ds-comp-overlay-group">{comp.group}</span>
+                {comp.kind && (
+                  <span className={`ds-kind-badge ds-kind-${comp.kind}`}>
+                    { comp.kind === 'component'  ? 'Component'
+                    : comp.kind === 'standalone' ? 'Standalone'
+                    : comp.kind === 'primitive'  ? 'ARIA Primitive'
+                    : 'Pattern' }
+                  </span>
+                )}
+              </div>
             </div>
             <button className="ds-comp-overlay-close" onClick={onClose} aria-label="Close">×</button>
           </div>
@@ -923,8 +1123,17 @@ function ComponentStack({ onSelect, selectedId }) {
                   style={{ borderColor: isSelected ? brand : border }}
                 >
                   <div className="ds-comp-stack-header">
-                    <span className="ds-comp-stack-name" style={{ color: textP }}>{comp.name}</span>
-                    <span className="ds-comp-stack-action" style={{ color: isSelected ? brand : textM }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+                      <span className="ds-comp-stack-name" style={{ color: textP }}>{comp.name}</span>
+                      {comp.kind && comp.kind !== 'component' && (
+                        <span className={`ds-kind-badge ds-kind-${comp.kind}`} style={{ flexShrink: 0 }}>
+                          { comp.kind === 'standalone' ? 'standalone'
+                          : comp.kind === 'primitive'  ? 'ARIA'
+                          : 'pattern' }
+                        </span>
+                      )}
+                    </div>
+                    <span className="ds-comp-stack-action" style={{ color: isSelected ? brand : textM, flexShrink: 0 }}>
                       {isSelected ? 'Close spec ×' : 'View spec →'}
                     </span>
                   </div>

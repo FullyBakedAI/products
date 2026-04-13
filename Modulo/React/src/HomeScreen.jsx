@@ -492,7 +492,13 @@ export default function HomeScreen() {
               <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
               <span className="gain-text">$623.11 (5.08%)</span>
             </div>
-            {/* Simulator — coming in v2 */}
+            <Button
+              className="portfolio-whatif-btn"
+              aria-label="What if? — open portfolio simulator"
+              onPress={() => navigate('/simulate')}
+            >
+              What if?
+            </Button>
           </div>
 
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">

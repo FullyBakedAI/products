@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m, tap, stagger } from './motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, TextField, Input } from 'react-aria-components';
 import { useActions } from './ActionsContext';
 import { useBrandConfig } from './theme/BrandConfig';
 import BottomNav from './BottomNav';
@@ -112,6 +112,7 @@ export default function ExploreScreen() {
   const navigate = useNavigate();
   const { openActions } = useActions();
   const { brandName } = useBrandConfig();
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeChain, setActiveChain] = useState('All');
   const [activeTab, setActiveTab] = useState('All');
   const [sortBy, setSortBy] = useState('Volume');
@@ -153,12 +154,20 @@ export default function ExploreScreen() {
       <div className="scroll-content explore-scroll">
 
         {/* Search */}
-        <div role="search">
-          <Button className="search-field explore-search" aria-label="Search tokens">
+        <TextField
+          aria-label="Search tokens"
+          value={searchQuery}
+          onChange={setSearchQuery}
+          className="explore-search-field"
+        >
+          <div className="search-field explore-search explore-search-wrap">
             <IconSearch />
-            <span>Token name, address, or ENS</span>
-          </Button>
-        </div>
+            <Input
+              className="explore-search-input"
+              placeholder="Token name, address, or ENS"
+            />
+          </div>
+        </TextField>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">

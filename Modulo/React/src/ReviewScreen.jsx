@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, Dialog } from 'react-aria-components';
 const IconArrowDown = () => (
   <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="opacity" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -77,14 +77,13 @@ export default function ReviewScreen() {
 
   return (
     <motion.div
-      role="dialog"
       aria-modal="true"
-      aria-label={`Review ${action}`}
       className="review-sheet"
       initial={{ y: '100%' }}
       animate={{ y: 0, transition: m.sheet.enter }}
       exit={{ y: '100%', transition: m.sheet.exit }}
     >
+      <Dialog aria-label={`Review ${action}`} style={{ outline: 'none', display: 'contents' }}>
       {/* drag-handle from shared.css */}
       <div className="drag-handle"><div className="drag-handle-pill" /></div>
 
@@ -255,6 +254,7 @@ export default function ReviewScreen() {
       <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">
         Cancel
       </Button>
+      </Dialog>
     </motion.div>
   );
 }

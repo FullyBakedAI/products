@@ -157,7 +157,7 @@ Voice: Clear, confident, precise, calm. Never use jargon without explanation.
 Design constraints:
 - Dark-first UI using CSS custom properties (--bk-* tokens)
 - Mobile-first, 390px viewport, WCAG 2.1 AA minimum
-- All interactive elements must use React ARIA components
+- All interactive elements must use React ARIA components from react-aria-components
 - Primary CTA colour: ${brand}
 - App background: ${getToken('--bk-bg-base')}
 - Text primary: ${getToken('--bk-text-primary')}
@@ -165,19 +165,28 @@ Design constraints:
 - One primary action per screen
 - 44px minimum touch targets
 
+React ARIA component rules (import from 'react-aria-components'):
+- Buttons and pressable elements → Button
+- On/off toggles and switches → Switch (renders aria-checked, not aria-pressed)
+- Text inputs and search fields → TextField + Input (never raw <input>)
+- Tab navigation → Tabs + TabList + Tab + TabPanel (arrow key nav included)
+- Dialogs / sheets → Dialog (focus trap + Escape key included)
+- Amount display divs (updated by numpad) → role="status" aria-live="polite" (never role="textbox")
+
 Component stack: react-aria-components → BakeKit tokens → product components
 Typography: Inter, weights 400/500/600/700
 Icons: Lucide (UI chrome), Figma assets (product icons)
 
-Screens available: Home, Swap, SwapSelect, Explore, Send, Receive
-Navigation: React Router v7 HashRouter, bottom navigation bar
+Screens available: Home, Swap, SwapSelect, Explore, Send, SendAmount, Receive, Activity, Review, Simulate, Optimise, Autopilot, Manage, Asset, Settings
+Navigation: React Router v7 HashRouter, bottom navigation bar (BottomNav)
 
 When building a new screen:
 1. Import tokens via CSS custom properties (never hardcode hex)
-2. Use Button from react-aria-components for all interactive elements
-3. Include StatusBar and BottomNav components
+2. Use the correct React ARIA component for each interaction type (see rules above)
+3. Include BottomNav for primary screens; omit on modal sheets and linear flows
 4. Follow the pattern in existing screens (HomeScreen.jsx, SwapScreen.jsx)
-5. Populate with realistic mock data — never leave placeholders`;
+5. Populate with realistic mock data — never leave placeholders
+6. Amount displays updated by external input: role="status" aria-live="polite", not role="textbox"`;
 
   const tokenJSON = JSON.stringify(tokenManifest, null, 2);
 
