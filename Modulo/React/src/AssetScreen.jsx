@@ -1136,11 +1136,11 @@ export default function AssetScreen() {
       <div className="portfolio-label">Put it to work</div>
       <div className="asset-opp-list">
         {[
-          { Icon: IconZap,        label: 'Stake',           sub: `Up to 6.8% APY · Flexible or locked`,    tab: 'lend'   },
-          { Icon: IconLandmark,   label: 'Lend & Borrow',   sub: 'Earn on idle assets · Use as collateral', tab: 'lend'   },
-          { Icon: IconTrendingUp, label: 'Trade',            sub: 'Market & limit orders',                   tab: 'trade'  },
-          { Icon: IconBell,       label: 'Set price alert',  sub: 'Get notified when price hits a target',   tab: null     },
-        ].map(({ Icon, label, sub, tab }, i) => (
+          { Icon: IconZap,        label: 'Stake',           sub: `Up to 6.8% APY · Flexible or locked`,    tab: 'stake',  passAsset: true  },
+          { Icon: IconLandmark,   label: 'Lend & Borrow',   sub: 'Earn on idle assets · Use as collateral', tab: 'lend',   passAsset: false },
+          { Icon: IconTrendingUp, label: 'Trade',            sub: 'Market & limit orders',                   tab: 'trade',  passAsset: true  },
+          { Icon: IconBell,       label: 'Set price alert',  sub: 'Get notified when price hits a target',   tab: null,     passAsset: false },
+        ].map(({ Icon, label, sub, tab, passAsset }, i) => (
           <motion.div
             key={label}
             initial={{ opacity: 0, y: 6 }}
@@ -1151,7 +1151,7 @@ export default function AssetScreen() {
           <Button
             className={`asset-opp-row${i === 0 ? ' first' : i === 3 ? ' last' : ''}`}
             onPress={() => {
-              if (tab) { openActions({ tab, asset: id }); }
+              if (tab) { openActions({ tab, asset: passAsset ? id : undefined }); }
               else { setAlertPrice(t.chainPrice.replace(/[$,]/g, '')); setAlertDirection('above'); setAlertConfirmed(false); setPriceAlertOpen(true); }
             }}
             aria-label={label}

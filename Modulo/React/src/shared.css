@@ -108,11 +108,10 @@ html, body {
 .bottom-nav {
   height: calc(71px + env(safe-area-inset-bottom, 0px));
   background: var(--bk-bg-nav);
-  border-top: 1ss solid var(--bk-border-subtle);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  align-items: start;
-  justify-items: center;
+  border-top: 1px solid var(--bk-border-subtle);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
   flex-shrink: 0;
   position: relative;
   overflow: visible;
@@ -130,7 +129,8 @@ html, body {
   border: none;
   cursor: pointer;
   font-family: var(--bk-font);
-  padding: 4px 0;
+  padding: 4px 8px;
+  flex: 1;
   color: var(--bk-text-muted);
   transition: color 0.15s;
   -webkit-tap-highlight-color: transparent;

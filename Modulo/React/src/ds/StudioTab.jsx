@@ -76,47 +76,6 @@ function LoadingButton({ brand }) {
   );
 }
 
-function ToastDemo({ brand, bgCard, border, textP, textM }) {
-  const [toasts, setToasts] = useState([]);
-  function fire(type) {
-    const id = Date.now();
-    const config = {
-      success: { label: 'Swap confirmed',     sub: '0.5 ETH → 921.25 USDC', color: 'var(--bk-success)' },
-      pending: { label: 'Transaction pending', sub: 'Waiting for confirmation…', color: brand },
-      error:   { label: 'Transaction failed',  sub: 'Slippage too high',       color: 'var(--bk-error)' },
-    }[type];
-    setToasts(prev => [...prev, { id, ...config }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200);
-  }
-  return (
-    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 8, minHeight: 80 }}>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {['success', 'pending', 'error'].map(t => (
-          <button key={t} className="ds-ex-btn ds-ex-btn-secondary" onClick={() => fire(t)}
-            style={{ borderColor: border, color: textP, fontSize: 12, padding: '6px 12px' }}>
-            {t}
-          </button>
-        ))}
-      </div>
-      <div style={{ position: 'absolute', top: 42, left: 0, width: '100%', zIndex: 10, pointerEvents: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
-        <AnimatePresence>
-          {toasts.map(t => (
-            <motion.div key={t.id}
-              initial={{ opacity: 0, y: -6, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -4, scale: 0.97 }}
-              transition={{ duration: 0.16 }}
-              style={{ background: bgCard, border: `1px solid rgba(0,0,0,0.2)`, borderLeft: `3px solid ${t.color}`, borderRadius: 8, padding: '9px 13px' }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: textP }}>{t.label}</div>
-              <div style={{ fontSize: 10, color: textM, marginTop: 1 }}>{t.sub}</div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-}
-
 function BottomSheetDemo({ brand, bgCard, border, textP, textM }) {
   const [open, setOpen] = useState(false);
   return (
@@ -146,56 +105,6 @@ function BottomSheetDemo({ brand, bgCard, border, textP, textM }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
-  );
-}
-
-function SkeletonDemo({ border }) {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    if (!loaded) { const t = setTimeout(() => setLoaded(true), 1800); return () => clearTimeout(t); }
-  }, [loaded]);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', maxWidth: 220 }}>
-      <button className="ds-ex-btn ds-ex-btn-secondary" onClick={() => setLoaded(false)}
-        style={{ fontSize: 10, borderColor: border, color: 'var(--bk-text-muted)', padding: '3px 9px', alignSelf: 'flex-start', marginBottom: 4, borderRadius: 6 }}>
-        Replay
-      </button>
-      <AnimatePresence mode="wait">
-        {!loaded ? (
-          <motion.div key="skel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-            {[80, 130, 60].map((w, i) => (
-              <div key={i} className="ds-skeleton" style={{ width: w, height: 11, borderRadius: 5 }} />
-            ))}
-          </motion.div>
-        ) : (
-          <motion.div key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--bk-text-primary)' }}>$12,891.44</div>
-            <div style={{ fontSize: 12, color: 'var(--bk-success)' }}>+$412.30 today (+3.3%)</div>
-            <div style={{ fontSize: 10, color: 'var(--bk-text-muted)' }}>4 assets across 3 chains</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function SwapFlipDemo({ brand, border, bgCard }) {
-  const [flipped, setFlipped] = useState(false);
-  const pairs = flipped ? ['USDC', 'ETH'] : ['ETH', 'USDC'];
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 5, alignItems: 'center' }}>
-      <div style={{ fontSize: 12, padding: '5px 12px', background: bgCard, borderRadius: 7, border: `1px solid ${border}`, color: 'var(--bk-text-primary)', fontWeight: 600 }}>{pairs[0]}</div>
-      <motion.button
-        onClick={() => setFlipped(v => !v)}
-        style={{ width: 30, height: 30, borderRadius: '50%', background: `${brand}20`, border: `1px solid ${brand}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <motion.span animate={{ rotate: flipped ? 180 : 0 }} transition={{ type: 'spring', damping: 18, stiffness: 300 }} style={{ display: 'flex' }}>
-          <LucideIcons.ArrowUpDown size={13} color={brand} strokeWidth={2} />
-        </motion.span>
-      </motion.button>
-      <div style={{ fontSize: 12, padding: '5px 12px', background: bgCard, borderRadius: 7, border: `1px solid ${border}`, color: 'var(--bk-text-primary)', fontWeight: 600 }}>{pairs[1]}</div>
     </div>
   );
 }
@@ -329,27 +238,8 @@ function ComponentDemoStage({ comp, controls }) {
       );
     }
 
-    case 'toast':
-      return <ToastDemo brand={brand} bgCard={bgCard} border={border} textP={textP} textM={textM} />;
-
     case 'bottom-sheet':
       return <BottomSheetDemo brand={brand} bgCard={bgCard} border={border} textP={textP} textM={textM} />;
-
-    case 'skeleton':
-      return <SkeletonDemo border={border} />;
-
-    case 'badge': {
-      const colMap = { Confirmed: success, Pending: brand, Failed: error };
-      return (
-        <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {Object.entries(colMap).map(([label, c]) => (
-            <span key={label} style={{ background: `${c}18`, color: c, borderColor: `${c}30`, fontSize: 12, padding: '4px 12px', borderRadius: 6, border: '1px solid', fontWeight: 600 }}>
-              {label}
-            </span>
-          ))}
-        </div>
-      );
-    }
 
     case 'input':
       return <InputStatesDemo brand={brand} border={border} bgCard={bgCard} textP={textP} textM={textM} />;
@@ -369,77 +259,32 @@ function ComponentDemoStage({ comp, controls }) {
       );
     }
 
-    case 'pct-pills':
-      return (
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {['25%', '50%', '75%', 'Max'].map((label, i) => (
-            <button key={label} className="ds-ex-pct-pill" style={{ background: i === 1 ? brand : `${brand}15`, color: i === 1 ? '#fff' : brand, borderColor: `${brand}30` }}>
-              {label}
-            </button>
-          ))}
-        </div>
-      );
-
-    case 'token-card': {
-      const tok = controls.token || 'ETH';
-      const up = (controls.trend || 'up') === 'up';
-      const data_ = { ETH: ['1.1421', '$4,412.82'], BTC: ['0.0421', '$2,800.50'], USDC: ['921.25', '$921.25'], SOL: ['12.40', '$1,240.00'] };
-      const names = { ETH: 'Ethereum', BTC: 'Bitcoin', USDC: 'USD Coin', SOL: 'Solana' };
-      const chg = up ? ['+4.38%', '+1.82%', '+0.01%', '+6.14%'] : ['−2.11%', '−3.44%', '−0.01%', '−4.22%'];
-      const idx = ['ETH','BTC','USDC','SOL'].indexOf(tok);
-      const [bal, val] = data_[tok] || data_.ETH;
-      return (
-        <div className="ds-ex-card" style={{ background: bgCard, borderColor: border, width: '100%', maxWidth: 280 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: brand, opacity: 0.2, flexShrink: 0 }} />
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: textP }}>{names[tok]}</div>
-              <div style={{ fontSize: 11, color: textM, marginTop: 2 }}>{bal} {tok}</div>
-            </div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: textP }}>{val}</div>
-            <div style={{ fontSize: 11, color: up ? success : error, marginTop: 2 }}>{chg[idx]}</div>
-          </div>
-        </div>
-      );
-    }
-
-    case 'swap-card':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%', maxWidth: 280 }}>
-          {[{ label: 'You pay', token: 'ETH', amount: '0.5', usd: '$921.25' }, { label: 'You receive', token: 'USDC', amount: '921.25', usd: '≈ $921.25' }].map(({ label, token, amount, usd }) => (
-            <div key={label} className="ds-ex-swap-card" style={{ background: bgCard, borderColor: border }}>
-              <div style={{ fontSize: 10, color: textM, marginBottom: 5 }}>{label}</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 26, fontWeight: 700, color: textP }}>{amount}</span>
-                <div className="ds-ex-token-pill" style={{ background: `${brand}18`, borderColor: `${brand}30` }}>
-                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: brand, opacity: 0.7 }} />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: textP }}>{token}</span>
-                </div>
-              </div>
-              <div style={{ fontSize: 10, color: textM, marginTop: 3 }}>{usd}</div>
-            </div>
-          ))}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <SwapFlipDemo brand={brand} border={border} bgCard={bgCard} />
-          </div>
-        </div>
-      );
-
     case 'bottom-nav': {
       const active = controls.active || 'Home';
-      const navItems = [
-        { l: 'Home',     I: getIcon('nav-home') },
-        { l: 'Explore',  I: getIcon('nav-explore') },
-        { l: 'Activity', I: getIcon('nav-activity') },
-        { l: 'Swap',     I: getIcon('nav-swap') },
+      // Inline SVGs matching BottomNav.jsx exactly
+      const IconHome    = () => <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 9.5L10 3L17 9.5V17H13V13H7V17H3V9.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>;
+      const IconMarkets = () => <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16V10M8 16V6M12 16V12M16 16V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>;
+      const IconZap     = () => <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>;
+      const IconClock   = () => <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/><path d="M10 7V10.5L12.5 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+      const IconFunds   = () => <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="7" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/><circle cx="13" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/><circle cx="8" cy="14" r="2" stroke="currentColor" strokeWidth="1.5"/></svg>;
+      const tabs = [
+        { l: 'Home',     Icon: IconHome },
+        { l: 'Markets',  Icon: IconMarkets },
+        { l: null,       Icon: IconZap },
+        { l: 'Activity', Icon: IconClock },
+        { l: 'Funds',    Icon: IconFunds },
       ];
       return (
         <div className="ds-ex-bottom-nav" style={{ background: bgCard, borderColor: border }}>
-          {navItems.map(({ l, I }) => (
+          {tabs.map(({ l, Icon }, i) => l === null ? (
+            <div key="fab" className="ds-ex-nav-item">
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: brand, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                <Icon />
+              </div>
+            </div>
+          ) : (
             <div key={l} className="ds-ex-nav-item" style={{ color: l === active ? brand : textM }}>
-              <I size={18} color={l === active ? brand : textM} strokeWidth={l === active ? 2 : 1.5} />
+              <Icon />
               <span style={{ fontSize: 10 }}>{l}</span>
             </div>
           ))}
@@ -455,131 +300,6 @@ function ComponentDemoStage({ comp, controls }) {
               {label}
             </button>
           ))}
-        </div>
-      );
-
-    case 'tx-row': {
-      const type = controls.type || 'sent';
-      const rows = {
-        sent:     { icon: 'ArrowUpRight',  label: 'Sent ETH',      sub: 'to 0x4a3f…c12d',   amount: '−0.5 ETH', usd: '$921.25', color: error },
-        received: { icon: 'ArrowDownLeft', label: 'Received USDC', sub: 'from 0x8b2c…a44e', amount: '+921.25',  usd: 'USDC',    color: success },
-        swapped:  { icon: 'ArrowUpDown',   label: 'Swapped',       sub: 'ETH → USDC',        amount: '−0.5 ETH', usd: '$921.25', color: brand },
-      };
-      const r = rows[type];
-      const Ic = LucideIcons[r.icon] ?? LucideIcons.Circle;
-      return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: bgCard, borderRadius: 10, border: `1px solid ${border}`, width: '100%', maxWidth: 300 }}>
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: `${r.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Ic size={14} color={r.color} strokeWidth={1.8} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: textP }}>{r.label}</div>
-            <div style={{ fontSize: 10, color: textM, marginTop: 1 }}>{r.sub}</div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: type === 'received' ? success : textP }}>{r.amount}</div>
-            <div style={{ fontSize: 10, color: textM }}>{r.usd}</div>
-          </div>
-        </div>
-      );
-    }
-
-    case 'step-progress': {
-      const activeStep = controls.step || 'Approve';
-      const steps = ['Review', 'Approve', 'Confirm'];
-      const activeIdx = steps.indexOf(activeStep);
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 240 }}>
-          {steps.map((label, i) => {
-            const done = i < activeIdx;
-            const active = i === activeIdx;
-            return (
-              <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{ width: 22, height: 22, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: done ? success : active ? brand : 'transparent', border: `2px solid ${done ? success : active ? brand : border}`, fontSize: 10, fontWeight: 700, color: i > activeIdx ? textM : '#fff' }}>
-                    {done ? <LucideIcons.Check size={11} strokeWidth={3} /> : i + 1}
-                  </div>
-                  {i < steps.length - 1 && <div style={{ width: 2, height: 14, background: border, marginTop: 2 }} />}
-                </div>
-                <div style={{ paddingTop: 2 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: i > activeIdx ? textM : textP }}>{label}</div>
-                  <div style={{ fontSize: 10, color: textM, marginTop: 1 }}>{['ETH → USDC at 1,842.50', 'Waiting for signature…', 'Est. 15–30 sec'][i]}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-
-    case 'confirm-summary':
-      return (
-        <div style={{ background: bgCard, borderRadius: 12, border: `1px solid ${border}`, overflow: 'hidden', width: '100%', maxWidth: 280 }}>
-          <div style={{ padding: '10px 14px', borderBottom: `1px solid ${border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: textP }}>Confirm swap</span>
-            <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: `${brand}18`, color: brand }}>Preview</span>
-          </div>
-          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: 5 }}>
-            {[{ label: 'You pay', token: 'ETH', amount: '0.5000', usd: '$921.25', i: 0 }, { label: 'You receive', token: 'USDC', amount: '921.25', usd: '≈ $921.25', i: 1 }].map(({ label, token, amount, usd, i }) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 9px', background: i === 0 ? 'rgba(255,255,255,0.03)' : `${success}08`, borderRadius: 7, border: `1px solid ${i === 0 ? border : `${success}20`}` }}>
-                <div>
-                  <div style={{ fontSize: 10, color: textM }}>{label}</div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: i === 1 ? success : textP, marginTop: 1 }}>{amount} {token}</div>
-                </div>
-                <div style={{ fontSize: 10, color: textM }}>{usd}</div>
-              </div>
-            ))}
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 2px' }}>
-              <span style={{ fontSize: 10, color: textM }}>Network fee</span>
-              <span style={{ fontSize: 10, color: textP, fontWeight: 600 }}>~$2.40</span>
-            </div>
-          </div>
-          <div style={{ padding: '0 12px 12px' }}>
-            <button style={{ width: '100%', padding: '9px', borderRadius: 9, background: brand, border: 'none', color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
-              Confirm swap
-            </button>
-          </div>
-        </div>
-      );
-
-    case 'portfolio-metric':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', maxWidth: 260 }}>
-          <div style={{ background: bgCard, borderRadius: 12, border: `1px solid ${border}`, padding: '16px' }}>
-            <div style={{ fontSize: 10, color: textM, marginBottom: 3 }}>Total portfolio</div>
-            <div style={{ fontSize: 30, fontWeight: 700, color: textP }}>$12,891.44</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 5 }}>
-              <LucideIcons.TrendingUp size={11} color={success} strokeWidth={2} />
-              <span style={{ fontSize: 11, color: success, fontWeight: 600 }}>+$412.30</span>
-              <span style={{ fontSize: 11, color: textM }}>today (+3.3%)</span>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
-            {[{ label: 'Assets', value: '4' }, { label: 'Chains', value: '3' }].map(({ label, value }) => (
-              <div key={label} style={{ background: bgCard, borderRadius: 8, border: `1px solid ${border}`, padding: '10px 12px' }}>
-                <div style={{ fontSize: 20, fontWeight: 700, color: brand }}>{value}</div>
-                <div style={{ fontSize: 10, color: textM }}>{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-
-    case 'wallet-chip':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7, width: '100%', maxWidth: 260 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 11px', background: bgCard, borderRadius: 8, border: `1px solid ${border}` }}>
-            <div style={{ width: 24, height: 24, borderRadius: '50%', background: `linear-gradient(135deg, ${brand}, ${success})`, flexShrink: 0 }} />
-            <span style={{ fontSize: 12, color: textP, fontFamily: 'monospace', flex: 1 }}>0x4a3f…c12d</span>
-            <LucideIcons.Copy size={12} color={textM} strokeWidth={1.5} style={{ cursor: 'pointer' }} />
-          </div>
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-            {[{ label: 'Ethereum', color: '#627EEA' }, { label: 'Polygon', color: '#8247E5' }, { label: 'Arbitrum', color: '#28A0F0' }, { label: 'Base', color: '#0052FF' }].map(({ label, color }) => (
-              <span key={label} style={{ fontSize: 10, padding: '3px 7px', borderRadius: 4, background: `${color}18`, color, border: `1px solid ${color}30`, fontWeight: 600 }}>
-                {label}
-              </span>
-            ))}
-          </div>
         </div>
       );
 
@@ -1098,55 +818,100 @@ function ComponentStack({ onSelect, selectedId }) {
   const border = getToken('--bk-border-subtle');
   const textP  = getToken('--bk-text-primary');
   const textM  = getToken('--bk-text-muted');
+  const bgEl   = getToken('--bk-bg-elevated') || 'rgba(255,255,255,0.06)';
+
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+
+  const groups = COMP_GROUPS.map(group => {
+    const items = COMPONENT_REGISTRY.filter(c => {
+      if (c.group !== group) return false;
+      if (!q) return true;
+      return (
+        c.name.toLowerCase().includes(q) ||
+        (c.description || '').toLowerCase().includes(q) ||
+        (c.usage || '').toLowerCase().includes(q) ||
+        group.toLowerCase().includes(q)
+      );
+    });
+    return { group, items };
+  }).filter(g => g.items.length > 0);
 
   return (
     <div className="ds-comp-stack">
-      {COMP_GROUPS.map(group => {
-        const items = COMPONENT_REGISTRY.filter(c => c.group === group);
-        const groupColor = GROUP_COLORS[group] || brand;
-        return (
-          <div key={group} className="ds-comp-stack-group">
-            <div className="ds-comp-stack-group-label" style={{ color: groupColor }}>
-              {group}
-            </div>
-            <div className="ds-comp-stack-items-grid">
-            {items.map(comp => {
-              const defaultCtrls = (COMP_CONTROLS[comp.id] || []).reduce(
-                (acc, c) => ({ ...acc, [c.id]: c.def }), {}
-              );
-              const isSelected = selectedId === comp.id;
-              return (
-                <button
-                  key={comp.id}
-                  className={`ds-comp-stack-item${isSelected ? ' is-selected' : ''}`}
-                  onClick={() => onSelect(isSelected ? null : comp.id)}
-                  style={{ borderColor: isSelected ? brand : border }}
-                >
-                  <div className="ds-comp-stack-header">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
-                      <span className="ds-comp-stack-name" style={{ color: textP }}>{comp.name}</span>
-                      {comp.kind && comp.kind !== 'component' && (
-                        <span className={`ds-kind-badge ds-kind-${comp.kind}`} style={{ flexShrink: 0 }}>
-                          { comp.kind === 'standalone' ? 'standalone'
-                          : comp.kind === 'primitive'  ? 'ARIA'
-                          : 'pattern' }
+      {/* Search */}
+      <div className="ds-comp-search-wrap">
+        <svg className="ds-comp-search-icon" width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
+          <path d="M13.5 13.5L17 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+        <input
+          className="ds-comp-search-input"
+          type="text"
+          placeholder="Search components…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          aria-label="Search components"
+          autoComplete="off"
+        />
+        {query && (
+          <button
+            className="ds-comp-search-clear"
+            onClick={() => setQuery('')}
+            aria-label="Clear search"
+          >×</button>
+        )}
+      </div>
+
+      {groups.length === 0 ? (
+        <div className="ds-comp-no-results">No components match "{query}"</div>
+      ) : (
+        groups.map(({ group, items }) => {
+          const groupColor = GROUP_COLORS[group] || brand;
+          return (
+            <div key={group} className="ds-comp-stack-group">
+              <div className="ds-comp-stack-group-label" style={{ color: groupColor }}>
+                {group}
+              </div>
+              <div className="ds-comp-stack-items-grid">
+                {items.map(comp => {
+                  const defaultCtrls = (COMP_CONTROLS[comp.id] || []).reduce(
+                    (acc, c) => ({ ...acc, [c.id]: c.def }), {}
+                  );
+                  const isSelected = selectedId === comp.id;
+                  return (
+                    <button
+                      key={comp.id}
+                      className={`ds-comp-stack-item${isSelected ? ' is-selected' : ''}`}
+                      onClick={() => onSelect(isSelected ? null : comp.id)}
+                      style={{ borderColor: isSelected ? brand : border }}
+                    >
+                      <div className="ds-comp-stack-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+                          <span className="ds-comp-stack-name" style={{ color: textP }}>{comp.name}</span>
+                          {comp.kind && comp.kind !== 'component' && (
+                            <span className={`ds-kind-badge ds-kind-${comp.kind}`} style={{ flexShrink: 0 }}>
+                              { comp.kind === 'standalone' ? 'standalone'
+                              : comp.kind === 'primitive'  ? 'ARIA'
+                              : 'pattern' }
+                            </span>
+                          )}
+                        </div>
+                        <span className="ds-comp-stack-action" style={{ color: isSelected ? brand : textM, flexShrink: 0 }}>
+                          {isSelected ? 'Close spec ×' : 'View spec →'}
                         </span>
-                      )}
-                    </div>
-                    <span className="ds-comp-stack-action" style={{ color: isSelected ? brand : textM, flexShrink: 0 }}>
-                      {isSelected ? 'Close spec ×' : 'View spec →'}
-                    </span>
-                  </div>
-                  <div className="ds-comp-stack-demo">
-                    <ComponentDemoStage comp={comp} controls={defaultCtrls} />
-                  </div>
-                </button>
-              );
-            })}
+                      </div>
+                      <div className="ds-comp-stack-demo">
+                        <ComponentDemoStage comp={comp} controls={defaultCtrls} />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
     </div>
   );
 }

@@ -42,9 +42,9 @@ const SORT_OPTIONS = ['Volume', 'Price', '% Change', 'APY'];
 
 // Top yield opportunities — shown prominently at the top
 const TOP_YIELDS = [
-  { asset: 'ETH',  icon: tokenEth,  protocol: 'Lido',     apy: 4.2, type: 'stake', tab: 'lend', apyType: 'APY' },
-  { asset: 'USDC', icon: tokenUsdc, protocol: 'Aave v3',  apy: 5.8, type: 'lend',  tab: 'lend', apyType: 'APY' },
-  { asset: 'SOL',  icon: tokenSol,  protocol: 'Marinade', apy: 7.1, type: 'stake', tab: 'lend', apyType: 'APY' },
+  { asset: 'ETH',  icon: tokenEth,  protocol: 'Lido',     apy: 4.2, type: 'stake', tab: 'stake', apyType: 'APY' },
+  { asset: 'USDC', icon: tokenUsdc, protocol: 'Aave v3',  apy: 5.8, type: 'lend',  tab: 'lend',  apyType: 'APY' },
+  { asset: 'SOL',  icon: tokenSol,  protocol: 'Marinade', apy: 7.1, type: 'stake', tab: 'stake', apyType: 'APY' },
 ];
 
 const CG = 'https://assets.coingecko.com/coins/images';
@@ -160,7 +160,7 @@ export default function ExploreScreen() {
           onChange={setSearchQuery}
           className="explore-search-field"
         >
-          <div className="search-field explore-search explore-search-wrap">
+          <div className="explore-search explore-search-wrap">
             <IconSearch />
             <Input
               className="explore-search-input"

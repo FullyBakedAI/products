@@ -1,5 +1,5 @@
 /**
- * LendBorrowTab — lending, borrowing and staking inside ActionsScreen
+ * LendBorrowTab — lending and borrowing inside ActionsScreen
  */
 
 import { useState, useEffect } from 'react';
@@ -21,34 +21,11 @@ import { AuditBadge } from '../components/AuditBadge';
 import { getAuditForProtocol } from '../config/protocol-audits';
 import { LTVBar } from '../components/LTVBar';
 
-// Only used by LendBorrowTab
 const LENDING_PLATFORMS = [
   { name: 'Aave v3',  apy: 3.8, tvl: '$2.1B', apyType: 'APY', audit: 'CertiK',        verified: true },
   { name: 'Compound', apy: 3.2, tvl: '$890M',  apyType: 'APY', audit: 'OpenZeppelin',  verified: true },
   { name: 'Spark',    apy: 4.1, tvl: '$1.4B',  apyType: 'APY', audit: 'ChainSecurity', verified: true },
 ];
-
-const STAKING_PLATFORMS = {
-  eth: [
-    { name: 'Lido',             apy: 4.2, tvl: '$34B',  apyType: 'APY' },
-    { name: 'Rocket Pool',      apy: 3.9, tvl: '$4.1B', apyType: 'APY' },
-    { name: 'Coinbase cbETH',   apy: 3.5, tvl: '$2.8B', apyType: 'APY' },
-  ],
-  sol: [
-    { name: 'Marinade',         apy: 7.1, tvl: '$1.2B', apyType: 'APY' },
-    { name: 'Jito',             apy: 8.2, tvl: '$2.4B', apyType: 'APY' },
-    { name: 'Lido (wSOL)',      apy: 6.9, tvl: '$890M', apyType: 'APY' },
-  ],
-  dot: [
-    { name: 'Polkadot native',  apy: 12.0, tvl: '$3.2B', apyType: 'APY' },
-  ],
-  atom: [
-    { name: 'Cosmos Hub',       apy: 18.0, tvl: '$1.8B', apyType: 'APY' },
-  ],
-  ada: [
-    { name: 'Cardano native',   apy: 3.8, tvl: '$4.4B', apyType: 'APY' },
-  ],
-};
 
 export default function LendBorrowTab() {
   const f = useFeatures();
@@ -57,8 +34,7 @@ export default function LendBorrowTab() {
   const tokenKey = (asset && ASSET_ID_TO_TOKEN[asset]) || 'USDC';
   const tok      = SWAP_TOKENS[tokenKey];
 
-  const platforms  = STAKING_PLATFORMS[asset] || LENDING_PLATFORMS;
-  const isStaking  = !!STAKING_PLATFORMS[asset];
+  const platforms = LENDING_PLATFORMS;
 
   const [sub, setSub]               = useState('lend');
   const [amount, setAmount]         = useState('');
@@ -91,7 +67,7 @@ export default function LendBorrowTab() {
     <div className="actions-tab-stack">
       <AssetHeader tok={tok} tokenKey={tokenKey} />
 
-      {/* Lend / Borrow toggle — matches Buy/Sell style */}
+      {/* Lend / Borrow toggle */}
       <div className="trade-direction-tabs" role="group" aria-label="Lend or borrow">
         <Button
           className={`trade-dir-tab${sub === 'lend' ? ' dir-buy-active' : ''}`}
@@ -109,7 +85,7 @@ export default function LendBorrowTab() {
 
       {sub === 'lend' ? (
         <>
-          <div className="portfolio-label">{isStaking ? 'Select validator' : 'Select protocol'}</div>
+          <div className="portfolio-label">Select protocol</div>
           <div className="asset-opp-list">
             {platforms.map((p, i) => (
               <Button key={p.name}
@@ -147,7 +123,7 @@ export default function LendBorrowTab() {
           </div>
 
           <div className="swap-card pay-card">
-            <div className="card-label">{isStaking ? 'Amount to stake' : 'Amount to lend'}</div>
+            <div className="card-label">Amount to lend</div>
             <div className="card-middle">
               <div className="swap-amount" role="status" aria-live="polite">
                 <span className="amount-text">{amount || '0'}</span>
@@ -167,13 +143,13 @@ export default function LendBorrowTab() {
           <Numpad onKey={handleKey} />
 
           <Button className={`bottom-cta-btn ${ctaReady && !isQuoting ? 'cta-ready' : 'cta-disabled'}`}
-            isDisabled={isQuoting || !ctaReady} aria-label={isStaking ? 'Review stake' : 'Review lend'}
+            isDisabled={isQuoting || !ctaReady} aria-label="Review lend"
             onPress={() => {
               if (!ctaReady) return;
               setIsQuoting(true);
               setTimeout(() => {
                 navigate('/review', { state: {
-                  action: isStaking ? 'stake' : 'lend',
+                  action: 'lend',
                   from: { icon: tok.icon, symbol: tok.symbol, amount, usd: parseFloat(amount || 0) * tok.price },
                   to: null,
                   fee: { network: '$1.80', protocol: '$0.40', total: '$2.20' },
@@ -191,7 +167,7 @@ export default function LendBorrowTab() {
                   <motion.span animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                     style={{ display: 'inline-block', lineHeight: 1 }} aria-hidden="true">⟳</motion.span>
                 )}
-                {isQuoting ? 'Fetching best rate...' : (isStaking ? 'Review Stake' : 'Review Lend')}
+                {isQuoting ? 'Fetching best rate...' : 'Review Lend'}
               </motion.span>
             </AnimatePresence>
           </Button>

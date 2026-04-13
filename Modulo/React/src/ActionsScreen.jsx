@@ -4,7 +4,7 @@
  * Rendered as an overlay from ActionsContext (not a route).
  * Previous screen stays mounted and visible behind the backdrop.
  *
- * Tabs: Swap | Trade | Lend & Borrow | Deposit
+ * Tabs: Swap | Trade | Lending | Stake
  */
 
 import { useState, useEffect, useRef } from 'react';
@@ -16,7 +16,7 @@ import { useFeatures } from './theme/FeatureConfig';
 import SwapTab       from './tabs/SwapTab';
 import TradeTab      from './tabs/TradeTab';
 import LendBorrowTab from './tabs/LendBorrowTab';
-import DepositTab    from './tabs/DepositTab';
+import StakeTab      from './tabs/StakeTab';
 import './actions.css';
 
 const IconX = ({ size = 16 }) => (
@@ -26,10 +26,10 @@ const IconX = ({ size = 16 }) => (
 );
 
 const TABS = [
-  { id: 'swap',    label: 'Swap' },
-  { id: 'trade',   label: 'Trade' },
-  { id: 'lend',    label: 'Lend' },
-  { id: 'deposit', label: 'Deposit' },
+  { id: 'swap',  label: 'Swap'    },
+  { id: 'trade', label: 'Trade'   },
+  { id: 'lend',  label: 'Lending' },
+  { id: 'stake', label: 'Stake'   },
 ];
 
 export default function ActionsScreen({ variant }) {
@@ -123,10 +123,10 @@ export default function ActionsScreen({ variant }) {
 
         {/* Tab content */}
         <div className="actions-scroll">
-          {active === 'swap'    && <SwapTab />}
-          {active === 'trade'   && <TradeTab />}
-          {active === 'lend'    && <LendBorrowTab />}
-          {active === 'deposit' && <DepositTab />}
+          {active === 'swap'  && <SwapTab />}
+          {active === 'trade' && <TradeTab />}
+          {active === 'lend'  && <LendBorrowTab />}
+          {active === 'stake' && <StakeTab />}
         </div>
       </motion.div>
     </div>

@@ -19,7 +19,7 @@ const BUILTIN_PRESETS = [
         optimisePromo: false,
         assetLimit: 1,
       },
-      actions: { swap: true, trade: false, lend: false, deposit: false },
+      actions: { swap: true, trade: false, lend: false, stake: false },
       defi: {
         priceImpact: true,
         slippageWarning: true,
@@ -45,7 +45,7 @@ const BUILTIN_PRESETS = [
         optimisePromo: false,
         assetLimit: 5,
       },
-      actions: { swap: true, trade: false, lend: true, deposit: true },
+      actions: { swap: true, trade: true, lend: true, stake: true },
       defi: {
         priceImpact: true,
         slippageWarning: true,
@@ -272,10 +272,10 @@ export default function FeaturePanel() {
           {/* DeFi tabs */}
           <div className="bk-builder-section">
             <div className="bk-builder-section-label">DeFi tabs</div>
-            <ToggleSwitch label="Swap" checked={f.actions.swap} onChange={v => updateSection('actions', 'swap', v)} />
-            <ToggleSwitch label="Lending" checked={f.actions.lend} onChange={v => updateSection('actions', 'lend', v)} />
-            <ToggleSwitch label="Deposit" checked={f.actions.deposit} onChange={v => updateSection('actions', 'deposit', v)} />
-            <ToggleSwitch label="Trade" checked={f.actions.trade} onChange={v => updateSection('actions', 'trade', v)} />
+            <ToggleSwitch label="Swap"    checked={f.actions.swap}  onChange={v => updateSection('actions', 'swap',  v)} />
+            <ToggleSwitch label="Trade"   checked={f.actions.trade} onChange={v => updateSection('actions', 'trade', v)} />
+            <ToggleSwitch label="Lending" checked={f.actions.lend}  onChange={v => updateSection('actions', 'lend',  v)} />
+            <ToggleSwitch label="Stake"   checked={f.actions.stake} onChange={v => updateSection('actions', 'stake', v)} />
           </div>
 
           {/* App toggles */}

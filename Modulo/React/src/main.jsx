@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App.jsx';
 import DesignSystemPage from './DesignSystemPage.jsx';
+import PasswordGate from './PasswordGate.jsx';
 import { TokenOverrideProvider } from './TokenOverrideContext.jsx';
 import { IconOverrideProvider } from './IconOverrideContext.jsx';
 import { DevModeProvider } from './DevModeContext.jsx';
@@ -80,7 +81,9 @@ function Root() {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
-      <Root />
+      <PasswordGate>
+        <Root />
+      </PasswordGate>
     </ErrorBoundary>
   </StrictMode>
 );

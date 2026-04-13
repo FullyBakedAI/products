@@ -20,7 +20,7 @@ import './ds/ds-page.css';
 
 const NAV_ITEMS = [
   { id: 'prototype', label: 'Prototype' },
-  { id: 'build',     label: 'Build' },
+  { id: 'build',     label: 'Build',          cta: true },
   { id: 'brand',     label: 'Brand' },
   { id: 'studio',    label: 'Components' },
   { id: 'rules',     label: 'Rules' },
@@ -81,15 +81,6 @@ export default function DesignSystemPage() {
         <div className="ds-header-left">
           <img src={logoModulo} alt="Modulo" height="14" style={{ opacity: 0.55 }} />
           <span className="ds-header-title">Product Library</span>
-          <a
-            href="https://fullybaked.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ds-bakekit-badge"
-            title="Built with BakeKit by Fully Baked"
-          >
-            Powered by BakeKit
-          </a>
         </div>
         <div className="ds-header-right">
           <AnimatePresence>
@@ -116,12 +107,17 @@ export default function DesignSystemPage() {
 
       {/* ── Tab bar ── */}
       <nav className="ds-tab-bar">
-        {NAV_ITEMS.map(({ id, label }) => (
+        {NAV_ITEMS.map(({ id, label, cta }) => (
           <Button
             key={id}
-            className={`ds-tab-item${activeSection === id ? ' active' : ''}`}
+            className={`ds-tab-item${activeSection === id ? ' active' : ''}${cta ? ' ds-tab-cta' : ''}`}
             onPress={() => navigateTab(id)}
           >
+            {cta && (
+              <svg width="11" height="11" viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" fill="currentColor" fillOpacity="0.2"/>
+              </svg>
+            )}
             {label}
           </Button>
         ))}

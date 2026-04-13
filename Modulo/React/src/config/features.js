@@ -34,10 +34,10 @@ export const defaultFeatures = {
 
   // ── Actions sheet tabs ────────────────────────────────────────────────
   actions: {
-    swap:     true,
-    trade:    true,
-    lend:     true,
-    deposit:  true,
+    swap:    true,
+    trade:   true,
+    lend:    true,
+    stake:   true,
   },
 
   // ── DeFi features ────────────────────────────────────────────────────

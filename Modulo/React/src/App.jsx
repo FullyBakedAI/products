@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import SplashScreen from './SplashScreen';
-import PasswordGate               from './PasswordGate';
 import { BrandConfigProvider }    from './theme/BrandConfig';
 import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
 import FeaturePanel               from './theme/FeaturePanel';
@@ -176,26 +175,24 @@ export default function App() {
   const handleSplashDone = useCallback(() => setSplashDone(true), []);
 
   return (
-    <PasswordGate>
-      <BrandConfigProvider>
-        <FeatureConfigProvider>
-          <AnimatePresence mode="wait">
-            {isTopFrame && !splashDone ? (
-              <SplashScreen key="splash" onDone={handleSplashDone} />
-            ) : (
-              <motion.div
-                key="app"
-                style={{ position: 'relative', width: '100%', height: '100%' }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.25 }}
-              >
-                <AppInner />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </FeatureConfigProvider>
-      </BrandConfigProvider>
-    </PasswordGate>
+    <BrandConfigProvider>
+      <FeatureConfigProvider>
+        <AnimatePresence mode="wait">
+          {isTopFrame && !splashDone ? (
+            <SplashScreen key="splash" onDone={handleSplashDone} />
+          ) : (
+            <motion.div
+              key="app"
+              style={{ position: 'relative', width: '100%', height: '100%' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+            >
+              <AppInner />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </FeatureConfigProvider>
+    </BrandConfigProvider>
   );
 }

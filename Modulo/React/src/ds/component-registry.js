@@ -6,7 +6,6 @@
  *   'component' — extracted, importable from './components'
  *   'standalone' — standalone file, not in /components/ (e.g. BottomNav, theme contexts)
  *   'primitive'  — React ARIA primitive used directly (react-aria-components)
- *   'pattern'    — design pattern; inline JSX, no single extracted component file
  */
 
 export const COMP_GROUPS = ['Actions', 'Feedback', 'Forms', 'Cards', 'Navigation', 'DeFi'];
@@ -36,18 +35,6 @@ export const COMPONENT_REGISTRY = [
   // ── Feedback ─────────────────────────────────────────────────────────────────
 
   {
-    id: 'toast', group: 'Feedback', name: 'Toast', kind: 'pattern',
-    description: 'Non-blocking status messages that appear at the top of the screen. Three types: success (transaction confirmed), pending (waiting for chain), error (transaction failed or rejected). Powered by the sonner library.',
-    usage: 'Fire after any async operation completes. Auto-dismiss after 3.2 seconds. Stack if multiple fire simultaneously.',
-    notes: 'Copy must be specific — say what happened. Never use for warnings requiring action; use a modal instead.',
-    tokens: ['--bk-bg-elevated', '--bk-border-subtle', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary'],
-    jsx: `import { toast } from 'sonner';
-
-toast.success('Transaction confirmed');
-toast.error('Slippage too high');`,
-  },
-
-  {
     id: 'aria-dialog', group: 'Feedback', name: 'Dialog', kind: 'primitive',
     description: 'React ARIA Dialog from react-aria-components. Provides role="dialog", focus management (Tab cycles within the dialog), and Escape key dismissal. Used inside animated motion.div sheets.',
     usage: 'ActivityScreen transaction detail sheet. ReviewScreen confirmation sheet. Any bottom sheet where focus should be trapped inside.',
@@ -74,27 +61,6 @@ toast.error('Slippage too high');`,
 <BottomSheet isOpen={isOpen} onClose={() => setOpen(false)}>
   <div>Sheet content</div>
 </BottomSheet>`,
-  },
-
-  {
-    id: 'skeleton', group: 'Feedback', name: 'Skeleton loader', kind: 'pattern',
-    description: 'Structure-preserving placeholder shown while data loads. Shimmer animation signals active loading state. Prevents layout shift when content arrives.',
-    usage: 'Use instead of spinners. Match the skeleton shape to the content it stands in for.',
-    notes: 'Escalate to an error state if data has not arrived after 3 seconds. Never show a skeleton indefinitely.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle'],
-    jsx: '',
-  },
-
-  {
-    id: 'badge', group: 'Feedback', name: 'Status badge', kind: 'pattern',
-    description: 'Inline status indicator for transaction and portfolio states. Colour-coded: success green, brand purple for pending, error red. Inline HTML — not an extracted component.',
-    usage: 'Transaction lists, confirmation screens, activity feeds.',
-    notes: 'Text should be a noun (Confirmed, Pending, Failed), not a verb. Never use for navigation or actions.',
-    tokens: ['--bk-success', '--bk-error', '--bk-brand-primary'],
-    jsx: `// Inline pattern — no component import needed
-<span className="status-badge status-badge--success">Confirmed</span>
-<span className="status-badge status-badge--pending">Pending</span>
-<span className="status-badge status-badge--error">Failed</span>`,
   },
 
   // ── Forms ─────────────────────────────────────────────────────────────────────
@@ -185,24 +151,6 @@ toast.error('Slippage too high');`,
 </Switch>`,
   },
 
-  {
-    id: 'pct-pills', group: 'Forms', name: 'Percentage pills', kind: 'pattern',
-    description: 'Preset amount selectors (25%, 50%, 75%, Max). Allow quick entry without using the keyboard. Active pill highlighted in brand colour. Inline pattern — not an extracted component.',
-    usage: 'Below amount inputs in Swap and Send screens only.',
-    notes: 'Max must calculate from available balance in real time. Never hardcode a value.',
-    tokens: ['--bk-brand-primary'],
-    jsx: `// Inline pattern — no component import needed
-{['25%', '50%', '75%', 'Max'].map(label => (
-  <Button
-    key={label}
-    className={\`pct-pill\${active === label ? ' active' : ''}\`}
-    onPress={() => setActive(label)}
-  >
-    {label}
-  </Button>
-))}`,
-  },
-
   // ── Cards ─────────────────────────────────────────────────────────────────────
 
   {
@@ -225,17 +173,6 @@ toast.error('Slippage too high');`,
 
 // Display-only (omit onPress)
 <AssetRow icon={...} name="USDC" amount="921.25 USDC" usdValue="$921.25" />`,
-  },
-
-  {
-    id: 'token-card', group: 'Cards', name: 'Token card', kind: 'pattern',
-    description: 'Portfolio row showing token icon, name, balance, current USD value, and 24h change. The primary data unit of the home screen portfolio list. Inline pattern — not an extracted component.',
-    usage: 'Home screen portfolio list. Tapping drills into token detail.',
-    notes: 'Positive change in success green. Negative in error red. Zero or undefined in muted text.',
-    tokens: ['--bk-bg-base', '--bk-text-primary', '--bk-text-muted', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-border-subtle'],
-    jsx: `<div className="token-row-outer">
-  {/* token row content */}
-</div>`,
   },
 
   {
@@ -349,60 +286,6 @@ const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();`,
   // ── DeFi ─────────────────────────────────────────────────────────────────────
 
   {
-    id: 'tx-row', group: 'DeFi', name: 'Transaction row', kind: 'pattern',
-    description: 'Activity list item showing type (sent/received/swapped), counterparty address, token amounts, and fiat values. Icon and colour encode the transaction direction. Inline pattern — not an extracted component.',
-    usage: 'Activity feed, portfolio detail, transaction history.',
-    notes: 'Timestamp in relative format for <7 days, absolute thereafter. Never truncate or round amounts.',
-    tokens: ['--bk-bg-card', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
-    jsx: '',
-  },
-
-  {
-    id: 'step-progress', group: 'DeFi', name: 'Step progress', kind: 'pattern',
-    description: 'Three-step linear indicator for transaction flows: Review → Approve → Confirm on-chain. Steps render as done (filled), active (brand), or pending (outline). Inline pattern — not an extracted component.',
-    usage: 'Swap confirmation flow. Send confirmation flow.',
-    notes: 'Never skip steps or show all as done simultaneously. Be honest about the current on-chain state.',
-    tokens: ['--bk-success', '--bk-brand-primary', '--bk-border-subtle', '--bk-text-primary'],
-    jsx: '',
-  },
-
-  {
-    id: 'confirm-summary', group: 'DeFi', name: 'Confirmation summary', kind: 'pattern',
-    description: 'Pre-execution summary card showing the complete transaction: token pair, amounts, exchange rate, network fee, and the final CTA. Inline pattern — not an extracted component.',
-    usage: 'Swap confirmation. Send confirmation.',
-    notes: 'Exchange rate must refresh if stale >15s. Show slippage tolerance. Never round amounts on this surface.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-success', '--bk-text-primary', '--bk-text-muted'],
-    jsx: '',
-  },
-
-  {
-    id: 'swap-card', group: 'DeFi', name: 'Swap card', kind: 'pattern',
-    description: 'The pay/receive surface in the swap flow. A pair of FinancialInputCard instances with a direction toggle between them. Inline pattern — not a standalone extracted component.',
-    usage: 'Swap screen only. Always appear as a pair.',
-    notes: 'Amount accepts numeric input only. USD equivalent updates on every keystroke. Use FinancialInputCard for the individual cards.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
-    jsx: '',
-  },
-
-  {
-    id: 'portfolio-metric', group: 'DeFi', name: 'Portfolio metric', kind: 'pattern',
-    description: 'Hero value block for total portfolio value with 24h change. Large numeral hierarchy establishes the dominant visual weight on the Home screen. Inline pattern — not an extracted component.',
-    usage: 'Home screen hero area. Portfolio detail header.',
-    notes: 'Locale-formatted currency. Animated count-up on first load. Change indicator always includes sign (+ or −).',
-    tokens: ['--bk-bg-card', '--bk-success', '--bk-error', '--bk-brand-primary', '--bk-text-primary'],
-    jsx: '',
-  },
-
-  {
-    id: 'wallet-chip', group: 'DeFi', name: 'Wallet address chip', kind: 'pattern',
-    description: 'Compact address display with identicon, truncated address, copy action, and optional network badges. Inline pattern — not an extracted component.',
-    usage: 'Receive screen, transaction detail, address confirmation flows.',
-    notes: 'Always truncate to 0x4a3f…c12d format. Copy to clipboard with confirmation feedback.',
-    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
-    jsx: '',
-  },
-
-  {
     id: 'audit-badge', group: 'DeFi', name: 'AuditBadge', kind: 'component',
     description: 'Protocol audit status pill. Shows audit firm and year inline. Tapping opens a BottomSheet with TVL, full report link, and audit summary.',
     usage: 'Platform/protocol selector rows, asset detail screens, lending platform cards.',
@@ -474,15 +357,9 @@ const { logoSrc, logoAlt, logoWidth, logoHeight } = useBrandConfig();`,
 ];
 
 export const COMP_CONTROLS = {
-  button:          [{ id: 'variant', label: 'Variant',      options: ['primary','secondary','ghost','destructive'], def: 'primary' }],
-  toast:           [{ id: 'type',    label: 'Type',         options: ['success','pending','error'],                 def: 'success' }],
-  badge:           [{ id: 'type',    label: 'Status',       options: ['Confirmed','Pending','Failed'],              def: 'Confirmed' }],
-  input:           [{ id: 'state',   label: 'State',        options: ['default','focused','error','disabled'],      def: 'default' }],
-  'token-card':    [{ id: 'token',   label: 'Token',        options: ['ETH','BTC','USDC','SOL'],                    def: 'ETH' },
-                   { id: 'trend',    label: 'Trend',        options: ['up','down'],                                 def: 'up' }],
-  'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Markets','Activity','Funds'],         def: 'Home' }],
-  'tx-row':        [{ id: 'type',    label: 'Type',         options: ['sent','received','swapped'],                 def: 'sent' }],
-  'step-progress': [{ id: 'step',    label: 'Current step', options: ['Review','Approve','Confirm'],                def: 'Approve' }],
-  'status-card':   [{ id: 'status',  label: 'Status',       options: ['success','pending','error'],                 def: 'success' }],
-  'ltv-bar':       [{ id: 'current', label: 'LTV %',        options: ['20','42','75','90'],                         def: '42' }],
+  button:        [{ id: 'variant', label: 'Variant', options: ['primary','secondary','ghost','destructive'], def: 'primary' }],
+  input:         [{ id: 'state',   label: 'State',   options: ['default','focused','error','disabled'],      def: 'default' }],
+  'bottom-nav':  [{ id: 'active',  label: 'Active',  options: ['Home','Markets','Activity','Funds'],         def: 'Home' }],
+  'status-card': [{ id: 'status',  label: 'Status',  options: ['success','pending','error'],                 def: 'success' }],
+  'ltv-bar':     [{ id: 'current', label: 'LTV %',   options: ['20','42','75','90'],                         def: '42' }],
 };

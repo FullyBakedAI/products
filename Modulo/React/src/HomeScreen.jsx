@@ -10,6 +10,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+import { createChart, AreaSeries } from 'lightweight-charts';
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { motion as m, tap, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
@@ -70,7 +71,6 @@ import { TransactionPath } from './components/TransactionPath';
 import { BottomSheet } from './components/BottomSheet';
 import { CURRENT_AUTOPILOT_ACTION } from './config/autopilot-activity';
 import iconBrandBadge    from './assets/icon-modulo-badge.svg';
-import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
 import iconSettings    from './assets/icon-settings.svg';
 import iconGainArrow   from './assets/icon-gain-arrow.svg';
@@ -84,7 +84,83 @@ import tokenUsdt from './assets/token-usdt.svg';
 
 const TIME_PERIODS = ['1D', '1W', '1M', '1Y', 'ALL'];
 
-// Chart uses the original chart-line.svg for all periods (same visual style)
+// ─── Portfolio chart (lightweight-charts — matches AssetScreen style) ──────────
+
+function generatePortfolioData(period) {
+  const now = Math.floor(Date.now() / 1000);
+  const configs = {
+    '1D':  { points: 48, step: 1800,    base: 23000, range: 800  },
+    '1W':  { points: 84, step: 7200,    base: 22000, range: 2000 },
+    '1M':  { points: 60, step: 43200,   base: 20000, range: 4000 },
+    '1Y':  { points: 52, step: 604800,  base: 16000, range: 8000 },
+    'ALL': { points: 60, step: 2592000, base: 10000, range: 14000 },
+  };
+  const { points, step, base, range } = configs[period] || configs['1D'];
+  let value = base;
+  return Array.from({ length: points + 1 }, (_, i) => {
+    const time = now - (points - i) * step;
+    const drift = (base + range * 0.7 - value) * 0.05;
+    const noise = (Math.random() - 0.45) * range * 0.06;
+    value = Math.max(base * 0.85, value + drift + noise);
+    return { time, value: parseFloat(value.toFixed(2)) };
+  });
+}
+
+function PortfolioChart({ period }) {
+  const containerRef = useRef(null);
+  const chartRef     = useRef(null);
+  const seriesRef    = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const chart = createChart(el, {
+      width:  el.clientWidth,
+      height: el.clientHeight,
+      layout: {
+        background: { type: 'solid', color: 'transparent' },
+        textColor:  'rgba(0,0,0,0)',
+        fontSize:   10,
+      },
+      grid:            { vertLines: { visible: false }, horzLines: { visible: false } },
+      crosshair:       { mode: 0 },  // no crosshair — decorative background chart
+      rightPriceScale: { visible: false },
+      timeScale:       { visible: false },
+      handleScroll:    false,
+      handleScale:     false,
+    });
+
+    const series = chart.addSeries(AreaSeries, {
+      lineColor:                      '#584BEB',
+      topColor:                       'rgba(88,75,235,0.28)',
+      bottomColor:                    'rgba(0,0,0,0)',
+      lineWidth:                      2,
+      priceLineVisible:               false,
+      lastValueVisible:               false,
+      crosshairMarkerVisible:         false,
+    });
+
+    series.setData(generatePortfolioData(period));
+    chart.timeScale().fitContent();
+
+    chartRef.current  = chart;
+    seriesRef.current = series;
+
+    const ro = new ResizeObserver(() => {
+      chart.applyOptions({ width: el.clientWidth, height: el.clientHeight });
+    });
+    ro.observe(el);
+    return () => { ro.disconnect(); chart.remove(); chartRef.current = null; };
+  }, []); // eslint-disable-line
+
+  useEffect(() => {
+    if (!seriesRef.current || !chartRef.current) return;
+    seriesRef.current.setData(generatePortfolioData(period));
+    chartRef.current.timeScale().fitContent();
+  }, [period]);
+
+  return <div ref={containerRef} className="portfolio-chart-canvas" aria-hidden="true" />;
+}
 
 // Chain badge: colour-coded dot (bottom-right of token icon)
 const CHAIN_BADGE = {
@@ -427,7 +503,7 @@ export default function HomeScreen() {
           </div>
 
           {f.notifications && (
-          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(pre => { setNotifOpen(true); return pre; })}>
+          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(true)}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
             <span className="notif-dot" aria-hidden="true" />
           </Button>
@@ -448,8 +524,8 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
         >
-          <div className="portfolio-chart" role="img" aria-label="Portfolio performance chart">
-            <img src={chartLine} alt="" />
+          <div className="portfolio-chart" aria-hidden="true">
+            <PortfolioChart period={activePeriod} />
           </div>
 
           <div className="portfolio-header">
@@ -553,7 +629,7 @@ export default function HomeScreen() {
         {f.home.smartNudges && <SmartNudges />}
 
         {/* Sprint 005: Autopilot transparency card */}
-        {f.home.autopilotCard && autopilotActive && (
+        {f.home.autopilotCard && f.nav.autopilot && autopilotActive && (
           <motion.div
             className="autopilot-home-card"
             initial={{ opacity: 0, y: 8 }}
