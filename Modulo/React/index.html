@@ -35,6 +35,7 @@
         }
         var PW_HASH = sha256('B4k3d-M0dul0!');
         var KEY = 'modulo_auth';
+        var REACT_KEY = 'modulo-access';
         if (sessionStorage.getItem(KEY) === PW_HASH) return;
         document.documentElement.style.cssText = 'background:#0D0E17;margin:0;padding:0';
         var overlay = document.createElement('div');
@@ -56,6 +57,7 @@
           var val = document.getElementById('pw-input').value;
           if (sha256(val) === PW_HASH) {
             sessionStorage.setItem(KEY, PW_HASH);
+            localStorage.setItem(REACT_KEY, '1');
             overlay.remove();
           } else {
             var err = document.getElementById('pw-error');
@@ -68,7 +70,8 @@
         document.getElementById('pw-btn').addEventListener('click', attempt);
         document.getElementById('pw-input').addEventListener('keydown', function(e) {
           if (e.key === 'Enter') { attempt(); return; }
-          document.getElementById('pw-error').style.display = 'none';
+          var errEl = document.getElementById('pw-error');
+          if (errEl) errEl.style.display = 'none';
         });
       })();
     </script>
