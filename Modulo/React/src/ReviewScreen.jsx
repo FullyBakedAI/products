@@ -87,9 +87,17 @@ export default function ReviewScreen() {
       {/* drag-handle from shared.css */}
       <div className="drag-handle"><div className="drag-handle-pill" /></div>
 
-      <h1 className="swap-title" style={{ textAlign: 'center', padding: '2px 20px 10px' }}>
-        Review {capitalize(action)}
-      </h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '2px 20px 10px' }}>
+        <div aria-hidden="true" style={{ width: 32 }} />
+        <h1 className="swap-title" style={{ textAlign: 'center', flex: 1 }}>
+          Review {capitalize(action)}
+        </h1>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate(-1)}>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </Button>
+      </div>
 
       {/* Summary — card chrome for visual weight on confirmation step */}
       <div className="swap-cards" style={{ paddingBottom: 8 }}>

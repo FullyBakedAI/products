@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, animate } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
-const IconChevronLeft = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+const IconX = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 import { useUndoToast } from './UndoToastContext';
@@ -86,11 +86,12 @@ export default function OptimiseScreen() {
       animate={{ opacity: 1, y: 0, transition: m.modal.enter }}
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
-      {/* Back button — full-width tap target */}
-      <Button className="optimise-back-btn" aria-label="Go back" onPress={() => navigate('/')}>
-        <IconChevronLeft size={18} />
-        Back
-      </Button>
+      <div className="optimise-header">
+        <span className="optimise-title">Optimise</span>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+          <IconX />
+        </Button>
+      </div>
 
       <div className="scroll-content">
         {/* Hero */}

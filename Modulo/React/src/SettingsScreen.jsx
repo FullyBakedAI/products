@@ -459,11 +459,12 @@ export default function SettingsScreen() {
           >
             {/* Header */}
             <div className="settings-header">
-              <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-                <IconChevronLeft size={20} />
-              </Button>
               <span className="settings-title">Settings</span>
-              <div aria-hidden="true" style={{ width: 20 }} />
+              <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </Button>
             </div>
 
             <div className="scroll-content">

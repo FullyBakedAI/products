@@ -11,9 +11,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { Button, Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
 
-const IconChevronLeft = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+const IconX = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 const IconTrendingUp = () => (
@@ -75,11 +75,10 @@ export default function SimulateScreen() {
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
       <header className="simulate-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <IconChevronLeft />
-        </Button>
         <h1 className="simulate-title">What if?</h1>
-        <div aria-hidden="true" style={{ width: 20 }} />
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+          <IconX />
+        </Button>
       </header>
 
       <Tabs

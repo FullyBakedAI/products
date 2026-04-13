@@ -1,11 +1,11 @@
 /**
  * SwapSelectScreen — select token for swap
  * Route: /swap/select/:side (side = 'pay' | 'receive')
- * Matches HTML prototype at ../Prototype/swap-select-screen.html
- * All colours via --bk-* tokens. All data mocked.
+ * Search field auto-focuses on mount and filters by symbol/name.
  */
 
-import { Button } from 'react-aria-components';
+import { useState, useRef, useEffect } from 'react';
+import { Button, TextField, Input } from 'react-aria-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSwap } from './SwapContext';
 import { useActions } from './ActionsContext';
@@ -21,6 +21,21 @@ export default function SwapSelectScreen() {
   const { selectToken, payKey, receiveKey } = useSwap();
   const { openActions } = useActions();
   const { brandName } = useBrandConfig();
+  const [query, setQuery] = useState('');
+  const inputRef = useRef(null);
+
+  // Auto-focus the search field on mount
+  useEffect(() => {
+    const t = setTimeout(() => inputRef.current?.focus(), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  const q = query.trim().toLowerCase();
+  const filteredKeys = TOKEN_ORDER.filter(key => {
+    if (!q) return true;
+    const t = SWAP_TOKENS[key];
+    return t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q);
+  });
 
   function handleSelect(symbol) {
     selectToken(side, symbol);
@@ -44,38 +59,57 @@ export default function SwapSelectScreen() {
         </Button>
       </div>
 
-      <div className="search-field select-search" role="search" aria-label="Search tokens">
-        <img src={iconSearch} alt="" />
-        <span>Token name or address</span>
-      </div>
+      <TextField
+        className="select-search"
+        value={query}
+        onChange={setQuery}
+        aria-label="Search tokens"
+      >
+        <div className="select-search-wrap">
+          <img src={iconSearch} alt="" aria-hidden="true" className="select-search-icon" />
+          <Input
+            ref={inputRef}
+            className="select-search-input"
+            placeholder="Token name or address"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck="false"
+          />
+        </div>
+      </TextField>
 
       <div className="select-token-list" role="list" aria-label="Available tokens">
-        {TOKEN_ORDER.map((key) => {
-          const t       = SWAP_TOKENS[key];
-          const isActive = key === (side === 'pay' ? payKey : receiveKey);
-          return (
-            <Button
-              key={key}
-              className={`select-token-row${isActive ? ' selected' : ''}`}
-              role="listitem"
-              aria-label={`${t.symbol} — ${t.balanceLabel}`}
-              aria-pressed={isActive}
-              onPress={() => handleSelect(key)}
-            >
-              <img className="select-token-icon" src={t.icon} alt="" />
-              <div className="select-token-info">
-                <div className="select-token-name">{t.symbol}</div>
-                <div className="select-token-balance">{t.balanceLabel}</div>
-              </div>
-              {isActive && (
-                <svg className="select-token-check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                  <circle cx="9" cy="9" r="8.5" stroke="var(--bk-brand-primary)" />
-                  <path d="M5 9L7.5 11.5L13 6" stroke="var(--bk-brand-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </Button>
-          );
-        })}
+        {filteredKeys.length === 0 ? (
+          <div className="select-no-results">No tokens match "{query}"</div>
+        ) : (
+          filteredKeys.map((key) => {
+            const t = SWAP_TOKENS[key];
+            const isActive = key === (side === 'pay' ? payKey : receiveKey);
+            return (
+              <Button
+                key={key}
+                className={`select-token-row${isActive ? ' selected' : ''}`}
+                role="listitem"
+                aria-label={`${t.symbol} — ${t.balanceLabel}`}
+                aria-pressed={isActive}
+                onPress={() => handleSelect(key)}
+              >
+                <img className="select-token-icon" src={t.icon} alt="" />
+                <div className="select-token-info">
+                  <div className="select-token-name">{t.symbol}</div>
+                  <div className="select-token-balance">{t.balanceLabel}</div>
+                </div>
+                {isActive && (
+                  <svg className="select-token-check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <circle cx="9" cy="9" r="8.5" stroke="var(--bk-brand-primary)" />
+                    <path d="M5 9L7.5 11.5L13 6" stroke="var(--bk-brand-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </Button>
+            );
+          })
+        )}
       </div>
     </main>
   );

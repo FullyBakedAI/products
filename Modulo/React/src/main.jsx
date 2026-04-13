@@ -31,12 +31,25 @@ class ErrorBoundary extends Component {
 // Top-level router split — DS page lives outside HashRouter so it can own
 // its own router context for the phone preview. Everything else uses HashRouter.
 function Root() {
+  // On mobile devices, skip the DS page entirely — just show the prototype app.
+  const isMobile = window.innerWidth < 768;
+
   // Restore last route on PWA launch (start_url always resets to /modulo/).
   // On browser refresh the hash is already in the URL — this is a no-op.
   const [hash, setHash] = useState(() => {
     const current = window.location.hash;
-    // Only redirect to DS when we're the top-level page, not inside an iframe
     const isTopFrame = window.self === window.top;
+
+    if (isMobile) {
+      // On mobile: always serve the app. Redirect away from /ds if needed.
+      if (!current || current === '#' || current === '#/' || current.startsWith('#/ds')) {
+        window.location.hash = '/';
+        return '#/';
+      }
+      return current;
+    }
+
+    // On desktop: default to DS page on first visit
     if (isTopFrame && (!current || current === '#' || current === '#/')) {
       window.location.hash = '/ds';
       return '#/ds';
@@ -56,7 +69,7 @@ function Root() {
     return () => window.removeEventListener('hashchange', handler);
   }, []);
 
-  const isDS = hash === '#/ds' || hash.startsWith('#/ds/');
+  const isDS = !isMobile && (hash === '#/ds' || hash.startsWith('#/ds/'));
 
   return (
     <BrandProvider theme={moduloTheme}>
