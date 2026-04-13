@@ -6,7 +6,7 @@
     <title>Modulo</title>
 
     <!-- PWA: fullscreen when added to home screen -->
-    <link rel="manifest" href="/modulo/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -22,6 +22,59 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Password gate — fires before React loads
+      (function() {
+        var HASH = '5a8f2e3d9c1b4f6a7e0d2c8b3a5f9e1d4c7b2a6f8e0d3c5b9a4f7e2d1c6b8a3';
+        function sha256(str) {
+          // Simple FNV-inspired hash for obfuscation (not crypto — just a deterrent)
+          var h = 0x811c9dc5;
+          for (var i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = (h * 0x01000193) >>> 0;
+          }
+          return h.toString(16);
+        }
+        var PW_HASH = sha256('B4k3d-M0dul0!');
+        var KEY = 'modulo_auth';
+        if (sessionStorage.getItem(KEY) === PW_HASH) return;
+        document.documentElement.style.cssText = 'background:#0D0E17;margin:0;padding:0';
+        var overlay = document.createElement('div');
+        overlay.id = 'pw-gate';
+        overlay.style.cssText = 'position:fixed;inset:0;background:#0D0E17;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,system-ui,sans-serif';
+        overlay.innerHTML = [
+          '<div style="width:100%;max-width:360px;padding:0 24px">',
+          '<div style="margin-bottom:32px">',
+          '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#1E2030"/><circle cx="16" cy="16" r="6" fill="#6E6AF0"/></svg>',
+          '</div>',
+          '<h1 style="color:#F2F1F5;font-size:20px;font-weight:600;margin:0 0 8px">Modulo</h1>',
+          '<p style="color:#6B6A73;font-size:14px;margin:0 0 24px">Enter password to continue</p>',
+          '<input id="pw-input" type="password" placeholder="Password" autofocus style="width:100%;box-sizing:border-box;background:#1E2030;border:1px solid #2A2B3D;border-radius:10px;color:#F2F1F5;font-size:15px;padding:13px 16px;outline:none;margin-bottom:12px"/>',
+          '<p id="pw-error" style="color:#F04348;font-size:13px;margin:0 0 12px;min-height:18px;display:none">Incorrect password</p>',
+          '<button id="pw-btn" style="width:100%;background:#6E6AF0;border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:500;padding:14px;cursor:pointer">Continue</button>',
+          '</div>'
+        ].join('');
+        document.body.appendChild(overlay);
+        function attempt() {
+          var val = document.getElementById('pw-input').value;
+          if (sha256(val) === PW_HASH) {
+            sessionStorage.setItem(KEY, PW_HASH);
+            overlay.remove();
+          } else {
+            var err = document.getElementById('pw-error');
+            err.style.display = 'block';
+            err.textContent = 'Incorrect password';
+            document.getElementById('pw-input').value = '';
+            document.getElementById('pw-input').focus();
+          }
+        }
+        document.getElementById('pw-btn').addEventListener('click', attempt);
+        document.getElementById('pw-input').addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') attempt();
+          document.getElementById('pw-error').style.display = 'none';
+        });
+      })();
+    </script>
     <script>
       window.addEventListener('error', function(e) {
         document.body.innerHTML = '<div style="position:fixed;inset:0;background:#0D0E17;color:#F04348;padding:32px;font:14px/1.6 monospace;z-index:9999;overflow:auto"><b>JS Error:</b><br>' + (e.message || e) + '<br><br>' + (e.filename || '') + ':' + (e.lineno || '') + '<br><br><pre>' + (e.error && e.error.stack ? e.error.stack : '') + '</pre></div>';
