@@ -63,7 +63,7 @@ function claudeProxyPlugin() {
 }
 
 export default defineConfig({
-  base: '/modulo/',
+  base: '/',
   build: {
     outDir: '../Prototype/vercel',
     emptyOutDir: true,
