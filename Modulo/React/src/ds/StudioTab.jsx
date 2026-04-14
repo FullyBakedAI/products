@@ -4,10 +4,9 @@
  * Sidebar: theme presets, 8 key token tweaks, component gallery.
  * Component gallery: click a card → overlay sheet with demo + spec.
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
-import PhonePreview, { PREVIEW_SCREENS } from './PhonePreview';
 import { COMPONENT_REGISTRY, COMP_CONTROLS, COMP_GROUPS } from './component-registry';
 import { TOKEN_DEFINITIONS, BUILTIN_THEMES, useTokenOverride } from '../TokenOverrideContext';
 import { useIconOverride } from '../IconOverrideContext';
@@ -879,6 +878,8 @@ function SidebarTokenList() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Sidebar: component gallery
 // ─────────────────────────────────────────────────────────────────────────────
+// Sidebar: component gallery
+// ─────────────────────────────────────────────────────────────────────────────
 
 const GROUP_COLORS = {
   Actions: '#584BEB',
@@ -889,40 +890,189 @@ const GROUP_COLORS = {
   DeFi: '#F04348',
 };
 
-function SidebarComponentGallery({ onSelect }) {
+// ── ComponentStack — full-size stacked component list ─────────────────────────
+
+function ComponentStack({ onSelect, selectedId }) {
   const { getToken } = useTokenOverride();
-  const brand = getToken('--bk-brand-primary');
+  const brand  = getToken('--bk-brand-primary');
   const border = getToken('--bk-border-subtle');
-  const textP = getToken('--bk-text-primary');
-  const textM = getToken('--bk-text-muted');
+  const textP  = getToken('--bk-text-primary');
+  const textM  = getToken('--bk-text-muted');
 
   return (
-    <div className="ds-comp-gallery">
-      <div style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 10, color: textM }}>
-          {COMPONENT_REGISTRY.length} components
-        </span>
-      </div>
+    <div className="ds-comp-stack">
       {COMP_GROUPS.map(group => {
         const items = COMPONENT_REGISTRY.filter(c => c.group === group);
-        const dotColor = GROUP_COLORS[group] || brand;
+        const groupColor = GROUP_COLORS[group] || brand;
         return (
-          <div key={group} className="ds-comp-gallery-group">
-            <div className="ds-comp-gallery-group-label">{group}</div>
-            {items.map(comp => (
-              <button
-                key={comp.id}
-                className="ds-comp-card"
-                onClick={() => onSelect(comp.id)}
-              >
-                <div className="ds-comp-card-dot" style={{ background: dotColor }} />
-                <span className="ds-comp-card-name" style={{ color: textP }}>{comp.name}</span>
-              </button>
-            ))}
+          <div key={group} className="ds-comp-stack-group">
+            <div className="ds-comp-stack-group-label" style={{ color: groupColor }}>
+              {group}
+            </div>
+            <div className="ds-comp-stack-items-grid">
+            {items.map(comp => {
+              const defaultCtrls = (COMP_CONTROLS[comp.id] || []).reduce(
+                (acc, c) => ({ ...acc, [c.id]: c.def }), {}
+              );
+              const isSelected = selectedId === comp.id;
+              return (
+                <button
+                  key={comp.id}
+                  className={`ds-comp-stack-item${isSelected ? ' is-selected' : ''}`}
+                  onClick={() => onSelect(isSelected ? null : comp.id)}
+                  style={{ borderColor: isSelected ? brand : border }}
+                >
+                  <div className="ds-comp-stack-header">
+                    <span className="ds-comp-stack-name" style={{ color: textP }}>{comp.name}</span>
+                    <span className="ds-comp-stack-action" style={{ color: isSelected ? brand : textM }}>
+                      {isSelected ? 'Close spec ×' : 'View spec →'}
+                    </span>
+                  </div>
+                  <div className="ds-comp-stack-demo">
+                    <ComponentDemoStage comp={comp} controls={defaultCtrls} />
+                  </div>
+                </button>
+              );
+            })}
+            </div>
           </div>
         );
       })}
     </div>
+  );
+}
+
+// ── ComponentSpecPanel — right-side spec panel (replaces overlay) ──────────────
+
+function ComponentSpecPanel({ comp, onClose }) {
+  const { getToken } = useTokenOverride();
+  const brand  = getToken('--bk-brand-primary');
+  const border = getToken('--bk-border-subtle');
+  const textP  = getToken('--bk-text-primary');
+  const textM  = getToken('--bk-text-muted');
+
+  const defaultControls = (COMP_CONTROLS[comp.id] || []).reduce(
+    (acc, c) => ({ ...acc, [c.id]: c.def }), {}
+  );
+  const [ctrlValues, setCtrlValues] = useState(defaultControls);
+  const [copiedJsx, setCopiedJsx] = useState(false);
+
+  function copyJsx() {
+    navigator.clipboard.writeText(comp.jsx);
+    setCopiedJsx(true);
+    setTimeout(() => setCopiedJsx(false), 1600);
+  }
+
+  const controls = COMP_CONTROLS[comp.id] || [];
+
+  return (
+    <motion.div
+      className="ds-spec-panel-content"
+      key={comp.id}
+      initial={{ opacity: 0, x: 18 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 18 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+    >
+      {/* Header */}
+      <div className="ds-spec-panel-header">
+        <div>
+          <div className="ds-spec-panel-name" style={{ color: textP }}>{comp.name}</div>
+          <div className="ds-spec-panel-group" style={{ color: GROUP_COLORS[comp.group] || brand }}>
+            {comp.group}
+          </div>
+        </div>
+        <button className="ds-spec-panel-close" onClick={onClose} aria-label="Close spec">×</button>
+      </div>
+
+      {/* Live demo */}
+      <div className="ds-spec-panel-demo">
+        <ComponentDemoStage comp={comp} controls={ctrlValues} />
+      </div>
+
+      {/* Controls */}
+      {controls.length > 0 && (
+        <div className="ds-spec-panel-controls">
+          {controls.map(ctrl => (
+            <div key={ctrl.id} className="ds-comp-control-row">
+              <span className="ds-comp-control-label" style={{ color: textM }}>{ctrl.label}</span>
+              <div className="ds-comp-control-options">
+                {ctrl.options.map(opt => (
+                  <button
+                    key={opt}
+                    className="ds-comp-control-opt"
+                    onClick={() => setCtrlValues(prev => ({ ...prev, [ctrl.id]: opt }))}
+                    style={{
+                      borderColor: ctrlValues[ctrl.id] === opt ? brand : border,
+                      background:  ctrlValues[ctrl.id] === opt ? `${brand}18` : 'transparent',
+                      color:       ctrlValues[ctrl.id] === opt ? brand : textM,
+                    }}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Spec fields */}
+      <div className="ds-spec-panel-info">
+        {[
+          { label: 'Description', text: comp.description },
+          { label: 'Usage',       text: comp.usage },
+          { label: 'Notes',       text: comp.notes },
+        ].map(({ label, text }) => text ? (
+          <div key={label} className="ds-comp-info-field">
+            <span className="ds-comp-info-label" style={{ color: textM }}>{label}</span>
+            <p className="ds-comp-info-text" style={{ color: textP }}>{text}</p>
+          </div>
+        ) : null)}
+      </div>
+
+      {/* Tokens used */}
+      {comp.tokens && comp.tokens.length > 0 && (
+        <div className="ds-spec-panel-tokens">
+          <div className="ds-comp-info-label" style={{ color: textM, marginBottom: 8 }}>Tokens used</div>
+          <div className="ds-comp-overlay-tokens">
+            {comp.tokens.map(key => {
+              const val = getToken(key);
+              const isColor = /^#|^rgb/.test(val);
+              return (
+                <button
+                  key={key}
+                  className="ds-comp-token-btn"
+                  onClick={() => navigator.clipboard.writeText(key)}
+                  style={{ borderColor: border, color: textP }}
+                  title={`${key}: ${val}`}
+                >
+                  {isColor && <span className="ds-comp-token-dot" style={{ background: val }} />}
+                  <span>{key.replace('--bk-', '')}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* JSX snippet */}
+      {comp.jsx && (
+        <div className="ds-spec-panel-jsx">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span className="ds-comp-info-label" style={{ color: textM }}>JSX</span>
+            <button
+              className="ds-comp-copy-jsx"
+              onClick={copyJsx}
+              style={{ color: copiedJsx ? 'var(--bk-success)' : brand }}
+            >
+              {copiedJsx ? '✓ Copied' : 'Copy'}
+            </button>
+          </div>
+          <pre className="ds-comp-jsx-pre">{comp.jsx}</pre>
+        </div>
+      )}
+    </motion.div>
   );
 }
 
@@ -932,8 +1082,6 @@ function SidebarComponentGallery({ onSelect }) {
 
 export default function StudioTab() {
   const { getToken } = useTokenOverride();
-  const [activeScreen, setActiveScreen] = useState('/');
-  const [phoneTheme,   setPhoneTheme]   = useState('dark');
   const [selectedComp, setSelectedComp] = useState(null);
 
   const brand  = getToken('--bk-brand-primary');
@@ -947,11 +1095,7 @@ export default function StudioTab() {
 
   function downloadInventory() {
     const inventory = COMPONENT_REGISTRY.map(c => ({
-      id: c.id,
-      name: c.name,
-      group: c.group,
-      description: c.description,
-      tokens: c.tokens,
+      id: c.id, name: c.name, group: c.group, description: c.description, tokens: c.tokens,
     }));
     const md = [
       '# Modulo Component Inventory',
@@ -986,9 +1130,8 @@ export default function StudioTab() {
       <div className="ds-studio-leave-behind">
         <div className="ds-slb-content">
           <p className="ds-slb-text">
-            This design system is your deliverable. Every component here is white-label ready,
-            accessible (WCAG 2.1 AA), and wired to the BakeKit token system.
-            Fork it, theme it, ship it.
+            This design system is your deliverable. Every component is white-label ready,
+            accessible (WCAG 2.1 AA), and wired to BakeKit tokens.
           </p>
           <button className="ds-slb-download" onClick={downloadInventory} type="button">
             Download component inventory ↓
@@ -996,89 +1139,46 @@ export default function StudioTab() {
         </div>
       </div>
 
-      {/* ── Main area (phone + sidebar) ── */}
-      <div className="ds-studio-main">
+      {/* ── Body: stacked list + spec panel ── */}
+      <div className="ds-studio-body">
 
-      {/* ── Phone area ── */}
-      <div className="ds-studio-phone-area">
-
-        {/* Controls row: screen tabs + dark/light toggle */}
-        <div className="ds-studio-controls">
-          <div className="ds-screen-tabs">
-            {PREVIEW_SCREENS.map(s => (
-              <button
-                key={s.path}
-                className={`ds-screen-tab${activeScreen === s.path ? ' active' : ''}`}
-                onClick={() => setActiveScreen(s.path)}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="ds-phone-theme-toggle">
-            <button
-              className={`ds-phone-theme-btn${phoneTheme === 'dark' ? ' active' : ''}`}
-              onClick={() => setPhoneTheme('dark')}
-              title="Dark theme"
-              style={{ color: phoneTheme === 'dark' ? brand : textM }}
-            >
-              <LucideIcons.Moon size={12} strokeWidth={2} />
-            </button>
-            <button
-              className={`ds-phone-theme-btn${phoneTheme === 'light' ? ' active' : ''}`}
-              onClick={() => setPhoneTheme('light')}
-              title="Light theme"
-              style={{ color: phoneTheme === 'light' ? brand : textM }}
-            >
-              <LucideIcons.Sun size={12} strokeWidth={2} />
-            </button>
-          </div>
+        {/* Left: scrollable component stack */}
+        <div className="ds-comp-list">
+          <ComponentStack onSelect={handleSelectComp} selectedId={selectedComp} />
         </div>
 
-        {/* Phone frame */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeScreen}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.18 } }}
-            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-          >
-            <PhonePreview screen={activeScreen} theme={phoneTheme} />
-          </motion.div>
-        </AnimatePresence>
+        {/* Right: spec panel (always visible, content swaps) */}
+        <aside className="ds-studio-right-panel">
+          <AnimatePresence mode="wait">
+            {selectedCompDef ? (
+              <ComponentSpecPanel
+                key={selectedCompDef.id}
+                comp={selectedCompDef}
+                onClose={handleCloseComp}
+              />
+            ) : (
+              <motion.div
+                key="default"
+                className="ds-spec-default"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <div className="ds-sidebar-section">
+                  <div className="ds-sidebar-section-title">Themes</div>
+                  <SidebarThemes />
+                </div>
+                <div className="ds-sidebar-section" style={{ borderBottom: 'none' }}>
+                  <div className="ds-sidebar-section-title">Tokens</div>
+                  <SidebarTokenList />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </aside>
 
       </div>
-
-      {/* ── Right sidebar ── */}
-      <aside className="ds-studio-sidebar">
-
-        {/* Theme presets */}
-        <div className="ds-sidebar-section">
-          <div className="ds-sidebar-section-title">Themes</div>
-          <SidebarThemes />
-        </div>
-
-        {/* Token tweaks */}
-        <div className="ds-sidebar-section">
-          <div className="ds-sidebar-section-title">Tokens</div>
-          <SidebarTokenList />
-        </div>
-
-        {/* Component gallery */}
-        <div className="ds-sidebar-section" style={{ flex: 1, borderBottom: 'none' }}>
-          <div className="ds-sidebar-section-title">Components</div>
-          <SidebarComponentGallery onSelect={handleSelectComp} />
-        </div>
-
-      </aside>
-
-      {/* ── Component overlay ── */}
-      {selectedCompDef && (
-        <ComponentOverlay comp={selectedCompDef} onClose={handleCloseComp} />
-      )}
-
-      </div>{/* end ds-studio-main */}
 
     </div>
   );

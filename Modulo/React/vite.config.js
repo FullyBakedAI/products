@@ -63,9 +63,9 @@ function claudeProxyPlugin() {
 }
 
 export default defineConfig({
-  base: '/modulo/',
+  base: '/',
   build: {
-    outDir: '../Prototype/modulo',
+    outDir: 'dist',
     emptyOutDir: true,
   },
   preview: {

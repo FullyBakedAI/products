@@ -620,9 +620,205 @@
   --bk-earn-card-border: rgba(88, 75, 235, 0.15);
 }
 
-/* ── Right sidebar ───────────────────────────────────────────────────── */
+/* ── Studio body: stacked list + spec panel ─────────────────────────── */
+.ds-studio-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Left: scrollable component list */
+.ds-comp-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px 32px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+}
+
+/* Right: always-visible spec / token panel */
+.ds-studio-right-panel {
+  width: 320px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(10, 10, 16, 0.5);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+}
+
+/* ── ComponentStack ──────────────────────────────────────────────────── */
+.ds-comp-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 760px;
+}
+
+.ds-comp-stack-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ds-comp-stack-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.ds-comp-stack-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.ds-comp-stack-item {
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: var(--bk-font);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.ds-comp-stack-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ds-comp-stack-item.is-selected {
+  background: rgba(88, 75, 235, 0.04);
+}
+
+.ds-comp-stack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ds-comp-stack-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ds-comp-stack-action {
+  font-size: 11px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.ds-comp-stack-demo {
+  padding: 24px 24px 20px;
+  display: flex;
+  justify-content: flex-start;
+  pointer-events: none;
+}
+
+/* ── Spec panel content ──────────────────────────────────────────────── */
+.ds-spec-panel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-spec-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.ds-spec-panel-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ds-spec-panel-group {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.ds-spec-panel-close {
+  background: none;
+  border: none;
+  color: var(--bk-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 0 0 8px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ds-spec-panel-close:hover { color: var(--bk-text-primary); }
+
+.ds-spec-panel-demo {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 80px;
+  flex-shrink: 0;
+}
+
+.ds-spec-panel-controls {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ds-spec-panel-info {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ds-spec-panel-tokens {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ds-spec-panel-jsx {
+  padding: 14px 16px;
+}
+
+.ds-spec-default {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Legacy sidebar (kept for default state) ─────────────────────────── */
+/* ── Component gallery area (main content, legacy) ───────────────────── */
+.ds-studio-comp-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 28px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+}
+
 .ds-studio-sidebar {
-  width: 288px;
+  width: 256px;
   flex-shrink: 0;
   border-left: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
@@ -789,7 +985,7 @@
 .ds-comp-gallery {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 24px;
 }
 
 .ds-comp-gallery-count {
@@ -809,40 +1005,69 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.2);
-  padding: 6px 0 4px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 10px;
+}
+
+/* Grid of component cards inside each group */
+.ds-comp-gallery-group > .ds-comp-gallery-group-label ~ * {
+  display: contents;
+}
+.ds-comp-gallery-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px;
+  align-items: start;
+}
+.ds-comp-gallery-group > .ds-comp-gallery-group-label {
+  grid-column: 1 / -1;
 }
 
 .ds-comp-card {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid transparent;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   cursor: pointer;
-  background: none;
+  background: rgba(255, 255, 255, 0.02);
   font-family: var(--bk-font);
   text-align: left;
   width: 100%;
-  transition: background 0.12s, border-color 0.12s;
+  overflow: hidden;
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
 }
 .ds-comp-card:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--bk-border-subtle);
+  transform: translateY(-1px);
+}
+
+.ds-comp-card-preview {
+  padding: 14px 14px 12px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .ds-comp-card-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .ds-comp-card-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--bk-text-primary);
-  flex: 1;
+  padding: 8px 12px;
+  display: block;
 }
 
 .ds-comp-card-group {
@@ -1656,7 +1881,8 @@ pre.ds-comp-overlay-pre {
 @media (max-width: 900px) {
   .ds-studio-sidebar { display: none; }
   .ds-studio-layout { height: auto; flex-direction: column; }
-  .ds-studio-phone-area { min-height: 600px; }
+  .ds-studio-comp-area { padding: 20px 16px; }
+  .ds-comp-gallery-group { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .ds-editorial-block { padding: 40px 24px; }
   .ds-rules-page { padding: 40px 24px 60px; }
   .ds-agent-page { padding: 40px 24px 60px; }

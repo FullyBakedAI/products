@@ -61,29 +61,9 @@ export default function ActionsScreen({ variant }) {
   return (
     <div className={isPanel ? 'actions-panel-root' : 'actions-overlay'} role="dialog" aria-modal="true" aria-label="Actions">
 
-      {/* Dark backdrop — tap to dismiss (mobile overlay only) */}
-      {!isPanel && (
-        <Button
-          className="actions-backdrop"
-          aria-label="Close actions"
-          onPress={closeActions}
-        />
-      )}
+      {/* Sheet — full screen on mobile, static panel on desktop */}
+      <motion.div className="actions-sheet">
 
-      {/* Sheet with drag-to-dismiss (mobile) or static panel (desktop) */}
-      <motion.div
-        className="actions-sheet"
-        drag={isPanel ? false : 'y'}
-        dragConstraints={isPanel ? undefined : { top: 0 }}
-        dragElastic={isPanel ? undefined : { top: 0, bottom: 0.3 }}
-        onDragEnd={isPanel ? undefined : ((_, info) => { if (info.offset.y > 80) closeActions(); })}
-      >
-        {/* Drag handle (mobile only) */}
-        {!isPanel && (
-          <div className="drag-handle" aria-hidden="true">
-            <div className="drag-handle-pill" />
-          </div>
-        )}
 
         {/* Header row — tabs + close button */}
         <div className="actions-header-row">

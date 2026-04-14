@@ -5,9 +5,11 @@
 import { useState } from 'react';
 import { useFeatures } from '../theme/FeatureConfig';
 import { defaultFeatures } from '../config/features';
-import mvpJson       from '../../client-config/presets/mvp.json';
-import phase2Json    from '../../client-config/presets/phase-2.json';
-import fullJson      from '../../client-config/presets/full-product.json';
+
+const BC = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('modulo-updates') : null;
+import mvpJson       from '../config/presets/mvp.json';
+import phase2Json    from '../config/presets/phase-2.json';
+import fullJson      from '../config/presets/full-product.json';
 import './BuildTab.css';
 
 // ── Preset definitions ────────────────────────────────────────────────────────
@@ -101,19 +103,25 @@ export default function BuildTab() {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
+  function persistFeatures(next) {
+    setFeatures(next);
+    BC?.postMessage({ type: 'SET_FEATURES', features: next });
+    try { localStorage.setItem('modulo_build_features', JSON.stringify(next)); } catch {}
+  }
+
   function updateSection(section, key, value) {
     setActivePresetId(null);
-    setFeatures({ ...f, [section]: { ...f[section], [key]: value } });
+    persistFeatures({ ...f, [section]: { ...f[section], [key]: value } });
   }
 
   function updateTop(key, value) {
     setActivePresetId(null);
-    setFeatures({ ...f, [key]: value });
+    persistFeatures({ ...f, [key]: value });
   }
 
   function applyPreset(preset) {
     setActivePresetId(preset.id);
-    setFeatures(preset.json.features ?? null);
+    persistFeatures(preset.json.features ?? null);
   }
 
   function downloadJson(data, filename) {

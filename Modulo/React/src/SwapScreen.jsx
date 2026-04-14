@@ -68,10 +68,9 @@ function PayCard({ payAmount, payUSD, payToken }) {
       <div className="card-middle">
         <div
           className="swap-amount"
-          role="textbox"
-          aria-readonly="true"
-          aria-label="Pay amount"
+          role="status"
           aria-live="polite"
+          aria-label="Pay amount"
         >
           <span className="amount-text">{payAmount || '0'}</span>
           <span className="amount-cursor" aria-hidden="true" />
@@ -93,10 +92,9 @@ function ReceiveCard({ receiveAmount, receiveToken, rateLabel, flash }) {
       <div className="card-middle">
         <div
           className={`swap-amount${receiveToken ? '' : ' dimmed'}${flash ? ' receive-flash' : ''}`}
-          role="textbox"
-          aria-readonly="true"
-          aria-label="Receive amount"
+          role="status"
           aria-live="polite"
+          aria-label="Receive amount"
           aria-atomic="true"
         >
           <span className="amount-text">{receiveAmount || '0'}</span>

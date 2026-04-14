@@ -1000,11 +1000,11 @@ export default function AssetScreen() {
           </span>
           {/* MOD-023: APY info tooltip */}
           <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-            <button className="apy-info-btn" aria-label="What is APY?" onClick={() => setApyTooltipOpen(v => !v)}>ⓘ</button>
+            <Button className="apy-info-btn" aria-label="What is APY?" onPress={() => setApyTooltipOpen(v => !v)}>ⓘ</Button>
             {apyTooltipOpen && (
               <div className="apy-tooltip" role="tooltip">
                 <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
-                <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                <Button onPress={() => setApyTooltipOpen(false)}>Got it</Button>
               </div>
             )}
           </span>

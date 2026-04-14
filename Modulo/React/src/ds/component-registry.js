@@ -71,6 +71,22 @@ export const COMPONENT_REGISTRY = [
     jsx: '',
   },
   {
+    id: 'financial-input-card', group: 'Forms', name: 'Financial input card',
+    description: 'Compound card combining a token selector pill, numeric amount input, and USD equivalent display. Consolidates the amount-entry pattern across swap, send, and lending flows. Built on React ARIA TextField + Input for the numeric field; token selector is a Button that fires onTokenSelect.',
+    usage: 'Swap screen (pay + receive cards), Send screen, Lend/Borrow amount entry. Always render as a pair in swap flows with a direction toggle between them.',
+    notes: 'Controlled component — parent owns amount and token state. onTokenSelect should open a BottomSheet token picker. USD value string is pre-formatted by the caller. Never open a picker internally.',
+    tokens: ['--bk-bg-card', '--bk-border-card', '--bk-text-primary', '--bk-text-muted', '--bk-text-placeholder', '--bk-pill-bg', '--bk-border-pill', '--bk-font'],
+    jsx: `import { FinancialInputCard } from './components/FinancialInputCard';\n\n<FinancialInputCard\n  label="You pay"\n  amount={amount}\n  onAmountChange={setAmount}\n  token={{ icon: ethIcon, symbol: 'ETH', name: 'Ethereum' }}\n  onTokenSelect={openTokenPicker}\n  usdValue="≈ $1,234.56"\n/>`,
+  },
+  {
+    id: 'asset-row', group: 'Cards', name: 'Asset row',
+    description: 'Tappable row displaying a token with icon, name, chain, amount, and USD value. Used in token selection lists and portfolio drill-downs. Wraps content in a React ARIA Button when onPress is provided; renders as a plain div otherwise.',
+    usage: 'Token selection bottom sheets, send destination lists, portfolio asset lists. Pass onPress to make the row interactive.',
+    notes: 'Chain label is optional — omit for single-chain tokens. Always show USD value when available. Chevron only appears when onPress is provided.',
+    tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted'],
+    jsx: `import { AssetRow } from './components/AssetRow';\n\n<AssetRow\n  icon={<img src={ethIcon} alt="ETH" width={32} height={32} />}\n  name="Ethereum"\n  chain="Mainnet"\n  amount="1.24 ETH"\n  usdValue="$3,200"\n  onPress={() => selectToken('eth')}\n/>`,
+  },
+  {
     id: 'token-card', group: 'Cards', name: 'Token card',
     description: 'Portfolio row showing token icon, name, balance, current USD value, and 24h change. The primary data unit of the portfolio list.',
     usage: 'Home screen portfolio list. Tapping drills into token detail.',
@@ -127,6 +143,14 @@ export const COMPONENT_REGISTRY = [
     jsx: `<div className="tabs" role="tablist">\n  <button className="tab active">Tokens</button>\n  <button className="tab">NFTs</button>\n</div>`,
   },
   {
+    id: 'tab-switcher', group: 'Navigation', name: 'Tab switcher',
+    description: 'White-label segmented tab control built on React ARIA Tabs + TabList + Tab. Parent-controlled: activeTab + onChange manage selection state. Active state driven by data-selected attribute set automatically by React ARIA — no manual class toggling required.',
+    usage: 'Within-screen content tabs wherever React ARIA keyboard navigation and accessibility semantics are needed. Use instead of raw tab-bar for new white-label builds.',
+    notes: 'Controlled component — always pass activeTab and onChange. Tab ids must be unique within the switcher. Keyboard navigation (arrow keys, Home, End) is handled automatically by React ARIA.',
+    tokens: ['--bk-text-muted', '--bk-text-primary', '--bk-brand-primary', '--bk-border-subtle', '--bk-font'],
+    jsx: `import { TabSwitcher } from './components/TabSwitcher';\n\n<TabSwitcher\n  tabs={[{ id: 'tokens', label: 'Tokens' }, { id: 'nfts', label: 'NFTs' }]}\n  activeTab={activeTab}\n  onChange={setActiveTab}\n/>`,
+  },
+  {
     id: 'tx-row', group: 'DeFi', name: 'Transaction row',
     description: 'Activity list item showing type (sent/received/swapped), counterparty address, token amounts, and fiat values. Icon and colour encode the transaction direction.',
     usage: 'Activity feed, portfolio detail, transaction history.',
@@ -166,6 +190,66 @@ export const COMPONENT_REGISTRY = [
     tokens: ['--bk-bg-card', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted'],
     jsx: '',
   },
+  {
+    id: 'screen-header', group: 'Navigation', name: 'Screen header',
+    description: 'Standardised top navigation bar with back/close buttons and title. Consolidates the header pattern used across 10+ screens. Supports transparent mode for hero/overlay screens.',
+    usage: 'All secondary screens — asset detail, settings, review, send. Pass onBack for drill-in screens, onClose for modal overlays.',
+    notes: 'Always include a title. rightSlot is for contextual actions (settings gear, share). Use transparent variant when screen has a hero image or gradient header.',
+    tokens: ['--bk-text-primary', '--bk-text-muted', '--bk-bg-base', '--bk-border-subtle'],
+    jsx: `import { ScreenHeader } from './components/ScreenHeader';
+
+<ScreenHeader title="Send" onBack={() => navigate(-1)} />`,
+  },
+  {
+    id: 'status-card', group: 'Cards', name: 'Status card',
+    description: 'Card displaying a transaction or operation status. Shows status icon, title, subtitle, and key-value detail rows. Colour-coded by status: success green, pending brand, error red.',
+    usage: 'Success screen after transaction, pending confirmation states, error recovery screens.',
+    notes: 'All props optional — gracefully omits empty sections. Status icon auto-selects based on status prop.',
+    tokens: ['--bk-bg-card', '--bk-border-card', '--bk-border-subtle', '--bk-text-primary', '--bk-text-muted', '--bk-success', '--bk-error'],
+    jsx: `import { StatusCard } from './components/StatusCard';
+
+<StatusCard status="success" title="Swap Complete" subtitle="0.5 ETH → 1,250 USDC" />`,
+  },
+  {
+    id: 'audit-badge', group: 'DeFi', name: 'Audit badge',
+    description: 'Protocol audit status pill. Shows audit firm and year inline. Tapping opens a BottomSheet with TVL, full report link, and audit summary.',
+    usage: 'Platform/protocol selector rows, asset detail screens, lending platform cards.',
+    notes: 'Returns null if no firm provided. Use inline prop for compact rendering inside list rows.',
+    tokens: ['--bk-success', '--bk-bg-card', '--bk-border-subtle', '--bk-text-primary'],
+    jsx: `import { AuditBadge } from './components/AuditBadge';
+
+<AuditBadge protocolName="Aave v3" firm="CertiK" year={2024} tvl="\$12.4B" inline />`,
+  },
+  {
+    id: 'fee-breakdown', group: 'DeFi', name: 'Fee breakdown',
+    description: 'Expandable fee summary. Collapsed shows total; tapping expands to itemised list with animated chevron. Full ARIA-expanded and list semantics.',
+    usage: 'Review screen, swap confirmation, any transaction summary where fees need transparency.',
+    notes: 'Always show the total even when collapsed. Items array should include network fee, protocol fee, and any other line items.',
+    tokens: ['--bk-bg-card', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
+    jsx: `import { FeeBreakdown } from './components/FeeBreakdown';
+
+<FeeBreakdown total="\$3.28" items={[{ label: 'Network', amount: '\$2.40' }, { label: 'Protocol', amount: '\$0.88' }]} />`,
+  },
+  {
+    id: 'ltv-bar', group: 'DeFi', name: 'LTV bar',
+    description: 'Loan-to-Value health bar with animated fill, warning/liquidation threshold markers, and colour-coded status. Help button opens an explanation BottomSheet.',
+    usage: 'Borrow tab, lending position detail, portfolio risk overview.',
+    notes: 'Defaults: warning at 75%%, liquidation at 85%%. Colour transitions automatically: green (safe) → amber (warning) → red (at risk). Always show borrow + collateral amounts when available.',
+    tokens: ['--bk-success', '--bk-warning', '--bk-error', '--bk-bg-card', '--bk-text-primary', '--bk-text-muted'],
+    jsx: `import { LTVBar } from './components/LTVBar';
+
+<LTVBar current={42} warning={75} liquidation={85} borrowAmount="\$8,400" collateralAmount="\$20,000" />`,
+  },
+  {
+    id: 'tx-path', group: 'DeFi', name: 'Transaction path',
+    description: 'Asset route visualiser. Shows how a swap moves through tokens, bridges, and protocols with chain-coloured dots, arrow connectors, and estimated time.',
+    usage: 'Swap review, cross-chain bridge confirmation, autopilot route display.',
+    notes: 'Supports three step types: token (with chain), bridge, and protocol. Use compact mode for inline display in list rows. Returns null if steps array is empty.',
+    tokens: ['--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
+    jsx: `import { TransactionPath } from './components/TransactionPath';
+
+<TransactionPath steps={[{ type: 'token', symbol: 'ETH', chain: 'Ethereum' }, { type: 'bridge', name: 'Stargate' }, { type: 'token', symbol: 'ETH', chain: 'Arbitrum' }]} estimatedTime="~45 sec" />`,
+  },
 ];
 
 export const COMP_CONTROLS = {
@@ -178,4 +262,6 @@ export const COMP_CONTROLS = {
   'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Explore','Activity','Swap'],          def: 'Home' }],
   'tx-row':        [{ id: 'type',    label: 'Type',         options: ['sent','received','swapped'],                 def: 'sent' }],
   'step-progress': [{ id: 'step',    label: 'Current step', options: ['Review','Approve','Confirm'],                def: 'Approve' }],
+  'status-card':   [{ id: 'status',  label: 'Status',       options: ['success','pending','error'],                 def: 'success' }],
+  'ltv-bar':       [{ id: 'current', label: 'LTV %',        options: ['20','42','75','90'],                         def: '42' }],
 };

@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from '../motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, Switch } from 'react-aria-components';
 import { useActions } from '../ActionsContext';
 import { useFeatures } from '../theme/FeatureConfig';
 import { SWAP_TOKENS } from '../tokens-data';
@@ -208,14 +208,14 @@ export default function LendBorrowTab() {
               </div>
               <div className="collateral-status-wrap">
                 <span className="collateral-status">{collateralEnabled ? 'Active' : 'Inactive'}</span>
-                <Button
+                <Switch
+                  aria-label="Enable as collateral"
+                  isSelected={collateralEnabled}
+                  onChange={setCollateralEnabled}
                   className={`collateral-toggle${collateralEnabled ? ' enabled' : ''}`}
-                  aria-label={collateralEnabled ? 'Disable as collateral' : 'Enable as collateral'}
-                  aria-pressed={collateralEnabled}
-                  onPress={() => setCollateralEnabled(v => !v)}
                 >
                   <div className="collateral-toggle-knob" />
-                </Button>
+                </Switch>
               </div>
             </div>
             <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10, marginTop: 8 }}>

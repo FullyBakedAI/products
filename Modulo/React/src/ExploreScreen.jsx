@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m, tap, stagger } from './motion-tokens';
-import { Button } from 'react-aria-components';
+import { Button, TextField, Input } from 'react-aria-components';
 import { useActions } from './ActionsContext';
 import { useBrandConfig } from './theme/BrandConfig';
 import BottomNav from './BottomNav';
@@ -117,6 +117,7 @@ export default function ExploreScreen() {
   const [sortBy, setSortBy] = useState('Volume');
   const [yieldFilter, setYieldFilter] = useState('all'); // MOD-024: 'all' | 'mine'
   const [apyTooltipOpen, setApyTooltipOpen] = useState(false); // MOD-023
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredYields = yieldFilter === 'mine'
     ? TOP_YIELDS.filter(y => PORTFOLIO_ASSETS.includes(y.asset))
@@ -153,12 +154,10 @@ export default function ExploreScreen() {
       <div className="scroll-content explore-scroll">
 
         {/* Search */}
-        <div role="search">
-          <Button className="search-field explore-search" aria-label="Search tokens">
-            <IconSearch />
-            <span>Token name, address, or ENS</span>
-          </Button>
-        </div>
+        <TextField aria-label="Search tokens" value={searchQuery} onChange={setSearchQuery} className="search-field explore-search">
+          <IconSearch />
+          <Input className="explore-search-input" placeholder="Search tokens..." />
+        </TextField>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">
@@ -202,11 +201,11 @@ export default function ExploreScreen() {
                 {/* MOD-023: APY info tooltip on first yield only */}
                 {i === 0 && (
                   <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
-                    <button className="apy-info-btn" aria-label="What is APY?" onClick={() => setApyTooltipOpen(v => !v)}>ⓘ</button>
+                    <Button className="apy-info-btn" aria-label="What is APY?" onPress={() => setApyTooltipOpen(v => !v)}>ⓘ</Button>
                     {apyTooltipOpen && (
                       <div className="apy-tooltip" role="tooltip">
                         <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
-                        <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                        <Button onPress={() => setApyTooltipOpen(false)}>Got it</Button>
                       </div>
                     )}
                   </span>

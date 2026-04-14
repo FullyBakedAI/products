@@ -29,14 +29,11 @@
 /* The sheet itself */
 .actions-sheet {
   background: var(--bk-bg-base);
-  border-radius: 20px 20px 0 0;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 94%;
-  /* Subtle top border */
-  border-top: 1px solid var(--bk-white-07);
-  /* Prevent drag from scrolling the page */
+  height: 100%;
   touch-action: none;
 }
 

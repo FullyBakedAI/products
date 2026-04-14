@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTokenOverride } from './TokenOverrideContext';
+import { FeatureConfigProvider } from './theme/FeatureConfig';
 import PrototypeTab    from './ds/PrototypeTab';
 import BuildTab        from './ds/BuildTab';
 import BrandTab        from './ds/BrandTab';
@@ -26,9 +27,28 @@ const NAV_ITEMS = [
   { id: 'brief',     label: 'Agentic Guide' },
 ];
 
+const VALID_TABS = new Set(NAV_ITEMS.map(n => n.id));
+
+function tabFromHash() {
+  const part = window.location.hash.replace('#/ds', '').replace(/^\//, '');
+  return VALID_TABS.has(part) ? part : 'prototype';
+}
+
 export default function DesignSystemPage() {
   const { hasDraft, draft, saveOverrides, discardChanges, getToken } = useTokenOverride();
-  const [activeSection, setActiveSection] = useState('prototype');
+  const [activeSection, setActiveSection] = useState(tabFromHash);
+
+  // Keep tab in sync with browser back/forward
+  useEffect(() => {
+    const handler = () => setActiveSection(tabFromHash());
+    window.addEventListener('hashchange', handler);
+    return () => window.removeEventListener('hashchange', handler);
+  }, []);
+
+  function navigateTab(id) {
+    setActiveSection(id);
+    window.location.hash = id === 'prototype' ? '/ds' : `/ds/${id}`;
+  }
   const draftCount = Object.keys(draft).length;
   const brand      = getToken('--bk-brand-primary');
 
@@ -49,17 +69,18 @@ export default function DesignSystemPage() {
     brief:     <AgenticGuideTab />,
   };
 
-  // Studio tab has its own full-height layout — don't overflow-scroll on that tab
-  const studioActive = activeSection === 'studio';
+  // Prototype + Studio tabs have full-height layouts — suppress overflow-scroll
+  const fullHeightTab = activeSection === 'studio' || activeSection === 'prototype';
 
   return (
+    <FeatureConfigProvider>
     <div className="ds-page">
 
       {/* ── Header ── */}
       <header className="ds-header">
         <div className="ds-header-left">
           <img src={logoModulo} alt="Modulo" height="14" style={{ opacity: 0.55 }} />
-          <span className="ds-header-title">Design System</span>
+          <span className="ds-header-title">Product kit</span>
           <a
             href="https://fullybaked.ai"
             target="_blank"
@@ -99,7 +120,7 @@ export default function DesignSystemPage() {
           <Button
             key={id}
             className={`ds-tab-item${activeSection === id ? ' active' : ''}`}
-            onPress={() => setActiveSection(id)}
+            onPress={() => navigateTab(id)}
           >
             {label}
           </Button>
@@ -109,7 +130,7 @@ export default function DesignSystemPage() {
       {/* ── Content ── */}
       <main
         className="ds-content"
-        style={studioActive ? { overflow: 'hidden' } : undefined}
+        style={fullHeightTab ? { overflow: 'hidden' } : undefined}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -118,6 +139,7 @@ export default function DesignSystemPage() {
             animate={{ opacity: 1, y: 0, transition: { duration: 0.18, ease: 'easeOut' } }}
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
             className="ds-content-inner"
+            style={fullHeightTab ? { height: '100%' } : undefined}
           >
             {SECTIONS[activeSection]}
           </motion.div>
@@ -125,5 +147,6 @@ export default function DesignSystemPage() {
       </main>
 
     </div>
+    </FeatureConfigProvider>
   );
 }

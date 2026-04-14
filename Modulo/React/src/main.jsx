@@ -34,8 +34,9 @@ function Root() {
   // On browser refresh the hash is already in the URL — this is a no-op.
   const [hash, setHash] = useState(() => {
     const current = window.location.hash;
-    if (!current || current === '#' || current === '#/') {
-      // Default landing is the design system deliverable
+    // Only redirect to DS when we're the top-level page, not inside an iframe
+    const isTopFrame = window.self === window.top;
+    if (isTopFrame && (!current || current === '#' || current === '#/')) {
       window.location.hash = '/ds';
       return '#/ds';
     }

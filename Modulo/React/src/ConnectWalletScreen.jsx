@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from 'react-aria-components';
+import logoModulo from './assets/logo-modulo.svg';
 import './connect-wallet.css';
 
 const WALLETS = [
@@ -20,7 +21,7 @@ export default function ConnectWalletScreen({ onConnect }) {
     <div className="connect-wallet-screen">
       <div className="connect-wallet-content">
         <div className="connect-wallet-logo">
-          <div className="logo-mark" />
+          <img src={logoModulo} alt="Modulo" className="logo-wordmark" />
         </div>
         <h1 className="connect-wallet-title">Connect your wallet</h1>
         <p className="connect-wallet-subtitle">Choose your wallet to get started</p>
