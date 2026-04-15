@@ -53,6 +53,10 @@ Modulo/
 cd React && npm run build    # → outputs to Prototype/modulo/
 ```
 
+## Deploy Rules
+1. **Commit before every deploy.** No exceptions. Run `git add` + `git commit` before `vercel --prod`. If the deploy breaks something, git is the rollback.
+2. **Push after every deploy.** `git push origin main` immediately after — remote must stay in sync with what's live.
+
 ## Screens
 
 | Screen | File | Route |
