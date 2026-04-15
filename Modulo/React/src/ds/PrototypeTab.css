@@ -5,7 +5,7 @@
 .proto-tab {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   padding: 0;
   height: 100%;
   overflow: hidden;
@@ -400,4 +400,54 @@
 .bp-save-preset-btn:hover {
   background: rgba(88, 75, 235, 0.35);
   color: #fff;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .proto-tab {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .proto-left {
+    flex: none;
+    width: 100%;
+    padding: 24px 16px;
+    overflow: visible;
+  }
+
+  .proto-frame {
+    transform: none;
+    margin-bottom: 0;
+    max-width: 100%;
+    width: min(390px, 100%);
+    height: auto;
+    aspect-ratio: 390 / 844;
+  }
+
+  .build-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    max-height: none;
+    overflow: visible;
+    padding: 20px 16px 0;
+  }
+
+  .bp-footer {
+    position: static;
+    padding: 16px 0 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .proto-frame {
+    border-radius: 32px;
+    border-width: 5px;
+  }
+
+  .proto-frame iframe {
+    border-radius: 28px;
+  }
 }

@@ -106,7 +106,7 @@ export default function RulesTab() {
 
       {/* Accessibility standards */}
       <div className="ds-a11y-section">
-        <div className="ds-a11y-title">Accessibility standards</div>
+        <div className="ds-a11y-title">Accessibility Standards — WCAG 2.1 AA</div>
         <div className="ds-a11y-list">
           {A11Y_STANDARDS.map(({ standard, detail }) => (
             <div key={standard} className="ds-a11y-row">

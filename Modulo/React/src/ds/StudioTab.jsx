@@ -424,15 +424,20 @@ function ComponentDemoStage({ comp, controls }) {
     case 'bottom-nav': {
       const active = controls.active || 'Home';
       const navItems = [
-        { l: 'Home',     I: getIcon('nav-home') },
-        { l: 'Explore',  I: getIcon('nav-explore') },
-        { l: 'Activity', I: getIcon('nav-activity') },
-        { l: 'Swap',     I: getIcon('nav-swap') },
+        { l: 'Home',     I: getIcon('nav-home'),     fab: false },
+        { l: 'Markets',  I: getIcon('nav-markets'),  fab: false },
+        { l: '',         I: getIcon('nav-fab'),       fab: true  },
+        { l: 'Activity', I: getIcon('nav-activity'), fab: false },
+        { l: 'Funds',    I: getIcon('nav-funds'),    fab: false },
       ];
       return (
         <div className="ds-ex-bottom-nav" style={{ background: bgCard, borderColor: border }}>
-          {navItems.map(({ l, I }) => (
-            <div key={l} className="ds-ex-nav-item" style={{ color: l === active ? brand : textM }}>
+          {navItems.map(({ l, I, fab }, i) => fab ? (
+            <div key="fab" className="ds-ex-nav-item ds-ex-nav-fab" style={{ background: brand, color: '#fff', borderRadius: 12, padding: '6px 10px' }}>
+              <I size={18} color="#fff" strokeWidth={2} />
+            </div>
+          ) : (
+            <div key={l || i} className="ds-ex-nav-item" style={{ color: l === active ? brand : textM }}>
               <I size={18} color={l === active ? brand : textM} strokeWidth={l === active ? 2 : 1.5} />
               <span style={{ fontSize: 10 }}>{l}</span>
             </div>
@@ -577,8 +582,347 @@ function ComponentDemoStage({ comp, controls }) {
         </div>
       );
 
-    default:
-      return <div style={{ color: 'var(--bk-text-muted)', fontSize: 12 }}>Demo coming soon</div>;
+    case 'action-row':
+      return (
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', padding: '8px 0' }}>
+          {[{ icon: 'ArrowUpDown', label: 'Swap' }, { icon: 'TrendingUp', label: 'Trade' }, { icon: 'ArrowUpRight', label: 'Send' }, { icon: 'ArrowDownLeft', label: 'Receive' }].map(({ icon, label }) => {
+            const I = LucideIcons[icon];
+            return (
+              <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: bgCard, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <I size={18} color={brand} strokeWidth={1.8} />
+                </div>
+                <span style={{ fontSize: 10, color: textM }}>{label}</span>
+              </div>
+            );
+          })}
+        </div>
+      );
+
+    case 'fab':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 52, height: 52, borderRadius: '50%', background: `linear-gradient(135deg, ${brand}, color-mix(in srgb, ${brand} 80%, #fff))`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 4px 20px ${brand}40` }}>
+            <LucideIcons.Plus size={22} color="#fff" strokeWidth={2.5} />
+          </div>
+        </div>
+      );
+
+    case 'icon-btn':
+      return (
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+          {[{ icon: 'Settings', label: 'Settings' }, { icon: 'Bell', label: 'Notifications' }, { icon: 'ArrowLeft', label: 'Back' }, { icon: 'X', label: 'Close' }, { icon: 'Share2', label: 'Share' }].map(({ icon, label }) => {
+            const I = LucideIcons[icon];
+            return (
+              <div key={label} style={{ width: 36, height: 36, borderRadius: 10, background: bgCard, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} title={label}>
+                <I size={16} color={textM} strokeWidth={1.5} />
+              </div>
+            );
+          })}
+        </div>
+      );
+
+    case 'undo-toast':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: bgCard, borderRadius: 12, border: `1px solid ${border}`, width: '100%', maxWidth: 280 }}>
+          <LucideIcons.Check size={14} color={success} strokeWidth={2} />
+          <span style={{ fontSize: 12, fontWeight: 600, color: textP, flex: 1 }}>Optimise deployed</span>
+          <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'transparent', border: `2px solid ${brand}`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: brand }}>3</span>
+          </div>
+          <button style={{ fontSize: 12, fontWeight: 700, color: brand, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>Undo</button>
+        </div>
+      );
+
+    case 'drag-handle':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px 0 4px' }}>
+          <div style={{ width: 40, height: 4, borderRadius: 2, background: border }} />
+          <span style={{ fontSize: 10, color: textM, marginTop: 8 }}>Drag indicator for bottom sheets</span>
+        </div>
+      );
+
+    case 'empty-state':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: 16 }}>
+          <LucideIcons.Inbox size={28} color={textM} strokeWidth={1.2} />
+          <div style={{ fontSize: 14, fontWeight: 600, color: textP }}>No transactions yet</div>
+          <div style={{ fontSize: 12, color: textM, textAlign: 'center' }}>Your activity will appear here once you make your first swap.</div>
+          <button style={{ fontSize: 12, fontWeight: 600, color: '#fff', background: brand, border: 'none', borderRadius: 8, padding: '8px 20px', marginTop: 4, cursor: 'pointer', fontFamily: 'inherit' }}>Start swapping</button>
+        </div>
+      );
+
+    case 'financial-input-card':
+      return (
+        <div style={{ background: bgCard, borderRadius: 14, border: `1px solid ${border}`, padding: '10px 14px', width: '100%', maxWidth: 280 }}>
+          <div style={{ fontSize: 10, color: textM, marginBottom: 6 }}>You pay</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 28, fontWeight: 700, color: textP }}>0.5</span>
+            <div className="ds-ex-token-pill" style={{ background: `${brand}18`, borderColor: `${brand}30` }}>
+              <div style={{ width: 16, height: 16, borderRadius: '50%', background: brand, opacity: 0.7 }} />
+              <span style={{ fontSize: 12, fontWeight: 600, color: textP }}>ETH</span>
+              <LucideIcons.ChevronDown size={10} color={textM} strokeWidth={2} />
+            </div>
+          </div>
+          <div style={{ fontSize: 10, color: textM, marginTop: 4 }}>≈ $921.25</div>
+        </div>
+      );
+
+    case 'search-input':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: bgCard, borderRadius: 10, border: `1px solid ${border}`, width: '100%', maxWidth: 260 }}>
+          <LucideIcons.Search size={14} color={textM} strokeWidth={1.8} />
+          <span style={{ fontSize: 13, color: textM, flex: 1 }}>Search tokens...</span>
+          <LucideIcons.X size={12} color={textM} strokeWidth={1.5} style={{ opacity: 0.4 }} />
+        </div>
+      );
+
+    case 'toggle-switch':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 220 }}>
+          {[{ label: 'Notifications', on: true }, { label: 'Dark mode', on: true }, { label: 'Biometrics', on: false }].map(({ label, on }) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 13, color: textP }}>{label}</span>
+              <div style={{ width: 36, height: 20, borderRadius: 10, background: on ? success : textM, position: 'relative', cursor: 'pointer' }}>
+                <div style={{ position: 'absolute', left: on ? 18 : 2, top: 2, width: 16, height: 16, borderRadius: '50%', background: '#fff', transition: 'left 0.15s' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+
+    case 'risk-selector': {
+      const level = controls.level || 'balanced';
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%', maxWidth: 280 }}>
+          {[{ id: 'conservative', label: 'Conservative', desc: 'Stablecoins, low APY, minimal risk' }, { id: 'balanced', label: 'Balanced', desc: 'Mix of yield and stability' }, { id: 'aggressive', label: 'Aggressive', desc: 'Maximum yield, higher volatility' }].map(o => (
+            <div key={o.id} style={{ padding: '10px 14px', borderRadius: 10, border: `1.5px solid ${level === o.id ? brand : border}`, background: level === o.id ? `${brand}10` : bgCard, cursor: 'pointer' }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: level === o.id ? brand : textP }}>{o.label}</div>
+              <div style={{ fontSize: 11, color: textM, marginTop: 2 }}>{o.desc}</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    case 'asset-row':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: 300, borderRadius: 12, overflow: 'hidden', border: `1px solid ${border}` }}>
+          {[{ name: 'Ethereum', sym: 'ETH', chain: 'Mainnet', bal: '1.24 ETH', usd: '$4,412' }, { name: 'Solana', sym: 'SOL', chain: 'Solana', bal: '12.40 SOL', usd: '$1,240' }, { name: 'USD Coin', sym: 'USDC', chain: 'Arbitrum', bal: '921.25', usd: '$921' }].map((t, i) => (
+            <div key={t.sym} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: bgCard, borderTop: i > 0 ? `1px solid ${border}` : 'none' }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: `${brand}20`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: brand }}>{t.sym[0]}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: textP }}>{t.name}</div>
+                <div style={{ fontSize: 10, color: textM }}>{t.chain} · {t.bal}</div>
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: textP }}>{t.usd}</div>
+              <LucideIcons.ChevronRight size={14} color={textM} strokeWidth={1.5} />
+            </div>
+          ))}
+        </div>
+      );
+
+    case 'settings-row':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: 300, borderRadius: 12, overflow: 'hidden', border: `1px solid ${border}` }}>
+          {[{ icon: 'Shield', label: 'Security', desc: 'Biometrics, PIN' }, { icon: 'Palette', label: 'Appearance', desc: 'Theme, display' }, { icon: 'Bell', label: 'Notifications', desc: 'Alerts, updates' }].map((r, i) => {
+            const I = LucideIcons[r.icon];
+            return (
+              <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: bgCard, borderTop: i > 0 ? `1px solid ${border}` : 'none', cursor: 'pointer' }}>
+                <I size={18} color={textM} strokeWidth={1.5} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: textP }}>{r.label}</div>
+                  <div style={{ fontSize: 11, color: textM }}>{r.desc}</div>
+                </div>
+                <LucideIcons.ChevronRight size={14} color={textM} strokeWidth={1.5} />
+              </div>
+            );
+          })}
+        </div>
+      );
+
+    case 'screen-header':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', padding: '10px 14px', width: '100%', maxWidth: 300, background: bgCard, borderRadius: 10, border: `1px solid ${border}` }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <LucideIcons.ArrowLeft size={18} color={textP} strokeWidth={1.8} />
+          </div>
+          <span style={{ flex: 1, textAlign: 'center', fontSize: 15, fontWeight: 600, color: textP }}>Send ETH</span>
+          <div style={{ width: 32 }} />
+        </div>
+      );
+
+    case 'chain-selector':
+      return (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[{ label: 'All', active: true }, { label: 'Ethereum' }, { label: 'Arbitrum' }, { label: 'Base' }, { label: 'Solana' }].map(c => (
+            <span key={c.label} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 20, background: c.active ? brand : `${brand}12`, color: c.active ? '#fff' : textM, border: `1px solid ${c.active ? brand : border}`, cursor: 'pointer' }}>{c.label}</span>
+          ))}
+        </div>
+      );
+
+    case 'notifications-panel':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%', maxWidth: 280, borderRadius: 12, overflow: 'hidden', border: `1px solid ${border}` }}>
+          {[{ icon: 'TrendingUp', title: 'ETH up 4.3% today', time: '2m ago', color: success }, { icon: 'ArrowDownLeft', title: 'Received 500 USDC', time: '1h ago', color: brand }, { icon: 'AlertTriangle', title: 'Health factor low', time: '3h ago', color: error }].map((n, i) => {
+            const I = LucideIcons[n.icon];
+            return (
+              <div key={n.title} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: bgCard, borderTop: i > 0 ? `1px solid ${border}` : 'none' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${n.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <I size={13} color={n.color} strokeWidth={1.8} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: textP }}>{n.title}</div>
+                </div>
+                <span style={{ fontSize: 10, color: textM }}>{n.time}</span>
+              </div>
+            );
+          })}
+        </div>
+      );
+
+    case 'status-card': {
+      const st = controls.status || 'success';
+      const stMap = { success: { icon: 'CheckCircle', color: success, title: 'Swap Complete', sub: '0.5 ETH → 921.25 USDC' }, pending: { icon: 'Clock', color: brand, title: 'Confirming...', sub: 'Waiting for block confirmation' }, error: { icon: 'XCircle', color: error, title: 'Transaction Failed', sub: 'Insufficient gas — try again' } };
+      const s = stMap[st];
+      const I = LucideIcons[s.icon];
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: 16, background: bgCard, borderRadius: 14, border: `1px solid ${border}`, width: '100%', maxWidth: 260 }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', background: `${s.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <I size={20} color={s.color} strokeWidth={1.8} />
+          </div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: textP }}>{s.title}</div>
+          <div style={{ fontSize: 12, color: textM }}>{s.sub}</div>
+        </div>
+      );
+    }
+
+    case 'ltv-bar': {
+      const pct = parseInt(controls.current || '42');
+      const barColor = pct >= 85 ? error : pct >= 75 ? '#F5A623' : success;
+      return (
+        <div style={{ width: '100%', maxWidth: 280, padding: '12px 16px', background: bgCard, borderRadius: 12, border: `1px solid ${border}` }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ fontSize: 11, color: textM }}>Loan-to-Value</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: barColor }}>{pct}%</span>
+          </div>
+          <div style={{ height: 6, borderRadius: 3, background: `${border}40`, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${pct}%`, borderRadius: 3, background: barColor, transition: 'width 0.3s' }} />
+            <div style={{ position: 'absolute', left: '75%', top: 0, width: 1, height: '100%', background: '#F5A623' }} />
+            <div style={{ position: 'absolute', left: '85%', top: 0, width: 1, height: '100%', background: error }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+            <span style={{ fontSize: 10, color: textM }}>$8,400 borrowed</span>
+            <span style={{ fontSize: 10, color: textM }}>$20,000 collateral</span>
+          </div>
+        </div>
+      );
+    }
+
+    case 'audit-badge':
+      return (
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {[{ firm: 'CertiK', year: 2024 }, { firm: 'OpenZeppelin', year: 2023 }, { firm: 'ChainSecurity', year: 2024 }].map(a => (
+            <span key={a.firm} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: success, background: `${success}12`, border: `1px solid ${success}25`, borderRadius: 6, padding: '3px 8px' }}>
+              <LucideIcons.ShieldCheck size={10} strokeWidth={2} /> {a.firm} {a.year}
+            </span>
+          ))}
+        </div>
+      );
+
+    case 'fee-breakdown':
+      return (
+        <div style={{ width: '100%', maxWidth: 260, background: bgCard, borderRadius: 10, border: `1px solid ${border}`, padding: '10px 14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <span style={{ fontSize: 12, color: textM }}>Total fee</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: textP }}>$3.28</span>
+          </div>
+          {[{ label: 'Network gas', amount: '$2.40' }, { label: 'Protocol fee', amount: '$0.88' }].map(f => (
+            <div key={f.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+              <span style={{ fontSize: 11, color: textM }}>{f.label}</span>
+              <span style={{ fontSize: 11, color: textP }}>{f.amount}</span>
+            </div>
+          ))}
+        </div>
+      );
+
+    case 'tx-path':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {[{ label: 'ETH', sub: 'Ethereum', color: '#627EEA' }, null, { label: 'Stargate', sub: 'Bridge', color: brand }, null, { label: 'ETH', sub: 'Arbitrum', color: '#28A0F0' }].map((step, i) =>
+            step === null ? <LucideIcons.ArrowRight key={`a${i}`} size={12} color={textM} strokeWidth={1.5} /> : (
+              <div key={step.label + i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${step.color}18`, border: `1.5px solid ${step.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 8, fontWeight: 700, color: step.color }}>{step.label[0]}</span>
+                </div>
+                <span style={{ fontSize: 9, color: textM }}>{step.sub}</span>
+              </div>
+            )
+          )}
+        </div>
+      );
+
+    case 'price-impact-warning':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, background: `#F5A62315`, border: '1px solid #F5A62330' }}>
+            <LucideIcons.AlertTriangle size={12} color="#F5A623" strokeWidth={2} />
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#F5A623' }}>Price impact: −1.2%</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, background: `${error}12`, border: `1px solid ${error}30` }}>
+            <LucideIcons.AlertTriangle size={12} color={error} strokeWidth={2} />
+            <span style={{ fontSize: 11, fontWeight: 600, color: error }}>Price impact: −4.8%</span>
+          </div>
+        </div>
+      );
+
+    case 'qr-code':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: 16, background: bgCard, borderRadius: 14, border: `1px solid ${border}`, width: '100%', maxWidth: 200 }}>
+          <div style={{ width: 100, height: 100, background: '#fff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 80, height: 80, background: `repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50%/10px 10px`, borderRadius: 4 }} />
+          </div>
+          <span style={{ fontSize: 11, color: textM, fontFamily: 'monospace' }}>0x4a3f…c12d</span>
+        </div>
+      );
+
+    case 'exchange-list':
+      return (
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {['Coinbase', 'Binance', 'Kraken', 'Gemini'].map(name => (
+            <span key={name} style={{ fontSize: 11, fontWeight: 600, padding: '6px 14px', borderRadius: 8, background: bgCard, border: `1px solid ${border}`, color: textP, cursor: 'pointer' }}>{name}</span>
+          ))}
+        </div>
+      );
+
+    case 'tab-switcher':
+      return (
+        <div style={{ display: 'flex', borderRadius: 10, overflow: 'hidden', border: `1px solid ${border}`, width: '100%', maxWidth: 260 }}>
+          {['Tokens', 'NFTs', 'Positions'].map((label, i) => (
+            <button key={label} style={{ flex: 1, padding: '8px 0', fontSize: 12, fontWeight: i === 0 ? 600 : 500, color: i === 0 ? brand : textM, background: i === 0 ? `${brand}12` : bgCard, border: 'none', borderRight: i < 2 ? `1px solid ${border}` : 'none', cursor: 'pointer', fontFamily: 'inherit' }}>{label}</button>
+          ))}
+        </div>
+      );
+
+    default: {
+      const tokens = comp.tokens || [];
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center', padding: '8px 0' }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: `${brand}12`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LucideIcons.Component size={16} color={brand} strokeWidth={1.5} />
+          </div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: textP }}>{comp.name}</div>
+          <div style={{ fontSize: 10, color: textM, textAlign: 'center', maxWidth: 200 }}>{comp.description?.slice(0, 80)}…</div>
+          {tokens.length > 0 && (
+            <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'center', marginTop: 2 }}>
+              {tokens.slice(0, 3).map(t => (
+                <span key={t} style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: `${brand}10`, color: brand, border: `1px solid ${brand}20` }}>{t.replace('--bk-', '')}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
   }
 }
 

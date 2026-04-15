@@ -17,11 +17,11 @@ export const COMPONENT_REGISTRY = [
   },
   {
     id: 'action-row', group: 'Actions', name: 'Action buttons row',
-    description: 'Horizontal bar of quick-action icon buttons (Swap, Trade, Send, Receive) rendered immediately below the portfolio balance on Home. Each button is feature-flag gated — missing flags hide the button and rebalance spacing.',
+    description: 'Horizontal bar of four quick-action icon buttons (Swap, Trade, Send, Receive) rendered immediately below the portfolio balance on Home.',
     usage: 'Home screen only. Always the first interactive element after the balance display.',
-    notes: 'Button visibility controlled by useFeatures().actions flags. Do not hardcode which buttons appear.',
+    notes: 'All four buttons render unconditionally. Each button opens the corresponding flow sheet.',
     tokens: ['--bk-bg-card', '--bk-brand-primary', '--bk-text-primary', '--bk-text-muted', '--bk-border-subtle'],
-    jsx: "const f = useFeatures();\n{f.actions.swap && <button onClick={openSwap}>Swap</button>}\n{f.actions.send && <button onClick={openSend}>Send</button>}",
+    jsx: "<div className=\"action-btns-row\">\n  <button onClick={openSwap}>Swap</button>\n  <button onClick={openTrade}>Trade</button>\n  <button onClick={openSend}>Send</button>\n  <button onClick={openReceive}>Receive</button>\n</div>",
   },
   {
     id: 'fab', group: 'Actions', name: 'FAB',
@@ -55,7 +55,7 @@ export const COMPONENT_REGISTRY = [
     usage: 'After any deploy or confirm action where the user might want to reverse. Controlled by the undoToast feature flag.',
     notes: 'Call via useUndoToast().showUndo(). The undo action must be defined before showing — never show without a handler.',
     tokens: ['--bk-bg-elevated', '--bk-border-subtle', '--bk-brand-primary', '--bk-text-primary'],
-    jsx: "const { showUndo } = useUndoToast();\nshowUndo({ label: 'Optimise deployed', onUndo: () => revert() });",
+    jsx: "const { showUndo } = useUndoToast();\nshowUndo('Optimise deployed', () => revert());",
   },
   {
     id: 'bottom-sheet', group: 'Feedback', name: 'Bottom sheet',
@@ -281,9 +281,9 @@ export const COMPONENT_REGISTRY = [
   // ── Navigation ─────────────────────────────────────────────────────────────
   {
     id: 'bottom-nav', group: 'Navigation', name: 'Bottom nav',
-    description: 'Four-item navigation bar anchored to the bottom of the viewport. Active item in brand colour with filled icon weight. FAB sits in the centre above the bar.',
-    usage: 'Persistent on all primary screens. Hidden on modal sheets and linear confirmation flows.',
-    notes: 'Labels always visible. 44px tap targets. Four items maximum.',
+    description: 'Five-slot navigation bar anchored to the bottom of the viewport. Slots: Home, Markets, FAB (centre), Activity, Funds. Active item in brand colour with filled icon weight. The FAB is an elevated centre button that opens the ActionsSheet — it is not a standard nav destination.',
+    usage: 'Persistent on all primary screens (Home, Markets/Explore, Activity, Funds/Manage). Hidden on modal sheets and linear confirmation flows.',
+    notes: 'Labels always visible. 44px tap targets. All slots gated by feature flags (nav.home, nav.explore, nav.fab, nav.activity, nav.manage). Markets routes to /explore. Funds routes to /manage.',
     tokens: ['--bk-bg-nav', '--bk-brand-primary', '--bk-text-muted', '--bk-border-subtle'],
     jsx: "import BottomNav from './BottomNav';\n\n<BottomNav />",
   },
@@ -477,9 +477,9 @@ export const COMPONENT_REGISTRY = [
   },
   {
     id: 'success-screen', group: 'Screens', name: 'Success screen',
-    description: 'Full-screen confirmation shown after a transaction completes. Shows animated tick, transaction summary (tokens, amounts, exchange rate), and a Done CTA.',
+    description: 'Full-screen confirmation shown after a transaction completes. Shows animated check mark with glow, StatusCard with transaction summary, and two CTAs: "View in Activity" (routes to /activity) and "Back to Portfolio" (routes to /). Optional share button.',
     usage: 'After swap, send, or optimise confirmation.',
-    notes: 'The Done button always navigates back to Home — not back in history.',
+    notes: 'Two navigation paths: activity feed or home. Never navigate via browser history. Share button uses native share API where available.',
     tokens: ['--bk-success', '--bk-bg-base', '--bk-text-primary', '--bk-text-muted'],
     jsx: '',
   },
@@ -519,7 +519,7 @@ export const COMPONENT_REGISTRY = [
   },
   {
     id: 'sidebar-nav', group: 'Layout', name: 'Sidebar nav',
-    description: 'Vertical navigation sidebar for desktop breakpoints. Mirrors the bottom nav item set (Home, Explore, Activity, Autopilot). Brand logo at top, settings at bottom.',
+    description: 'Vertical navigation sidebar for desktop breakpoints. Mirrors the bottom nav item set (Home, Markets, Activity, Funds). Brand logo at top, settings at bottom.',
     usage: 'Desktop layout only. Hidden on mobile.',
     notes: 'Never show simultaneously with the bottom nav. Collapses to icon-only at narrow desktop widths.',
     tokens: ['--bk-bg-nav', '--bk-brand-primary', '--bk-text-muted', '--bk-border-subtle'],
@@ -566,7 +566,7 @@ export const COMP_CONTROLS = {
   input:           [{ id: 'state',   label: 'State',        options: ['default','focused','error','disabled'],      def: 'default' }],
   'token-card':    [{ id: 'token',   label: 'Token',        options: ['ETH','BTC','USDC','SOL'],                    def: 'ETH' },
                    { id: 'trend',    label: 'Trend',        options: ['up','down'],                                 def: 'up' }],
-  'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Explore','Activity','Swap'],          def: 'Home' }],
+  'bottom-nav':    [{ id: 'active',  label: 'Active tab',   options: ['Home','Markets','Activity','Funds'],         def: 'Home' }],
   'tx-row':        [{ id: 'type',    label: 'Type',         options: ['sent','received','swapped'],                 def: 'sent' }],
   'step-progress': [{ id: 'step',    label: 'Current step', options: ['Review','Approve','Confirm'],                def: 'Approve' }],
   'status-card':   [{ id: 'status',  label: 'Status',       options: ['success','pending','error'],                 def: 'success' }],

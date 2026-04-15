@@ -40,3 +40,9 @@ A product that respects my sophistication. Shows me the mechanics. Gives me the 
 ## Voice
 
 "I'm not looking for a better MetaMask. I'm looking for DeFi prime brokerage. Does this exist yet?"
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/README]] — Fully Baked persona methodology
+- [[bakekit|BakeKit]] — design system Modulo is built on

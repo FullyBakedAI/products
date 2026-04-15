@@ -30,6 +30,13 @@ Run through before submitting ANY UI work.
 - [ ] No `navigate(-1)` — use explicit routes
 - [ ] Back buttons navigate to a specific parent route
 
+## Interaction Design
+- [ ] Cards/panels representing a single concept are fully tappable — not just sub-buttons
+- [ ] Tappable cards have press feedback (`whileTap` scale)
+- [ ] Shared state (autopilot, theme, wallet) stays in sync across all screens that display it
+- [ ] Status badges update immediately when state changes — no stale ON/OFF labels
+- [ ] No elements that look tappable but do nothing
+
 ## Code
 - [ ] No unused imports
 - [ ] No console.log

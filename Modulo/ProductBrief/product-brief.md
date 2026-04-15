@@ -712,3 +712,9 @@ These are unresolved questions that the Design System agent and Build agent shou
 *This brief is filed by Peggy (BakedUX) as the Product Team output for the Modulo engagement.*
 *Next phase: Design System agent reads this brief and the Figma file to extract tokens, components, and patterns.*
 *Blockers: Figma MCP access (Ant to resolve SSH/settings.json). Product decisions in Section 5 (Ant to take to Modulo team).*
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[bakekit|BakeKit]] — design system Modulo is built on
+- [[overview]] — Fully Baked methodology this brief follows

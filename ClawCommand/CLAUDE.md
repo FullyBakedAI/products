@@ -49,3 +49,9 @@ See `~/workspace/Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
 - Design-Led Builder
 - Offline Operator
 - White-Label Client
+
+## See also
+
+- [[clawcommand|ClawCommand]] — ClawCommand product home in workspace
+- [[bakekit|BakeKit]] — design system ClawCommand is built on
+- [[overview]] — Fully Baked methodology

@@ -304,3 +304,9 @@ These are not design opinions. They are the product requirements that would conv
 **Findings authored by:** Peggy (BakedUX), Sam persona
 **Next phase:** Product team reads these findings and defines build priorities
 **Output destination:** `Discovery/persona-findings-sam.md`
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/Sam-High-Value-Holder]] — Sam persona definition
+- [[Discovery/README]] — Fully Baked discovery phase

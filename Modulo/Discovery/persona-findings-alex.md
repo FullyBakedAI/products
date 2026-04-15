@@ -327,3 +327,9 @@ In priority order:
 ---
 
 *Evaluation complete. Feeds into ProductBrief phase.*
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/Alex-DeFi-Intermediate]] — Alex persona definition
+- [[Discovery/README]] — Fully Baked discovery phase

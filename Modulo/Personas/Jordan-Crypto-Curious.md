@@ -39,3 +39,9 @@ An app that meets me where I am: shows me what I have, explains clearly what I c
 ## Voice
 
 "I just want this to be like a better savings account. Can't it just... do it for me?"
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/README]] — Fully Baked persona methodology
+- [[bakekit|BakeKit]] — design system Modulo is built on

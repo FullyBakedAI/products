@@ -34,3 +34,10 @@ These files are updated by the strategy/QA side of the operation. When they chan
 ## For Frank
 
 Product files live at `~/products` on the Mac Studio. Reference them read-only — don't commit from agent sessions.
+
+## See also
+
+- [[overview]] — Fully Baked methodology these products are built on
+- [[bakekit|BakeKit]] — design system powering all products
+- [[subagent-architecture]] — agent structure for product builds
+- [[principles]] — quality principles to work to

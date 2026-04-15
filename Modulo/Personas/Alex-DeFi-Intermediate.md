@@ -39,3 +39,9 @@ One app. All my assets — real ones, native BTC, actual SOL, not wrapped versio
 ## Voice
 
 "If this actually does native cross-chain without bridging, that's a genuine unlock. Show me the mechanism."
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/README]] — Fully Baked persona methodology
+- [[bakekit|BakeKit]] — design system Modulo is built on

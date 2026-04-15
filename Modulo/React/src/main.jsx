@@ -68,7 +68,7 @@ function Root() {
       <IconOverrideProvider>
       <DevModeProvider>
         {isDS
-          ? <PasswordGate><DesignSystemPage onBack={() => { window.location.hash = '/'; }} /></PasswordGate>
+          ? <DesignSystemPage onBack={() => { window.location.hash = '/'; }} />
           : (
             <HashRouter>
               <App />

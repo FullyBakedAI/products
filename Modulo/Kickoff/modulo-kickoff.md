@@ -90,3 +90,9 @@ Modulo targets **$2 trillion in sidelined crypto assets** — holders of BTC, XR
 ## Response required
 
 Each agent must respond to this kickoff before proceeding with their phase. Response = file on disk in their output directory confirming they've read it and stating their first action.
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[bakekit|BakeKit]] — design system Modulo is built on
+- [[overview]] — Fully Baked methodology

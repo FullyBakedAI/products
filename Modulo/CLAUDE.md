@@ -105,6 +105,26 @@ All components must accept theming via `--bk-*` CSS custom properties set by `Th
 - **File key:** `rTAg5ODay1ac1ZZBq8lYwr`
 - **Canvas node:** `2078-6541`
 
+## Quality Gate — Mandatory Before Every Commit
+
+Run `npm run lint:quality` before committing. This checks:
+- No hardcoded hex colours in product CSS (excluding tokens.css, ds/, theme/, v1/)
+- No hardcoded hex colours in product JSX (excluding ds/ pages)
+- No inline `style={{` with hardcoded colours/spacing in product JSX
+- No missing `useMemo`/`useCallback` on context provider values
+- All new CSS uses `--bk-*` tokens for colours, spacing, radius, typography
+
+If the lint fails, fix the violations before committing. No exceptions.
+
+**Post-sprint structural audit** — after every feature batch, before demo:
+1. Token adherence scan (colours, spacing, radius, typography)
+2. Memoization check on all contexts
+3. Dead code / unused token sweep
+4. BakeKit reusability score
+5. Visual regression check
+
+This is not a nice-to-have. This is the same level of mandatory as the QA gate.
+
 ## Session Handoff — Required
 
 At the end of every session, before finishing, write a session notes file:

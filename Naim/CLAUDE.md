@@ -49,3 +49,9 @@ See `~/workspace/Platform/BakeKit/Decisions/ADR-002-component-primitives.md`.
 - Creator
 - Agency Namer
 - Accidental Rebrander
+
+## See also
+
+- [[Platform/Naim/STATUS]] — current Naim build status
+- [[bakekit|BakeKit]] — design system Naim is built on
+- [[overview]] — Fully Baked methodology

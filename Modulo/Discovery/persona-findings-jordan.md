@@ -339,3 +339,9 @@ That's it. No swaps, no borrows, no bridges, no recipient selection. Jordan's fi
 ---
 
 *Filed by Peggy for BakedUX Discovery phase. For use by Product Team agents in defining what to build.*
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — Modulo build status
+- [[Personas/Jordan-Crypto-Curious]] — Jordan persona definition
+- [[Discovery/README]] — Fully Baked discovery phase

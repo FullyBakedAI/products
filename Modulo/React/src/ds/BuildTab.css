@@ -431,3 +431,20 @@
   background: rgba(255,255,255,0.06);
   color: var(--bk-text-primary, #F5F5F6);
 }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .bt-root {
+    padding: 24px 16px;
+    gap: 36px;
+  }
+
+  .bt-version-actions {
+    flex-direction: column;
+  }
+
+  .bt-action-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

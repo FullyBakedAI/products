@@ -306,3 +306,10 @@
   background: var(--bk-brand-primary);
   color: #fff;
 }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bk-builder-panel {
+    width: 100%;
+  }
+}

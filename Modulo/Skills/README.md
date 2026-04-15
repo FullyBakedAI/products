@@ -43,3 +43,9 @@ Run through every item in `qa-checklist.md`.
 ## The Goal
 
 Everything feeds into a **reusable React ARIA component library**. Every screen is an opportunity to extract shared patterns. Don't just build screens — build the system.
+
+## See also
+
+- [[Platform/Modulo/STATUS]] — current Modulo build status
+- [[bakekit|BakeKit]] — the design system this skills set is based on
+- [[005b-component-primitives-react-aria]] — React ARIA ADR

@@ -16,9 +16,10 @@ import * as LucideIcons from 'lucide-react';
 
 export const ICON_SLOTS = [
   { slot: 'nav-home',       label: 'Nav — Home',       default: 'House',          screen: 'BottomNav' },
-  { slot: 'nav-explore',    label: 'Nav — Explore',    default: 'Search',         screen: 'BottomNav' },
-  { slot: 'nav-activity',   label: 'Nav — Activity',   default: 'Activity',       screen: 'BottomNav' },
-  { slot: 'nav-swap',       label: 'Nav — Swap',       default: 'ArrowRightLeft', screen: 'BottomNav' },
+  { slot: 'nav-markets',    label: 'Nav — Markets',    default: 'BarChart3',      screen: 'BottomNav' },
+  { slot: 'nav-fab',        label: 'Nav — FAB',        default: 'Zap',            screen: 'BottomNav' },
+  { slot: 'nav-activity',   label: 'Nav — Activity',   default: 'Clock',          screen: 'BottomNav' },
+  { slot: 'nav-funds',      label: 'Nav — Funds',      default: 'Wallet',         screen: 'BottomNav' },
   { slot: 'action-buy',     label: 'Action — Buy',     default: 'Plus',           screen: 'Home' },
   { slot: 'action-send',    label: 'Action — Send',    default: 'Send',           screen: 'Home' },
   { slot: 'action-receive', label: 'Action — Receive', default: 'Download',       screen: 'Home' },
