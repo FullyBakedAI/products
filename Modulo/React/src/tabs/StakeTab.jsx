@@ -110,7 +110,9 @@ export default function StakeTab() {
         ))}
       </div>
 
-      {/* Amount input */}
+      </div>{/* end actions-tab-scroll */}
+
+      {/* Amount input — outside scroll, always visible above numpad */}
       <div className="swap-card pay-card">
         <div className="card-label">Amount to stake</div>
         <div className="card-middle">
@@ -128,7 +130,6 @@ export default function StakeTab() {
           <span>{tok.balanceLabel}</span>
         </div>
       </div>
-      </div>{/* end actions-tab-scroll */}
 
       <Numpad onKey={handleKey} />
 

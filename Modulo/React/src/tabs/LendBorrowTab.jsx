@@ -156,6 +156,9 @@ export default function LendBorrowTab() {
             ))}
           </div>
 
+          </div>{/* end actions-tab-scroll */}
+
+          {/* Amount input — outside scroll, always visible above numpad */}
           <div className="swap-card pay-card">
             <div className="card-label">{isStaking ? 'Amount to stake' : 'Amount to lend'}</div>
             <div className="card-middle">
@@ -173,7 +176,6 @@ export default function LendBorrowTab() {
               <span>{tok.balanceLabel}</span>
             </div>
           </div>
-          </div>{/* end actions-tab-scroll */}
 
           <Numpad onKey={handleKey} />
 
@@ -274,6 +276,9 @@ export default function LendBorrowTab() {
             />
           )}
 
+          </div>{/* end actions-tab-scroll */}
+
+          {/* Borrow amount — outside scroll, always visible above numpad */}
           <div className="swap-card pay-card">
             <div className="card-label">Borrow amount</div>
             <div className="card-middle">
@@ -288,7 +293,6 @@ export default function LendBorrowTab() {
             </div>
             <div className="card-bottom"><span>Variable 4.8% APR</span><span>Max: $3,300</span></div>
           </div>
-          </div>{/* end actions-tab-scroll */}
 
           <Numpad onKey={handleKey} />
 
