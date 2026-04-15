@@ -2,7 +2,7 @@
  * SwapTab — token swap interface inside ActionsScreen
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from '../motion-tokens';
 import { Button } from 'react-aria-components';
@@ -41,9 +41,23 @@ export default function SwapTab() {
     payToken, receiveToken,
     payAmount, setPayAmount,
     activePct, setActivePct,
-    payUSD, receiveAmount, rateLabel,
+    payUSD, receiveAmount, receiveAmountRaw, rateLabel,
     swapDirections, selectToken,
+    slippage, setSlippage,
+    deadline,
+    livePayPrice, liveReceivePrice,
   } = useSwap();
+
+  const { getIcon } = useIconOverride();
+  const DirIcon = getIcon('swap-direction');
+  const [swappedVisual, setSwappedVisual]           = useState(false);
+  const [customSlippage, setCustomSlippage]         = useState('');         // MOD-120
+  const [showCustomInput, setShowCustomInput]       = useState(false);      // MOD-120
+  const [showSlippage, setShowSlippage]             = useState(false);
+  const [activeChain, setActiveChain]               = useState('ethereum'); // MOD-036
+  const [isQuoting, setIsQuoting]                   = useState(false);       // MOD-022
+  const [slippageAcknowledged, setSlippageAcknowledged] = useState(false);   // MOD-043
+  const quoteTimerRef                               = useRef(null);          // MOD-104
 
   // Pre-select the asset as pay token when opened from an asset overview
   useEffect(() => {
@@ -51,21 +65,24 @@ export default function SwapTab() {
       const key = ASSET_ID_TO_TOKEN[asset];
       if (key) selectToken('pay', key);
     }
-  }, [asset]); // eslint-disable-line
-  const { getIcon } = useIconOverride();
-  const DirIcon = getIcon('swap-direction');
-  const [swappedVisual, setSwappedVisual]           = useState(false);
-  const [slippagePct, setSlippagePct]               = useState(0.5);
-  const [showSlippage, setShowSlippage]             = useState(false);
-  const [activeChain, setActiveChain]               = useState('ethereum'); // MOD-036
-  const { deadline }                                 = useSwap(); // MOD-011: minutes
-  const [isQuoting, setIsQuoting]                   = useState(false);       // MOD-022
-  const [slippageAcknowledged, setSlippageAcknowledged] = useState(false);   // MOD-043
+  }, [asset, selectToken]); // MOD-129: include selectToken
+
+  // MOD-104: cleanup quote timer on unmount
+  useEffect(() => {
+    return () => {
+      if (quoteTimerRef.current) clearTimeout(quoteTimerRef.current);
+    };
+  }, []);
 
   const hasAmount = payAmount && parseFloat(payAmount) > 0;
 
-  // MOD-038 — dynamic price impact
-  const priceImpact = Math.min(15, Math.max(0.01, (parseFloat(payAmount) || 0) / 1000000 * 100));
+  // MOD-038/MOD-102 — dynamic price impact using live prices
+  const priceImpact = (() => {
+    const raw = receiveAmountRaw && payAmount
+      ? Math.abs((1 - parseFloat(receiveAmountRaw) / (parseFloat(payAmount) * livePayPrice / liveReceivePrice)) * 100)
+      : 0;
+    return Math.min(15, Math.max(0.01, raw));
+  })();
   const impactLevel = priceImpact < 1 ? 'low' : priceImpact < 3 ? 'medium' : 'high';
   const impactLabel = priceImpact < 1 ? 'Low' : priceImpact < 3 ? 'Medium' : 'High impact';
 
@@ -100,7 +117,6 @@ export default function SwapTab() {
       {/* Scrollable upper section — TransactionPath/FeeBreakdown grow into this area,
           never pushing the Numpad or CTA below the visible sheet boundary. */}
       <div className="actions-tab-scroll">
-      <div style={{flex:1}} />
       <AssetHeader tok={payToken} tokenKey={payTokenKey} />
       <div className="swap-cards">
         <div className="swap-card pay-card" role="region" aria-label="You pay">
@@ -179,7 +195,7 @@ export default function SwapTab() {
         <Button className="slippage-toggle" onPress={() => setShowSlippage(v => !v)}
           aria-expanded={showSlippage} aria-label="Slippage tolerance settings">
           <span className="slippage-icon" aria-hidden="true">⚙</span>
-          <span>Slippage: {slippagePct}%</span>
+          <span>Slippage: {slippage}%</span>
           <span className={`slippage-chevron${showSlippage ? ' open' : ''}`} aria-hidden="true">›</span>
         </Button>
         <AnimatePresence>
@@ -191,12 +207,37 @@ export default function SwapTab() {
             >
               {[0.1, 0.5, 1].map(p => (
                 <Button key={p}
-                  className={`pct-pill-btn${slippagePct === p ? ' active' : ''}`}
+                  className={`pct-pill-btn${slippage === p && !showCustomInput ? ' active' : ''}`}
                   aria-label={`Set slippage to ${p}%`}
-                  aria-pressed={slippagePct === p}
-                  onPress={() => { setSlippagePct(p); setShowSlippage(false); }}
+                  aria-pressed={slippage === p && !showCustomInput}
+                  onPress={() => { setSlippage(p); setShowCustomInput(false); setCustomSlippage(''); setShowSlippage(false); }}
                 >{p}%</Button>
               ))}
+              {/* MOD-120: Custom slippage option */}
+              <Button
+                className={`pct-pill-btn${showCustomInput ? ' active' : ''}`}
+                aria-label="Set custom slippage"
+                aria-pressed={showCustomInput}
+                onPress={() => setShowCustomInput(v => !v)}
+              >Custom</Button>
+              {showCustomInput && (
+                <input
+                  className="slippage-custom-input"
+                  type="number"
+                  min="0.01"
+                  max="50"
+                  step="0.01"
+                  placeholder="e.g. 2.5"
+                  value={customSlippage}
+                  aria-label="Custom slippage percentage"
+                  onChange={e => {
+                    setCustomSlippage(e.target.value);
+                    const parsed = parseFloat(e.target.value);
+                    if (!isNaN(parsed) && parsed > 0) setSlippage(parsed);
+                  }}
+                  onKeyDown={e => { if (e.key === 'Enter') setShowSlippage(false); }}
+                />
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -280,11 +321,13 @@ export default function SwapTab() {
           const net = parseFloat(fees.network.replace('$', ''));
           const pro = parseFloat(fees.protocol.replace('$', ''));
           const feeTotal = `$${(net + pro).toFixed(2)}`;
-          setTimeout(() => {
+          // MOD-104: store ref for cleanup
+          quoteTimerRef.current = setTimeout(() => {
+            setIsQuoting(false); // safety reset
             navigate('/review', { state: {
               action: 'swap',
-              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * payToken.price },
-              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * receiveToken.price },
+              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * livePayPrice },
+              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * liveReceivePrice },
               fee: { network: fees.network, protocol: fees.protocol, total: feeTotal },
               rate: rateLabel, warning: null,
             }});

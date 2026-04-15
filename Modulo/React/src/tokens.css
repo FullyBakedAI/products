@@ -51,6 +51,54 @@
   /* Typography */
   --bk-font:             'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 
+  /* Typography scale */
+  --bk-text-xs:    10px;
+  --bk-text-sm:    12px;
+  --bk-text-base:  14px;
+  --bk-text-md:    15px;
+  --bk-text-lg:    16px;
+  --bk-text-xl:    18px;
+  --bk-text-2xl:   22px;
+  --bk-text-3xl:   28px;
+  --bk-text-4xl:   36px;
+
+  /* Spacing scale */
+  --bk-space-1:    4px;
+  --bk-space-2:    8px;
+  --bk-space-3:    12px;
+  --bk-space-4:    16px;
+  --bk-space-5:    20px;
+  --bk-space-6:    24px;
+  --bk-space-8:    32px;
+  --bk-space-10:   40px;
+  --bk-space-12:   48px;
+
+  /* Radius scale */
+  --bk-radius-sm:   4px;
+  --bk-radius-md:   8px;
+  --bk-radius-lg:   12px;
+  --bk-radius-xl:   16px;
+  --bk-radius-2xl:  20px;
+  --bk-radius-3xl:  24px;
+  --bk-radius-full: 9999px;
+
+  /* Interaction states */
+  --bk-hover-opacity:    0.85;
+  --bk-disabled-opacity: 0.4;
+  --bk-press-scale:      0.97;
+
+  /* Contrast text — used on brand/colored backgrounds */
+  --bk-text-on-brand:    #fff;
+
+  /* Overlay / scrim */
+  --bk-overlay:          rgba(0, 0, 0, 0.5);
+  --bk-shadow-soft:      rgba(0, 0, 0, 0.3);
+  --bk-shadow-heavy:     rgba(0, 0, 0, 0.45);
+
+  /* Brand glow */
+  --bk-brand-glow:       rgba(88, 75, 235, 0.3);
+  --bk-brand-glow-strong: rgba(88, 75, 235, 0.55);
+
   /* Motion — standard animation budget */
   --bk-motion-instant:  80ms;
   --bk-motion-fast:     150ms;
@@ -91,6 +139,10 @@
 
   /* Grid layout */
   --bk-manage-grid-cols: 2;
+
+  /* Safe-area top — used by screen-wrapper and full-screen overlays.
+     Overridden per context in shared.css media queries. */
+  --bk-safe-top: 0px;
 }
 
 /* ── Light theme — apply to phone wrapper only ─────────────────────── */
@@ -125,6 +177,10 @@
   --bk-pill-bg:          #EBEBF8;
   --bk-earn-card-bg:     rgba(88, 75, 235, 0.06);
   --bk-earn-card-border: rgba(88, 75, 235, 0.15);
+
+  --bk-action-swap:  var(--bk-brand-primary);
+  --bk-action-lend:  color-mix(in srgb, var(--bk-brand-primary) 72%, #e8e8f0 28%);
+  --bk-action-trade: color-mix(in srgb, var(--bk-brand-primary) 55%, #e8e8f0 45%);
 }
 
 /* ── Global Reset ────────────────────────────────────────────────────── */

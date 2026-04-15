@@ -26,7 +26,7 @@ const PRESETS = [
     id: 'phase-2',
     name: 'Phase 2',
     tagline: 'Lending · Autopilot · 5 assets',
-    bullets: ['5 assets', 'Lending + Deposit', 'Autopilot nav tab', 'Portfolio chart'],
+    bullets: ['5 assets', 'Lending + Stake', 'Autopilot nav tab', 'Portfolio chart'],
     json: phase2Json,
   },
   {
@@ -234,7 +234,7 @@ export default function BuildTab() {
             <FeatureRow label="Swap" checked={f.actions.swap} onChange={v => updateSection('actions','swap',v)} />
             <FeatureRow label="Trade" description="Advanced order types" checked={f.actions.trade} onChange={v => updateSection('actions','trade',v)} />
             <FeatureRow label="Lend" description="Collateral lending" checked={f.actions.lend} onChange={v => updateSection('actions','lend',v)} />
-            <FeatureRow label="Deposit" description="Yield-bearing deposits" checked={f.actions.deposit} onChange={v => updateSection('actions','deposit',v)} />
+            <FeatureRow label="Stake" description="Staking rewards" checked={f.actions.stake} onChange={v => updateSection('actions','stake',v)} />
           </div>
 
           {/* DeFi */}

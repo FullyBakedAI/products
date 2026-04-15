@@ -242,7 +242,7 @@
 .asset-pos-stat { flex: 1; }
 
 .asset-pos-stat + .asset-pos-stat {
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 1px solid var(--bk-white-07);
   padding-left: 12px;
   margin-left: 12px;
 }
@@ -418,7 +418,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--bk-success);
-  background: rgba(52, 199, 89, 0.12);
+  background: color-mix(in srgb, var(--bk-success) 12%, transparent);
   border-radius: 20px;
   padding: 4px 8px;
   flex-shrink: 0;
@@ -583,10 +583,10 @@
 .asset-sheet-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--bk-overlay);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  z-index: 20;
+  z-index: var(--bk-z-modal);
 }
 
 .asset-price-alert-sheet {
@@ -737,7 +737,7 @@
   border-radius: 14px;
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   font-family: var(--bk-font);
   cursor: pointer;
   transition: opacity 0.15s;

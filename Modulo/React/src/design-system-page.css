@@ -59,7 +59,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color var(--bk-motion-fast), border-color var(--bk-motion-fast), background var(--bk-motion-fast);
   letter-spacing: 0.01em;
 }
 .ds-back-btn:hover {
@@ -120,7 +120,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   letter-spacing: -0.01em;
-  transition: color 0.15s;
+  transition: color var(--bk-motion-fast);
   white-space: nowrap;
   margin-bottom: -1px;
 }
@@ -163,7 +163,7 @@
   font-family: var(--bk-font);
   color: rgba(255,255,255,0.35);
   text-align: left;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
   width: 100%;
   position: relative;
 }
@@ -282,7 +282,7 @@
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.07);
   background: rgba(255,255,255,0.03);
-  transition: border-color 0.2s;
+  transition: border-color var(--bk-motion-standard);
 }
 .ds-logo-chip:hover { border-color: rgba(255,255,255,0.14); }
 .ds-logo-chip-light { background: #F8F8FA !important; border-color: rgba(0,0,0,0.06) !important; }
@@ -298,7 +298,7 @@
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(255,255,255,0.03);
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color var(--bk-motion-standard), transform var(--bk-motion-standard);
   cursor: default;
 }
 .ds-palette-chip:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
@@ -338,7 +338,7 @@
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
   padding: 20px;
-  transition: border-color 0.2s;
+  transition: border-color var(--bk-motion-standard);
 }
 .ds-voice-card:hover { border-color: rgba(255,255,255,0.12); }
 .ds-voice-trait { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 6px; letter-spacing: -0.01em; }
@@ -387,7 +387,7 @@
   padding: 6px 16px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 .ds-save-btn:hover { opacity: 0.85; }
 .ds-discard-btn {
@@ -400,7 +400,7 @@
   padding: 6px 14px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: color 0.15s, border-color 0.15s;
+  transition: color var(--bk-motion-fast), border-color var(--bk-motion-fast);
 }
 .ds-discard-btn:hover { color: var(--bk-text-primary); border-color: var(--bk-text-muted); }
 
@@ -425,7 +425,7 @@
   padding: 5px 11px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 .ds-footer-btn:hover { opacity: 0.7; }
 .ds-reset-defaults-btn {
@@ -461,12 +461,12 @@
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 5px;
+  border-radius: var(--bk-radius-sm);
   border: 1px solid;
   cursor: pointer;
   background: none;
   font-family: var(--bk-font);
-  transition: opacity 0.12s;
+  transition: opacity var(--bk-motion-instant);
 }
 .ds-theme-btn:hover { opacity: 0.7; }
 .ds-theme-del { padding: 3px 8px; }
@@ -491,7 +491,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   white-space: nowrap;
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 
 /* ── Tokens studio layout ────────────────────────────────────────────── */
@@ -578,7 +578,7 @@
   border: none;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: background 0.15s;
+  transition: background var(--bk-motion-fast);
 }
 .ds-accordion-header:hover { background: rgba(255,255,255,0.025); }
 .ds-accordion-group.open .ds-accordion-header {
@@ -761,7 +761,7 @@
   padding: 4px 12px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: all 0.15s;
+  transition: all var(--bk-motion-fast);
 }
 .ds-reset-all-btn:hover { color: var(--bk-error); border-color: var(--bk-error); }
 
@@ -799,7 +799,7 @@
   font-family: var(--bk-font);
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  transition: color 0.15s;
+  transition: color var(--bk-motion-fast);
 }
 .ds-group-tab:hover { color: var(--bk-text-secondary); }
 .ds-group-tab.active {
@@ -843,15 +843,15 @@
 
 .ds-colour-picker {
   width: 26px; height: 26px; padding: 0;
-  border: none; border-radius: 5px; cursor: pointer; background: none;
+  border: none; border-radius: var(--bk-radius-sm); cursor: pointer; background: none;
 }
-.ds-colour-picker::-webkit-color-swatch-wrapper { padding: 0; border-radius: 5px; }
-.ds-colour-picker::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; }
+.ds-colour-picker::-webkit-color-swatch-wrapper { padding: 0; border-radius: var(--bk-radius-sm); }
+.ds-colour-picker::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.15); border-radius: var(--bk-radius-sm); }
 
 .ds-hex-input {
   width: 70px; font-size: 11px; font-family: 'SF Mono', monospace;
   color: var(--bk-text-secondary); background: var(--bk-bg-card);
-  border: 1px solid var(--bk-border-subtle); border-radius: 5px;
+  border: 1px solid var(--bk-border-subtle); border-radius: var(--bk-radius-sm);
   padding: 3px 6px; outline: none;
 }
 .ds-hex-input:focus { border-color: var(--bk-brand-primary); color: var(--bk-text-primary); }
@@ -891,7 +891,7 @@
 .ds-screen-tab {
   font-size: 12px; font-weight: 500; color: var(--bk-text-muted);
   background: none; border: none; border-radius: 8px;
-  padding: 5px 12px; cursor: pointer; font-family: var(--bk-font); transition: all 0.15s;
+  padding: 5px 12px; cursor: pointer; font-family: var(--bk-font); transition: all var(--bk-motion-fast);
 }
 .ds-screen-tab.active { background: var(--bk-bg-card); color: var(--bk-text-primary); }
 
@@ -930,7 +930,7 @@
   font-size: 14px; font-weight: 600; border-radius: 12px;
   padding: 10px 20px; border: 1px solid transparent;
   cursor: pointer; font-family: var(--bk-font);
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 .ds-ex-btn:hover { opacity: 0.85; }
 .ds-ex-btn-primary { color: #fff; border: none; }
@@ -995,7 +995,7 @@
   padding: 24px;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(255,255,255,0.025);
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color var(--bk-motion-standard), transform var(--bk-motion-standard);
 }
 .ds-principle-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
 .ds-principle-number {
@@ -1057,7 +1057,7 @@
 }
 .ds-copy-btn {
   font-size: 11px; font-weight: 600; background: none; border: none;
-  cursor: pointer; font-family: var(--bk-font); transition: color 0.15s;
+  cursor: pointer; font-family: var(--bk-font); transition: color var(--bk-motion-fast);
 }
 .ds-copy-pre {
   padding: 14px; font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
@@ -1125,7 +1125,7 @@
   cursor: pointer;
   font-size: 10px;
   flex-shrink: 0;
-  transition: background 0.12s;
+  transition: background var(--bk-motion-instant);
 }
 .ds-motion-play-btn:hover { background: rgba(88,75,235,0.1); }
 
@@ -1169,7 +1169,7 @@
   display: flex;
   align-items: center;
   opacity: 0.5;
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 .ds-customizer-reset:hover { opacity: 1; }
 
@@ -1229,7 +1229,7 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  transition: transform 0.12s;
+  transition: transform var(--bk-motion-instant);
 }
 .ds-customizer-preset-dot:hover { transform: scale(1.2); }
 
@@ -1261,7 +1261,7 @@
   width: 36px;
   height: 20px;
   border-radius: 10px;
-  transition: background 0.2s;
+  transition: background var(--bk-motion-standard);
   position: relative;
 }
 .ds-toggle-track::after {
@@ -1273,7 +1273,7 @@
   height: 14px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.2s;
+  transition: transform var(--bk-motion-standard);
 }
 .ds-toggle input:checked + .ds-toggle-track::after { transform: translateX(16px); }
 
@@ -1302,7 +1302,7 @@
   border: 1px solid;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: all 0.15s;
+  transition: all var(--bk-motion-fast);
   background: none;
 }
 
@@ -1324,7 +1324,7 @@
   cursor: pointer;
   text-align: left;
   font-family: var(--bk-font);
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color var(--bk-motion-fast), background var(--bk-motion-fast);
 }
 .ds-product-icon-chip:hover { border-color: var(--bk-brand-primary) !important; }
 .ds-product-icon-chip.copied { border-color: var(--bk-brand-primary) !important; }
@@ -1376,7 +1376,7 @@
   border: 1px solid;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: all 0.12s;
+  transition: all var(--bk-motion-instant);
 }
 
 .ds-icon-cats {
@@ -1393,7 +1393,7 @@
   border: 1px solid;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: all 0.12s;
+  transition: all var(--bk-motion-instant);
 }
 
 .ds-icon-grid {
@@ -1411,7 +1411,7 @@
   border-radius: 10px;
   border: 1px solid;
   cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
+  transition: border-color var(--bk-motion-instant), background var(--bk-motion-instant);
   background: none;
 }
 .ds-icon-chip:hover { border-color: var(--bk-brand-primary) !important; }
@@ -1514,7 +1514,7 @@
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 14px;
   background: rgba(255,255,255,0.02);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color var(--bk-motion-standard), background var(--bk-motion-standard);
 }
 
 .ds-agent-callout:hover {
@@ -1620,7 +1620,7 @@
   align-items: flex-end;
   padding: 14px;
   position: relative;
-  transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: flex var(--bk-motion-slow) cubic-bezier(0.16, 1, 0.3, 1);
   cursor: default;
   min-width: 0;
   overflow: hidden;
@@ -1665,7 +1665,7 @@
   margin-top: 4px;
   line-height: 1.4;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity var(--bk-motion-standard);
 }
 
 .ds-colour-block:hover .ds-colour-block-role { opacity: 1; }
@@ -1845,7 +1845,7 @@
   font-size: 11px;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--bk-motion-instant), color var(--bk-motion-instant);
 }
 .ds-builtin-theme-btn:hover {
   background: rgba(255,255,255,0.06);
@@ -1923,7 +1923,7 @@
   cursor: pointer;
   font-family: inherit;
   text-align: left;
-  transition: background 0.12s;
+  transition: background var(--bk-motion-instant);
   width: 100%;
 }
 .ds-icon-register-row:last-child { border-bottom: none; }
@@ -2004,7 +2004,7 @@
   cursor: pointer;
   font-family: inherit;
   position: relative;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  transition: background var(--bk-motion-instant), border-color var(--bk-motion-instant), color var(--bk-motion-instant);
 }
 .ds-icon-slot-thumb-label {
   font-size: 9px;
@@ -2037,7 +2037,7 @@
 .ds-icon-slot-pick {
   width: 24px;
   height: 24px;
-  border-radius: 5px;
+  border-radius: var(--bk-radius-sm);
   border: 1px solid;
   display: flex;
   align-items: center;
@@ -2045,7 +2045,7 @@
   cursor: pointer;
   background: transparent;
   flex-shrink: 0;
-  transition: background 0.12s;
+  transition: background var(--bk-motion-instant);
 }
 .ds-icon-mini-picker {
   border: 1px solid;
@@ -2098,7 +2098,7 @@
   align-items: center;
   gap: 8px;
   position: relative;
-  z-index: 2;
+  z-index: var(--bk-z-card);
   width: 100%;
   flex-shrink: 0;
 }
@@ -2129,7 +2129,7 @@
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  transition: background var(--bk-motion-instant), border-color var(--bk-motion-instant), color var(--bk-motion-instant);
   white-space: nowrap;
 }
 .ds-showcase-action-btn:hover { opacity: 0.85; }
@@ -2155,7 +2155,7 @@
   padding: 4px 10px;
   cursor: pointer;
   font-family: var(--bk-font, 'Inter', sans-serif);
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--bk-motion-instant), color var(--bk-motion-instant);
   white-space: nowrap;
 }
 .ds-version-tab:hover { color: var(--bk-text-secondary); }
@@ -2299,7 +2299,7 @@
   border-bottom: 1px solid transparent;
   cursor: pointer;
   text-align: left;
-  transition: opacity 0.12s;
+  transition: opacity var(--bk-motion-instant);
 }
 .ds-comp-list-group-header:hover { opacity: 0.75; }
 .ds-comp-list-count {
@@ -2361,7 +2361,7 @@
   font-family: inherit;
   cursor: pointer;
   background: transparent;
-  transition: opacity 0.12s;
+  transition: opacity var(--bk-motion-instant);
 }
 .ds-inspector-close:hover { opacity: 0.7; }
 
@@ -2423,7 +2423,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: opacity 0.12s;
+  transition: opacity var(--bk-motion-instant);
 }
 .ds-kit-panel-action:hover { opacity: 0.7; }
 .ds-kit-field {
@@ -2464,7 +2464,7 @@
 }
 .ds-kit-option {
   padding: 4px 10px;
-  border-radius: 5px;
+  border-radius: var(--bk-radius-sm);
   font-size: 11px;
   font-family: inherit;
   cursor: pointer;
@@ -2488,7 +2488,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--bk-motion-instant), color var(--bk-motion-instant);
   font-family: inherit;
 }
 .ds-phone-theme-btn.active {
@@ -2530,7 +2530,7 @@
 .ds-inspector-tabs { display: flex; gap: 2px; flex: 1; }
 .ds-inspector-tab {
   font-size: 11px; font-weight: 500;
-  padding: 4px 10px; border-radius: 5px;
+  padding: 4px 10px; border-radius: var(--bk-radius-sm);
   border: none; background: transparent;
   cursor: pointer; font-family: inherit;
   transition: background 0.1s;

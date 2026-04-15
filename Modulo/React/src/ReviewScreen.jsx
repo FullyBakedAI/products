@@ -36,25 +36,14 @@ import { getPathForTokens } from './config/transaction-paths';
 import { formatUSD, capitalize } from './utils/formatters';
 import './review.css';
 
-import tokenEth  from './assets/token-eth.svg';
-import tokenUsdc from './assets/token-usdc.svg';
-
-const DEFAULT_STATE = {
-  action: 'swap',
-  from: { icon: tokenEth,  symbol: 'ETH',  amount: '0.1',    usd: 386.40 },
-  to:   { icon: tokenUsdc, symbol: 'USDC', amount: '324.10', usd: 324.10 },
-  fee:  { network: '$2.40', protocol: '$0.88', total: '$3.28' },
-  rate: '1 ETH = 3,241 USDC',
-  warning: null,
-};
-
-
 export default function ReviewScreen() {
   const f = useFeatures();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const s = state || DEFAULT_STATE;
-  const { action, from, to, fee, rate, warning } = s;
+  const location = useLocation();
+  const { state } = location;
+  // MOD-118: No DEFAULT_STATE — if no real route state, redirect to root
+  const hasRealState = !!(state && state.from && state.from.usd);
+  const { action, from, to, fee, rate, warning } = state || {};
   const isEarnOnly = !to || action === 'stake' || action === 'lend';
   const [feesOpen, setFeesOpen] = useState(false);
   const { deadline } = useSwap(); // MOD-011: minutes, swap transactions expire — sourced from context
@@ -64,20 +53,25 @@ export default function ReviewScreen() {
   const [approvalStatus, setApprovalStatus] = useState('idle'); // 'idle' | 'pending' | 'approved'
   const needsApproval = f.defi.tokenApproval && !isNativeToken && approvalStatus !== 'approved';
 
+  // MOD-118 / MOD-041 / MOD-096: Guard against missing or zero-amount state — redirect, never render
+  useEffect(() => {
+    if (!hasRealState || parseFloat(from?.usd) <= 0) {
+      navigate('/');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // MOD-119: Reset approval status whenever the source token changes
+  useEffect(() => {
+    setApprovalStatus('idle');
+  }, [from?.symbol]);
+
   const handleConfirm = () => navigate('/success', { state: {
     action,
     summary: `${from.amount} ${from.symbol}${to ? ` for ${to.amount} ${to.symbol}` : ''}`,
     from, to, fee, rate,
   }});
 
-  // MOD-041: Guard against zero/missing amount state
-  useEffect(() => {
-    if (!from?.usd || parseFloat(from.usd) <= 0) {
-      navigate('/');
-    }
-  }, [from?.usd, navigate]);
-
-  if (!from?.usd || parseFloat(from.usd) <= 0) {
+  if (!hasRealState || parseFloat(from?.usd) <= 0) {
     return null;
   }
 
@@ -138,13 +132,17 @@ export default function ReviewScreen() {
               <div className="review-asset-left">
                 <img src={to.icon} alt="" width="36" height="36" style={{ borderRadius: '50%', flexShrink: 0, display: 'block' }} />
                 <div>
-                  <div className="card-label" style={{ margin: 0 }}>You receive</div>
+                  {/* MOD-128: borrow uses neutral label; swap/trade gets "You receive" */}
+                  <div className="card-label" style={{ margin: 0 }}>
+                    {action === 'borrow' ? 'You borrow' : 'You receive'}
+                  </div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--bk-text-primary)', marginTop: 1 }}>
                     {to.amount} {to.symbol}
                   </div>
                 </div>
               </div>
-              <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-success)' }}>{formatUSD(to.usd)}</span>
+              {/* MOD-128: green success color only for swap/trade receive, neutral for borrow */}
+              <span style={{ fontSize: 16, fontWeight: 600, color: action === 'borrow' ? 'var(--bk-text-secondary)' : 'var(--bk-success)' }}>{formatUSD(to.usd)}</span>
             </div>
           )}
         </div>
@@ -189,7 +187,7 @@ export default function ReviewScreen() {
             </span>
             <motion.span
               animate={{ rotate: feesOpen ? 180 : 0 }}
-              transition={{ type: 'spring', damping: 18, stiffness: 300 }}
+              transition={{ type: 'spring', damping: 18, stiffness: 260, mass: 0.6 }}
               style={{ display: 'flex' }}
             >
               <IconChevronDown />
@@ -210,7 +208,7 @@ export default function ReviewScreen() {
                 { label: 'Network fee',  value: fee.network  },
                 { label: 'Protocol fee', value: fee.protocol },
               ].map(({ label, value }) => (
-                <div key={label} className="card-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '9px 0', margin: 0 }}>
+                <div key={label} className="card-bottom" style={{ borderTop: '1px solid var(--bk-white-05)', padding: '9px 0', margin: 0 }}>
                   <span className="card-label" style={{ margin: 0, paddingLeft: 10 }}>{label}</span>
                   <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-muted)' }}>{value ?? 'Estimating...'}</span>
                 </div>

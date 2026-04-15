@@ -40,7 +40,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 .settings-wallet-card:active {
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--bk-white-05);
 }
 
 .settings-wallet-left {
@@ -175,7 +175,7 @@
 .sp-switch-indicator {
   width: 44px;
   height: 26px;
-  border-radius: 13px;
+  border-radius: var(--bk-radius-lg);
   background: var(--bk-bg-card-alt);
   border: 1px solid var(--bk-border-pill);
   position: relative;

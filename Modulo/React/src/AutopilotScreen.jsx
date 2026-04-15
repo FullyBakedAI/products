@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
+import { useAutopilot } from './AutopilotContext';
 
 const MotionButton = motion.create(Button);
 const IconZap = () => (
@@ -52,7 +53,7 @@ export default function AutopilotScreen() {
   const navigate = useNavigate();
   const [risk, setRisk]     = useState('balanced');
   const [notifs, setNotifs] = useState(true);
-  const [active, setActive] = useState(true);
+  const { active, setActive } = useAutopilot();
 
   return (
     <motion.main

@@ -211,7 +211,7 @@
 
 /* ── Copy feedback ──────────────────────────────────────────────────── */
 .address-action-btn.copied {
-  background: rgba(34, 197, 94, 0.12);
+  background: color-mix(in srgb, var(--bk-success) 12%, transparent);
   border-radius: 8px;
 }
 

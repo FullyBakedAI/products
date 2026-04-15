@@ -27,7 +27,7 @@ const BUILTIN_PRESETS = [
         tokenApproval: false,
         transactionDeadline: false,
       },
-      walletConnection: true,
+      walletConnection: false,
       notifications: false,
       undoToast: false,
     },

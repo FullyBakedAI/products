@@ -258,7 +258,7 @@
   min-width: 124px;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   font-family: var(--bk-font);
 }
 
@@ -289,7 +289,7 @@
   align-items: center;
   overflow: visible;
   position: relative;
-  z-index: 2;
+  z-index: var(--bk-z-card);
 }
 
 .swap-direction {
@@ -389,7 +389,7 @@
 }
 
 .numpad-key-btn[data-hovered] {
-  background: rgba(255, 255, 255, 0.04) !important;
+  background: var(--bk-white-05) !important;
 }
 
 .numpad-key-btn[data-pressed] {
@@ -432,9 +432,9 @@
 
 .bottom-cta-btn.cta-ready {
   background: var(--bk-brand-primary) !important;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   border-color: transparent !important;
-  box-shadow: 0 0 24px rgba(88, 75, 235, 0.3);
+  box-shadow: 0 0 24px var(--bk-brand-glow);
 }
 
 .bottom-cta-btn.cta-ready[data-hovered] {
@@ -490,7 +490,7 @@
     color: transparent;
     caret-color: var(--bk-brand-primary);
     pointer-events: all;
-    z-index: 2;
+    z-index: var(--bk-z-card);
     padding: 0;
     margin: 0;
     font-family: var(--bk-font);

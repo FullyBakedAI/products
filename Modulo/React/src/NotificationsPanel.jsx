@@ -99,7 +99,7 @@ export default function NotificationsPanel({ onClose }) {
   return (
     <AnimatePresence>
       <>
-        {/* Backdrop */}
+        {/* Backdrop — MOD-084: explicit exit transition */}
         <motion.div
           className="notif-backdrop"
           aria-label="Close notifications"
@@ -130,17 +130,18 @@ export default function NotificationsPanel({ onClose }) {
                 <span className="notif-count" aria-label={`${unreadCount} unread`}>{unreadCount}</span>
               )}
             </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {unreadCount > 0 && (
-                <Button className="notif-mark-read" onPress={markAllRead} aria-label="Mark all as read">
-                  Mark all read
-                </Button>
-              )}
-              <Button className="close-btn-shared" aria-label="Close notifications" onPress={onClose}>
-                <IconX />
+            <Button className="close-btn-shared" aria-label="Close notifications" onPress={onClose}>
+              <IconX />
+            </Button>
+          </div>
+
+          {unreadCount > 0 && (
+            <div className="notif-actions-row">
+              <Button className="notif-mark-read" onPress={markAllRead} aria-label="Mark all as read">
+                Mark all read
               </Button>
             </div>
-          </div>
+          )}
 
           <div className="notif-list" role="list">
             {groups.map(group => {

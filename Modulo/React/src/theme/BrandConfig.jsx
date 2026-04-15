@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import logoModulo from '../assets/logo-modulo.svg';
 
 const defaultConfig = {
@@ -12,8 +12,13 @@ const defaultConfig = {
 const BrandConfigContext = createContext(defaultConfig);
 
 export function BrandConfigProvider({ config = defaultConfig, children }) {
+  const value = useMemo(
+    () => ({ ...defaultConfig, ...config }),
+    [defaultConfig, config]
+  );
+
   return (
-    <BrandConfigContext.Provider value={{ ...defaultConfig, ...config }}>
+    <BrandConfigContext.Provider value={value}>
       {children}
     </BrandConfigContext.Provider>
   );

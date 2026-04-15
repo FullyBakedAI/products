@@ -94,9 +94,9 @@
   width: 44px;
   height: 26px;
   background: var(--bk-border-subtle);
-  border-radius: 13px;
+  border-radius: var(--bk-radius-lg);
   position: relative;
-  transition: background 0.2s ease;
+  transition: background var(--bk-motion-standard) ease;
   flex-shrink: 0;
 }
 
@@ -112,7 +112,7 @@
   height: 20px;
   background: var(--bk-text-primary);
   border-radius: 50%;
-  transition: transform 0.2s var(--bk-motion-spring);
+  transition: transform var(--bk-motion-standard) var(--bk-motion-spring);
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
@@ -152,7 +152,7 @@
   color: var(--bk-text-secondary);
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: background var(--bk-motion-fast), border-color var(--bk-motion-fast), color var(--bk-motion-fast);
 }
 
 .autopilot-risk-pill.active {
@@ -181,7 +181,7 @@
   padding: 14px 16px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-card);
-  border-radius: 14px;
+  border-radius: var(--bk-radius-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -207,7 +207,7 @@
   gap: 0;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-card);
-  border-radius: 14px;
+  border-radius: var(--bk-radius-lg);
   overflow: hidden;
 }
 
@@ -274,13 +274,13 @@
   height: 48px;
   background: color-mix(in srgb, var(--bk-error) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--bk-error) 25%, transparent);
-  border-radius: 14px;
+  border-radius: var(--bk-radius-lg);
   font-size: 14px;
   font-weight: 600;
   color: var(--bk-error);
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: background 0.15s;
+  transition: background var(--bk-motion-fast);
 }
 
 .autopilot-pause-btn[data-hovered] {

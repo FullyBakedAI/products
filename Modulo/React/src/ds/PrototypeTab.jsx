@@ -16,15 +16,15 @@ const BC = typeof BroadcastChannel !== 'undefined'
 const PRESETS = {
   MVP: {
     nav:     { home: true, explore: false, activity: false, autopilot: false, fab: true },
-    home:    { portfolioChart: true, liveYield: true, smartNudges: false, autopilotCard: false, optimisePromo: false, assetLimit: 3 },
-    actions: { swap: true, trade: false, lend: false, deposit: true },
+    home:    { portfolioChart: true, liveYield: true, smartNudges: false, autopilotCard: false, optimisePromo: false, assetLimit: 1 },
+    actions: { swap: true, trade: false, lend: false, stake: false },
     defi:    { priceImpact: false, slippageWarning: false, healthFactor: false, tokenApproval: false, transactionDeadline: false },
-    notifications: false, walletConnection: true, undoToast: false,
+    notifications: false, walletConnection: false, undoToast: false,
   },
   Phase2: {
     nav:     { home: true, explore: true, activity: true, autopilot: false, fab: true },
     home:    { portfolioChart: true, liveYield: true, smartNudges: true, autopilotCard: false, optimisePromo: true, assetLimit: null },
-    actions: { swap: true, trade: true, lend: true, deposit: true },
+    actions: { swap: true, trade: true, lend: true, stake: true },
     defi:    { priceImpact: true, slippageWarning: true, healthFactor: false, tokenApproval: false, transactionDeadline: false },
     notifications: true, walletConnection: true, undoToast: true,
   },
@@ -67,6 +67,9 @@ function fmtTime(ts) {
 // ── BuildPanel ────────────────────────────────────────────────────────────
 function BuildPanel({ features, onFeaturesChange }) {
   const [activePreset, setActivePreset] = useState(null);
+  const [customPresets, setCustomPresets] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('modulo-custom-presets') || '[]'); } catch { return []; }
+  });
   const [versions, setVersions] = useState([]);
   const [currentVersionIdx, setCurrentVersionIdx] = useState(null);
 
@@ -122,6 +125,23 @@ function BuildPanel({ features, onFeaturesChange }) {
     if (nextIdx < versions.length) restoreVersion(nextIdx);
   }
 
+  function saveAsPreset() {
+    const name = window.prompt('Preset name:');
+    if (!name) return;
+    const preset = { name, features: JSON.parse(JSON.stringify(features)) };
+    const updated = [...customPresets, preset];
+    setCustomPresets(updated);
+    try { localStorage.setItem('modulo-custom-presets', JSON.stringify(updated)); } catch {}
+    setActivePreset(name);
+  }
+
+  function deleteCustomPreset(name) {
+    const updated = customPresets.filter(p => p.name !== name);
+    setCustomPresets(updated);
+    try { localStorage.setItem('modulo-custom-presets', JSON.stringify(updated)); } catch {}
+    if (activePreset === name) setActivePreset(null);
+  }
+
   return (
     <aside className="build-panel">
       {/* Presets */}
@@ -136,6 +156,18 @@ function BuildPanel({ features, onFeaturesChange }) {
               type="button"
             >
               {name}
+            </button>
+          ))}
+          {customPresets.map(p => (
+            <button
+              key={p.name}
+              className={`bp-preset-btn bp-preset-custom${activePreset === p.name ? ' active' : ''}`}
+              onClick={() => { setActivePreset(p.name); onFeaturesChange(deepMerge(defaultFeatures, p.features)); }}
+              onContextMenu={e => { e.preventDefault(); if (window.confirm(`Delete preset "${p.name}"?`)) deleteCustomPreset(p.name); }}
+              type="button"
+              title="Right-click to delete"
+            >
+              {p.name}
             </button>
           ))}
         </div>
@@ -171,7 +203,7 @@ function BuildPanel({ features, onFeaturesChange }) {
           <Toggle label="Swap"    checked={!!features.actions?.swap}    onChange={v => setActionsFlag('swap', v)} />
           <Toggle label="Trade"   checked={!!features.actions?.trade}   onChange={v => setActionsFlag('trade', v)} />
           <Toggle label="Lend"    checked={!!features.actions?.lend}    onChange={v => setActionsFlag('lend', v)} />
-          <Toggle label="Deposit" checked={!!features.actions?.deposit} onChange={v => setActionsFlag('deposit', v)} />
+          <Toggle label="Stake"   checked={!!features.actions?.stake}   onChange={v => setActionsFlag('stake', v)} />
         </div>
       </div>
 
@@ -231,6 +263,13 @@ function BuildPanel({ features, onFeaturesChange }) {
           </div>
         )}
       </div>
+
+      {/* Save preset — sticky footer */}
+      <div className="bp-footer">
+        <button className="bp-save-preset-btn" onClick={saveAsPreset} type="button">
+          Save Preset
+        </button>
+      </div>
     </aside>
   );
 }
@@ -249,8 +288,11 @@ export default function PrototypeTab() {
     window.location.hash = '/';
   }
 
-  function handleNewTab() {
-    window.open(window.location.origin + window.location.pathname, '_blank');
+  function handleRestart() {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      iframe.src = iframe.src;
+    }
   }
 
   return (
@@ -265,11 +307,12 @@ export default function PrototypeTab() {
             </svg>
             Full screen
           </button>
-          <button className="proto-btn proto-btn-ghost" onClick={handleNewTab} type="button">
+          <button className="proto-btn proto-btn-ghost" onClick={handleRestart} type="button">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M6 2H2v10h10V8M8 2h4m0 0v4M12 2 6 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M1.5 7a5.5 5.5 0 0 1 9.37-3.9M12.5 7a5.5 5.5 0 0 1-9.37 3.9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M11 1v2.5h-2.5M3 13v-2.5h2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Open in new tab
+            Restart
           </button>
         </div>
 

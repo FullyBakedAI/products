@@ -16,9 +16,11 @@ import { motion as m, tap, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
+import { useAutopilot } from './AutopilotContext';
 import { useIsDesktop } from './hooks/useIsDesktop';
 import BottomNav from './BottomNav';
 import NotificationsPanel from './NotificationsPanel';
+import { CHAIN_BADGE, SPARKLINES } from './config/chains';
 import './home.css';
 
 const IconTrendingUp = ({ size = 18 }) => (
@@ -167,23 +169,6 @@ function PortfolioChart({ period }) {
   return <div ref={containerRef} className="portfolio-chart-canvas" aria-hidden="true" />;
 }
 
-// Chain badge: colour-coded dot (bottom-right of token icon)
-const CHAIN_BADGE = {
-  usdc: { color: '#2D374B', title: 'Arbitrum' },
-  btc:  { color: '#F7931A', title: 'Bitcoin'  },
-  eth:  { color: '#0052FF', title: 'Base'     },
-  sol:  { color: '#9945FF', title: 'Solana'   },
-  usdt: { color: '#627EEA', title: 'Ethereum' },
-};
-
-// 7-day sparkline data (normalised 0–1)
-const SPARKLINES = {
-  usdc: [0.50, 0.50, 0.51, 0.49, 0.50, 0.50, 0.50, 0.51, 0.50],
-  btc:  [0.62, 0.55, 0.48, 0.42, 0.46, 0.54, 0.61, 0.66, 0.70],
-  eth:  [0.32, 0.38, 0.44, 0.50, 0.56, 0.63, 0.70, 0.74, 0.78],
-  sol:  [0.72, 0.68, 0.63, 0.57, 0.52, 0.48, 0.44, 0.42, 0.40],
-  usdt: [0.50, 0.50, 0.50, 0.51, 0.50, 0.50, 0.49, 0.50, 0.50],
-};
 
 function MiniSparkline({ id, negative }) {
   const vals = SPARKLINES[id] || SPARKLINES.usdc;
@@ -409,7 +394,7 @@ export default function HomeScreen() {
   const [activeChain, setActiveChain] = useState('Arbitrum');
   const [apyTooltipOpen, setApyTooltipOpen] = useState(false);
   const [chainMenuOpen, setChainMenuOpen] = useState(false);
-  const [autopilotActive] = useState(true);
+  const { active: autopilotActive } = useAutopilot();
   const [autopilotPathOpen, setAutopilotPathOpen] = useState(false);
 
   const CHAINS = ['Ethereum', 'Arbitrum', 'Base', 'Optimism'];
@@ -637,18 +622,21 @@ export default function HomeScreen() {
         {f.home.autopilotCard && f.nav.autopilot && autopilotActive && (
           <motion.div
             className="autopilot-home-card"
+            role="button"
+            tabIndex={0}
+            aria-label={`Autopilot is ${autopilotActive ? 'on' : 'off'} — tap to view settings`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.18 } }}
+            whileTap={{ scale: tap.default }}
+            onTap={() => navigate('/autopilot')}
           >
             <div className="autopilot-home-card-header">
               <div className="autopilot-home-card-title">
                 <span className="autopilot-home-icon" aria-hidden="true">⚡</span>
                 <span className="autopilot-home-label">Autopilot</span>
-                <Button
-                  className="autopilot-home-badge"
-                  onPress={() => navigate('/autopilot')}
-                  aria-label="Autopilot is on — view autopilot settings"
-                >ON</Button>
+                <span className={`autopilot-home-badge${autopilotActive ? '' : ' off'}`}>
+                  {autopilotActive ? 'ON' : 'OFF'}
+                </span>
               </div>
             </div>
             <div className="autopilot-home-action">
@@ -657,13 +645,9 @@ export default function HomeScreen() {
             <div className="autopilot-home-reason">
               Reason: {CURRENT_AUTOPILOT_ACTION.reason}
             </div>
-            <Button
-              className="autopilot-home-path-btn"
-              onPress={() => setAutopilotPathOpen(true)}
-              aria-label="View transaction path for current autopilot action"
-            >
+            <span className="autopilot-home-path-btn" aria-hidden="true">
               View path →
-            </Button>
+            </span>
           </motion.div>
         )}
 
@@ -714,9 +698,9 @@ export default function HomeScreen() {
             {totalPortfolioValue === 0 && (
               <div className="onboarding-card">
                 <h3>Welcome to Modulo</h3>
-                <p>Deposit to get started — see your portfolio grow across every chain.</p>
-                <Button className="primary-btn" onPress={() => openActions({ tab: 'deposit' })}>
-                  Deposit
+                <p>Start staking — see your portfolio grow across every chain.</p>
+                <Button className="primary-btn" onPress={() => openActions({ tab: 'stake' })}>
+                  Stake
                 </Button>
               </div>
             )}

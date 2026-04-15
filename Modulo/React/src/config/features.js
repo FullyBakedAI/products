@@ -15,6 +15,7 @@ export const defaultFeatures = {
     activity:   true,
     autopilot:  true,
     fab:        true,   // floating action button (+ in nav bar)
+    manage:     true,   // MOD-097: Funds tab in bottom nav
   },
 
   // ── Home screen sections ─────────────────────────────────────────────
@@ -29,7 +30,7 @@ export const defaultFeatures = {
 
   // ── Features ──────────────────────────────────────────────────────────
   notifications:    true,
-  walletConnection: true,   // connect wallet gate on first launch
+  walletConnection: false,  // skip wallet gate — show swap screen directly
   undoToast:        true,   // undo toast after transactions
 
   // ── Actions sheet tabs ────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { defaultFeatures } from '../config/features';
 
 const FeatureConfigContext = createContext(defaultFeatures);
@@ -23,20 +23,22 @@ export function FeatureConfigProvider({ config = defaultFeatures, children }) {
     return () => bc.close();
   }, []);
 
-  // Deep merge: client overrides only what they specify
-  const base = liveFeatures ?? config;
-  const resolved = {
-    nav:     { ...defaultFeatures.nav,     ...base.nav },
-    home:    { ...defaultFeatures.home,    ...base.home },
-    actions: { ...defaultFeatures.actions, ...base.actions },
-    defi:    { ...defaultFeatures.defi,    ...base.defi },
-    notifications:    base.notifications    ?? defaultFeatures.notifications,
-    walletConnection: base.walletConnection ?? defaultFeatures.walletConnection,
-    undoToast:        base.undoToast        ?? defaultFeatures.undoToast,
-  };
+  const value = useMemo(() => {
+    const base = liveFeatures ?? config;
+    return {
+      nav:     { ...defaultFeatures.nav,     ...base.nav },
+      home:    { ...defaultFeatures.home,    ...base.home },
+      actions: { ...defaultFeatures.actions, ...base.actions },
+      defi:    { ...defaultFeatures.defi,    ...base.defi },
+      notifications:    base.notifications    ?? defaultFeatures.notifications,
+      walletConnection: base.walletConnection ?? defaultFeatures.walletConnection,
+      undoToast:        base.undoToast        ?? defaultFeatures.undoToast,
+      setFeatures: setLiveFeatures,
+    };
+  }, [liveFeatures, config, setLiveFeatures]);
 
   return (
-    <FeatureConfigContext.Provider value={{ ...resolved, setFeatures: setLiveFeatures }}>
+    <FeatureConfigContext.Provider value={value}>
       {children}
     </FeatureConfigContext.Provider>
   );

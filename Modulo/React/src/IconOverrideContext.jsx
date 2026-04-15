@@ -11,7 +11,7 @@
  *   <HomeIcon size={22} />
  */
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 
 export const ICON_SLOTS = [
@@ -30,29 +30,34 @@ const IconOverrideContext = createContext(null);
 export function IconOverrideProvider({ children }) {
   const [overrides, setOverrides] = useState({});
 
-  function getIconName(slot) {
+  const getIconName = useCallback((slot) => {
     return overrides[slot] ?? ICON_SLOTS.find(s => s.slot === slot)?.default ?? 'Circle';
-  }
+  }, [overrides]);
 
-  function getIcon(slot) {
-    const name = getIconName(slot);
+  const getIcon = useCallback((slot) => {
+    const name = overrides[slot] ?? ICON_SLOTS.find(s => s.slot === slot)?.default ?? 'Circle';
     return LucideIcons[name] ?? LucideIcons.Circle;
-  }
+  }, [overrides]);
 
-  function setIconOverride(slot, iconName) {
+  const setIconOverride = useCallback((slot, iconName) => {
     setOverrides(prev => ({ ...prev, [slot]: iconName }));
-  }
+  }, []);
 
-  function resetIconOverride(slot) {
+  const resetIconOverride = useCallback((slot) => {
     setOverrides(prev => {
       const next = { ...prev };
       delete next[slot];
       return next;
     });
-  }
+  }, []);
+
+  const value = useMemo(
+    () => ({ getIcon, getIconName, setIconOverride, resetIconOverride, overrides }),
+    [getIcon, getIconName, setIconOverride, resetIconOverride, overrides]
+  );
 
   return (
-    <IconOverrideContext.Provider value={{ getIcon, getIconName, setIconOverride, resetIconOverride, overrides }}>
+    <IconOverrideContext.Provider value={value}>
       {children}
     </IconOverrideContext.Provider>
   );

@@ -2,7 +2,7 @@
  * TradeTab — market/limit order ticket inside ActionsScreen
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from '../motion-tokens';
 import { Button } from 'react-aria-components';
@@ -28,6 +28,11 @@ export default function TradeTab() {
   const [limitPrice, setLimitPrice] = useState('');
   const [activeInput, setActiveInput] = useState('amount');
   const [isQuoting, setIsQuoting]   = useState(false); // MOD-022
+  const quotingTimerRef             = useRef(null);  // MOD-104: cleanup on unmount
+
+  useEffect(() => {
+    return () => { if (quotingTimerRef.current) clearTimeout(quotingTimerRef.current); };
+  }, []);
 
   function handleKey(key) {
     const setter = activeInput === 'limit' ? setLimitPrice : setAmount;
@@ -50,7 +55,7 @@ export default function TradeTab() {
     <div className="actions-tab-stack">
       <div className="actions-tab-scroll">
 
-      <AssetHeader tok={tok} tokenKey={tokenKey} />
+      <AssetHeader tok={tok} tokenKey={tokenKey} returnTab="trade" />
 
       {/* Buy / Sell toggle */}
       <div className="trade-direction-tabs" role="group" aria-label="Buy or sell">
@@ -131,7 +136,7 @@ export default function TradeTab() {
         onPress={() => {
           if (!ctaReady) return;
           setIsQuoting(true);
-          setTimeout(() => {
+          quotingTimerRef.current = setTimeout(() => {
             navigate('/review', { state: {
               action: 'trade',
               from: { icon: tokenUsdc, symbol: 'USDC', amount: `$${dollarVal.toLocaleString()}`, usd: dollarVal },

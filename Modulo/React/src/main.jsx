@@ -28,6 +28,10 @@ class ErrorBoundary extends Component {
   }
 }
 
+if (window.self !== window.top) {
+  document.documentElement.setAttribute('data-iframe', '');
+}
+
 // Top-level router split — DS page lives outside HashRouter so it can own
 // its own router context for the phone preview. Everything else uses HashRouter.
 function Root() {

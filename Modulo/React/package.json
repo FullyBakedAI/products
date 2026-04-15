@@ -11,9 +11,12 @@
     "preview": "vite preview",
     "qa:css": "node -e \"const fs=require('fs');const {execSync}=require('child_process');const result=execSync('grep -rn \\\"color: #\\\\|background: #\\\\|rgba(255\\\" src/ --include=\\\"*.css\\\" --include=\\\"*.jsx\\\"').toString();if(result.trim()){console.error('CSS QA FAILED — hardcoded values found:\\n'+result);process.exit(1);}else{console.log('CSS QA: clean');}\"",
     "qa:build": "npm run build && echo 'BUILD: clean'",
-    "qa:gate": "npm run qa:build && echo '\\n--- QA GATE PASSED: build clean ---\\n\\nNow run manual checks (qa-gate-process.md Step 3+4):\\n  swap screen loads, amounts work, Review CTA visible, Confirm button reachable on mobile\\n\\nLocal model audit (Step 5):\\n  cat src/ReviewScreen.jsx | ollama run qwen3:32b \\\"QA audit: find layout bugs. BUG: [P1/P2/P3] [line] [description]\\\"'"
+    "lint:quality": "bash scripts/lint-quality.sh",
+    "qa:gate": "npm run lint:quality && npm run qa:build && echo '\\n--- QA GATE PASSED: build + quality clean ---\\n\\nNow run manual checks (qa-gate-process.md Step 3+4):\\n  swap screen loads, amounts work, Review CTA visible, Confirm button reachable on mobile\\n\\nLocal model audit (Step 5):\\n  cat src/ReviewScreen.jsx | ollama run qwen3:32b \\\"QA audit: find layout bugs. BUG: [P1/P2/P3] [line] [description]\\\"'"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@tanstack/react-query": "^5.99.0",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.23",
     "bignumber.js": "^10.0.2",
@@ -24,8 +27,10 @@
     "react": "^18.3.1",
     "react-aria-components": "^1.4.0",
     "react-dom": "^18.3.1",
+    "react-error-boundary": "^6.1.1",
     "react-router-dom": "^7.14.0",
-    "sonner": "^2.0.7"
+    "sonner": "^2.0.7",
+    "wagmi": "^3.6.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

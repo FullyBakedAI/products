@@ -48,7 +48,20 @@ export default function ConnectWalletScreen({ onConnect, onDemoConnect }) {
             const display = getDisplay(connector);
             const isConnectingThis = isPending && variables?.connector === connector;
             const isInjectedMissing = connector.id === 'injected' && !hasInjected;
-            const isWCUnavailable = connector.id === 'walletConnect' && !isWalletConnectSafe();
+            // MOD-090: WalletConnect with demo projectId crashes — show disabled placeholder instead
+            if (connector.id === 'walletConnect' && !isWalletConnectSafe()) {
+              return (
+                <Button
+                  key={connector.uid}
+                  className="wallet-option"
+                  role="listitem"
+                  isDisabled
+                >
+                  <span className="wallet-icon" aria-hidden="true">WC</span>
+                  <span className="wallet-name">WalletConnect — coming soon</span>
+                </Button>
+              );
+            }
 
             return (
               <Button
@@ -56,11 +69,11 @@ export default function ConnectWalletScreen({ onConnect, onDemoConnect }) {
                 className="wallet-option"
                 role="listitem"
                 onPress={() => {
-                  if (!isInjectedMissing && !isWCUnavailable) {
+                  if (!isInjectedMissing) {
                     try { connect({ connector }); } catch {}
                   }
                 }}
-                isDisabled={isPending || isInjectedMissing || isWCUnavailable}
+                isDisabled={isPending || isInjectedMissing}
               >
                 <span className="wallet-icon" aria-hidden="true">{display.label}</span>
                 <span className="wallet-name">

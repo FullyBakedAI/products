@@ -91,6 +91,7 @@ const IconEdit3 = ({ size = 18 }) => (
 );
 import './settings.css';
 import { useBrandConfig } from './theme/BrandConfig';
+import { useUndoToast } from './UndoToastContext';
 
 import walletAvatar from './assets/wallet-avatar.svg';
 import iconBrandBadge from './assets/icon-modulo-badge.svg';
@@ -193,6 +194,7 @@ function PillGroup({ options, value, onChange, ariaLabel }) {
 
 /* ── Security panel ── */
 function SecurityPanel({ onBack }) {
+  const { showUndo } = useUndoToast();
   const [biometric, setBiometric] = useState(true);
   const [txSigning, setTxSigning] = useState(true);
   const [autoLock, setAutoLock]   = useState('5min');
@@ -213,7 +215,7 @@ function SecurityPanel({ onBack }) {
         />
       </div>
       <div className="settings-section">
-        <Button className="settings-row" aria-label="Connected apps" onPress={() => alert('Connected apps — coming soon')}>
+        <Button className="settings-row" aria-label="Connected apps" onPress={() => showUndo?.('Connected apps — coming soon')}>
           <IconGlobe size={18} />
           <div className="settings-row-text">
             <span className="settings-row-label">Connected apps</span>
@@ -367,6 +369,7 @@ function AboutPanel({ onBack }) {
 /* ── Wallet detail panel ── */
 function WalletPanel({ onBack }) {
   const { brandName } = useBrandConfig();
+  const { showUndo } = useUndoToast();
   const [copied, setCopied] = useState(false);
   const fullAddr = '0x7f3e4a2b8c1d9e6f0a5b3c7d2e8f1a4b6c9d0e9A14';
 
@@ -406,7 +409,7 @@ function WalletPanel({ onBack }) {
         <Button
           className="settings-row"
           aria-label="Rename wallet"
-          onPress={() => alert('Rename wallet — coming soon')}
+          onPress={() => showUndo?.('Rename wallet — coming soon')}
         >
           <IconEdit3 size={18} />
           <div className="settings-row-text">
@@ -507,7 +510,7 @@ export default function SettingsScreen() {
                 <Button
                   className="settings-row settings-signout"
                   aria-label="Disconnect wallet"
-                  onPress={() => { disconnect(); navigate('/connect'); }}
+                  onPress={() => { disconnect(); navigate('/'); }}
                 >
                   <IconLogOut size={18} />
                   <div className="settings-row-text">

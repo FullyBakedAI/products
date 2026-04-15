@@ -17,7 +17,7 @@
   background: var(--bk-bg-elevated);
   border: 1px solid var(--bk-border-subtle);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 32px var(--bk-shadow-heavy);
 }
 
 .undo-message {

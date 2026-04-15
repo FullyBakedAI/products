@@ -4,10 +4,10 @@
  * Rendered as an overlay from ActionsContext (not a route).
  * Previous screen stays mounted and visible behind the backdrop.
  *
- * Tabs: Swap | Trade | Lend & Borrow | Deposit
+ * Tabs: Swap | Trade | Lend & Borrow | Stake
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from 'react-aria-components';
 import { useActions } from './ActionsContext';
@@ -15,7 +15,7 @@ import { useFeatures } from './theme/FeatureConfig';
 import SwapTab       from './tabs/SwapTab';
 import TradeTab      from './tabs/TradeTab';
 import LendBorrowTab from './tabs/LendBorrowTab';
-import DepositTab    from './tabs/DepositTab';
+import StakeTab      from './tabs/StakeTab';
 import './actions.css';
 
 const IconX = ({ size = 16 }) => (
@@ -28,14 +28,15 @@ const TABS = [
   { id: 'swap',    label: 'Swap' },
   { id: 'trade',   label: 'Trade' },
   { id: 'lend',    label: 'Lend' },
-  { id: 'deposit', label: 'Deposit' },
+  { id: 'stake',   label: 'Stake' },
 ];
 
 export default function ActionsScreen({ variant }) {
   const f = useFeatures();
   const isPanel = variant === 'panel';
   const { closeActions, tab: initialTab, isOpen } = useActions();
-  const visibleTabs = TABS.filter(t => f.actions[t.id]);
+  // MOD-130: wrap in useMemo to avoid recomputing on every render
+  const visibleTabs = useMemo(() => TABS.filter(t => f.actions[t.id]), [f.actions]);
   const [activeIdx, setActiveIdx] = useState(0);
   const closeButtonRef   = useRef(null);   // MOD-002
   const previousFocusRef = useRef(null);   // MOD-002
@@ -95,7 +96,7 @@ export default function ActionsScreen({ variant }) {
           {active === 'swap'    && <SwapTab />}
           {active === 'trade'   && <TradeTab />}
           {active === 'lend'    && <LendBorrowTab />}
-          {active === 'deposit' && <DepositTab />}
+          {active === 'stake'   && <StakeTab />}
         </div>
       </motion.div>
     </div>

@@ -137,7 +137,7 @@
   background: var(--bk-bg-elevated);
   border: 1px solid color-mix(in srgb, var(--bk-brand-primary) 30%, transparent);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 32px var(--bk-shadow-heavy);
   overflow: hidden;
 }
 

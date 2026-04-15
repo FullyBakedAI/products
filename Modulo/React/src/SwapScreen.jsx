@@ -21,6 +21,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { useBrandConfig } from './theme/BrandConfig';
 
+// MOD-114: chain-aware gas fees (mirrors SwapTab)
+const GAS_FEES = {
+  ethereum: { network: '$14.20', protocol: '$0.88' },
+  arbitrum: { network: '$0.08',  protocol: '$0.22' },
+  base:     { network: '$0.04',  protocol: '$0.18' },
+  polygon:  { network: '$0.02',  protocol: '$0.15' },
+  optimism: { network: '$0.05',  protocol: '$0.19' },
+};
+
 const MotionButton = motion.create(Button);
 import { useSwap } from './SwapContext';
 import { useUndoToast } from './UndoToastContext';
@@ -42,7 +51,7 @@ function SwapTokenPill({ token, side, appear }) {
   return (
     <TokenPill
       token={{ id: token.id, name: token.symbol, icon: token.icon }}
-      onPress={() => navigate(`/swap/select/${side}`)}
+      onPress={() => navigate(`/swap/select/${side}`, { state: { from: 'swap' } })}
       appear={appear}
     />
   );
@@ -54,7 +63,7 @@ function SelectTokenButton({ side }) {
     <Button
       className="select-token-cta-btn"
       aria-label="Select receive token"
-      onPress={() => navigate(`/swap/select/${side}`)}
+      onPress={() => navigate(`/swap/select/${side}`, { state: { from: 'swap' } })}
     >
       Select token
     </Button>
@@ -194,7 +203,10 @@ export default function SwapScreen() {
     activePct, setActivePct,
     payUSD, receiveAmount, rateLabel,
     swapDirections,
+    livePayPrice, liveReceivePrice,
   } = useSwap();
+
+  const [activeChain] = useState('ethereum'); // MOD-114: default chain for fee lookup
 
   const flashTimer   = useRef(null);
   const prevReceive  = useRef('');
@@ -309,11 +321,17 @@ export default function SwapScreen() {
         onPress={() => {
           if (!receiveToken) { navigate('/swap/select/receive'); return; }
           if (ctaReady) {
+            // MOD-114: chain-aware gas fees
+            const fees = GAS_FEES[activeChain] || GAS_FEES.ethereum;
+            const net = parseFloat(fees.network.replace('$', ''));
+            const pro = parseFloat(fees.protocol.replace('$', ''));
+            const feeTotal = `$${(net + pro).toFixed(2)}`;
             navigate('/review', { state: {
               action: 'swap',
-              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * payToken.price },
-              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * receiveToken.price },
-              fee: { network: '$2.40', protocol: '$0.88', total: '$3.28' },
+              // MOD-103: use live prices instead of static payToken.price / receiveToken.price
+              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * livePayPrice },
+              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * liveReceivePrice },
+              fee: { network: fees.network, protocol: fees.protocol, total: feeTotal },
               rate: rateLabel,
               warning: null,
             }});

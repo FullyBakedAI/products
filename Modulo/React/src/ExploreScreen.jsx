@@ -128,12 +128,23 @@ export default function ExploreScreen() {
     setSortBy(next);
   };
 
+  const q = searchQuery.trim().toLowerCase();
+
   const tabFiltered = ALL_TOKENS.filter(t => {
-    if (activeTab === 'Staking') return t.apyType === 'stake';
-    if (activeTab === 'Lending') return t.apyType === 'lend';
-    if (activeTab === 'Top')     return t.rank <= 5;
+    if (q && !t.name.toLowerCase().includes(q) && !t.symbol.toLowerCase().includes(q)) return false;
+    if (activeTab === 'Staking') { if (t.apyType !== 'stake') return false; }
+    else if (activeTab === 'Lending') { if (t.apyType !== 'lend') return false; }
+    else if (activeTab === 'Top') { if (t.rank > 5) return false; }
+    // MOD-113: apply chain filter — tokens carry a `chains` array if set, else show all
+    if (activeChain && activeChain !== 'All') {
+      if (t.chains && !t.chains.includes(activeChain)) return false;
+    }
     return true;
   });
+
+  const searchedYields = q
+    ? filteredYields.filter(y => y.asset.toLowerCase().includes(q) || y.protocol.toLowerCase().includes(q))
+    : filteredYields;
 
   const sortedTokens = [...tabFiltered].sort((a, b) => {
     if (sortBy === 'Price')     return b.priceRaw - a.priceRaw;
@@ -153,11 +164,15 @@ export default function ExploreScreen() {
     >
       <div className="scroll-content explore-scroll">
 
-        {/* Search */}
-        <TextField aria-label="Search tokens" value={searchQuery} onChange={setSearchQuery} className="search-field explore-search">
-          <IconSearch />
-          <Input className="explore-search-input" placeholder="Search tokens..." />
+        {/* Search — MOD-003: role="search" on wrapper div, not Button */}
+        <div role="search" aria-label="Search tokens">
+        <TextField aria-label="Search tokens" value={searchQuery} onChange={setSearchQuery} className="explore-search-field">
+          <div className="explore-search-wrap">
+            <IconSearch />
+            <Input className="explore-search-input" placeholder="Token name, address, or ENS" />
+          </div>
         </TextField>
+        </div>
 
         {/* Top Yields — compact list, not tiles */}
         <div className="yield-section">
@@ -178,7 +193,7 @@ export default function ExploreScreen() {
               >Your assets</Button>
             </div>
           </div>
-          {filteredYields.map((y, i) => (
+          {searchedYields.map((y, i) => (
             <motion.div
               key={y.asset + y.protocol}
               initial={{ opacity: 0, y: 6 }}

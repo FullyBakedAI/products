@@ -33,7 +33,7 @@
   border: 1px solid var(--bk-border-subtle);
   border-radius: 12px;
   padding: 0 12px;
-  transition: border-color 0.15s;
+  transition: border-color var(--bk-motion-fast);
 }
 
 .explore-search-field[data-focused-within] .explore-search-wrap {
@@ -99,7 +99,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   text-align: left;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-instant) ease;
 }
 
 .yield-row:active,
@@ -203,7 +203,7 @@
   font-family: var(--bk-font);
   color: inherit;
   text-align: left;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-instant) ease;
 }
 
 .token-row-explore:active,
@@ -295,13 +295,16 @@
   padding: 0;
 }
 
-.token-row-explore[data-focus-visible] {
+/* MOD-027: keyboard / pointer focus states */
+.token-row-explore[data-focus-visible],
+.token-row-explore[data-focused] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: -2px;
-  border-radius: 12px;
+  border-radius: var(--bk-radius-lg);
 }
 
-.sort-btn[data-focus-visible] {
+.sort-btn[data-focus-visible],
+.sort-btn[data-focused] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -324,12 +327,12 @@
   padding: 3px 10px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
   white-space: nowrap;
 }
 
 .yield-filter-pill.active {
   background: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
   font-weight: 600;
 }

@@ -13,6 +13,7 @@ import { SwapProvider }           from './SwapContext';
 import { IconOverrideProvider }   from './IconOverrideContext';
 import { UndoToastProvider }      from './UndoToastContext';
 import { ActionsProvider, useActions } from './ActionsContext';
+import { AutopilotProvider }          from './AutopilotContext';
 import { motion as m }            from './motion-tokens';
 import { useIsDesktop }           from './hooks/useIsDesktop';
 import DesktopLayout              from './DesktopLayout';
@@ -218,11 +219,14 @@ function AppInner() {
   }
 
   return (
+    <AutopilotProvider>
     <ActionsProvider>
       <IconOverrideProvider>
         <SwapProvider>
           <UndoToastProvider>
             {isDesktop ? (
+              // MOD-121: DesktopLayout already renders ActionsScreen as a panel — no separate overlay needed
+              // but ActionsOverlay must still be available for openActions() to work if ever called outside DesktopLayout
               <DesktopLayout>
                 <ErrorBoundary FallbackComponent={AppError}>
                   <AnimatedRoutes />
@@ -242,13 +246,12 @@ function AppInner() {
         </SwapProvider>
       </IconOverrideProvider>
     </ActionsProvider>
+    </AutopilotProvider>
   );
 }
 
 // ── App ───────────────────────────────────────────────────────────────────
 export default function App() {
-  // Only show splash on top-level frame (not inside the DS page iframe)
-  const isTopFrame = window.self === window.top;
   const [splashDone, setSplashDone] = useState(false);
   const handleSplashDone = useCallback(() => setSplashDone(true), []);
 
@@ -258,7 +261,7 @@ export default function App() {
         <BrandConfigProvider>
           <FeatureConfigProvider>
             <AnimatePresence mode="wait">
-              {isTopFrame && !splashDone ? (
+              {!splashDone ? (
                 <SplashScreen key="splash" onDone={handleSplashDone} />
               ) : (
                 <motion.div

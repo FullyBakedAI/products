@@ -3,7 +3,7 @@
  * Shows stakeable tokens; platform list driven by selected asset.
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from '../motion-tokens';
 import { Button } from 'react-aria-components';
@@ -32,14 +32,14 @@ const STAKING_PLATFORMS = {
     { name: 'Lido (wSOL)', apy: 6.9, tvl: '$890M', apyType: 'APY' },
   ],
   btc: [
-    { name: 'Native staking', apy: 1.8, tvl: '$8.4B', apyType: 'APY' },
-    { name: 'Babylon',        apy: 2.4, tvl: '$1.2B', apyType: 'APY' },
+    { name: 'BTC yield (wrapped)', apy: 1.8, tvl: '$8.4B', apyType: 'APY' },  // MOD-115: was "Native staking" which is incorrect for BTC
+    { name: 'Babylon Protocol',    apy: 2.4, tvl: '$1.2B', apyType: 'APY' },
   ],
   dot: [
     { name: 'Polkadot native', apy: 12.0, tvl: '$3.2B', apyType: 'APY' },
   ],
   atom: [
-    { name: 'Cosmos Hub', apy: 18.0, tvl: '$1.8B', apyType: 'APY' },
+    { name: 'Cosmos Hub', apy: 18.0, tvl: '$1.8B', apyType: 'APY (nominal)' },  // MOD-116: nominal label
   ],
   ada: [
     { name: 'Cardano native', apy: 3.8, tvl: '$4.4B', apyType: 'APY' },
@@ -70,6 +70,11 @@ export default function StakeTab() {
   const [platform, setPlatform]   = useState(platforms[0]);
   const [amount, setAmount]       = useState('');
   const [isQuoting, setIsQuoting] = useState(false);
+  const quotingTimerRef           = useRef(null);  // MOD-104: cleanup on unmount
+
+  useEffect(() => {
+    return () => { if (quotingTimerRef.current) clearTimeout(quotingTimerRef.current); };
+  }, []);
 
   // Reset platform when asset changes
   function selectAsset(id) {
@@ -93,7 +98,7 @@ export default function StakeTab() {
   return (
     <div className="actions-tab-stack">
       <div className="actions-tab-scroll">
-      <AssetHeader tok={tok} tokenKey={tokenKey} />
+      <AssetHeader tok={tok} tokenKey={tokenKey} returnTab="stake" />
 
       {/* Token selector — only shown when no specific asset was passed */}
       {!asset && (
@@ -163,7 +168,7 @@ export default function StakeTab() {
         onPress={() => {
           if (!ctaReady) return;
           setIsQuoting(true);
-          setTimeout(() => {
+          quotingTimerRef.current = setTimeout(() => {
             navigate('/review', {
               state: {
                 action: 'stake',

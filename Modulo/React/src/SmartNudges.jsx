@@ -64,6 +64,8 @@ const NUDGES_DATA = [
   },
 ];
 
+// MOD-049: icon colour classes replaces inline style={{ color: iconColor }}
+
 export default function SmartNudges() {
   const navigate = useNavigate();
   const { openActions } = useActions();
@@ -94,7 +96,7 @@ export default function SmartNudges() {
               layout
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0, transition: m.springTight }}
-              exit={{ opacity: 0, y: -16, scale: 0.88, transition: { duration: 0.16 } }}
+              exit={{ opacity: 0, y: -16, transition: { duration: 0.16 } }}
               style={{ position: 'relative' }}
             >
               {/* Whole card is tappable */}

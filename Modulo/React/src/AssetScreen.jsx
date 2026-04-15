@@ -14,6 +14,7 @@
 
 import { useParams, useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
+import { useUndoToast } from './UndoToastContext';
 import { useIsDesktop } from './hooks/useIsDesktop';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -823,10 +824,22 @@ function PriceChart({ symbol, period, negative, onCrosshairPrice }) {
   const chartRef     = useRef(null);
   const seriesRef    = useRef(null);
 
+  // MOD-105/MOD-137: resolve CSS token values for chart colours and font
+  const brandPrimary = useRef(null);
+  const brandFont    = useRef(null);
+  if (!brandPrimary.current) {
+    const cs = getComputedStyle(document.documentElement);
+    brandPrimary.current = cs.getPropertyValue('--bk-brand-primary').trim() || '#584BEB';
+    brandFont.current    = cs.getPropertyValue('--bk-font').trim() || "'Inter', sans-serif";
+  }
+
   // Create chart once
   useEffect(() => {
     if (!containerRef.current) return;
     const el = containerRef.current;
+
+    const resolvedBrand = brandPrimary.current;
+    const resolvedFont  = brandFont.current;
 
     const chart = createChart(el, {
       width:  el.clientWidth,
@@ -835,7 +848,7 @@ function PriceChart({ symbol, period, negative, onCrosshairPrice }) {
         background:  { type: 'solid', color: 'transparent' },
         textColor:   'rgba(135,135,140,0)',  // hide axis labels for clean look
         fontSize:    10,
-        fontFamily:  "'Inter', sans-serif",
+        fontFamily:  resolvedFont,
       },
       grid:            { vertLines: { visible: false }, horzLines: { visible: false } },
       crosshair:       { mode: 1 },
@@ -845,8 +858,8 @@ function PriceChart({ symbol, period, negative, onCrosshairPrice }) {
       handleScale:     false,
     });
 
-    const lineColor = negative ? '#F04348' : '#584BEB';
-    const topColor  = negative ? 'rgba(240,67,72,0.25)' : 'rgba(88,75,235,0.25)';
+    const lineColor = negative ? (getComputedStyle(document.documentElement).getPropertyValue('--bk-error').trim() || '#F04348') : resolvedBrand;
+    const topColor  = negative ? 'rgba(240,67,72,0.25)' : `${resolvedBrand}40`;
 
     const series = chart.addSeries(AreaSeries, {
       lineColor,
@@ -913,6 +926,7 @@ export default function AssetScreen() {
   const { id }   = useParams();
   const navigate = useNavigate();
   const { openActions } = useActions();
+  const { showUndo } = useUndoToast() ?? {};
   const isDesktop = useIsDesktop();
   const [period, setPeriod]             = useState('1D');
   const [crosshairPrice, setCrosshair]  = useState(null);  // floating label value
@@ -950,8 +964,14 @@ export default function AssetScreen() {
   if (!t) {
     return (
       <motion.div className="swap-screen-inner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-
-        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--bk-text-muted)' }}>Asset not found.</div>
+        <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--bk-text-muted)' }}>
+          <p>Asset not found.</p>
+          <Button
+            className="bottom-cta-btn cta-ready"
+            style={{ marginTop: 16 }}
+            onPress={() => navigate('/')}
+          >← Back to home</Button>
+        </div>
       </motion.div>
     );
   }
@@ -1118,7 +1138,7 @@ export default function AssetScreen() {
                       <Button
                         className="chain-breakdown-bridge-btn"
                         aria-label={`Bridge from ${c.chain}`}
-                        onPress={() => {}}
+                        onPress={() => showUndo?.('Bridge — coming soon')}
                       >Bridge</Button>
                     </div>
                   </div>

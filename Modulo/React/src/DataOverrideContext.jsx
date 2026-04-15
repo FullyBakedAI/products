@@ -3,7 +3,7 @@
  * Any screen can call useData(key, defaultValue) to get an overrideable value.
  * AI writes via localStorage 'modulo_data_overrides' + BroadcastChannel SET_DATA.
  */
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const LS_KEY = 'modulo_data_overrides';
 const BC = new BroadcastChannel('modulo-updates');
@@ -29,8 +29,10 @@ export function DataOverrideProvider({ children }) {
     return () => BC.removeEventListener('message', handler);
   }, []);
 
+  const value = useMemo(() => overrides, [overrides]);
+
   return (
-    <DataOverrideContext.Provider value={overrides}>
+    <DataOverrideContext.Provider value={value}>
       {children}
     </DataOverrideContext.Provider>
   );

@@ -11,7 +11,7 @@
  * Themes are named snapshots of a full token set, saved separately.
  */
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'bk-token-overrides';
 const THEMES_KEY  = 'bk-themes';
@@ -93,17 +93,22 @@ export function TokenOverrideProvider({ children }) {
   // Apply saved overrides on mount
   useEffect(() => { applyToDOM(saved); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // hasDraft — any unsaved changes?
-  const hasDraft = JSON.stringify(draft) !== JSON.stringify(saved);
+  const hasDraft = useMemo(
+    () => {
+      const draftKeys = Object.keys(draft);
+      const savedKeys = Object.keys(saved);
+      if (draftKeys.length !== savedKeys.length) return true;
+      return draftKeys.some(k => draft[k] !== saved[k]);
+    },
+    [draft, saved]
+  );
 
-  // setToken — update draft + apply to CSS immediately (live preview)
-  function setToken(key, value) {
+  const setToken = useCallback((key, value) => {
     document.documentElement.style.setProperty(key, value);
     setDraft(prev => ({ ...prev, [key]: value }));
-  }
+  }, []);
 
-  // resetTokenDraft — revert a single token to its saved/default state
-  function resetTokenDraft(key) {
+  const resetTokenDraft = useCallback((key) => {
     const restoredValue = saved[key] ?? null;
     if (restoredValue) {
       document.documentElement.style.setProperty(key, restoredValue);
@@ -115,85 +120,83 @@ export function TokenOverrideProvider({ children }) {
       delete next[key];
       return next;
     });
-  }
+  }, [saved]);
 
-  // saveOverrides — commit draft to localStorage
-  function saveOverrides() {
+  const saveOverrides = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
     setSaved(draft);
-  }
+  }, [draft]);
 
-  // discardChanges — revert draft to last saved state
-  function discardChanges() {
+  const discardChanges = useCallback(() => {
     applyToDOM(saved);
     setDraft(saved);
-  }
+  }, [saved]);
 
-  // resetToDefaults — clear everything, back to design system defaults
-  function resetToDefaults() {
+  const resetToDefaults = useCallback(() => {
     TOKEN_DEFINITIONS.forEach(t => document.documentElement.style.removeProperty(t.key));
     localStorage.removeItem(STORAGE_KEY);
     setSaved({});
     setDraft({});
-  }
+  }, []);
 
-  // saveTheme — save current draft as a named theme
-  function saveTheme(name) {
+  const saveTheme = useCallback((name) => {
     const next = { ...themes, [name]: draft };
     localStorage.setItem(THEMES_KEY, JSON.stringify(next));
     setThemes(next);
-  }
+  }, [themes, draft]);
 
-  // loadTheme — load a theme into draft (user still needs to save)
-  function loadTheme(name) {
+  const loadTheme = useCallback((name) => {
     const theme = themes[name];
     if (!theme) return;
     applyToDOM(theme);
     setDraft(theme);
-  }
+  }, [themes]);
 
-  // loadBuiltinTheme — load a preset (Dark/Light) into draft
-  function loadBuiltinTheme(name) {
+  const loadBuiltinTheme = useCallback((name) => {
     const theme = BUILTIN_THEMES[name];
     if (!theme) return;
     applyToDOM(theme);
     setDraft(theme);
-  }
+  }, []);
 
-  // deleteTheme
-  function deleteTheme(name) {
+  const deleteTheme = useCallback((name) => {
     const next = { ...themes };
     delete next[name];
     localStorage.setItem(THEMES_KEY, JSON.stringify(next));
     setThemes(next);
-  }
+  }, [themes]);
 
-  function getToken(key) {
+  const getToken = useCallback((key) => {
     return draft[key] ?? TOKEN_DEFINITIONS.find(t => t.key === key)?.default ?? '';
-  }
+  }, [draft]);
 
-  // Is this token different from its saved value?
-  function isUnsaved(key) {
+  const isUnsaved = useCallback((key) => {
     return draft[key] !== saved[key];
-  }
+  }, [draft, saved]);
 
-  // Does this token have any override (vs design system default)?
-  function isOverridden(key) {
+  const isOverridden = useCallback((key) => {
     return key in draft;
-  }
+  }, [draft]);
+
+  const value = useMemo(() => ({
+    draft, saved, hasDraft, themes,
+    setToken, resetTokenDraft,
+    saveOverrides, discardChanges, resetToDefaults,
+    saveTheme, loadTheme, loadBuiltinTheme, deleteTheme,
+    getToken, isOverridden, isUnsaved,
+    overrides: draft,
+    resetAll: resetToDefaults,
+    resetToken: resetTokenDraft,
+  }), [
+    draft, saved, hasDraft, themes,
+    setToken, resetTokenDraft,
+    saveOverrides, discardChanges, resetToDefaults,
+    saveTheme, loadTheme, loadBuiltinTheme, deleteTheme,
+    getToken, isOverridden, isUnsaved,
+  ]);
 
   return (
-    <TokenOverrideContext.Provider value={{
-      draft, saved, hasDraft, themes,
-      setToken, resetTokenDraft,
-      saveOverrides, discardChanges, resetToDefaults,
-      saveTheme, loadTheme, loadBuiltinTheme, deleteTheme,
-      getToken, isOverridden, isUnsaved,
-      // Legacy compat
-      overrides: draft,
-      resetAll: resetToDefaults,
-      resetToken: resetTokenDraft,
-    }}>
+    <TokenOverrideContext.Provider value={value}>
       {children}
     </TokenOverrideContext.Provider>
   );

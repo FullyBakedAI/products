@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const ActionsContext = createContext(null);
 
@@ -13,8 +13,13 @@ export function ActionsProvider({ children }) {
     setState(s => ({ ...s, isOpen: false }));
   }, []);
 
+  const value = useMemo(
+    () => ({ ...state, openActions, closeActions }),
+    [state, openActions, closeActions]
+  );
+
   return (
-    <ActionsContext.Provider value={{ ...state, openActions, closeActions }}>
+    <ActionsContext.Provider value={value}>
       {children}
     </ActionsContext.Provider>
   );

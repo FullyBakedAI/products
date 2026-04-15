@@ -28,7 +28,7 @@
   border-radius: 9999px;
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   height: 52px;
   padding: 0 32px;
   min-width: 120px;

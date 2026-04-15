@@ -34,6 +34,7 @@ export const ASSET_ID_TO_TOKEN = {
   eth:  'ETH',
   usdc: 'USDC',
   btc:  'WBTC',
+  wbtc: 'WBTC', // MOD-111: WBTC selected from swap list passes 'wbtc' as asset ID
   sol:  'SOL',
   usdt: 'USDT',
 };
@@ -56,7 +57,7 @@ export function useFlowNavigate() {
 
 // ── Shared sub-components ─────────────────────────────────────────────────────
 
-export function AssetHeader({ tok, tokenKey }) {
+export function AssetHeader({ tok, tokenKey, returnTab }) {
   const navigate = useFlowNavigate();
   const chg = ASSET_CHANGES[tokenKey] || { label: '0.00%', positive: true };
   return (
@@ -65,7 +66,7 @@ export function AssetHeader({ tok, tokenKey }) {
       aria-label={`Change asset — currently ${tok.name}`}
       aria-haspopup="listbox"
       aria-expanded={false}
-      onPress={() => navigate('/swap/select/pay')}
+      onPress={() => navigate('/swap/select/pay', { state: { returnTab: returnTab || 'swap' } })}
     >
       <img src={tok.icon} alt="" width="36" height="36" className="trade-asset-icon" />
       <div className="trade-asset-info">

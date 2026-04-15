@@ -103,7 +103,7 @@ export default function CustomHtmlOverlay() {
   return (
     <div style={{
       position: 'absolute', inset: 0, zIndex: 20,
-      background: position === 'screen' ? 'var(--bk-bg-base)' : 'rgba(13,14,23,0.88)',
+      background: position === 'screen' ? 'var(--bk-bg-base)' : 'var(--bk-overlay, rgba(13,14,23,0.88))',
       backdropFilter: position === 'overlay' ? 'blur(4px)' : 'none',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
@@ -113,7 +113,7 @@ export default function CustomHtmlOverlay() {
         onClick={dismiss}
         style={{
           position: 'absolute', top: 12, right: 16, zIndex: 1,
-          background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)',
+          background: 'var(--bk-white-12, rgba(255,255,255,0.12))', border: '1px solid rgba(255,255,255,0.15)',
           borderRadius: 20, color: 'var(--bk-text-primary)', fontSize: 13,
           padding: '4px 12px', cursor: 'pointer', fontFamily: 'var(--bk-font)',
         }}

@@ -5,37 +5,30 @@
 
 /* ── Sheet overlay ──────────────────────────────────────────────────── */
 
-/* Fills the full screen-wrapper; screen-wrapper slides from y:100% */
+/* Fills the full screen-wrapper */
 .actions-overlay {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-}
-
-/* Tap to dismiss — dark area above the sheet */
-.actions-backdrop {
-  flex: 1;
-  width: 100%;
   height: 100%;
-  border: none;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  cursor: default;
-  -webkit-tap-highlight-color: transparent;
 }
 
-/* The sheet itself */
+/* Tap to dismiss — hidden in full-screen mode */
+.actions-backdrop {
+  display: none;
+}
+
+/* The sheet itself — full screen */
 .actions-sheet {
   background: var(--bk-bg-base);
   border-radius: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 100%;
+  flex: 1;
   touch-action: none;
+  padding-top: var(--bk-safe-top, 0px);
 }
 
 /* Header row — cycle control + close button */
@@ -43,7 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px 12px;
+  padding: 8px 16px 12px;
   flex-shrink: 0;
   gap: 8px;
 }
@@ -72,13 +65,13 @@
   font-family: var(--bk-font);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
   -webkit-tap-highlight-color: transparent;
 }
 
 .actions-tab-pill.active {
   background: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
   font-weight: 600;
 }
 
@@ -94,6 +87,7 @@
 /* Content area — flex column, clips nothing at this level */
 .actions-scroll {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -105,7 +99,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 8px 16px 0;
+  padding: 0 16px;
   flex: 1;
   min-height: 0;
   overflow: hidden;
@@ -124,25 +118,25 @@
   scrollbar-width: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-bottom: 4px;
+  gap: 8px;
+  padding-bottom: 8px;
 }
 
 .actions-tab-scroll::-webkit-scrollbar { display: none; }
 
-/* Numpad: fixed size in the actions context — does NOT grow to fill space.
-   The scroll div above owns the flex: 1. Keys size themselves from min-height. */
+/* Numpad: scales to fill available space below the scroll area.
+   Capped so it never dominates the screen on tall viewports. */
 .actions-tab-stack .numpad {
-  flex: none;
+  flex: 1 1 0;
   min-height: 0;
-  grid-template-rows: repeat(4, minmax(36px, auto));
-  padding: 4px 8px 0;
+  grid-template-rows: repeat(4, 1fr);
+  padding: 8px 16px 0;
 }
 
 .actions-tab-stack .numpad-key-btn {
-  height: auto;
-  min-height: 36px;
-  font-size: 20px;
+  height: 100%;
+  min-height: 0;
+  font-size: clamp(18px, 3.5vw, 24px);
 }
 
 .actions-tab-stack .bottom-cta-btn {
@@ -152,6 +146,7 @@
   flex-shrink: 0 !important;
   height: 48px;
   padding: 0 16px !important;
+  margin-top: 8px;
   margin-bottom: max(16px, env(safe-area-inset-bottom, 16px));
 }
 
@@ -171,7 +166,7 @@
   cursor: pointer;
   text-align: left;
   -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.15s;
+  transition: border-color var(--bk-motion-fast);
 }
 
 .trade-asset-header:active {
@@ -246,7 +241,7 @@
   font-family: var(--bk-font);
   color: var(--bk-text-muted);
   background: none;
-  transition: background 0.15s, color 0.15s;
+  transition: background var(--bk-motion-fast), color var(--bk-motion-fast);
 }
 
 .trade-dir-tab.dir-buy-active {
@@ -276,7 +271,7 @@
   background: none;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: all 0.12s;
+  transition: all var(--bk-motion-instant);
 }
 
 .trade-order-pill.active {
@@ -297,7 +292,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   width: 100%;
-  transition: border-color 0.15s;
+  transition: border-color var(--bk-motion-fast);
 }
 
 .trade-limit-row.focused {
@@ -333,7 +328,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   width: 100%;
-  transition: border-color 0.15s;
+  transition: border-color var(--bk-motion-fast);
 }
 
 .trade-amount-display.focused {
@@ -458,7 +453,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--bk-motion-standard) ease;
 }
 
 .collateral-toggle.enabled {
@@ -473,7 +468,7 @@
   height: 16px;
   border-radius: 50%;
   background: var(--bk-text-primary);
-  transition: transform 0.2s ease;
+  transition: transform var(--bk-motion-standard) ease;
 }
 
 .collateral-toggle.enabled .collateral-toggle-knob {
@@ -483,7 +478,7 @@
 /* ── Platform rows (Lend tab) ───────────────────────────────────────── */
 
 .actions-tab-stack .asset-opp-row {
-  padding: 6px 16px;
+  padding: 10px 16px;
 }
 
 .asset-opp-info { flex: 1; }
@@ -510,7 +505,7 @@
 }
 
 .actions-tab-stack .swap-card {
-  padding: 6px 12px 4px;
+  padding: 10px 12px 8px;
   height: auto !important;
 }
 
@@ -545,7 +540,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.12s;
+  transition: color var(--bk-motion-instant);
 }
 
 .slippage-toggle[data-hovered] { color: var(--bk-text-secondary); }
@@ -554,7 +549,7 @@
 
 .slippage-chevron {
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: transform var(--bk-motion-standard) ease;
   font-size: 14px;
 }
 
@@ -677,8 +672,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 10px 6px;
+  gap: 2px;
+  padding: 8px 6px;
   border-radius: 14px;
   border: 1.5px solid var(--bk-border-subtle);
   background: var(--bk-bg-elevated);
@@ -687,7 +682,7 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  transition: border-color var(--bk-motion-fast), color var(--bk-motion-fast), background var(--bk-motion-fast);
 }
 
 .stake-token-pill.active {

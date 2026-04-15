@@ -68,6 +68,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
+  server: {
+    allowedHosts: true,
+  },
   preview: {
     allowedHosts: true,
   },

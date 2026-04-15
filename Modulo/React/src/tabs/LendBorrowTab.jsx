@@ -2,7 +2,7 @@
  * LendBorrowTab — lending, borrowing and staking inside ActionsScreen
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from '../motion-tokens';
 import { Button, Switch } from 'react-aria-components';
@@ -61,11 +61,20 @@ export default function LendBorrowTab() {
   const isStaking  = !!STAKING_PLATFORMS[asset];
 
   const [sub, setSub]               = useState('lend');
-  const [amount, setAmount]         = useState('');
+  const [lendAmount, setLendAmount] = useState('');   // MOD-132: separate state
+  const [borrowAmount, setBorrowAmount] = useState(''); // MOD-132: separate state
+  const amount = sub === 'lend' ? lendAmount : borrowAmount;
+  const setAmount = sub === 'lend' ? setLendAmount : setBorrowAmount;
   const [platform, setPlatform]     = useState(platforms[0]);
   const [collateralEnabled, setCollateralEnabled] = useState(true);
   const [healthFactorOpen, setHealthFactorOpen]   = useState(false); // MOD-040
   const [isQuoting, setIsQuoting]                 = useState(false); // MOD-022
+  const quotingTimerRef                           = useRef(null);    // MOD-104
+
+  // MOD-104 — cleanup quoting timer on unmount
+  useEffect(() => {
+    return () => { if (quotingTimerRef.current) clearTimeout(quotingTimerRef.current); };
+  }, []);
 
   // MOD-040 — close health factor panel on Escape
   useEffect(() => {
@@ -89,7 +98,7 @@ export default function LendBorrowTab() {
 
   return (
     <div className="actions-tab-stack">
-      <AssetHeader tok={tok} tokenKey={tokenKey} />
+      <AssetHeader tok={tok} tokenKey={tokenKey} returnTab="lend" />
 
       {/* Lend / Borrow toggle — matches Buy/Sell style */}
       <div className="trade-direction-tabs" role="group" aria-label="Lend or borrow">
@@ -109,6 +118,7 @@ export default function LendBorrowTab() {
 
       {sub === 'lend' ? (
         <>
+          <div className="actions-tab-scroll">
           <div className="portfolio-label">{isStaking ? 'Select validator' : 'Select protocol'}</div>
           <div className="asset-opp-list">
             {platforms.map((p, i) => (
@@ -163,6 +173,7 @@ export default function LendBorrowTab() {
               <span>{tok.balanceLabel}</span>
             </div>
           </div>
+          </div>{/* end actions-tab-scroll */}
 
           <Numpad onKey={handleKey} />
 
@@ -171,7 +182,7 @@ export default function LendBorrowTab() {
             onPress={() => {
               if (!ctaReady) return;
               setIsQuoting(true);
-              setTimeout(() => {
+              quotingTimerRef.current = setTimeout(() => {
                 navigate('/review', { state: {
                   action: isStaking ? 'stake' : 'lend',
                   from: { icon: tok.icon, symbol: tok.symbol, amount, usd: parseFloat(amount || 0) * tok.price },
@@ -198,6 +209,7 @@ export default function LendBorrowTab() {
         </>
       ) : (
         <>
+          <div className="actions-tab-scroll">
           <div className="actions-collateral-section">
             <div className="card-label" style={{ margin: '0 0 8px' }}>Your collateral</div>
             <div className="collateral-row">
@@ -276,6 +288,7 @@ export default function LendBorrowTab() {
             </div>
             <div className="card-bottom"><span>Variable 4.8% APR</span><span>Max: $3,300</span></div>
           </div>
+          </div>{/* end actions-tab-scroll */}
 
           <Numpad onKey={handleKey} />
 
@@ -284,14 +297,14 @@ export default function LendBorrowTab() {
             onPress={() => {
               if (!ctaReady) return;
               setIsQuoting(true);
-              setTimeout(() => {
+              quotingTimerRef.current = setTimeout(() => {
                 navigate('/review', { state: {
                   action: 'borrow',
                   from: { icon: tokenEth, symbol: 'ETH (collateral)', amount: '1.1421 ETH', usd: 4412 },
                   to:   { icon: tokenUsdc, symbol: 'USDC', amount, usd: parseFloat(amount || 0) },
                   fee: { network: '$1.20', protocol: '$0.30', total: '$1.50' },
                   rate: '4.8% variable APR',
-                  warning: parseFloat(amount || 0) > 3000 ? 'Health factor will drop to 2.1 — approaching liquidation threshold. Reduce borrow amount.' : null,
+                  warning: parseFloat(amount || 0) > 3000 ? 'Health factor will drop to 2.1 — reduce borrow amount.' : null,
                 }});
               }, 600);
             }}>

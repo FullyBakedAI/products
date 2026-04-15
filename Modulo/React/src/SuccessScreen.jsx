@@ -95,9 +95,16 @@ export default function SuccessScreen() {
           <StatusCard
             status="success"
             details={[
-              { label: 'Sent',        value: `${from?.amount ?? '0'} ${from?.symbol ?? 'ETH'}` },
-              { label: 'Received',    value: `${to?.amount ?? '0'} ${to?.symbol ?? 'USDC'}` },
-              { label: 'Rate',        value: rate ?? '—' },
+              { label: 'Sent', value: from ? `${from.amount} ${from.symbol}` : '0.1 ETH' },
+              // MOD-131 / MOD-092: Conditionally render receive vs earning row based on action type.
+              // stake/lend have no `to` token — show Earning with APY rate instead.
+              ...(to
+                ? [
+                    { label: 'Received', value: `${to.amount} ${to.symbol}` },
+                    { label: 'Rate',     value: rate ?? '—' },
+                  ]
+                : [{ label: 'Earning', value: rate || '—' }]
+              ),
               { label: 'Network fee', value: fee?.total ?? '—' },
             ]}
           />

@@ -38,12 +38,14 @@ export default function SwapSelectScreen() {
     return t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q);
   });
 
+  const returnTab = location.state?.returnTab;
+
   function handleSelect(symbol) {
     selectToken(side, symbol);
     if (location.state?.from === 'swap') {
       navigate('/swap');
     } else {
-      openActions({ tab: 'swap' });
+      openActions({ tab: returnTab || 'swap', asset: symbol.toLowerCase() });
       navigate('/');
     }
   }
@@ -56,7 +58,7 @@ export default function SwapSelectScreen() {
 
       <div className="select-header">
         <span className="select-title">Select token</span>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => { if (location.state?.from === 'swap') { navigate('/swap'); } else { openActions({ tab: 'swap' }); navigate('/'); } }}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => { if (location.state?.from === 'swap') { navigate('/swap'); } else { openActions({ tab: returnTab || 'swap' }); navigate('/'); } }}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M16.5 5.5L5.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />
             <path d="M5.5 5.5L16.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />

@@ -5,7 +5,7 @@
  * share state without prop drilling or URL params.
  */
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { SWAP_TOKENS } from './tokens-data';
 import { formatUSD } from './utils/formatters';
@@ -46,76 +46,84 @@ export function SwapProvider({ children }) {
 
   const decimals = displayDecimals(receiveToken);
 
-  // USD value of the pay amount — BigNumber arithmetic, live price
-  const payUSD = payAmount && payToken
-    ? formatUSD(
-        new BigNumber(payAmount).times(livePayPrice).toNumber()
-      ).slice(1) // strip leading $ for display consistency
-    : '0.00';
+  const payUSD = useMemo(() =>
+    payAmount && payToken
+      ? formatUSD(new BigNumber(payAmount).times(livePayPrice).toNumber()).slice(1)
+      : '0.00',
+    [payAmount, payToken, livePayPrice]
+  );
 
-  // Computed receive amount — raw numeric string for calculations/navigation state
-  // Uses receiveToken.maxDecimals (capped) instead of price heuristic
-  const receiveAmountRaw = payAmount && payToken && receiveToken && liveReceivePrice
-    ? new BigNumber(payAmount)
-        .times(livePayPrice)
-        .div(liveReceivePrice)
-        .toFixed(decimals)
-    : '';
+  const receiveAmountRaw = useMemo(() =>
+    payAmount && payToken && receiveToken && liveReceivePrice
+      ? new BigNumber(payAmount).times(livePayPrice).div(liveReceivePrice).toFixed(decimals)
+      : '',
+    [payAmount, payToken, receiveToken, livePayPrice, liveReceivePrice, decimals]
+  );
 
-  // Display-formatted — toLocaleString only at render time, never passed downstream
-  const receiveAmount = receiveAmountRaw
-    ? parseFloat(receiveAmountRaw).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: decimals,
-      })
-    : '';
-
-  // Rate label for receive card footer — BigNumber arithmetic, maxDecimals-aware
-  const rateLabel = payToken && receiveToken && liveReceivePrice
-    ? `1 ${payToken.symbol} ≈ ${new BigNumber(livePayPrice)
-        .div(liveReceivePrice)
-        .toNumber()
-        .toLocaleString('en-US', {
+  const receiveAmount = useMemo(() =>
+    receiveAmountRaw
+      ? parseFloat(receiveAmountRaw).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
           maximumFractionDigits: decimals,
-        })} ${receiveToken.symbol}`
-    : '';
+        })
+      : '',
+    [receiveAmountRaw, decimals]
+  );
 
-  // Select a token for pay or receive side. Prevents same token on both sides.
-  function selectToken(side, key) {
+  const rateLabel = useMemo(() =>
+    payToken && receiveToken && liveReceivePrice
+      ? `1 ${payToken.symbol} ≈ ${new BigNumber(livePayPrice)
+          .div(liveReceivePrice)
+          .toNumber()
+          .toLocaleString('en-US', { maximumFractionDigits: decimals })} ${receiveToken.symbol}`
+      : '',
+    [payToken, receiveToken, livePayPrice, liveReceivePrice, decimals]
+  );
+
+  const selectToken = useCallback((side, key) => {
     if (side === 'pay') {
-      if (key === receiveKey) setReceiveKey(payKey); // swap the other side
+      if (key === receiveKey) setReceiveKey(payKey);
       setPayKey(key);
     } else {
-      if (key === payKey) setPayKey(receiveKey ?? "ETH"); // swap the other side
+      if (key === payKey) setPayKey(receiveKey ?? 'ETH');
       setReceiveKey(key);
     }
     setPayAmount('');
     setActivePct(null);
-  }
+  }, [payKey, receiveKey]);
 
-  // Swap the pay and receive tokens (arrow button)
-  function swapDirections() {
-    if (!receiveKey) return; // nothing to swap if no receive token
+  const swapDirections = useCallback(() => {
+    if (!receiveKey) return;
     const prev = payKey;
     setPayKey(receiveKey);
     setReceiveKey(prev);
     setPayAmount('');
     setActivePct(null);
-  }
+  }, [payKey, receiveKey]);
+
+  const value = useMemo(() => ({
+    payToken, receiveToken,
+    payKey, receiveKey,
+    payAmount, setPayAmount,
+    activePct, setActivePct,
+    payUSD, receiveAmount, receiveAmountRaw, rateLabel,
+    selectToken, swapDirections,
+    slippage, setSlippage,
+    deadline, setDeadline,
+    livePayPrice, liveReceivePrice,
+    pricesLoading, pricesError,
+  }), [
+    payToken, receiveToken, payKey, receiveKey,
+    payAmount, activePct,
+    payUSD, receiveAmount, receiveAmountRaw, rateLabel,
+    selectToken, swapDirections,
+    slippage, deadline,
+    livePayPrice, liveReceivePrice,
+    pricesLoading, pricesError,
+  ]);
 
   return (
-    <SwapContext.Provider value={{
-      payToken, receiveToken,
-      payKey, receiveKey,
-      payAmount, setPayAmount,
-      activePct, setActivePct,
-      payUSD, receiveAmount, receiveAmountRaw, rateLabel,
-      selectToken, swapDirections,
-      slippage, setSlippage,
-      deadline, setDeadline,
-      livePayPrice, liveReceivePrice,
-      pricesLoading, pricesError,
-    }}>
+    <SwapContext.Provider value={value}>
       {children}
     </SwapContext.Provider>
   );
