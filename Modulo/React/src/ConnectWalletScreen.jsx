@@ -1,21 +1,38 @@
-import { useState } from 'react';
+import { useConnect, useConnectors } from 'wagmi';
 import { Button } from 'react-aria-components';
 import logoModulo from './assets/logo-modulo.svg';
 import './connect-wallet.css';
 
-const WALLETS = [
-  { id: 'metamask',      name: 'MetaMask',        icon: '🦊' },
-  { id: 'walletconnect', name: 'WalletConnect',   icon: '🔗' },
-  { id: 'coinbase',      name: 'Coinbase Wallet', icon: '💙' },
-];
+const CONNECTOR_DISPLAY = {
+  injected:       { name: 'MetaMask',        label: 'MM'  },
+  walletConnect:  { name: 'WalletConnect',   label: 'WC'  },
+  coinbaseWallet: { name: 'Coinbase Wallet', label: 'CB'  },
+};
 
-export default function ConnectWalletScreen({ onConnect }) {
-  const [connecting, setConnecting] = useState(null);
+function getDisplay(connector) {
+  return CONNECTOR_DISPLAY[connector.id] ?? { name: connector.name, label: connector.name.slice(0, 2).toUpperCase() };
+}
 
-  const handleConnect = (walletId) => {
-    setConnecting(walletId);
-    setTimeout(onConnect, 1200);
-  };
+function isWalletConnectSafe() {
+  try {
+    const pid = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
+    return pid && pid !== 'demo' && pid.length >= 10;
+  } catch { return false; }
+}
+
+export default function ConnectWalletScreen({ onConnect, onDemoConnect }) {
+  const connectors  = useConnectors();
+  const { connect, isPending, variables } = useConnect({
+    mutation: {
+      onSuccess: () => {
+        if (onConnect) onConnect();
+      },
+    },
+  });
+
+  // Detect whether the injected (MetaMask) provider is actually present
+  const injectedConnector = connectors.find(c => c.id === 'injected');
+  const hasInjected = injectedConnector && typeof window !== 'undefined' && !!window.ethereum;
 
   return (
     <div className="connect-wallet-screen">
@@ -27,26 +44,43 @@ export default function ConnectWalletScreen({ onConnect }) {
         <p className="connect-wallet-subtitle">Choose your wallet to get started</p>
 
         <div className="wallet-list" role="list">
-          {WALLETS.map(wallet => (
-            <Button
-              key={wallet.id}
-              className="wallet-option"
-              role="listitem"
-              onPress={() => handleConnect(wallet.id)}
-              isDisabled={!!connecting}
-            >
-              <span className="wallet-icon" aria-hidden="true">{wallet.icon}</span>
-              <span className="wallet-name">{wallet.name}</span>
-              {connecting === wallet.id && (
-                <span className="connecting-dot" aria-label="Connecting..." />
-              )}
-            </Button>
-          ))}
+          {connectors.map(connector => {
+            const display = getDisplay(connector);
+            const isConnectingThis = isPending && variables?.connector === connector;
+            const isInjectedMissing = connector.id === 'injected' && !hasInjected;
+            const isWCUnavailable = connector.id === 'walletConnect' && !isWalletConnectSafe();
+
+            return (
+              <Button
+                key={connector.uid}
+                className="wallet-option"
+                role="listitem"
+                onPress={() => {
+                  if (!isInjectedMissing && !isWCUnavailable) {
+                    try { connect({ connector }); } catch {}
+                  }
+                }}
+                isDisabled={isPending || isInjectedMissing || isWCUnavailable}
+              >
+                <span className="wallet-icon" aria-hidden="true">{display.label}</span>
+                <span className="wallet-name">
+                  {isInjectedMissing ? 'Install MetaMask' : display.name}
+                </span>
+                {isConnectingThis && (
+                  <span className="connecting-dot" aria-label="Connecting..." />
+                )}
+              </Button>
+            );
+          })}
         </div>
 
         <p className="connect-wallet-disclaimer">
           By connecting, you agree to Modulo's terms. Your keys, your crypto.
         </p>
+
+        <Button className="demo-connect-btn" onPress={() => onDemoConnect?.()}>
+          Continue in Demo Mode
+        </Button>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@
  */
 
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
@@ -127,7 +127,7 @@ export default function ManageScreen() {
         >
           {CARDS.map(({ id, label, sub, Icon, ariaLabel }) => (
             <motion.div key={id} variants={springStagger.item}>
-              <motion.div whileTap={{ scale: 0.97 }}>
+              <motion.div whileTap={{ scale: tap.card }}>
                 <Button
                   className="manage-card"
                   aria-label={ariaLabel}

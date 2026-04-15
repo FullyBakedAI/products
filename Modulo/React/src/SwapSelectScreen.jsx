@@ -6,7 +6,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Button, TextField, Input } from 'react-aria-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSwap } from './SwapContext';
 import { useActions } from './ActionsContext';
 import { useBrandConfig } from './theme/BrandConfig';
@@ -17,6 +17,7 @@ import iconSearch from './assets/icon-search.svg';
 
 export default function SwapSelectScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { side }  = useParams();
   const { selectToken, payKey, receiveKey } = useSwap();
   const { openActions } = useActions();
@@ -39,8 +40,12 @@ export default function SwapSelectScreen() {
 
   function handleSelect(symbol) {
     selectToken(side, symbol);
-    openActions({ tab: 'swap' });
-    navigate('/');
+    if (location.state?.from === 'swap') {
+      navigate('/swap');
+    } else {
+      openActions({ tab: 'swap' });
+      navigate('/');
+    }
   }
 
   return (
@@ -51,7 +56,7 @@ export default function SwapSelectScreen() {
 
       <div className="select-header">
         <span className="select-title">Select token</span>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => { openActions({ tab: 'swap' }); navigate('/'); }}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => { if (location.state?.from === 'swap') { navigate('/swap'); } else { openActions({ tab: 'swap' }); navigate('/'); } }}>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
             <path d="M16.5 5.5L5.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />
             <path d="M5.5 5.5L16.5 16.5" stroke="var(--bk-text-muted)" strokeWidth="1.667" strokeLinecap="round" />

@@ -92,6 +92,7 @@ export default function StakeTab() {
 
   return (
     <div className="actions-tab-stack">
+      <div className="actions-tab-scroll">
       <AssetHeader tok={tok} tokenKey={tokenKey} />
 
       {/* Token selector — only shown when no specific asset was passed */}
@@ -151,6 +152,7 @@ export default function StakeTab() {
           <span>{tok.balanceLabel}</span>
         </div>
       </div>
+      </div>{/* end actions-tab-scroll */}
 
       <Numpad onKey={handleKey} />
 

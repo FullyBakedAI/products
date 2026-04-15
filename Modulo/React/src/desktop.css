@@ -69,7 +69,7 @@
   font-weight: 600;
 }
 
-.sidebar-nav-item[data-focused] {
+.sidebar-nav-item[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -103,7 +103,7 @@
   color: var(--bk-text-primary);
 }
 
-.sidebar-ds-link[data-focused] {
+.sidebar-ds-link[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -145,7 +145,7 @@
   color: var(--bk-text-primary);
 }
 
-.sidebar-settings-btn[data-focused] {
+.sidebar-settings-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }

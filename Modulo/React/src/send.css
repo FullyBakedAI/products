@@ -9,9 +9,7 @@
   height: 100%;
 }
 
-[data-rac] {
-  outline: none;
-}
+/* [data-rac] { outline: none } — canonical rule lives in shared.css */
 
 /* ── Header ─────────────────────────────────────────────────────────── */
 .send-header {
@@ -37,8 +35,18 @@
   width: calc(100% - 40px);
 }
 
-.send-search .placeholder {
+.send-search-input {
   flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--bk-font);
+  font-size: 14px;
+  color: var(--bk-text-primary);
+  min-width: 0;
+}
+.send-search-input::placeholder {
+  color: var(--bk-text-muted);
 }
 
 .scan-btn {
@@ -59,7 +67,7 @@
   height: 18px;
 }
 
-.scan-btn[data-focused] {
+.scan-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
   border-radius: 4px;
@@ -114,7 +122,7 @@
   background: var(--bk-bg-card);
 }
 
-.contact-row[data-focused] {
+.contact-row[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: -2px;
 }

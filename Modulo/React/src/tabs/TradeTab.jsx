@@ -48,6 +48,7 @@ export default function TradeTab() {
 
   return (
     <div className="actions-tab-stack">
+      <div className="actions-tab-scroll">
 
       <AssetHeader tok={tok} tokenKey={tokenKey} />
 
@@ -119,6 +120,7 @@ export default function TradeTab() {
           <span>{direction === 'buy' ? 'Available $5,342 USDC' : `Available ${tok.balanceLabel}`}</span>
         </div>
       )}
+      </div>{/* end actions-tab-scroll */}
 
       <Numpad onKey={handleKey} />
 

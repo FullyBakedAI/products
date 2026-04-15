@@ -84,7 +84,7 @@
   font-family: var(--bk-font);
 }
 
-.ap-switch[data-focused] {
+.ap-switch[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
   border-radius: 12px;
@@ -287,7 +287,7 @@
   background: color-mix(in srgb, var(--bk-error) 18%, transparent);
 }
 
-.autopilot-pause-btn[data-focused] {
+.autopilot-pause-btn[data-focus-visible] {
   outline: 2px solid var(--bk-error);
   outline-offset: 2px;
 }

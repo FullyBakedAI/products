@@ -71,5 +71,13 @@ export default defineConfig({
   preview: {
     allowedHosts: true,
   },
+  server: {
+    allowedHosts: true,
+  },
   plugins: [react(), claudeProxyPlugin()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.js'],
+  },
 });

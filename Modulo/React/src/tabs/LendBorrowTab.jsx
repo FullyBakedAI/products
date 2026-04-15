@@ -63,8 +63,37 @@ export default function LendBorrowTab() {
 
   const ctaReady = amount && parseFloat(amount) > 0;
 
+  const ctaAction = sub === 'lend' ? 'lend' : 'borrow';
+  const ctaLabel = isQuoting ? 'Fetching best rate...' : sub === 'lend' ? 'Review Lend' : 'Review Borrow';
+
+  function handleCta() {
+    if (!ctaReady) return;
+    setIsQuoting(true);
+    setTimeout(() => {
+      if (sub === 'lend') {
+        navigate('/review', { state: {
+          action: 'lend',
+          from: { icon: tok.icon, symbol: tok.symbol, amount, usd: parseFloat(amount || 0) * tok.price },
+          to: null,
+          fee: { network: '$1.80', protocol: '$0.40', total: '$2.20' },
+          rate: `${platform.apy}% ${platform.apyType} on ${platform.name}`, warning: null,
+        }});
+      } else {
+        navigate('/review', { state: {
+          action: 'borrow',
+          from: { icon: tokenEth, symbol: 'ETH (collateral)', amount: '1.1421 ETH', usd: 4412 },
+          to:   { icon: tokenUsdc, symbol: 'USDC', amount, usd: parseFloat(amount || 0) },
+          fee: { network: '$1.20', protocol: '$0.30', total: '$1.50' },
+          rate: '4.8% variable APR',
+          warning: parseFloat(amount || 0) > 3000 ? 'Health factor will drop to 2.1 — approaching liquidation threshold. Reduce borrow amount.' : null,
+        }});
+      }
+    }, 600);
+  }
+
   return (
     <div className="actions-tab-stack">
+      <div className="actions-tab-scroll">
       <AssetHeader tok={tok} tokenKey={tokenKey} />
 
       {/* Lend / Borrow toggle */}
@@ -139,38 +168,6 @@ export default function LendBorrowTab() {
               <span>{tok.balanceLabel}</span>
             </div>
           </div>
-
-          <Numpad onKey={handleKey} />
-
-          <Button className={`bottom-cta-btn ${ctaReady && !isQuoting ? 'cta-ready' : 'cta-disabled'}`}
-            isDisabled={isQuoting || !ctaReady} aria-label="Review lend"
-            onPress={() => {
-              if (!ctaReady) return;
-              setIsQuoting(true);
-              setTimeout(() => {
-                navigate('/review', { state: {
-                  action: 'lend',
-                  from: { icon: tok.icon, symbol: tok.symbol, amount, usd: parseFloat(amount || 0) * tok.price },
-                  to: null,
-                  fee: { network: '$1.80', protocol: '$0.40', total: '$2.20' },
-                  rate: `${platform.apy}% ${platform.apyType} on ${platform.name}`, warning: null,
-                }});
-              }, 600);
-            }}>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span key={isQuoting ? 'quoting' : 'ready'}
-                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0, transition: m.cta.enter }}
-                exit={{ opacity: 0, y: -6, transition: m.cta.exit }}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}
-              >
-                {isQuoting && (
-                  <motion.span animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-                    style={{ display: 'inline-block', lineHeight: 1 }} aria-hidden="true">⟳</motion.span>
-                )}
-                {isQuoting ? 'Fetching best rate...' : 'Review Lend'}
-              </motion.span>
-            </AnimatePresence>
-          </Button>
         </>
       ) : (
         <>
@@ -252,41 +249,29 @@ export default function LendBorrowTab() {
             </div>
             <div className="card-bottom"><span>Variable 4.8% APR</span><span>Max: $3,300</span></div>
           </div>
-
-          <Numpad onKey={handleKey} />
-
-          <Button className={`bottom-cta-btn ${ctaReady && !isQuoting ? 'cta-ready' : 'cta-disabled'}`}
-            isDisabled={isQuoting || !ctaReady} aria-label="Review borrow"
-            onPress={() => {
-              if (!ctaReady) return;
-              setIsQuoting(true);
-              setTimeout(() => {
-                navigate('/review', { state: {
-                  action: 'borrow',
-                  from: { icon: tokenEth, symbol: 'ETH (collateral)', amount: '1.1421 ETH', usd: 4412 },
-                  to:   { icon: tokenUsdc, symbol: 'USDC', amount, usd: parseFloat(amount || 0) },
-                  fee: { network: '$1.20', protocol: '$0.30', total: '$1.50' },
-                  rate: '4.8% variable APR',
-                  warning: parseFloat(amount || 0) > 3000 ? 'Health factor will drop to 2.1 — approaching liquidation threshold. Reduce borrow amount.' : null,
-                }});
-              }, 600);
-            }}>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span key={isQuoting ? 'quoting' : 'ready'}
-                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0, transition: m.cta.enter }}
-                exit={{ opacity: 0, y: -6, transition: m.cta.exit }}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}
-              >
-                {isQuoting && (
-                  <motion.span animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-                    style={{ display: 'inline-block', lineHeight: 1 }} aria-hidden="true">⟳</motion.span>
-                )}
-                {isQuoting ? 'Fetching best rate...' : 'Review Borrow'}
-              </motion.span>
-            </AnimatePresence>
-          </Button>
         </>
       )}
+      </div>{/* end actions-tab-scroll */}
+
+      <Numpad onKey={handleKey} />
+
+      <Button className={`bottom-cta-btn ${ctaReady && !isQuoting ? 'cta-ready' : 'cta-disabled'}`}
+        isDisabled={isQuoting || !ctaReady} aria-label={`Review ${ctaAction}`}
+        onPress={handleCta}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span key={isQuoting ? 'quoting' : 'ready'}
+            initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0, transition: m.cta.enter }}
+            exit={{ opacity: 0, y: -6, transition: m.cta.exit }}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}
+          >
+            {isQuoting && (
+              <motion.span animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                style={{ display: 'inline-block', lineHeight: 1 }} aria-hidden="true">⟳</motion.span>
+            )}
+            {ctaLabel}
+          </motion.span>
+        </AnimatePresence>
+      </Button>
     </div>
   );
 }

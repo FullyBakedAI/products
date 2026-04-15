@@ -194,7 +194,7 @@ export default function ExploreScreen() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...m.fade.enter, delay: stagger.base + i * stagger.perItem }}
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: tap.card }}
             >
               <Button
                 className="yield-row"

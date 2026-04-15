@@ -9,7 +9,7 @@
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import iconNotif from './assets/icon-notification.svg';
 import iconShare from './assets/icon-share.svg';
@@ -60,6 +60,7 @@ export default function SuccessScreen() {
   const { state } = useLocation();
   const action  = state?.action  || 'swap';
   const summary = state?.summary || '0.1 ETH for 324.10 USDC';
+  const { from, to, fee, rate } = state || {};
 
   const pastTense = { swap: 'swapped', send: 'sent', receive: 'received', trade: 'traded', lend: 'lent', borrow: 'borrowed', stake: 'staked' };
 
@@ -94,10 +95,10 @@ export default function SuccessScreen() {
           <StatusCard
             status="success"
             details={[
-              { label: 'Sent',        value: '0.1 ETH'        },
-              { label: 'Received',    value: '324.10 USDC'    },
-              { label: 'Rate',        value: '1 ETH = $3,241' },
-              { label: 'Network fee', value: '$0.34'           },
+              { label: 'Sent',        value: `${from?.amount ?? '0'} ${from?.symbol ?? 'ETH'}` },
+              { label: 'Received',    value: `${to?.amount ?? '0'} ${to?.symbol ?? 'USDC'}` },
+              { label: 'Rate',        value: rate ?? '—' },
+              { label: 'Network fee', value: fee?.total ?? '—' },
             ]}
           />
         </motion.div>
@@ -107,7 +108,7 @@ export default function SuccessScreen() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...m.springTight, delay: 1.0 }}
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: tap.card }}
             style={{ width: '100%' }}
           >
             <Button className="primary-btn" style={{ margin: 0, width: '100%' }} aria-label="View in Activity" onPress={() => navigate('/activity')}>
@@ -119,7 +120,7 @@ export default function SuccessScreen() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...m.springTight, delay: 1.06 }}
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: tap.card }}
             style={{ width: '100%' }}
           >
             <Button className="success-secondary-btn" aria-label="Back to Portfolio" onPress={() => navigate('/')}>
@@ -131,7 +132,7 @@ export default function SuccessScreen() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...m.springTight, delay: 1.18 }}
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: tap.card }}
             style={{ width: '100%' }}
           >
             <Button className="success-share-btn" aria-label="Share transaction" onPress={() => { if (navigator.share) navigator.share({ title: 'Modulo', text: `${action} complete` }).catch(() => {}); }}>

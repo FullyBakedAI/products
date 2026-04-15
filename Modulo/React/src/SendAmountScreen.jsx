@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 
 const MotionButton = motion.create(Button);
@@ -153,7 +153,7 @@ export default function SendAmountScreen() {
       {/* Numpad */}
       <div className="sa-numpad">
         {['1','2','3','4','5','6','7','8','9','.','0','del'].map(k => (
-          <MotionButton key={k} className="sa-numpad-key" whileTap={{ scale: 0.82 }} onPress={() => handleKey(k)} aria-label={k === 'del' ? 'Delete' : k}>
+          <MotionButton key={k} className="sa-numpad-key" whileTap={{ scale: tap.numpad }} onPress={() => handleKey(k)} aria-label={k === 'del' ? 'Delete' : k}>
             {k === 'del' ? (
               <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><path d="M8 1L1 8L8 15" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M1 8H21" stroke="var(--bk-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             ) : k}

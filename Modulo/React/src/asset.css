@@ -49,7 +49,7 @@
   background: color-mix(in srgb, var(--bk-warning) 12%, transparent);
 }
 
-.asset-fav-btn[data-focused] {
+.asset-fav-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -420,7 +420,7 @@
   color: var(--bk-success);
   background: rgba(52, 199, 89, 0.12);
   border-radius: 20px;
-  padding: 3px 9px;
+  padding: 4px 8px;
   flex-shrink: 0;
 }
 

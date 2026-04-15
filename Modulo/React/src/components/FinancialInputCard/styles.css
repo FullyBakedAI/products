@@ -52,7 +52,7 @@
 }
 
 /* React ARIA focus management — outline handled by field wrapper */
-.financial-input-amount[data-focused] {
+.financial-input-amount[data-focus-visible] {
   outline: none;
 }
 

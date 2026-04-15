@@ -9,7 +9,7 @@
  * All colours via --bk-* tokens. All data mocked.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { createChart, AreaSeries } from 'lightweight-charts';
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { motion as m, tap, stagger } from './motion-tokens';
@@ -111,6 +111,11 @@ function PortfolioChart({ period }) {
   const chartRef     = useRef(null);
   const seriesRef    = useRef(null);
 
+  const brandColor = useMemo(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--bk-brand-primary').trim() || '#584BEB'
+  , []);
+
   useEffect(() => {
     if (!containerRef.current) return;
     const el = containerRef.current;
@@ -131,7 +136,7 @@ function PortfolioChart({ period }) {
     });
 
     const series = chart.addSeries(AreaSeries, {
-      lineColor:                      '#584BEB',
+      lineColor:                      brandColor,
       topColor:                       'rgba(88,75,235,0.28)',
       bottomColor:                    'rgba(0,0,0,0)',
       lineWidth:                      2,
@@ -363,7 +368,7 @@ function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) 
               className="token-yield-fill"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: t.yield / MAX_YIELD }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.22 + index * 0.06 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.22 + index * stagger.perItem }}
               style={{ transformOrigin: 'left' }}
             />
           </div>
@@ -524,7 +529,7 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
         >
-          <div className="portfolio-chart" aria-hidden="true">
+          <div className="portfolio-chart" role="img" aria-label="Portfolio performance chart">
             <PortfolioChart period={activePeriod} />
           </div>
 

@@ -28,7 +28,7 @@ const IconX = ({ size = 16 }) => (
 const TABS = [
   { id: 'swap',  label: 'Swap'    },
   { id: 'trade', label: 'Trade'   },
-  { id: 'lend',  label: 'Lending' },
+  { id: 'lend',  label: 'Lend' },
   { id: 'stake', label: 'Stake'   },
 ];
 

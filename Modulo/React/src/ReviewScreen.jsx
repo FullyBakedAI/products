@@ -7,14 +7,14 @@
  * Route: /review (sheet entry)
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m } from './motion-tokens';
 import { Button, Dialog } from 'react-aria-components';
 const IconArrowDown = () => (
   <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="opacity" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 5V15M10 15L6 11M10 15L14 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 const IconAlertTriangle = () => (
@@ -30,8 +30,10 @@ const IconChevronDown = () => (
   </svg>
 );
 import { useFeatures } from './theme/FeatureConfig';
+import { useSwap } from './SwapContext';
 import { TransactionPath } from './components/TransactionPath';
 import { getPathForTokens } from './config/transaction-paths';
+import { formatUSD, capitalize } from './utils/formatters';
 import './review.css';
 
 import tokenEth  from './assets/token-eth.svg';
@@ -46,8 +48,6 @@ const DEFAULT_STATE = {
   warning: null,
 };
 
-const capitalize = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
-const fmt = (n) => `$${Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function ReviewScreen() {
   const f = useFeatures();
@@ -55,9 +55,9 @@ export default function ReviewScreen() {
   const { state } = useLocation();
   const s = state || DEFAULT_STATE;
   const { action, from, to, fee, rate, warning } = s;
-  const isEarnOnly = !to || action === 'swap' || action === 'stake' || action === 'lend';
+  const isEarnOnly = !to || action === 'stake' || action === 'lend';
   const [feesOpen, setFeesOpen] = useState(false);
-  const deadline = 20; // MOD-011: minutes, swap transactions expire
+  const { deadline } = useSwap(); // MOD-011: minutes, swap transactions expire — sourced from context
 
   // MOD-012: Token approval gate — non-native ERC-20 tokens require approve() before swap
   const isNativeToken = from?.symbol === 'ETH' || from?.symbol === 'BNB';
@@ -67,11 +67,17 @@ export default function ReviewScreen() {
   const handleConfirm = () => navigate('/success', { state: {
     action,
     summary: `${from.amount} ${from.symbol}${to ? ` for ${to.amount} ${to.symbol}` : ''}`,
+    from, to, fee, rate,
   }});
 
   // MOD-041: Guard against zero/missing amount state
+  useEffect(() => {
+    if (!from?.usd || parseFloat(from.usd) <= 0) {
+      navigate('/');
+    }
+  }, [from?.usd, navigate]);
+
   if (!from?.usd || parseFloat(from.usd) <= 0) {
-    navigate(-1);
     return null;
   }
 
@@ -84,6 +90,8 @@ export default function ReviewScreen() {
       exit={{ y: '100%', transition: m.sheet.exit }}
     >
       <Dialog aria-label={`Review ${action}`} style={{ outline: 'none', display: 'contents' }}>
+      {/* review-body: scrollable container — Confirm button is outside in review-footer */}
+      <div className="review-body">
       {/* drag-handle from shared.css */}
       <div className="drag-handle"><div className="drag-handle-pill" /></div>
 
@@ -92,7 +100,7 @@ export default function ReviewScreen() {
         <h1 className="swap-title" style={{ textAlign: 'center', flex: 1 }}>
           Review {capitalize(action)}
         </h1>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate(-1)}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
@@ -113,7 +121,7 @@ export default function ReviewScreen() {
                 </div>
               </div>
             </div>
-            <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-text-secondary)' }}>{fmt(from.usd)}</span>
+            <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-text-secondary)' }}>{formatUSD(from.usd)}</span>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', padding: '6px 0' }}>
@@ -136,7 +144,7 @@ export default function ReviewScreen() {
                   </div>
                 </div>
               </div>
-              <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-success)' }}>{fmt(to.usd)}</span>
+              <span style={{ fontSize: 16, fontWeight: 600, color: 'var(--bk-success)' }}>{formatUSD(to.usd)}</span>
             </div>
           )}
         </div>
@@ -176,7 +184,9 @@ export default function ReviewScreen() {
         >
           <span className="card-label" style={{ margin: 0 }}>Total fees</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--bk-text-primary)' }}>{fee.total}</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: fee.total ? 'var(--bk-text-primary)' : 'var(--bk-text-muted)' }}>
+              {fee.total ?? 'Estimating...'}
+            </span>
             <motion.span
               animate={{ rotate: feesOpen ? 180 : 0 }}
               transition={{ type: 'spring', damping: 18, stiffness: 300 }}
@@ -202,7 +212,7 @@ export default function ReviewScreen() {
               ].map(({ label, value }) => (
                 <div key={label} className="card-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '9px 0', margin: 0 }}>
                   <span className="card-label" style={{ margin: 0, paddingLeft: 10 }}>{label}</span>
-                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-muted)' }}>{value}</span>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--bk-text-muted)' }}>{value ?? 'Estimating...'}</span>
                 </div>
               ))}
             </motion.div>
@@ -249,20 +259,22 @@ export default function ReviewScreen() {
         </div>
       )}
 
-      {/* Confirm — primary-btn from shared.css */}
-      <Button
-        className="primary-btn"
-        aria-label={`Confirm ${action}`}
-        isDisabled={needsApproval}
-        onPress={handleConfirm}
-      >
-        {needsApproval ? `Confirm (approve first)` : `Confirm ${capitalize(action)}`}
-      </Button>
-
-      <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">
-        Cancel
-      </Button>
+      {/* end review-body */}
+      </div>
       </Dialog>
+      <div className="review-footer">
+        <Button
+          className="primary-btn"
+          aria-label={`Confirm ${action}`}
+          isDisabled={needsApproval}
+          onPress={handleConfirm}
+        >
+          {needsApproval ? `Confirm (approve first)` : `Confirm ${capitalize(action)}`}
+        </Button>
+        <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">
+          Cancel
+        </Button>
+      </div>
     </motion.div>
   );
 }

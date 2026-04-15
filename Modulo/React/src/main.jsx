@@ -94,9 +94,7 @@ function Root() {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
-      <PasswordGate>
-        <Root />
-      </PasswordGate>
+      <Root />
     </ErrorBoundary>
   </StrictMode>
 );

@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDisconnect } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
@@ -436,6 +437,7 @@ export default function SettingsScreen() {
   const navigate = useNavigate();
   const { brandName } = useBrandConfig();
   const [activePanel, setActivePanel] = useState(null);
+  const { disconnect } = useDisconnect();
 
   const PanelComponent = activePanel ? PANELS[activePanel] : null;
 
@@ -500,12 +502,16 @@ export default function SettingsScreen() {
                 </div>
               ))}
 
-              {/* Sign out */}
+              {/* Disconnect wallet */}
               <div className="settings-section">
-                <Button className="settings-row settings-signout" aria-label="Sign out" onPress={() => navigate('/')}>
+                <Button
+                  className="settings-row settings-signout"
+                  aria-label="Disconnect wallet"
+                  onPress={() => { disconnect(); navigate('/connect'); }}
+                >
                   <IconLogOut size={18} />
                   <div className="settings-row-text">
-                    <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Sign Out</span>
+                    <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Disconnect Wallet</span>
                   </div>
                 </Button>
               </div>

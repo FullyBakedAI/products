@@ -54,7 +54,7 @@
   color: var(--bk-text-muted);
   background: none;
   border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 5px 12px;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -421,7 +421,7 @@
   font-weight: 500;
   background: none;
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 5px 11px;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -475,7 +475,7 @@
   flex: 1;
   font-size: 13px;
   border: 1px solid;
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 6px 10px;
   outline: none;
   font-family: var(--bk-font);
@@ -486,7 +486,7 @@
   font-weight: 600;
   color: #fff;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 6px 14px;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -757,7 +757,7 @@
   color: var(--bk-text-muted);
   background: none;
   border: 1px solid var(--bk-border-subtle);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 4px 12px;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -832,7 +832,7 @@
 
 .ds-token-swatch {
   width: 26px; height: 26px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.1);
   flex-shrink: 0;
 }
@@ -890,7 +890,7 @@
 }
 .ds-screen-tab {
   font-size: 12px; font-weight: 500; color: var(--bk-text-muted);
-  background: none; border: none; border-radius: 6px;
+  background: none; border: none; border-radius: 8px;
   padding: 5px 12px; cursor: pointer; font-family: var(--bk-font); transition: all 0.15s;
 }
 .ds-screen-tab.active { background: var(--bk-bg-card); color: var(--bk-text-primary); }
@@ -1105,7 +1105,7 @@
   flex: 1;
   height: 28px;
   background: var(--bk-bg-base);
-  border-radius: 6px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
@@ -1120,7 +1120,7 @@
   width: 28px; height: 28px;
   background: none;
   border: 1px solid var(--bk-border-subtle);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--bk-brand-primary);
   cursor: pointer;
   font-size: 10px;
@@ -1165,7 +1165,7 @@
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   opacity: 0.5;
@@ -1199,19 +1199,19 @@
   width: 32px;
   height: 32px;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 0;
   cursor: pointer;
   flex-shrink: 0;
 }
-.ds-customizer-swatch::-webkit-color-swatch-wrapper { padding: 0; border-radius: 7px; }
-.ds-customizer-swatch::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; }
+.ds-customizer-swatch::-webkit-color-swatch-wrapper { padding: 0; border-radius: 8px; }
+.ds-customizer-swatch::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; }
 .ds-customizer-hex {
   flex: 1;
   font-size: 12px;
   font-family: 'SF Mono', monospace;
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 5px 8px;
   outline: none;
 }
@@ -1372,7 +1372,7 @@
   font-size: 11px;
   font-weight: 500;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid;
   cursor: pointer;
   font-family: var(--bk-font);
@@ -1839,7 +1839,7 @@
   align-items: center;
   gap: 5px;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid;
   background: transparent;
   font-size: 11px;
@@ -2057,7 +2057,7 @@
 .ds-icon-mini-search {
   width: 100%;
   padding: 5px 8px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid;
   background: transparent;
   color: inherit;
@@ -2124,7 +2124,7 @@
   align-items: center;
   gap: 5px;
   padding: 5px 10px;
-  border-radius: 7px;
+  border-radius: 8px;
   border: 1px solid;
   font-size: 12px;
   font-family: inherit;
@@ -2151,7 +2151,7 @@
   color: var(--bk-text-muted);
   background: none;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 4px 10px;
   cursor: pointer;
   font-family: var(--bk-font, 'Inter', sans-serif);
@@ -2355,7 +2355,7 @@
   align-items: center;
   gap: 5px;
   padding: 5px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid;
   font-size: 11px;
   font-family: inherit;
@@ -2450,7 +2450,7 @@
   font-family: inherit;
   line-height: 1.6;
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 8px;
   outline: none;
   resize: vertical;
@@ -2476,7 +2476,7 @@
 .ds-phone-theme-toggle {
   display: flex;
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
 }
 .ds-phone-theme-btn {

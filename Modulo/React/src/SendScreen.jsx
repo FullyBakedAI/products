@@ -43,6 +43,7 @@ export default function SendScreen() {
   const navigate = useNavigate();
   const { brandName } = useBrandConfig();
   const [network, setNetwork] = useState(SEND_NETWORKS[0]);
+  const [query, setQuery] = useState('');
 
   function cycleNetwork() {
     const idx = SEND_NETWORKS.indexOf(network);
@@ -88,7 +89,17 @@ export default function SendScreen() {
         animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.10 } }}
       >
         <img src={iconSearch} width="16" height="16" aria-hidden="true" />
-        <span className="placeholder">Address, ENS, or username</span>
+        <input
+          className="send-search-input"
+          type="text"
+          placeholder="Address, ENS, or username"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          aria-label="Search by address, ENS, or username"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck="false"
+        />
         <Button className="scan-btn" aria-label="Scan QR code" onPress={() => navigate('/send/amount', { state: { recipient: { name: '0xScanned…Address' } } })}>
           <IconScanLine />
         </Button>
@@ -112,7 +123,11 @@ export default function SendScreen() {
       {/* Contact List — Saved + Recent sections */}
       <div className="contact-list" role="list" aria-label="Contacts">
         {['Saved', 'Recent'].map(section => {
-          const sectionContacts = CONTACTS.filter(c => c.section === section);
+          const q = query.toLowerCase();
+          const sectionContacts = CONTACTS.filter(c =>
+            c.section === section &&
+            (!q || c.name?.toLowerCase().includes(q) || c.sub?.toLowerCase().includes(q))
+          );
           if (!sectionContacts.length) return null;
           return (
             <div key={section}>

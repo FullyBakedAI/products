@@ -8,7 +8,7 @@
   border: 1px solid var(--bk-border-subtle);
   border-radius: 14px;
   padding: 12px 14px;
-  margin: 0 16px;
+  /* margin removed: parent .actions-tab-stack already has padding: 8px 16px 0 — double-padding caused 32px bleed on small screens */
 }
 
 .tx-path-compact {

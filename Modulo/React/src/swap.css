@@ -46,10 +46,7 @@
   /* React ARIA adds data-pressed, data-focused etc — style via those */
 }
 
-/* Remove RAC default focus ring — we add our own */
-[data-rac] {
-  outline: none;
-}
+/* Remove RAC default focus ring — we add our own; canonical rule lives in shared.css */
 
 .close-btn {
   width: 20px;
@@ -58,9 +55,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  /* Touch target: visual stays 20px; padding makes tap area ≥ 44×44 (WCAG 2.5.5) */
+  padding: 12px;
+  margin: -12px;
 }
 
-.close-btn[data-focused] {
+.close-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
   border-radius: 4px;
@@ -77,6 +77,8 @@
 .settings-btn {
   width: 38px;
   height: 38px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +93,7 @@
   background: var(--bk-bg-card);
 }
 
-.settings-btn[data-focused] {
+.settings-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -202,7 +204,7 @@
   background: var(--bk-bg-card) !important;
 }
 
-.token-pill-btn[data-focused] {
+.token-pill-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -264,7 +266,7 @@
   transform: scale(0.96);
 }
 
-.select-token-cta-btn[data-focused] {
+.select-token-cta-btn[data-focus-visible] {
   outline: 2px solid var(--bk-text-primary);
   outline-offset: 2px;
 }
@@ -308,7 +310,7 @@
   background: var(--bk-pill-bg) !important;
 }
 
-.swap-direction[data-focused] {
+.swap-direction[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary) !important;
   outline-offset: 2px;
 }
@@ -348,7 +350,7 @@
   background: var(--bk-bg-card) !important;
 }
 
-.pct-pill-btn[data-focused] {
+.pct-pill-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -365,7 +367,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   padding: 16px 24px 0;
-  flex: 1;
+  flex: none;
+  margin-top: auto;
 }
 
 .numpad-key-btn {
@@ -394,10 +397,13 @@
   transform: scale(0.88);
 }
 
-.numpad-key-btn[data-focused] {
+.numpad-key-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: -2px;
 }
+
+.numpad-key-btn:focus { outline: none; }
+.numpad-key-btn:focus-visible { outline: 2px solid var(--bk-brand-primary); outline-offset: 2px; border-radius: 8px; }
 
 /* ── Bottom CTA ─────────────────────────────────────────────────────── */
 .bottom-cta-btn {
@@ -435,7 +441,7 @@
   background: color-mix(in srgb, var(--bk-brand-primary) 80%, white 20%) !important;
 }
 
-.bottom-cta-btn[data-focused] {
+.bottom-cta-btn[data-focus-visible] {
   outline: 2px solid var(--bk-text-primary);
   outline-offset: 2px;
 }

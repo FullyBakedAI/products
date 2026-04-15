@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { WagmiProvider, useAccount } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { wagmiConfig } from './wagmi.config';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { ErrorBoundary } from 'react-error-boundary';
 import SplashScreen from './SplashScreen';
 import { BrandConfigProvider }    from './theme/BrandConfig';
 import { FeatureConfigProvider, useFeatures } from './theme/FeatureConfig';
@@ -34,6 +38,8 @@ import SettingsScreen     from './SettingsScreen';
 import ManageScreen       from './ManageScreen';
 import UndoToast          from './UndoToast';
 
+const queryClient = new QueryClient();
+
 // ── Motion variants (driven by motion-tokens.js) ──────────────────────────
 const fadeVariants = {
   initial: { opacity: 0 },
@@ -53,16 +59,85 @@ const sheetVariants = {
   exit:    { y: '100%', transition: m.sheet.exit  },
 };
 
-const MODAL_PATHS = [
-  '/swap', '/send', '/receive', '/asset', '/success', '/activity',
-  '/optimise', '/autopilot', '/simulate', '/achievements', '/send/amount', '/settings',
-];
-const SHEET_PATHS = ['/swap/select', '/review'];
+// ── Route metadata — add new routes here, getVariants picks up automatically ───
+// Keys are path prefixes; longer (more-specific) prefixes are listed first so
+// /swap/select wins over /swap in the startsWith lookup.
+const ROUTE_TRANSITIONS = {
+  '/swap/select': 'sheet',
+  '/review':      'sheet',
+  '/swap':        'modal',
+  '/send/amount': 'modal',
+  '/send':        'modal',
+  '/receive':     'modal',
+  '/asset':       'modal',
+  '/success':     'modal',
+  '/activity':    'modal',
+  '/optimise':    'modal',
+  '/autopilot':   'modal',
+  '/simulate':    'modal',
+  '/achievements': 'modal',
+  '/settings':    'modal',
+};
+
+const VARIANT_MAP = {
+  sheet:   sheetVariants,
+  modal:   modalVariants,
+  default: fadeVariants,
+};
 
 function getVariants(pathname) {
-  if (SHEET_PATHS.some(p => pathname.startsWith(p))) return sheetVariants;
-  if (MODAL_PATHS.some(p => pathname.startsWith(p))) return modalVariants;
-  return fadeVariants;
+  const match = Object.keys(ROUTE_TRANSITIONS).find(prefix => pathname.startsWith(prefix));
+  const type = match ? ROUTE_TRANSITIONS[match] : 'default';
+  return VARIANT_MAP[type];
+}
+
+// ── Error fallback — uses token-system colours so it's never unstyled ────
+function AppError({ error, resetErrorBoundary }) {
+  return (
+    <div
+      role="alert"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: '32px 24px',
+        background: 'var(--bk-bg-base)',
+        color: 'var(--bk-text-primary)',
+        textAlign: 'center',
+        gap: 16,
+      }}
+    >
+      <svg width="40" height="40" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 3L17.5 16H2.5L10 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 9V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="10" cy="14.5" r="0.75" fill="currentColor"/>
+      </svg>
+      <p style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Something went wrong</p>
+      {error?.message && (
+        <p style={{ margin: 0, fontSize: 13, color: 'var(--bk-text-secondary)', maxWidth: 280 }}>
+          {error.message}
+        </p>
+      )}
+      <button
+        onClick={resetErrorBoundary}
+        style={{
+          marginTop: 8,
+          padding: '10px 24px',
+          borderRadius: 12,
+          border: 'none',
+          background: 'var(--bk-brand-primary)',
+          color: '#fff',
+          fontSize: 15,
+          fontWeight: 600,
+          cursor: 'pointer',
+        }}
+      >
+        Reload
+      </button>
+    </div>
+  );
 }
 
 // ── Actions overlay (sits on top of whatever screen is active) ───────────
@@ -89,7 +164,11 @@ function ActionsOverlay() {
 // ── App routes (inside phone frame) ──────────────────────────────────────
 function AnimatedRoutes() {
   const location = useLocation();
-  const variants = getVariants(location.pathname);
+  // Respects prefers-reduced-motion OS setting (WCAG 2.3.3)
+  const prefersReducedMotion = useReducedMotion();
+  const variants = prefersReducedMotion
+    ? { initial: {}, animate: {}, exit: {} }
+    : getVariants(location.pathname);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -130,17 +209,12 @@ function AnimatedRoutes() {
 function AppInner() {
   const f = useFeatures();
   const isDesktop = useIsDesktop();
-  const [walletConnected, setWalletConnected] = useState(
-    () => !f.walletConnection || localStorage.getItem('walletConnected') === 'true'
-  );
+  const { isConnected } = useAccount();
+  const [demoMode, setDemoMode] = useState(false);
+  const walletConnected = !f.walletConnection || isConnected || demoMode;
 
   if (!walletConnected) {
-    return (
-      <ConnectWalletScreen onConnect={() => {
-        localStorage.setItem('walletConnected', 'true');
-        setWalletConnected(true);
-      }} />
-    );
+    return <ConnectWalletScreen onDemoConnect={() => setDemoMode(true)} />;
   }
 
   return (
@@ -150,11 +224,15 @@ function AppInner() {
           <UndoToastProvider>
             {isDesktop ? (
               <DesktopLayout>
-                <AnimatedRoutes />
+                <ErrorBoundary FallbackComponent={AppError}>
+                  <AnimatedRoutes />
+                </ErrorBoundary>
               </DesktopLayout>
             ) : (
               <div className="phone">
-                <AnimatedRoutes />
+                <ErrorBoundary FallbackComponent={AppError}>
+                  <AnimatedRoutes />
+                </ErrorBoundary>
                 <ActionsOverlay />
                 <UndoToast />
               </div>
@@ -175,24 +253,28 @@ export default function App() {
   const handleSplashDone = useCallback(() => setSplashDone(true), []);
 
   return (
-    <BrandConfigProvider>
-      <FeatureConfigProvider>
-        <AnimatePresence mode="wait">
-          {isTopFrame && !splashDone ? (
-            <SplashScreen key="splash" onDone={handleSplashDone} />
-          ) : (
-            <motion.div
-              key="app"
-              style={{ position: 'relative', width: '100%', height: '100%' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.25 }}
-            >
-              <AppInner />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </FeatureConfigProvider>
-    </BrandConfigProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <BrandConfigProvider>
+          <FeatureConfigProvider>
+            <AnimatePresence mode="wait">
+              {isTopFrame && !splashDone ? (
+                <SplashScreen key="splash" onDone={handleSplashDone} />
+              ) : (
+                <motion.div
+                  key="app"
+                  style={{ position: 'relative', width: '100%', height: '100%' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <AppInner />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </FeatureConfigProvider>
+        </BrandConfigProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

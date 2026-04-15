@@ -15,6 +15,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import BigNumber from 'bignumber.js';
 import { Button } from 'react-aria-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +25,7 @@ import { useBrandConfig } from './theme/BrandConfig';
 const MotionButton = motion.create(Button);
 import { useSwap } from './SwapContext';
 import { useUndoToast } from './UndoToastContext';
+import { useGasEstimate } from './hooks/useGasEstimate';
 const IconDelete = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true">
     <path d="M7 4H17V16H7L3 10L7 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -42,7 +44,7 @@ function SwapTokenPill({ token, side, appear }) {
   return (
     <TokenPill
       token={{ id: token.id, name: token.symbol, icon: token.icon }}
-      onPress={() => navigate(`/swap/select/${side}`)}
+      onPress={() => navigate(`/swap/select/${side}`, { state: { from: 'swap' } })}
       appear={appear}
     />
   );
@@ -54,14 +56,14 @@ function SelectTokenButton({ side }) {
     <Button
       className="select-token-cta-btn"
       aria-label="Select receive token"
-      onPress={() => navigate(`/swap/select/${side}`)}
+      onPress={() => navigate(`/swap/select/${side}`, { state: { from: 'swap' } })}
     >
       Select token
     </Button>
   );
 }
 
-function PayCard({ payAmount, payUSD, payToken }) {
+function PayCard({ payAmount, payUSD, payToken, pricesLoading }) {
   return (
     <div className="swap-card pay-card" role="region" aria-label="You pay">
       <div className="card-label">You pay</div>
@@ -78,7 +80,9 @@ function PayCard({ payAmount, payUSD, payToken }) {
         <SwapTokenPill token={payToken} side="pay" />
       </div>
       <div className="card-bottom">
-        <span>≈ ${payUSD}</span>
+        <div aria-live="polite" aria-atomic="true" aria-label="Pay amount in USD">
+          <span>≈ {pricesLoading ? '—' : `$${payUSD}`}</span>
+        </div>
         <span>{payToken.balanceLabel}</span>
       </div>
     </div>
@@ -171,7 +175,7 @@ function Numpad({ onKey }) {
           key={key}
           className="numpad-key-btn"
           aria-label={key === 'del' ? 'Delete last digit' : key}
-          whileTap={{ scale: 0.82 }}
+          whileTap={{ scale: tap.numpad }}
           onPress={() => onKey(key)}
         >
           {key === 'del'
@@ -194,7 +198,11 @@ export default function SwapScreen() {
     activePct, setActivePct,
     payUSD, receiveAmount, rateLabel,
     swapDirections,
+    livePayPrice, liveReceivePrice,
+    pricesLoading,
   } = useSwap();
+
+  const { data: gasEstimate } = useGasEstimate();
 
   const flashTimer   = useRef(null);
   const prevReceive  = useRef('');
@@ -213,6 +221,12 @@ export default function SwapScreen() {
   }, [receiveToken, location.state]); // eslint-disable-line
 
   // ── Derived CTA state ────────────────────────────────────────────────
+  //
+  // State machine for the bottom CTA:
+  //   'select'  — no receive token chosen; button navigates to token select
+  //   'amount'  — receive token set but no valid amount entered; button is disabled
+  //   'ready'   — both token and amount present; button navigates to review
+  //
   const hasAmount = payAmount && parseFloat(payAmount) > 0;
   const ctaReady  = !!(receiveToken && hasAmount);
   const ctaLabel  = !receiveToken
@@ -220,6 +234,11 @@ export default function SwapScreen() {
     : !hasAmount
     ? 'Enter an amount'
     : 'Swap';
+
+  // Disabled only in the 'amount' state: token is selected but no amount entered.
+  // In 'select' state, the button is active (it navigates to token select).
+  // In 'ready' state, the button is active (it navigates to review).
+  const ctaDisabled = !!receiveToken && !hasAmount;
 
   // ── Receive flash ────────────────────────────────────────────────────
   function triggerFlash() {
@@ -246,8 +265,11 @@ export default function SwapScreen() {
   // ── Percentage pills ─────────────────────────────────────────────────
   function handlePct(pct) {
     setActivePct(pct);
-    const amount = payToken.balance * pct / 100;
-    setPayAmount(amount % 1 === 0 ? amount.toString() : amount.toFixed(4));
+    // Guard: treat missing balance as 0 to avoid NaN/crash
+    const balance = payToken.balance ?? 0;
+    const amount = new BigNumber(balance).times(pct).div(100);
+    const amountNum = amount.toNumber();
+    setPayAmount(amountNum % 1 === 0 ? amountNum.toString() : amount.toFixed(4));
     triggerFlash();
   }
 
@@ -283,7 +305,7 @@ export default function SwapScreen() {
       />
 
       <div className="swap-cards" data-bk-component="swap-card">
-        <PayCard payAmount={payAmount} payUSD={payUSD} payToken={payToken} />
+        <PayCard payAmount={payAmount} payUSD={payUSD} payToken={payToken} pricesLoading={pricesLoading} />
         <SwapDirectionButton
           swapped={swappedVisual}
           onPress={handleSwapDirection}
@@ -305,15 +327,15 @@ export default function SwapScreen() {
         className={`bottom-cta-btn ${ctaReady ? 'cta-ready' : 'cta-disabled'}`}
         data-bk-component="button"
         aria-label={ctaLabel}
-        isDisabled={!ctaReady && !!receiveToken}
+        isDisabled={ctaDisabled}
         onPress={() => {
-          if (!receiveToken) { navigate('/swap/select/receive'); return; }
+          if (!receiveToken) { navigate('/swap/select/receive', { state: { from: 'swap' } }); return; }
           if (ctaReady) {
             navigate('/review', { state: {
               action: 'swap',
-              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * payToken.price },
-              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * receiveToken.price },
-              fee: { network: '$2.40', protocol: '$0.88', total: '$3.28' },
+              from: { icon: payToken.icon, symbol: payToken.symbol, amount: payAmount, usd: parseFloat(payAmount || 0) * livePayPrice },
+              to:   { icon: receiveToken.icon, symbol: receiveToken.symbol, amount: receiveAmount, usd: parseFloat(receiveAmount || 0) * (liveReceivePrice ?? receiveToken.price) },
+              fee: gasEstimate ?? { network: null, protocol: null, total: null },
               rate: rateLabel,
               warning: null,
             }});

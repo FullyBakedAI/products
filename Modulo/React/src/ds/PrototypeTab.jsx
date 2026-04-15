@@ -4,7 +4,7 @@
  * Build panel sends postMessage + localStorage to sync feature presets with iframe.
  */
 import { useRef, useState, useCallback } from 'react';
-import { Button, Switch } from 'react-aria-components';
+import { Button, Switch, TextField, TextArea } from 'react-aria-components';
 import { defaultFeatures } from '../config/features';
 import mvpJson    from '../../../client-config/presets/mvp.json';
 import phase2Json from '../../../client-config/presets/phase-2.json';
@@ -227,24 +227,194 @@ function ProtoToggle({ label, checked, onChange }) {
   );
 }
 
+// ── AI helper ────────────────────────────────────────────────────────────────
+
+const AI_SYSTEM_PROMPT = `You are Modulo's AI design assistant. You help business owners explore and refine their DeFi app prototype.
+
+You can suggest and apply feature changes by returning a JSON block. The feature structure is:
+{
+  "nav": { "home": bool, "explore": bool, "activity": bool, "autopilot": bool },
+  "home": { "portfolioChart": bool, "liveYield": bool, "smartNudges": bool, "autopilotCard": bool },
+  "actions": { "swap": bool, "trade": bool, "lend": bool, "stake": bool },
+  "walletConnection": bool, "notifications": bool, "undoToast": bool
+}
+
+When suggesting feature changes, wrap the new feature config in a \`\`\`features JSON block like:
+\`\`\`features
+{ "nav": { ... }, ... }
+\`\`\`
+
+Keep responses concise (2-4 sentences max). Focus on what changed and why it suits their needs.
+If the user asks something that doesn't map to feature toggles, give product advice or UX recommendations.`;
+
+async function callClaude(messages) {
+  const endpoint = import.meta.env.DEV ? '/api/claude' : '/api/claude';
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      system: AI_SYSTEM_PROMPT,
+      messages,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `API error ${res.status}`);
+  }
+  const data = await res.json();
+  return data.content?.[0]?.text || '';
+}
+
+function parseFeatures(text) {
+  const match = text.match(/```features\s*\n([\s\S]*?)\n```/);
+  if (!match) return null;
+  try { return JSON.parse(match[1]); } catch { return null; }
+}
+
+function stripFeaturesBlock(text) {
+  return text.replace(/```features\s*\n[\s\S]*?\n```/g, '').trim();
+}
+
+// ── AI Prompt Panel ──────────────────────────────────────────────────────────
+
+function AIPromptPanel({ onApplyFeatures }) {
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef(null);
+
+  async function handleSubmit() {
+    const text = input.trim();
+    if (!text || loading) return;
+
+    const userMsg = { role: 'user', content: text };
+    const history = [...messages, userMsg];
+    setMessages(history);
+    setInput('');
+    setLoading(true);
+
+    try {
+      const apiMessages = history.map(m => ({ role: m.role, content: m.content }));
+      const reply = await callClaude(apiMessages);
+      const features = parseFeatures(reply);
+      const displayText = stripFeaturesBlock(reply);
+
+      const assistantMsg = { role: 'assistant', content: reply, displayText, features };
+      setMessages(prev => [...prev, assistantMsg]);
+
+      if (features && onApplyFeatures) {
+        onApplyFeatures(features);
+      }
+    } catch (err) {
+      setMessages(prev => [...prev, { role: 'assistant', content: err.message, displayText: `Error: ${err.message}`, isError: true }]);
+    } finally {
+      setLoading(false);
+      setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' }), 50);
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
+
+  return (
+    <div className="proto-ai-panel">
+      <div className="proto-ai-header">
+        <span className="proto-ai-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1L8.5 5.5L13 7L8.5 8.5L7 13L5.5 8.5L1 7L5.5 5.5L7 1Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span className="proto-ai-title">AI Assistant</span>
+        <span className="proto-ai-sub">Describe what you'd like to explore</span>
+      </div>
+
+      <div className="proto-ai-messages" ref={scrollRef}>
+        {messages.length === 0 && (
+          <div className="proto-ai-empty">
+            Try: "Show me an MVP with just swap" or "What would a lending-focused app look like?"
+          </div>
+        )}
+        {messages.map((m, i) => (
+          <div key={i} className={`proto-ai-msg proto-ai-msg-${m.role}${m.isError ? ' proto-ai-msg-error' : ''}`}>
+            <div className="proto-ai-msg-text">{m.displayText || m.content}</div>
+            {m.features && (
+              <div className="proto-ai-msg-applied">Applied to prototype</div>
+            )}
+          </div>
+        ))}
+        {loading && (
+          <div className="proto-ai-msg proto-ai-msg-assistant">
+            <div className="proto-ai-typing"><span /><span /><span /></div>
+          </div>
+        )}
+      </div>
+
+      <div className="proto-ai-input-row">
+        <textarea
+          className="proto-ai-input"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Describe a feature idea or change…"
+          rows={1}
+          disabled={loading}
+        />
+        <Button
+          className="proto-ai-send"
+          onPress={handleSubmit}
+          isDisabled={!input.trim() || loading}
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M12.5 1.5L6 8M12.5 1.5L8.5 12.5L6 8M12.5 1.5L1.5 5.5L6 8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 // ── Main tab ──────────────────────────────────────────────────────────────────
 
 export default function PrototypeTab() {
   const iframeRef   = useRef(null);
   const [iframeKey, setIframeKey] = useState(0);
+  const buildPanelRef = useRef(null);
 
   function handleFullScreen() { window.location.hash = '/'; }
   function handleRestart() {
-    // Clear stored features so splash + fresh state plays
     try { localStorage.removeItem('modulo_build_features'); } catch {}
     setIframeKey(k => k + 1);
   }
+
+  const handleAIFeatures = useCallback((features) => {
+    const merged = { ...defaultFeatures };
+    for (const [k, v] of Object.entries(features)) {
+      if (typeof v === 'object' && v !== null) {
+        merged[k] = { ...(merged[k] || {}), ...v };
+      } else {
+        merged[k] = v;
+      }
+    }
+    try { localStorage.setItem(LS_FEATURES, JSON.stringify(merged)); } catch {}
+    try {
+      iframeRef.current?.contentWindow?.postMessage(
+        { type: 'SET_FEATURES', features: merged },
+        window.location.origin
+      );
+    } catch {}
+  }, []);
 
   return (
     <div className="proto-tab">
       <div className="proto-main">
 
-        {/* Left: phone frame */}
+        {/* Left: phone frame + AI prompt */}
         <div className="proto-phone-col">
           <div className="proto-top-bar">
             <Button className="proto-btn" onPress={handleFullScreen}>
@@ -261,18 +431,22 @@ export default function PrototypeTab() {
             </Button>
           </div>
 
-          <div className="proto-frame">
-            <div className="proto-notch" aria-hidden="true">
-              <div className="proto-notch-pill" />
+          <div className="proto-phone-and-ai">
+            <div className="proto-frame">
+              <div className="proto-notch" aria-hidden="true">
+                <div className="proto-notch-pill" />
+              </div>
+              <iframe
+                key={iframeKey}
+                ref={iframeRef}
+                src={window.location.origin + window.location.pathname}
+                title="Modulo prototype"
+                allow="same-origin"
+                loading="eager"
+              />
             </div>
-            <iframe
-              key={iframeKey}
-              ref={iframeRef}
-              src={window.location.origin + window.location.pathname}
-              title="Modulo prototype"
-              allow="same-origin"
-              loading="eager"
-            />
+
+            <AIPromptPanel onApplyFeatures={handleAIFeatures} />
           </div>
         </div>
 

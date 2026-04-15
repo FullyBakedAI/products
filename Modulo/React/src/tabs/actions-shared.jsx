@@ -112,7 +112,7 @@ export function Numpad({ onKey }) {
     <div className="numpad" role="group" aria-label="Number input">
       {keys.map(key => (
         <MotionButton key={key} className="numpad-key-btn" aria-label={key === 'del' ? 'Delete' : key} onPress={() => onKey(key)}
-          whileTap={{ scale: 0.82 }} transition={{ type: 'spring', damping: 18, stiffness: 400 }}>
+          whileTap={{ scale: tap.numpad }} transition={{ type: 'spring', damping: 18, stiffness: 400 }}>
           {key === 'del'
             ? <IconDelete size={18} />
             : key

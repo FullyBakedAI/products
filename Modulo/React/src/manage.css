@@ -46,7 +46,7 @@
   color: var(--bk-text-primary);
 }
 
-.manage-settings-btn[data-focused] {
+.manage-settings-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -94,7 +94,7 @@
   background: var(--bk-bg-card-alt);
 }
 
-.manage-card[data-focused] {
+.manage-card[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }

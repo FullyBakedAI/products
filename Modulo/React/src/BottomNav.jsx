@@ -24,12 +24,12 @@ const IconClock = () => (
     <path d="M10 7V10.5L12.5 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
-const IconSlidersHorizontal = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-    <circle cx="7" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
-    <circle cx="13" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/>
-    <circle cx="8" cy="14" r="2" stroke="currentColor" strokeWidth="1.5"/>
+const IconFunds = () => (
+  <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+    <path d="M3.67 7.33H17.42C18.43 7.33 19.25 8.16 19.25 9.17V17.42C19.25 18.43 18.43 19.25 17.42 19.25H4.58C3.57 19.25 2.75 18.43 2.75 17.42V9.17C2.75 8.16 3.57 7.33 4.58 7.33Z" stroke="currentColor" strokeWidth="1.83333" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6.42 7.33V5.5C6.42 4.49 7.24 3.67 8.25 3.67H15.58C16.59 3.67 17.42 4.49 17.42 5.5V7.33" stroke="currentColor" strokeWidth="1.83333" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19.25 11H15.58C14.57 11 13.75 11.82 13.75 12.83C13.75 13.84 14.57 14.67 15.58 14.67H19.25" stroke="currentColor" strokeWidth="1.83333" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="15.58" cy="12.83" r="0.917" fill="currentColor"/>
   </svg>
 );
 
@@ -93,15 +93,17 @@ export default function BottomNav() {
       </Button>
       )}
 
+      {(f.nav.manage ?? true) && (
       <Button
         className={`nav-btn${isActive('/manage') ? ' active' : ''}`}
         aria-label="Funds"
         aria-current={isActive('/manage') ? 'page' : undefined}
         onPress={() => navigate('/manage')}
       >
-        <IconSlidersHorizontal />
+        <IconFunds />
         <span className="nav-label">Funds</span>
       </Button>
+      )}
     </nav>
   );
 }
