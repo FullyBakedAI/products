@@ -60,7 +60,6 @@ export default function SplashScreen({ onDone }) {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 9999,
-        gap: 24,
       }}
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.35, ease: 'easeIn' } }}
@@ -74,22 +73,6 @@ export default function SplashScreen({ onDone }) {
         <PercentMark size={108} />
       </motion.div>
 
-      {/* Wordmark — fade up after mark lands */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut', delay: 0.5 }}
-        style={{
-          fontSize: 13,
-          fontWeight: 500,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'rgba(245,245,246,0.35)',
-          fontFamily: 'var(--bk-font, sans-serif)',
-        }}
-      >
-        modulo
-      </motion.div>
     </motion.div>
   );
 }
