@@ -116,7 +116,8 @@
   flex: 1;
   height: 0;          /* Safari flex scroll fix — forces browser to respect flex:1 constraint */
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;   /* scroll if content overflows — never clip */
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 4px;
