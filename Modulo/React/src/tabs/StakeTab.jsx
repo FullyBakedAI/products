@@ -16,10 +16,6 @@ import {
   ASSET_ID_TO_TOKEN,
 } from './actions-shared';
 
-import tokenEth  from '../assets/token-eth.svg';
-import tokenSol  from '../assets/token-sol.svg';
-import tokenBtc  from '../assets/token-btc.svg';
-
 const STAKING_PLATFORMS = {
   eth: [
     { name: 'Lido',           apy: 4.2, tvl: '$34B',  apyType: 'APY' },
@@ -45,13 +41,6 @@ const STAKING_PLATFORMS = {
     { name: 'Cardano native', apy: 3.8, tvl: '$4.4B', apyType: 'APY' },
   ],
 };
-
-// Tokens that have staking options, shown in selector when no asset passed
-const STAKEABLE = [
-  { id: 'eth',  tokenKey: 'ETH',  icon: tokenEth,  label: 'ETH',  bestApy: 4.2 },
-  { id: 'sol',  tokenKey: 'SOL',  icon: tokenSol,  label: 'SOL',  bestApy: 8.2 },
-  { id: 'btc',  tokenKey: 'BTC',  icon: tokenBtc,  label: 'BTC',  bestApy: 2.4 },
-];
 
 const DEFAULT_ASSET = 'eth';
 
@@ -99,24 +88,6 @@ export default function StakeTab() {
     <div className="actions-tab-stack">
       <div className="actions-tab-scroll">
       <AssetHeader tok={tok} tokenKey={tokenKey} returnTab="stake" />
-
-      {/* Token selector — only shown when no specific asset was passed */}
-      {!asset && (
-        <div className="stake-token-selector" role="group" aria-label="Select asset to stake">
-          {STAKEABLE.map(s => (
-            <Button
-              key={s.id}
-              className={`stake-token-pill${selectedAsset === s.id ? ' active' : ''}`}
-              aria-pressed={selectedAsset === s.id}
-              onPress={() => selectAsset(s.id)}
-            >
-              <img src={s.icon} alt="" width="20" height="20" />
-              <span>{s.label}</span>
-              <span className="stake-token-apy">up to {s.bestApy}%</span>
-            </Button>
-          ))}
-        </div>
-      )}
 
       {/* Validator / protocol selector */}
       <div className="portfolio-label">Select validator</div>
