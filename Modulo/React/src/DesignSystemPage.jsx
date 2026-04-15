@@ -81,15 +81,6 @@ export default function DesignSystemPage() {
         <div className="ds-header-left">
           <img src={logoModulo} alt="Modulo" height="14" style={{ opacity: 0.55 }} />
           <span className="ds-header-title">Product kit</span>
-          <a
-            href="https://fullybaked.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ds-bakekit-badge"
-            title="Built with BakeKit by Fully Baked"
-          >
-            Powered by BakeKit
-          </a>
         </div>
         <div className="ds-header-right">
           <AnimatePresence>

@@ -173,7 +173,7 @@ React ARIA component rules (import from 'react-aria-components'):
 - Dialogs / sheets → Dialog (focus trap + Escape key included)
 - Amount display divs (updated by numpad) → role="status" aria-live="polite" (never role="textbox")
 
-Component stack: react-aria-components → BakeKit tokens → product components
+Component stack: react-aria-components → design tokens → product components
 Typography: Inter, weights 400/500/600/700
 Icons: Lucide (UI chrome), Figma assets (product icons)
 
@@ -345,7 +345,7 @@ When building a new screen:
           {[
             { label: 'Value proposition', value: 'Eliminate multi-wallet friction for DeFi users' },
             { label: 'Primary audience',  value: 'DeFi-intermediate users managing 3+ tokens' },
-            { label: 'Design partner',    value: 'Built with BakedUX / Fully Baked methodology' },
+            { label: 'Design methodology', value: 'Research-led, prototype-first UX process' },
           ].map(({ label, value }) => (
             <div key={label} style={{ padding: '10px 0', borderTop: `1px solid ${border}` }}>
               <div style={{ fontSize: 11, color: textM, marginBottom: 3 }}>{label}</div>
