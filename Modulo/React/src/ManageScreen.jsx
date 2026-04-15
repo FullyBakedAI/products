@@ -4,7 +4,7 @@
  */
 
 import { motion } from 'framer-motion';
-import { motion as m } from './motion-tokens';
+import { motion as m, tap } from './motion-tokens';
 import { Button } from 'react-aria-components';
 import { useNavigate } from 'react-router-dom';
 import { useActions } from './ActionsContext';
@@ -92,10 +92,10 @@ export default function ManageScreen() {
   const { openActions } = useActions();
 
   function handlePress(id) {
-    if (id === 'deposit')  openActions({ tab: 'deposit' });
-    else if (id === 'withdraw') openActions({ tab: 'lend' });
-    else if (id === 'send')    navigate('/send');
-    else if (id === 'receive') navigate('/receive');
+    if (id === 'deposit')       navigate('/receive');
+    else if (id === 'withdraw') navigate('/send');
+    else if (id === 'send')     navigate('/send');
+    else if (id === 'receive')  navigate('/receive');
   }
 
   return (
@@ -127,7 +127,7 @@ export default function ManageScreen() {
         >
           {CARDS.map(({ id, label, sub, Icon, ariaLabel }) => (
             <motion.div key={id} variants={springStagger.item}>
-              <motion.div whileTap={{ scale: 0.97 }}>
+              <motion.div whileTap={{ scale: tap.card }}>
                 <Button
                   className="manage-card"
                   aria-label={ariaLabel}

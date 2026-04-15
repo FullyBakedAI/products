@@ -16,9 +16,9 @@ const IconZap = () => (
     <path d="M11 3L4 11H10L9 17L16 9H10L11 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
   </svg>
 );
-const IconChevronLeft = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+const IconX = () => (
+  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 const IconBell = () => (
@@ -64,14 +64,13 @@ export default function AutopilotScreen() {
       exit={{ opacity: 0, y: m.modal.offsetExit, transition: m.modal.exit }}
     >
       <header className="autopilot-header">
-        <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-          <IconChevronLeft />
-        </Button>
         <div className="autopilot-header-title">
           <IconZap />
           <h1 className="autopilot-title">Autopilot</h1>
         </div>
-        <div aria-hidden="true" style={{ width: 20 }} />
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+          <IconX />
+        </Button>
       </header>
 
       <div className="scroll-content">

@@ -9,7 +9,8 @@
  * All colours via --bk-* tokens. All data mocked.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { createChart, AreaSeries } from 'lightweight-charts';
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { motion as m, tap, stagger } from './motion-tokens';
 import { Button } from 'react-aria-components';
@@ -70,7 +71,6 @@ import { TransactionPath } from './components/TransactionPath';
 import { BottomSheet } from './components/BottomSheet';
 import { CURRENT_AUTOPILOT_ACTION } from './config/autopilot-activity';
 import iconBrandBadge    from './assets/icon-modulo-badge.svg';
-import chartLine       from './assets/chart-line.svg';
 import iconNotif       from './assets/icon-notification.svg';
 import iconSettings    from './assets/icon-settings.svg';
 import iconGainArrow   from './assets/icon-gain-arrow.svg';
@@ -84,7 +84,88 @@ import tokenUsdt from './assets/token-usdt.svg';
 
 const TIME_PERIODS = ['1D', '1W', '1M', '1Y', 'ALL'];
 
-// Chart uses the original chart-line.svg for all periods (same visual style)
+// ─── Portfolio chart (lightweight-charts — matches AssetScreen style) ──────────
+
+function generatePortfolioData(period) {
+  const now = Math.floor(Date.now() / 1000);
+  const configs = {
+    '1D':  { points: 48, step: 1800,    base: 23000, range: 800  },
+    '1W':  { points: 84, step: 7200,    base: 22000, range: 2000 },
+    '1M':  { points: 60, step: 43200,   base: 20000, range: 4000 },
+    '1Y':  { points: 52, step: 604800,  base: 16000, range: 8000 },
+    'ALL': { points: 60, step: 2592000, base: 10000, range: 14000 },
+  };
+  const { points, step, base, range } = configs[period] || configs['1D'];
+  let value = base;
+  return Array.from({ length: points + 1 }, (_, i) => {
+    const time = now - (points - i) * step;
+    const drift = (base + range * 0.7 - value) * 0.05;
+    const noise = (Math.random() - 0.45) * range * 0.06;
+    value = Math.max(base * 0.85, value + drift + noise);
+    return { time, value: parseFloat(value.toFixed(2)) };
+  });
+}
+
+function PortfolioChart({ period }) {
+  const containerRef = useRef(null);
+  const chartRef     = useRef(null);
+  const seriesRef    = useRef(null);
+
+  const brandColor = useMemo(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--bk-brand-primary').trim() || '#584BEB'
+  , []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const chart = createChart(el, {
+      width:  el.clientWidth,
+      height: el.clientHeight,
+      layout: {
+        background: { type: 'solid', color: 'transparent' },
+        textColor:  'rgba(0,0,0,0)',
+        fontSize:   10,
+      },
+      grid:            { vertLines: { visible: false }, horzLines: { visible: false } },
+      crosshair:       { mode: 0 },  // no crosshair — decorative background chart
+      rightPriceScale: { visible: false },
+      timeScale:       { visible: false },
+      handleScroll:    false,
+      handleScale:     false,
+    });
+
+    const series = chart.addSeries(AreaSeries, {
+      lineColor:                      brandColor,
+      topColor:                       'rgba(88,75,235,0.28)',
+      bottomColor:                    'rgba(0,0,0,0)',
+      lineWidth:                      2,
+      priceLineVisible:               false,
+      lastValueVisible:               false,
+      crosshairMarkerVisible:         false,
+    });
+
+    series.setData(generatePortfolioData(period));
+    chart.timeScale().fitContent();
+
+    chartRef.current  = chart;
+    seriesRef.current = series;
+
+    const ro = new ResizeObserver(() => {
+      chart.applyOptions({ width: el.clientWidth, height: el.clientHeight });
+    });
+    ro.observe(el);
+    return () => { ro.disconnect(); chart.remove(); chartRef.current = null; };
+  }, []); // eslint-disable-line
+
+  useEffect(() => {
+    if (!seriesRef.current || !chartRef.current) return;
+    seriesRef.current.setData(generatePortfolioData(period));
+    chartRef.current.timeScale().fitContent();
+  }, [period]);
+
+  return <div ref={containerRef} className="portfolio-chart-canvas" aria-hidden="true" />;
+}
 
 // Chain badge: colour-coded dot (bottom-right of token icon)
 const CHAIN_BADGE = {
@@ -287,22 +368,22 @@ function TokenRow({ t, index, showApyInfo, apyTooltipOpen, setApyTooltipOpen }) 
               className="token-yield-fill"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: t.yield / MAX_YIELD }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.22 + index * 0.06 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.22 + index * stagger.perItem }}
               style={{ transformOrigin: 'left' }}
             />
           </div>
           <span className="token-yield-label">{(t.yield * 100).toFixed(1)}% APY</span>
           {showApyInfo && (
             <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-              <button
+              <Button
                 className="apy-info-btn"
                 aria-label="What is APY?"
-                onClick={(e) => { e.stopPropagation(); setApyTooltipOpen(v => !v); }}
-              >ⓘ</button>
+                onPress={(e) => { setApyTooltipOpen(v => !v); }}
+              >ⓘ</Button>
               {apyTooltipOpen && (
                 <div className="apy-tooltip" role="tooltip">
                   <p>APY = Annual Percentage Yield. Rates are variable and may change daily.</p>
-                  <button onClick={() => setApyTooltipOpen(false)}>Got it</button>
+                  <Button onPress={() => setApyTooltipOpen(false)}>Got it</Button>
                 </div>
               )}
             </span>
@@ -427,7 +508,7 @@ export default function HomeScreen() {
           </div>
 
           {f.notifications && (
-          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(pre => { setNotifOpen(true); return pre; })}>
+          <Button className="icon-btn notif-btn" aria-label="Notifications, new activity available" onPress={() => setNotifOpen(true)}>
             <img src={iconNotif} alt="" width="16" height="16" aria-hidden="true" />
             <span className="notif-dot" aria-hidden="true" />
           </Button>
@@ -449,7 +530,7 @@ export default function HomeScreen() {
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
         >
           <div className="portfolio-chart" role="img" aria-label="Portfolio performance chart">
-            <img src={chartLine} alt="" />
+            <PortfolioChart period={activePeriod} />
           </div>
 
           <div className="portfolio-header">
@@ -492,7 +573,13 @@ export default function HomeScreen() {
               <img src={iconGainArrow} alt="" width="8" height="8" aria-hidden="true" />
               <span className="gain-text">$623.11 (5.08%)</span>
             </div>
-            {/* Simulator — coming in v2 */}
+            <Button
+              className="portfolio-whatif-btn"
+              aria-label="What if? — open portfolio simulator"
+              onPress={() => navigate('/simulate')}
+            >
+              What if?
+            </Button>
           </div>
 
           <div className="portfolio-alltime" aria-label="All-time gain: +$2,341.18 (22.3%)">
@@ -506,22 +593,22 @@ export default function HomeScreen() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.08 } }}
         >
-          <button className="action-btn" aria-label="Swap" onClick={() => openActions({ tab: 'swap' })}>
+          <Button className="action-btn" aria-label="Swap" onPress={() => openActions({ tab: 'swap' })}>
             <IconRepeat2 />
             <span className="action-label">Swap</span>
-          </button>
-          <button className="action-btn" aria-label="Trade" onClick={() => openActions({ tab: 'trade' })}>
+          </Button>
+          <Button className="action-btn" aria-label="Trade" onPress={() => openActions({ tab: 'trade' })}>
             <IconArrowUpRight />
             <span className="action-label">Trade</span>
-          </button>
-          <button className="action-btn" aria-label="Send" onClick={() => navigate('/send')}>
+          </Button>
+          <Button className="action-btn" aria-label="Send" onPress={() => navigate('/send')}>
             <img src={iconActionSend} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Send</span>
-          </button>
-          <button className="action-btn" aria-label="Receive" onClick={() => navigate('/receive')}>
+          </Button>
+          <Button className="action-btn" aria-label="Receive" onPress={() => navigate('/receive')}>
             <img src={iconActionRecv} alt="" width="20" height="20" aria-hidden="true" />
             <span className="action-label">Receive</span>
-          </button>
+          </Button>
         </motion.div>
 
         {/* F1: "Put It All To Work" promo card — spring scale entrance */}
@@ -547,7 +634,7 @@ export default function HomeScreen() {
         {f.home.smartNudges && <SmartNudges />}
 
         {/* Sprint 005: Autopilot transparency card */}
-        {f.home.autopilotCard && autopilotActive && (
+        {f.home.autopilotCard && f.nav.autopilot && autopilotActive && (
           <motion.div
             className="autopilot-home-card"
             initial={{ opacity: 0, y: 8 }}
@@ -557,7 +644,11 @@ export default function HomeScreen() {
               <div className="autopilot-home-card-title">
                 <span className="autopilot-home-icon" aria-hidden="true">⚡</span>
                 <span className="autopilot-home-label">Autopilot</span>
-                <span className="autopilot-home-badge">ON</span>
+                <Button
+                  className="autopilot-home-badge"
+                  onPress={() => navigate('/autopilot')}
+                  aria-label="Autopilot is on — view autopilot settings"
+                >ON</Button>
               </div>
             </div>
             <div className="autopilot-home-action">

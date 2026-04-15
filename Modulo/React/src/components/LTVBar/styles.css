@@ -42,7 +42,7 @@
   color: var(--bk-text-secondary);
 }
 
-.ltv-bar-help-btn[data-focused] {
+.ltv-bar-help-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }

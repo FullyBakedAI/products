@@ -42,7 +42,7 @@ const NUDGES_DATA = [
     headline: 'ETH yield up +0.9% on Lido',
     detail: 'Better rate available now',
     cta: 'Increase yield',
-    action: { type: 'actions', tab: 'lend', asset: 'eth' },
+    action: { type: 'actions', tab: 'stake', asset: 'eth' },
   },
   {
     id: 'sol-idle',
@@ -51,7 +51,7 @@ const NUDGES_DATA = [
     headline: 'SOL idle for 14 days',
     detail: "Could've earned $12 staking",
     cta: 'Stake now',
-    action: { type: 'actions', tab: 'lend', asset: 'sol' },
+    action: { type: 'actions', tab: 'stake', asset: 'sol' },
   },
   {
     id: 'btc-health',

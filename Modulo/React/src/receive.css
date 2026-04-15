@@ -9,14 +9,19 @@
   height: 100%;
 }
 
-[data-rac] {
-  outline: none;
-}
+/* [data-rac] { outline: none } — canonical rule lives in shared.css */
 
 /* ── Header ─────────────────────────────────────────────────────────── */
+.receive-nav {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px 0;
+  flex-shrink: 0;
+}
+
 .receive-header {
   text-align: center;
-  padding: 16px 20px 0;
+  padding: 8px 20px 0;
 }
 
 .receive-title {
@@ -94,7 +99,7 @@
   display: block;
 }
 
-.address-action-btn[data-focused] {
+.address-action-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
   border-radius: 4px;
@@ -188,7 +193,7 @@
   background: var(--bk-bg-card);
 }
 
-.exchange-row-btn[data-focused] {
+.exchange-row-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: -2px;
 }

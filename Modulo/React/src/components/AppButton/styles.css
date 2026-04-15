@@ -38,7 +38,7 @@
   transform: scale(0.96);
 }
 
-.app-button-primary[data-focused] {
+.app-button-primary[data-focus-visible] {
   outline: 2px solid var(--bk-text-primary);
   outline-offset: 2px;
 }
@@ -66,7 +66,7 @@
   transform: scale(0.94);
 }
 
-.app-button-action[data-focused] {
+.app-button-action[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -84,7 +84,7 @@
   background: var(--bk-bg-card);
 }
 
-.app-button-icon[data-focused] {
+.app-button-icon[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -102,7 +102,7 @@
   transform: scale(0.88);
 }
 
-.app-button-close[data-focused] {
+.app-button-close[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
 }

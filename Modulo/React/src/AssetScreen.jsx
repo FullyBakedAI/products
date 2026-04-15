@@ -919,6 +919,10 @@ export default function AssetScreen() {
   const [crosshairX, setCrosshairX]     = useState(null);  // 0–1 normalized
   const [apyTooltipOpen, setApyTooltipOpen] = useState(false); // MOD-023
   const [chainBreakdownOpen, setChainBreakdownOpen] = useState(false); // MOD-025
+  const [priceAlertOpen, setPriceAlertOpen] = useState(false);
+  const [alertDirection, setAlertDirection] = useState('above');
+  const [alertPrice, setAlertPrice] = useState('');
+  const [alertConfirmed, setAlertConfirmed] = useState(false);
   const [isFavourite, setIsFavourite]   = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('modulo_favourites') || '[]');
@@ -1132,11 +1136,11 @@ export default function AssetScreen() {
       <div className="portfolio-label">Put it to work</div>
       <div className="asset-opp-list">
         {[
-          { Icon: IconZap,        label: 'Stake',           sub: `Up to 6.8% APY · Flexible or locked`,    tab: 'lend'   },
-          { Icon: IconLandmark,   label: 'Lend & Borrow',   sub: 'Earn on idle assets · Use as collateral', tab: 'lend'   },
-          { Icon: IconTrendingUp, label: 'Trade',            sub: 'Market & limit orders',                   tab: 'trade'  },
-          { Icon: IconBell,       label: 'Set price alert',  sub: 'Get notified when price hits a target',   tab: null     },
-        ].map(({ Icon, label, sub, tab }, i) => (
+          { Icon: IconZap,        label: 'Stake',           sub: `Up to 6.8% APY · Flexible or locked`,    tab: 'stake',  passAsset: true  },
+          { Icon: IconLandmark,   label: 'Lend & Borrow',   sub: 'Earn on idle assets · Use as collateral', tab: 'lend',   passAsset: false },
+          { Icon: IconTrendingUp, label: 'Trade',            sub: 'Market & limit orders',                   tab: 'trade',  passAsset: true  },
+          { Icon: IconBell,       label: 'Set price alert',  sub: 'Get notified when price hits a target',   tab: null,     passAsset: false },
+        ].map(({ Icon, label, sub, tab, passAsset }, i) => (
           <motion.div
             key={label}
             initial={{ opacity: 0, y: 6 }}
@@ -1146,7 +1150,10 @@ export default function AssetScreen() {
           >
           <Button
             className={`asset-opp-row${i === 0 ? ' first' : i === 3 ? ' last' : ''}`}
-            onPress={() => tab ? openActions({ tab, asset: id }) : navigate('/settings', { state: { panel: 'notifications' } })}
+            onPress={() => {
+              if (tab) { openActions({ tab, asset: passAsset ? id : undefined }); }
+              else { setAlertPrice(t.chainPrice.replace(/[$,]/g, '')); setAlertDirection('above'); setAlertConfirmed(false); setPriceAlertOpen(true); }
+            }}
             aria-label={label}
             style={{ width: '100%' }}>
             <Icon size={20} strokeWidth={1.5} color="var(--bk-brand-primary)" aria-hidden="true" />
@@ -1258,6 +1265,7 @@ export default function AssetScreen() {
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
+    <>
     <motion.div
       role="main"
       aria-label={`${t.name} detail`}
@@ -1355,5 +1363,100 @@ export default function AssetScreen() {
         </>
       )}
     </motion.div>
+
+    {/* ── Price alert sheet ── */}
+    <AnimatePresence>
+      {priceAlertOpen && (
+        <>
+          <motion.div
+            className="asset-sheet-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            onClick={() => setPriceAlertOpen(false)}
+            aria-hidden="true"
+          />
+          <motion.div
+            className="asset-price-alert-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Set price alert"
+            initial={{ y: '100%' }}
+            animate={{ y: 0, transition: { type: 'spring', damping: 30, stiffness: 280 } }}
+            exit={{ y: '100%', transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } }}
+          >
+            <div className="asset-sheet-handle" aria-hidden="true"><div className="asset-sheet-pill" /></div>
+
+            {alertConfirmed ? (
+              /* ── Success state ── */
+              <div className="price-alert-success">
+                <div className="price-alert-success-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="14" cy="14" r="14" fill="var(--bk-success, #22C55E)" opacity="0.15"/>
+                    <path d="M8 14.5L12 18.5L20 10" stroke="var(--bk-success, #22C55E)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <p className="price-alert-success-title">Alert set</p>
+                <p className="price-alert-success-sub">
+                  You'll be notified when {t.symbol} goes {alertDirection} ${parseFloat(alertPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+                <Button className="price-alert-done-btn" onPress={() => setPriceAlertOpen(false)}>Done</Button>
+              </div>
+            ) : (
+              /* ── Set alert form ── */
+              <>
+                <div className="price-alert-header">
+                  <div>
+                    <p className="price-alert-title">Set price alert</p>
+                    <p className="price-alert-current">Current: {t.chainPrice}</p>
+                  </div>
+                  <Button className="price-alert-close" aria-label="Close" onPress={() => setPriceAlertOpen(false)}>
+                    <IconX />
+                  </Button>
+                </div>
+
+                {/* Direction toggle */}
+                <div className="price-alert-direction">
+                  {['above', 'below'].map(dir => (
+                    <Button
+                      key={dir}
+                      className={`price-alert-dir-btn${alertDirection === dir ? ' active' : ''}`}
+                      onPress={() => setAlertDirection(dir)}
+                    >
+                      {dir.charAt(0).toUpperCase() + dir.slice(1)}
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Price input */}
+                <div className="price-alert-input-wrap">
+                  <span className="price-alert-currency">$</span>
+                  <input
+                    className="price-alert-input"
+                    type="number"
+                    inputMode="decimal"
+                    placeholder="0.00"
+                    value={alertPrice}
+                    onChange={e => setAlertPrice(e.target.value)}
+                    aria-label={`Target price in USD for ${t.symbol}`}
+                  />
+                  <span className="price-alert-symbol">{t.symbol}</span>
+                </div>
+
+                <Button
+                  className="price-alert-cta"
+                  isDisabled={!alertPrice || parseFloat(alertPrice) <= 0}
+                  onPress={() => setAlertConfirmed(true)}
+                >
+                  Set alert
+                </Button>
+              </>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+    </>
   );
 }

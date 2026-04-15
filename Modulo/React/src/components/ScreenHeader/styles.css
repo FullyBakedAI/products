@@ -39,8 +39,8 @@
   font-family: var(--bk-font);
 }
 
-.header-back-btn[data-focused],
-.header-close-btn[data-focused] {
+.header-back-btn[data-focus-visible],
+.header-close-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
   border-radius: 4px;

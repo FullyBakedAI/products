@@ -56,8 +56,8 @@ export default function UndoToast() {
       {toast && (
         <motion.div
           className="undo-toast"
-          role="status"
-          aria-live="polite"
+          role="alert"
+          aria-live="assertive"
           aria-atomic="true"
           aria-label={undone ? 'Action reversed' : toast.message}
           initial={toastAnim.initial}

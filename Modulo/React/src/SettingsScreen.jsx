@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDisconnect } from 'wagmi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { motion as m, tap } from './motion-tokens';
 import { Button, Switch } from 'react-aria-components';
@@ -436,6 +437,7 @@ export default function SettingsScreen() {
   const navigate = useNavigate();
   const { brandName } = useBrandConfig();
   const [activePanel, setActivePanel] = useState(null);
+  const { disconnect } = useDisconnect();
 
   const PanelComponent = activePanel ? PANELS[activePanel] : null;
 
@@ -459,11 +461,12 @@ export default function SettingsScreen() {
           >
             {/* Header */}
             <div className="settings-header">
-              <Button className="icon-btn" aria-label="Go back" onPress={() => navigate('/')}>
-                <IconChevronLeft size={20} />
-              </Button>
               <span className="settings-title">Settings</span>
-              <div aria-hidden="true" style={{ width: 20 }} />
+              <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </Button>
             </div>
 
             <div className="scroll-content">
@@ -499,12 +502,16 @@ export default function SettingsScreen() {
                 </div>
               ))}
 
-              {/* Sign out */}
+              {/* Disconnect wallet */}
               <div className="settings-section">
-                <Button className="settings-row settings-signout" aria-label="Sign out" onPress={() => navigate('/')}>
+                <Button
+                  className="settings-row settings-signout"
+                  aria-label="Disconnect wallet"
+                  onPress={() => { disconnect(); navigate('/connect'); }}
+                >
                   <IconLogOut size={18} />
                   <div className="settings-row-text">
-                    <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Sign Out</span>
+                    <span className="settings-row-label" style={{ color: 'var(--bk-error)' }}>Disconnect Wallet</span>
                   </div>
                 </Button>
               </div>

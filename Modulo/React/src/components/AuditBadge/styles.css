@@ -6,12 +6,12 @@
 .audit-badge-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 22px;
-  padding: 0 8px;
-  background: color-mix(in srgb, var(--bk-success, #22C55E) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--bk-success, #22C55E) 28%, transparent);
-  border-radius: 6px;
+  gap: 4px;
+  height: 20px;
+  padding: 0 6px;
+  background: color-mix(in srgb, var(--bk-success, #22C55E) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bk-success, #22C55E) 14%, transparent);
+  border-radius: 5px;
   cursor: pointer;
   font-family: var(--bk-font);
   -webkit-tap-highlight-color: transparent;
@@ -21,14 +21,14 @@
 
 .audit-badge-pill:hover,
 .audit-badge-pill[data-hovered] {
-  background: color-mix(in srgb, var(--bk-success, #22C55E) 20%, transparent);
+  background: color-mix(in srgb, var(--bk-success, #22C55E) 12%, transparent);
 }
 
 .audit-badge-pill[data-pressed] {
   transform: scale(0.95);
 }
 
-.audit-badge-pill[data-focused] {
+.audit-badge-pill[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -41,14 +41,15 @@
 .audit-badge-icon {
   display: flex;
   align-items: center;
-  color: var(--bk-success, #22C55E);
+  color: var(--bk-text-muted);
   flex-shrink: 0;
+  opacity: 0.7;
 }
 
 .audit-badge-text {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--bk-success, #22C55E);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--bk-text-muted);
   white-space: nowrap;
 }
 

@@ -27,7 +27,7 @@
   background: var(--bk-bg-card);
 }
 
-.asset-row-tappable[data-focused] {
+.asset-row-tappable[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }

@@ -6,9 +6,21 @@
  */
 
 import { createContext, useContext, useState } from 'react';
+import BigNumber from 'bignumber.js';
 import { SWAP_TOKENS } from './tokens-data';
+import { formatUSD } from './utils/formatters';
+import { usePrices } from './hooks/usePrices';
 
 const SwapContext = createContext(null);
+
+// Display decimals for the receive card — capped at 6 for readability
+// even when maxDecimals is 18 (ETH).
+const DISPLAY_DECIMALS_CAP = 6;
+
+function displayDecimals(token) {
+  if (!token) return 2;
+  return Math.min(token.maxDecimals, DISPLAY_DECIMALS_CAP);
+}
 
 export function SwapProvider({ children }) {
   const [payKey,     setPayKey]     = useState('ETH');
@@ -16,29 +28,56 @@ export function SwapProvider({ children }) {
   const [payAmount,  setPayAmount]  = useState('');
   const [activePct,  setActivePct]  = useState(null);
 
+  // Task 4: slippage (%) and deadline (minutes) settings
+  const [slippage,  setSlippage]  = useState(0.5);
+  const [deadline,  setDeadline]  = useState(20);
+
   const payToken     = SWAP_TOKENS[payKey];
   const receiveToken = receiveKey ? SWAP_TOKENS[receiveKey] : null;
 
-  // USD value of the pay amount
+  // Live prices from CoinGecko — fall back to mock prices while loading/offline
+  const { data: livePrices, isLoading: pricesLoading, isError: pricesError } =
+    usePrices(['ETH', 'WBTC', 'USDC', 'USDT', 'SOL']);
+
+  const livePayPrice     = livePrices?.[payKey]     ?? payToken.price;
+  const liveReceivePrice = receiveToken
+    ? (livePrices?.[receiveKey] ?? receiveToken.price)
+    : null;
+
+  const decimals = displayDecimals(receiveToken);
+
+  // USD value of the pay amount — BigNumber arithmetic, live price
   const payUSD = payAmount && payToken
-    ? (parseFloat(payAmount) * payToken.price).toLocaleString('en-US', {
-        minimumFractionDigits: 2, maximumFractionDigits: 2,
-      })
+    ? formatUSD(
+        new BigNumber(payAmount).times(livePayPrice).toNumber()
+      ).slice(1) // strip leading $ for display consistency
     : '0.00';
 
-  // Computed receive amount based on relative prices
-  const receiveAmount = payAmount && payToken && receiveToken
-    ? ((parseFloat(payAmount) * payToken.price) / receiveToken.price).toLocaleString('en-US', {
+  // Computed receive amount — raw numeric string for calculations/navigation state
+  // Uses receiveToken.maxDecimals (capped) instead of price heuristic
+  const receiveAmountRaw = payAmount && payToken && receiveToken && liveReceivePrice
+    ? new BigNumber(payAmount)
+        .times(livePayPrice)
+        .div(liveReceivePrice)
+        .toFixed(decimals)
+    : '';
+
+  // Display-formatted — toLocaleString only at render time, never passed downstream
+  const receiveAmount = receiveAmountRaw
+    ? parseFloat(receiveAmountRaw).toLocaleString('en-US', {
         minimumFractionDigits: 2,
-        maximumFractionDigits: receiveToken.price > 1000 ? 6 : 2,
+        maximumFractionDigits: decimals,
       })
     : '';
 
-  // Rate label for receive card footer
-  const rateLabel = payToken && receiveToken
-    ? `1 ${payToken.symbol} ≈ ${(payToken.price / receiveToken.price).toLocaleString('en-US', {
-        maximumFractionDigits: receiveToken.price > 1000 ? 6 : 2,
-      })} ${receiveToken.symbol}`
+  // Rate label for receive card footer — BigNumber arithmetic, maxDecimals-aware
+  const rateLabel = payToken && receiveToken && liveReceivePrice
+    ? `1 ${payToken.symbol} ≈ ${new BigNumber(livePayPrice)
+        .div(liveReceivePrice)
+        .toNumber()
+        .toLocaleString('en-US', {
+          maximumFractionDigits: decimals,
+        })} ${receiveToken.symbol}`
     : '';
 
   // Select a token for pay or receive side. Prevents same token on both sides.
@@ -47,7 +86,7 @@ export function SwapProvider({ children }) {
       if (key === receiveKey) setReceiveKey(payKey); // swap the other side
       setPayKey(key);
     } else {
-      if (key === payKey) setPayKey(receiveKey);    // swap the other side
+      if (key === payKey) setPayKey(receiveKey ?? "ETH"); // swap the other side
       setReceiveKey(key);
     }
     setPayAmount('');
@@ -70,8 +109,12 @@ export function SwapProvider({ children }) {
       payKey, receiveKey,
       payAmount, setPayAmount,
       activePct, setActivePct,
-      payUSD, receiveAmount, rateLabel,
+      payUSD, receiveAmount, receiveAmountRaw, rateLabel,
       selectToken, swapDirections,
+      slippage, setSlippage,
+      deadline, setDeadline,
+      livePayPrice, liveReceivePrice,
+      pricesLoading, pricesError,
     }}>
       {children}
     </SwapContext.Provider>

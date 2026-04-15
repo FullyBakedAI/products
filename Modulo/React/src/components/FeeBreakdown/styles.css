@@ -22,7 +22,7 @@
   touch-action: manipulation;
 }
 
-.fee-breakdown-toggle[data-focused] {
+.fee-breakdown-toggle[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
   border-radius: 4px;

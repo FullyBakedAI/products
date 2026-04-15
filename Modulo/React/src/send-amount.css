@@ -160,7 +160,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   padding: 12px 24px 0;
-  flex: 1;
+  flex: none;
+  margin-top: auto;
 }
 
 .sa-numpad-key {

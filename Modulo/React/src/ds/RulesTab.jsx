@@ -1,6 +1,6 @@
 /**
  * RulesTab — design principles as a visual card grid.
- * 7 principles + accessibility standards. No walls of text.
+ * 8 principles + accessibility standards. No walls of text.
  */
 import { useTokenOverride } from '../TokenOverrideContext';
 
@@ -47,6 +47,12 @@ const PRINCIPLES = [
     desc: 'Portfolio value is larger than token name. Token name is larger than wallet address. Visual weight maps directly to decision importance.',
     tags: ['One primary CTA per screen', 'Progressive disclosure', 'Exact numbers, no rounding'],
   },
+  {
+    number: '08',
+    title: 'Every transaction has a review step',
+    desc: 'No DeFi action is irreversible without a confirmation screen. Swap, stake, lend, borrow — all pass through /review with fee breakdown and a clear confirm CTA. Trust is built one confirmation at a time.',
+    tags: ['openActions → /review → /success', 'Fee breakdown always visible', 'Undo toast on completion'],
+  },
 ];
 
 const A11Y_STANDARDS = [
@@ -71,7 +77,7 @@ export default function RulesTab() {
         <span className="ds-rules-intro-eyebrow">03 — Rules</span>
         <h2 className="ds-rules-intro-title">Not guidelines.<br />Constraints.</h2>
         <p className="ds-rules-intro-desc">
-          Seven rules that govern every design and engineering decision at Modulo.
+          Eight rules that govern every design and engineering decision at Modulo.
           These are enforced by the token system and component API — not documentation.
         </p>
       </div>

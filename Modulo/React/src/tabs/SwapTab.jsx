@@ -58,7 +58,7 @@ export default function SwapTab() {
   const [slippagePct, setSlippagePct]               = useState(0.5);
   const [showSlippage, setShowSlippage]             = useState(false);
   const [activeChain, setActiveChain]               = useState('ethereum'); // MOD-036
-  const deadline                                    = 20; // MOD-011: minutes
+  const { deadline }                                 = useSwap(); // MOD-011: minutes
   const [isQuoting, setIsQuoting]                   = useState(false);       // MOD-022
   const [slippageAcknowledged, setSlippageAcknowledged] = useState(false);   // MOD-043
 
@@ -97,6 +97,10 @@ export default function SwapTab() {
 
   return (
     <div className="actions-tab-stack">
+      {/* Scrollable upper section — TransactionPath/FeeBreakdown grow into this area,
+          never pushing the Numpad or CTA below the visible sheet boundary. */}
+      <div className="actions-tab-scroll">
+      <div style={{flex:1}} />
       <AssetHeader tok={payToken} tokenKey={payTokenKey} />
       <div className="swap-cards">
         <div className="swap-card pay-card" role="region" aria-label="You pay">
@@ -260,6 +264,7 @@ export default function SwapTab() {
           })()}
         </>
       )}
+      </div>{/* end actions-tab-scroll */}
 
       <Numpad onKey={handleKey} />
 

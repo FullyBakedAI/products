@@ -46,7 +46,7 @@
   color: var(--bk-text-primary);
 }
 
-.manage-settings-btn[data-focused] {
+.manage-settings-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -62,7 +62,14 @@
 .manage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
   gap: 12px;
+}
+
+/* Propagate full height through Framer Motion wrapper divs to the card */
+.manage-grid > *,
+.manage-grid > * > * {
+  height: 100%;
 }
 
 /* ── Action Card — matches Actions DepositTab style ──────────────────── */
@@ -71,6 +78,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
   padding: 18px 16px;
   background: var(--bk-bg-card);
   border: 1px solid var(--bk-border-subtle);
@@ -86,7 +94,7 @@
   background: var(--bk-bg-card-alt);
 }
 
-.manage-card[data-focused] {
+.manage-card[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }

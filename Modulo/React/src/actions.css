@@ -18,6 +18,7 @@
 .actions-backdrop {
   flex: 1;
   width: 100%;
+  height: 100%;
   border: none;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
@@ -85,12 +86,12 @@
   background: var(--bk-bg-card);
 }
 
-.actions-tab-pill[data-focused] {
+.actions-tab-pill[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
 
-/* Content area — no scrolling, fixed height */
+/* Content area — flex column, clips nothing at this level */
 .actions-scroll {
   flex: 1;
   overflow: hidden;
@@ -103,23 +104,44 @@
 .actions-tab-stack {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
   padding: 8px 16px 0;
   flex: 1;
   min-height: 0;
   overflow: hidden;
 }
 
-.actions-tab-stack .numpad {
+/* Scrollable upper section inside each tab.
+   Content above the Numpad scrolls here — TransactionPath, FeeBreakdown,
+   and any conditional rows grow freely without pushing the CTA off screen. */
+.actions-tab-scroll {
   flex: 1;
+  height: 0;          /* Safari flex scroll fix — forces browser to respect flex:1 constraint */
   min-height: 0;
-  grid-template-rows: repeat(4, 1fr);
-  padding: 0 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 4px;
+}
+
+.actions-tab-scroll::-webkit-scrollbar { display: none; }
+
+/* Numpad: fixed size in the actions context — does NOT grow to fill space.
+   The scroll div above owns the flex: 1. Keys size themselves from min-height. */
+.actions-tab-stack .numpad {
+  flex: none;
+  min-height: 0;
+  grid-template-rows: repeat(4, minmax(36px, auto));
+  padding: 4px 8px 0;
 }
 
 .actions-tab-stack .numpad-key-btn {
   height: auto;
-  min-height: 32px;
+  min-height: 36px;
   font-size: 20px;
 }
 
@@ -130,6 +152,7 @@
   flex-shrink: 0 !important;
   height: 48px;
   padding: 0 16px !important;
+  margin-bottom: max(16px, env(safe-area-inset-bottom, 16px));
 }
 
 /* ── Trade tab — order ticket ───────────────────────────────────────── */
@@ -259,7 +282,7 @@
 .trade-order-pill.active {
   background: var(--bk-bg-elevated);
   color: var(--bk-text-primary);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: var(--bk-white-25);
 }
 
 /* Limit price row */
@@ -460,7 +483,7 @@
 /* ── Platform rows (Lend tab) ───────────────────────────────────────── */
 
 .actions-tab-stack .asset-opp-row {
-  padding: 10px 16px;
+  padding: 6px 16px;
 }
 
 .asset-opp-info { flex: 1; }
@@ -493,11 +516,12 @@
 
 .actions-tab-stack .swap-cards {
   gap: 2px;
+  padding-top: 8px;
 }
 
 .actions-tab-stack .pct-row {
   padding: 0 4px;
-  margin-top: -2px;
+  margin-top: 0;
 }
 
 /* ── Slippage control (Swap tab) ────────────────────────────────────── */
@@ -626,9 +650,9 @@
 
 /* ── MOD-039: Audit badge on lending platform selector ─────────────── */
 .audit-badge {
-  font-size: 11px;
-  color: var(--bk-success);
-  font-weight: 600;
+  font-size: 10px;
+  color: var(--bk-text-muted);
+  font-weight: 500;
   margin-left: 6px;
 }
 
@@ -639,4 +663,42 @@
   align-items: center;
   padding: 6px 0;
   font-size: 13px;
+}
+
+/* ── StakeTab: token selector ────────────────────────────────────────── */
+.stake-token-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.stake-token-pill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  border: 1.5px solid var(--bk-border-subtle);
+  background: var(--bk-bg-elevated);
+  color: var(--bk-text-muted);
+  font-family: var(--bk-font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.stake-token-pill.active {
+  border-color: var(--bk-brand-primary);
+  color: var(--bk-brand-primary);
+  background: color-mix(in srgb, var(--bk-brand-primary) 10%, transparent 90%);
+}
+
+.stake-token-apy {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--bk-success);
+  white-space: nowrap;
 }

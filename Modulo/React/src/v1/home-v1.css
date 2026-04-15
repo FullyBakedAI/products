@@ -50,7 +50,7 @@
   display: block;
 }
 
-.icon-btn[data-focused] {
+.icon-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 3px;
   border-radius: 4px;
@@ -130,7 +130,7 @@
   color: #fff;
 }
 
-.time-btn[data-focused] {
+.time-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
   border-radius: 10px;
@@ -212,7 +212,7 @@
   background: var(--bk-bg-card-alt);
 }
 
-.action-btn[data-focused] {
+.action-btn[data-focus-visible] {
   outline: 2px solid var(--bk-brand-primary);
   outline-offset: 2px;
 }
@@ -524,7 +524,7 @@
   font-family: var(--bk-font);
 }
 
-.earn-btn[data-focused] {
+.earn-btn[data-focus-visible] {
   outline: 2px solid var(--bk-text-primary);
   outline-offset: 2px;
 }

@@ -68,6 +68,23 @@ export default function SidebarNav() {
 
       <div className="sidebar-divider" role="separator" />
 
+      {/* Product Library link — navigates back to DS page */}
+      <Button
+        className="sidebar-ds-link"
+        aria-label="Product Library"
+        onPress={() => { window.location.hash = '/ds'; }}
+      >
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+          <rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+          <rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+          <rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+        </svg>
+        <span>Product Library</span>
+      </Button>
+
+      <div className="sidebar-divider" role="separator" />
+
       <div className="sidebar-footer">
         <span className="sidebar-wallet" title="0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b" aria-label="Wallet address: 0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b">
           0x1a2b…9a0b

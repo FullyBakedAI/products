@@ -85,6 +85,23 @@ export default function ReceiveScreen() {
       {/* Scrollable Content */}
       <div className="scroll-content">
 
+        {/* Nav row — back button */}
+        <motion.div
+          className="receive-nav"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0, transition: { ...m.fade.enter, delay: 0.04 } }}
+        >
+          <Button
+            className="close-btn-shared"
+            aria-label="Go back"
+            onPress={() => navigate(-1)}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Button>
+        </motion.div>
+
         {/* Header */}
         <motion.div
           className="receive-header"
