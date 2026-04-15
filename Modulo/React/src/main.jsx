@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App.jsx';
 import DesignSystemPage from './DesignSystemPage.jsx';
+import PasswordGate from './PasswordGate.jsx';
 import { TokenOverrideProvider } from './TokenOverrideContext.jsx';
 import { IconOverrideProvider } from './IconOverrideContext.jsx';
 import { DevModeProvider } from './DevModeContext.jsx';
@@ -63,7 +64,7 @@ function Root() {
       <IconOverrideProvider>
       <DevModeProvider>
         {isDS
-          ? <DesignSystemPage onBack={() => { window.location.hash = '/'; }} />
+          ? <PasswordGate><DesignSystemPage onBack={() => { window.location.hash = '/'; }} /></PasswordGate>
           : (
             <HashRouter>
               <App />
