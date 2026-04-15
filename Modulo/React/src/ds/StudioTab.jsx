@@ -1474,8 +1474,7 @@ export default function StudioTab() {
       <div className="ds-studio-leave-behind">
         <div className="ds-slb-content">
           <p className="ds-slb-text">
-            Every component is white-label ready, accessible (WCAG 2.1 AA),
-            and wired to your brand tokens.
+            Every component is accessible (WCAG 2.1 AA) and wired to your brand tokens.
           </p>
           <button className="ds-slb-download" onClick={downloadInventory} type="button">
             Download component inventory ↓
