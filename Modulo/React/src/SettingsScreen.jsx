@@ -344,22 +344,12 @@ function AboutPanel({ onBack }) {
         <div className="settings-about-badge">Built with BakedUX</div>
       </div>
       <div className="settings-section">
-        {[
-          { label: 'Terms',    url: 'https://modulo.app/terms'   },
-          { label: 'Privacy',  url: 'https://modulo.app/privacy' },
-          { label: 'Licenses', url: 'https://modulo.app/oss'     },
-        ].map(({ label, url }) => (
-          <Button
-            key={label}
-            className="settings-row"
-            aria-label={label}
-            onPress={() => window.open(url, '_blank', 'noopener,noreferrer')}
-          >
+        {['Terms', 'Privacy', 'Licenses'].map(label => (
+          <div key={label} className="settings-row">
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
-            <IconExternalLink size={14} />
-          </Button>
+          </div>
         ))}
       </div>
     </PanelShell>
