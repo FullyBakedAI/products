@@ -303,28 +303,16 @@ function AppearancePanel({ onBack }) {
 }
 
 /* ── Help panel ── */
-const HELP_LINKS = {
-  'FAQ':             'https://help.modulo.app/faq',
-  'Contact Support': 'https://help.modulo.app/support',
-  'Report a Bug':    'https://github.com/modulo-app/feedback/issues/new',
-};
-
 function HelpPanel({ onBack }) {
   return (
     <PanelShell title="Help & Support" onBack={onBack}>
       <div className="settings-section">
-        {Object.entries(HELP_LINKS).map(([label, url]) => (
-          <Button
-            key={label}
-            className="settings-row"
-            aria-label={label}
-            onPress={() => window.open(url, '_blank', 'noopener,noreferrer')}
-          >
+        {['FAQ', 'Contact Support', 'Report a Bug'].map(label => (
+          <div key={label} className="settings-row">
             <div className="settings-row-text">
               <span className="settings-row-label">{label}</span>
             </div>
-            <IconExternalLink size={14} />
-          </Button>
+          </div>
         ))}
       </div>
       <div className="settings-version-footer">Modulo v3.0</div>
