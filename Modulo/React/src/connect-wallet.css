@@ -38,7 +38,8 @@
   font-family: var(--bk-font);
 }
 .wallet-option[data-pressed] { transform: scale(0.98); }
-.wallet-icon { font-size: 24px; width: 32px; flex-shrink: 0; }
+.wallet-icon { width: 32px; height: 32px; flex-shrink: 0; border-radius: 8px; object-fit: contain; }
+.wallet-icon-fallback { font-size: 14px; display: flex; align-items: center; justify-content: center; background: var(--bk-bg-elevated); border-radius: 8px; }
 .wallet-name { flex: 1; }
 .connecting-dot {
   width: 8px; height: 8px; border-radius: 50%;

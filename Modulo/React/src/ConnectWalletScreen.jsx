@@ -60,7 +60,10 @@ export default function ConnectWalletScreen({ onConnect, onDemoConnect }) {
                   role="listitem"
                   isDisabled
                 >
-                  <span className="wallet-icon" aria-hidden="true">WC</span>
+                  {connector.icon
+                    ? <img className="wallet-icon" src={connector.icon} alt="" aria-hidden="true" />
+                    : <span className="wallet-icon wallet-icon-fallback" aria-hidden="true">WC</span>
+                  }
                   <span className="wallet-name">WalletConnect — coming soon</span>
                 </Button>
               );
@@ -78,7 +81,10 @@ export default function ConnectWalletScreen({ onConnect, onDemoConnect }) {
                 }}
                 isDisabled={isPending || isInjectedMissing}
               >
-                <span className="wallet-icon" aria-hidden="true">{display.label}</span>
+                {connector.icon
+                  ? <img className="wallet-icon" src={connector.icon} alt="" aria-hidden="true" />
+                  : <span className="wallet-icon wallet-icon-fallback" aria-hidden="true">{display.label}</span>
+                }
                 <span className="wallet-name">
                   {isInjectedMissing ? 'Install MetaMask' : display.name}
                 </span>
