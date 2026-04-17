@@ -1,5 +1,7 @@
 # Modulo Design Foundations
 
+> **Load when:** making typography or spacing decisions, applying dark-first principles, setting up a new screen's visual baseline, or reviewing whether the design feel is consistent.
+>
 > Foundations are the raw materials. Get these right and everything built on top is consistent.
 > For token values, see `tokens.md`. This file covers typography, spacing, and principles.
 

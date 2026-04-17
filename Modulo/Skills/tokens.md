@@ -1,5 +1,7 @@
 # Modulo Token Contract
 
+> **Load when:** building or modifying any screen, writing CSS, checking colour/spacing/motion values, running visual QA, reviewing token compliance.
+
 Every visual value MUST come from a `--bk-*` CSS custom property. No hardcoded hex. No magic numbers.
 
 ## Surfaces

@@ -1,5 +1,7 @@
 # Modulo QA Checklist
 
+> **Load when:** about to submit, commit, or hand off any UI work. Also load for post-build review passes.
+
 Run through before submitting ANY UI work.
 
 ## Tokens

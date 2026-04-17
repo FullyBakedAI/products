@@ -5,37 +5,30 @@ Structured for designers, developers, and AI agents alike.
 > Focus on creating the foundations, constraints, and contexts that enable good experiences
 > to emerge, rather than crafting every detail yourself.
 
-## Files
+## Files — Load when
 
-### For building (read these first)
-| File | Purpose |
-|------|---------|
-| `tokens.md` | Every `--bk-*` token with values — the source of truth |
-| `components.md` | Screen structure, shared components, extraction targets, React ARIA, motion, accessibility |
-| `qa-checklist.md` | Pre-submit verification checklist |
+Scan this table before loading any file. Only load what's relevant to the current task.
 
-### For design decisions
-| File | Purpose |
-|------|---------|
-| `foundations.md` | Typography, spacing, dark-first principles |
-| `constraints.md` | Hard rules and strong defaults — what's allowed and not |
-| `contexts.md` | User situations that drive design decisions (reviewing, deciding, confirming, etc.) |
-
-### For AI agents
-| File | Purpose |
-|------|---------|
-| `agent-context.md` | Assembled prompt block — paste into any AI tool to start a build session |
+| File | Load when |
+|------|-----------|
+| `agent-context.md` | Starting any Modulo build session — entry point, references everything else |
+| `tokens.md` | Writing CSS, checking colour/spacing/motion values, visual QA, token compliance review |
+| `components.md` | Building a screen, extracting components, reviewing screen structure, React ARIA or motion work |
+| `constraints.md` | Making design/interaction decisions, reviewing output for compliance, checking what's permitted |
+| `contexts.md` | Building a specific screen type, writing agent prompts, making layout/density decisions |
+| `foundations.md` | Typography/spacing decisions, dark-first baseline, reviewing visual consistency |
+| `qa-checklist.md` | Before any submit, commit, or handoff |
 
 ## How to use
 
 **Starting a new build session:**
-Read `agent-context.md` for the full system prompt, then read the files it references.
+Read `agent-context.md` — it's the assembled entry point.
 
 **Building a specific screen:**
-Check `components.md` for the screen structure template and shared components. Add the relevant context from `contexts.md`.
+Load `components.md` for structure + `contexts.md` for the screen's user context.
 
 **Checking a design decision:**
-Check `constraints.md` first, then `contexts.md` for the appropriate pattern.
+Load `constraints.md` first. Add `contexts.md` if the decision is screen-specific.
 
 **Before submitting:**
 Run through every item in `qa-checklist.md`.

@@ -1,5 +1,7 @@
 # Modulo Component Skills
 
+> **Load when:** building any screen, extracting a shared component, checking the component inventory, reviewing screen structure, wiring React ARIA primitives, handling motion or accessibility.
+
 ## The Goal
 Everything you build feeds into a **reusable React ARIA component library**. Every screen is an opportunity to extract shared patterns into clean, accessible, themeable components. Don't just build screens — build the system.
 

@@ -1,5 +1,7 @@
 # Modulo Design Constraints
 
+> **Load when:** making any design or interaction decision, reviewing finished work, checking if a pattern is permitted, evaluating an agent's output for compliance.
+>
 > Constraints are not limitations — they are the conditions that make quality possible.
 > These rules apply to every agent, designer, and developer building Modulo UI.
 > When in doubt, apply the constraint.

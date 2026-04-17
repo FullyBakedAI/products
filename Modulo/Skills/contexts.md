@@ -1,5 +1,7 @@
 # Modulo Design Contexts
 
+> **Load when:** building a specific screen (swap, send, receive, explore, home, confirm), writing a screen prompt for an agent, making layout or density decisions based on user state.
+>
 > Context is the difference between a correct UI and a good one.
 > The same component renders differently in high-stakes vs. exploratory situations.
 > Before designing a screen, name the context. Then design for it.
