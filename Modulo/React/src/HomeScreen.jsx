@@ -137,9 +137,11 @@ function PortfolioChart({ period }) {
       handleScale:     false,
     });
 
+    // MOD-105: derive topColor from brandColor instead of hardcoded hex
+    const topColor = `${brandColor}40`;
     const series = chart.addSeries(AreaSeries, {
       lineColor:                      brandColor,
-      topColor:                       'rgba(88,75,235,0.28)',
+      topColor,
       bottomColor:                    'rgba(0,0,0,0)',
       lineWidth:                      2,
       priceLineVisible:               false,

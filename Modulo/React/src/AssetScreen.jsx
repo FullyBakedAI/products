@@ -978,7 +978,8 @@ export default function AssetScreen() {
 
   const changeSign  = t.change24h > 0 ? '+' : '';
   const changeColor = t.negative ? 'var(--bk-error)' : 'var(--bk-success)';
-  const lineColor   = t.negative ? '#F04348' : '#584BEB';
+  // MOD-105: use CSS tokens, no hardcoded hex
+  const lineColor   = t.negative ? 'var(--bk-error)' : 'var(--bk-brand-primary)';
 
   // Price shown: crosshair override when scrubbing, else current price
   const displayPrice = crosshairPrice

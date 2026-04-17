@@ -36,7 +36,7 @@
   background: rgba(13, 14, 23, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--bk-white-06);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -96,7 +96,7 @@
 .ds-save-btn {
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   border: none;
   border-radius: 6px;
   padding: 4px 12px;
@@ -123,7 +123,7 @@
 .ds-tab-bar {
   height: 44px;
   background: rgba(9, 9, 14, 0.96);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--bk-white-06);
   display: flex;
   align-items: center;
   padding: 0 24px;
@@ -150,7 +150,7 @@
   white-space: nowrap;
   margin-bottom: -1px;
 }
-.ds-tab-item:hover { color: rgba(255, 255, 255, 0.7); }
+.ds-tab-item:hover { color: var(--bk-white-80); }
 .ds-tab-item.active {
   color: var(--bk-text-primary);
   border-bottom-color: var(--bk-brand-primary);
@@ -163,7 +163,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+  scrollbar-color: var(--bk-white-06) transparent;
 }
 
 .ds-content-inner { width: 100%; }
@@ -186,7 +186,7 @@
     radial-gradient(ellipse 80% 60% at 50% 110%, rgba(88, 75, 235, 0.22) 0%, transparent 65%),
     radial-gradient(ellipse 40% 40% at 80% 10%, rgba(88, 75, 235, 0.09) 0%, transparent 60%),
     var(--bk-bg-base);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--bk-white-06);
 }
 
 .ds-brand-hero-inner {
@@ -216,7 +216,7 @@
 .ds-brand-hero-meta {
   font-size: 11px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin: 0;
@@ -225,7 +225,7 @@
 /* ── Editorial blocks ─────────────────────────────────────────────────── */
 .ds-editorial-block {
   padding: 64px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
 }
 
 .ds-editorial-label {
@@ -233,7 +233,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.18);
+  color: var(--bk-white-18);
   margin-bottom: 40px;
 }
 
@@ -248,7 +248,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--bk-white-25);
   margin-bottom: 14px;
 }
 
@@ -261,12 +261,12 @@
 .ds-brand-swatch-card {
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--bk-white-06);
   transition: transform 0.2s, border-color 0.2s;
 }
 .ds-brand-swatch-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: var(--bk-white-12);
 }
 
 .ds-brand-swatch-fill {
@@ -298,14 +298,14 @@
 .ds-brand-swatch-hex {
   font-size: 9px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--bk-white-30);
   display: block;
   margin-top: 2px;
 }
 
 .ds-brand-swatch-role {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--bk-white-20);
   display: block;
   margin-top: 4px;
   line-height: 1.4;
@@ -320,7 +320,7 @@
 
 .ds-brand-type-row {
   padding: 28px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
 }
 .ds-brand-type-row:last-child { border-bottom: none; }
 
@@ -342,11 +342,11 @@
 .ds-brand-type-meta-item {
   font-size: 10px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bk-white-04);
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--bk-white-06);
 }
 
 .ds-brand-type-label {
@@ -389,7 +389,7 @@
 .ds-brand-space-label {
   font-size: 10px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--bk-white-35);
 }
 
 .ds-brand-radius-grid {
@@ -415,7 +415,7 @@
 .ds-brand-radius-label {
   font-size: 10px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--bk-white-35);
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -492,7 +492,7 @@
   padding: 24px 24px 32px;
   gap: 16px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+  scrollbar-color: var(--bk-white-06) transparent;
   position: relative;
 }
 

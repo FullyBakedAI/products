@@ -118,7 +118,7 @@
   border-radius: 50%;
   background: var(--bk-brand-primary);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--bk-brand-primary) 20%, transparent),
-              0 2px 8px rgba(0,0,0,0.35);
+              0 2px 8px var(--bk-shadow-soft);
   cursor: pointer;
   border: 2px solid var(--bk-bg-base);
 }
@@ -129,7 +129,7 @@
   border-radius: 50%;
   background: var(--bk-brand-primary);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--bk-brand-primary) 20%, transparent),
-              0 2px 8px rgba(0,0,0,0.35);
+              0 2px 8px var(--bk-shadow-soft);
   cursor: pointer;
   border: 2px solid var(--bk-bg-base);
 }

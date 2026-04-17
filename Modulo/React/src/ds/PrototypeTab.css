@@ -25,9 +25,9 @@
   gap: 6px;
   padding: 7px 14px;
   border-radius: 8px;
-  border: 1px solid var(--bk-white-12, rgba(255,255,255,0.12));
-  background: var(--bk-bg-card, rgba(255,255,255,0.05));
-  color: var(--bk-text-primary, #F5F5F6);
+  border: 1px solid var(--bk-white-12);
+  background: var(--bk-bg-card);
+  color: var(--bk-text-primary);
   font-size: 12px;
   font-weight: 500;
   font-family: inherit;
@@ -36,18 +36,18 @@
 }
 
 .proto-btn:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.2);
+  background: var(--bk-white-08);
+  border-color: var(--bk-white-20);
 }
 
 .proto-btn-ghost {
   background: transparent;
-  color: var(--bk-text-muted, #8B8A92);
+  color: var(--bk-text-muted);
 }
 
 .proto-btn-ghost:hover {
-  background: rgba(255,255,255,0.05);
-  color: var(--bk-text-primary, #F5F5F6);
+  background: var(--bk-white-05);
+  color: var(--bk-text-primary);
 }
 
 /* ── Stage ───────────────────────────────────────────────────────── */
@@ -63,11 +63,11 @@
   width: 390px;
   height: 844px;
   border-radius: 44px;
-  border: 8px solid var(--bk-white-12, rgba(255,255,255,0.12));
+  border: 8px solid var(--bk-white-12);
   overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+  box-shadow: 0 40px 80px var(--bk-black-50), 0 0 0 1px var(--bk-white-04);
   position: relative;
-  background: #000;
+  background: var(--bk-black);
   flex-shrink: 0;
   transform: scale(0.88);
   transform-origin: top center;
@@ -90,7 +90,7 @@
   transform: translateX(-50%);
   width: 120px;
   height: 32px;
-  background: #000;
+  background: var(--bk-black);
   border-radius: 20px;
   z-index: 10;
   display: flex;
@@ -102,20 +102,20 @@
 .proto-notch-pill {
   width: 60px;
   height: 6px;
-  background: rgba(255,255,255,0.18);
+  background: var(--bk-white-18);
   border-radius: 3px;
 }
 
 /* ── Hint ────────────────────────────────────────────────────────── */
 .proto-hint {
   font-size: 12px;
-  color: var(--bk-text-muted, #8B8A92);
+  color: var(--bk-text-muted);
   text-align: center;
   margin: 0;
 }
 
 .proto-hint strong {
-  color: var(--bk-brand-primary, #584BEB);
+  color: var(--bk-brand-primary);
   font-weight: 600;
 }
 
@@ -132,7 +132,7 @@
   padding: 24px 24px 40px;
   gap: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.06) transparent;
+  scrollbar-color: var(--bk-white-06) transparent;
 }
 
 /* ── Build Panel ─────────────────────────────────────────────────── */
@@ -145,14 +145,14 @@
   padding: 20px 20px 0;
   overflow-y: auto;
   overflow-x: hidden;
-  border-left: 1px solid rgba(255,255,255,0.05);
+  border-left: 1px solid var(--bk-white-05);
   background: rgba(10,10,16,0.4);
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.05) transparent;
+  scrollbar-color: var(--bk-white-05) transparent;
 }
 
 .bp-section {
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--bk-white-06);
   padding: 14px 0;
 }
 
@@ -165,7 +165,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bk-text-muted, #87878C);
+  color: var(--bk-text-muted);
   margin: 0 0 10px;
 }
 
@@ -179,9 +179,9 @@
   flex: 1;
   padding: 6px 0;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.04);
-  color: var(--bk-text-secondary, #B3B2B8);
+  border: 1px solid var(--bk-white-10);
+  background: var(--bk-white-04);
+  color: var(--bk-text-secondary);
   font-size: 11px;
   font-weight: 500;
   font-family: inherit;
@@ -193,7 +193,7 @@
 .bp-preset-btn.active {
   background: rgba(88, 75, 235, 0.2);
   border-color: rgba(88, 75, 235, 0.5);
-  color: #A09CF7;
+  color: var(--bk-brand-primary);
 }
 
 /* Toggle rows */
@@ -212,7 +212,7 @@
 
 .bp-toggle-label {
   font-size: 12px;
-  color: var(--bk-text-secondary, #B3B2B8);
+  color: var(--bk-text-secondary);
 }
 
 .bp-toggle {
@@ -233,13 +233,13 @@
 .bp-toggle-track {
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0.1);
+  background: var(--bk-white-10);
   border-radius: 9px;
   transition: background 0.15s;
 }
 
 .bp-toggle input:checked + .bp-toggle-track {
-  background: var(--bk-brand-primary, #584BEB);
+  background: var(--bk-brand-primary);
 }
 
 .bp-toggle-thumb {
@@ -249,7 +249,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bk-white);
   transition: transform 0.15s;
   pointer-events: none;
 }
@@ -271,7 +271,7 @@
   border-radius: 7px;
   border: 1px solid rgba(88, 75, 235, 0.4);
   background: rgba(88, 75, 235, 0.15);
-  color: #A09CF7;
+  color: var(--bk-brand-primary);
   font-size: 12px;
   font-weight: 500;
   font-family: inherit;
@@ -286,9 +286,9 @@
 .bp-undo-btn {
   padding: 7px 12px;
   border-radius: 7px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--bk-white-08);
   background: transparent;
-  color: var(--bk-text-muted, #87878C);
+  color: var(--bk-text-muted);
   font-size: 12px;
   font-weight: 500;
   font-family: inherit;
@@ -297,8 +297,8 @@
 }
 
 .bp-undo-btn:hover:not(:disabled) {
-  background: rgba(255,255,255,0.05);
-  color: var(--bk-text-secondary, #B3B2B8);
+  background: var(--bk-white-05);
+  color: var(--bk-text-secondary);
 }
 
 .bp-undo-btn:disabled {
@@ -320,14 +320,14 @@
   gap: 8px;
   padding: 6px 8px;
   border-radius: 6px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--bk-white-03);
+  border: 1px solid var(--bk-white-06);
   cursor: pointer;
   transition: background 0.12s;
 }
 
 .bp-version-item:hover {
-  background: rgba(255,255,255,0.06);
+  background: var(--bk-white-06);
 }
 
 .bp-version-item.current {
@@ -338,17 +338,17 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.2);
+  background: var(--bk-white-20);
   flex-shrink: 0;
 }
 
 .bp-version-item.current .bp-version-dot {
-  background: #584BEB;
+  background: var(--bk-brand-primary);
 }
 
 .bp-version-label {
   font-size: 11px;
-  color: var(--bk-text-secondary, #B3B2B8);
+  color: var(--bk-text-secondary);
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -357,7 +357,7 @@
 
 .bp-version-time {
   font-size: 10px;
-  color: var(--bk-text-muted, #87878C);
+  color: var(--bk-text-muted);
   flex-shrink: 0;
 }
 
@@ -378,7 +378,7 @@
   padding: 16px 0;
   background: rgba(10,10,16,0.85);
   backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid var(--bk-white-06);
   margin-top: auto;
   flex-shrink: 0;
 }
@@ -389,7 +389,7 @@
   border-radius: 8px;
   border: 1px solid rgba(88, 75, 235, 0.5);
   background: rgba(88, 75, 235, 0.18);
-  color: #A09CF7;
+  color: var(--bk-brand-primary);
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
@@ -399,7 +399,7 @@
 
 .bp-save-preset-btn:hover {
   background: rgba(88, 75, 235, 0.35);
-  color: #fff;
+  color: var(--bk-text-on-brand);
 }
 
 /* ── Responsive ─────────────────────────────────────────────────── */
@@ -429,7 +429,7 @@
   .build-panel {
     width: 100%;
     border-left: none;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid var(--bk-white-05);
     max-height: none;
     overflow: visible;
     padding: 20px 16px 0;

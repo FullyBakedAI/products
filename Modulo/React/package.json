@@ -9,7 +9,7 @@
     "build": "vite build",
     "watch": "vite build --watch",
     "preview": "vite preview",
-    "qa:css": "node -e \"const fs=require('fs');const {execSync}=require('child_process');const result=execSync('grep -rn \\\"color: #\\\\|background: #\\\\|rgba(255\\\" src/ --include=\\\"*.css\\\" --include=\\\"*.jsx\\\"').toString();if(result.trim()){console.error('CSS QA FAILED — hardcoded values found:\\n'+result);process.exit(1);}else{console.log('CSS QA: clean');}\"",
+    "qa:css": "bash scripts/qa-css.sh",
     "qa:build": "npm run build && echo 'BUILD: clean'",
     "lint:quality": "bash scripts/lint-quality.sh",
     "qa:gate": "npm run lint:quality && npm run qa:build && echo '\\n--- QA GATE PASSED: build + quality clean ---\\n\\nNow run manual checks (qa-gate-process.md Step 3+4):\\n  swap screen loads, amounts work, Review CTA visible, Confirm button reachable on mobile\\n\\nLocal model audit (Step 5):\\n  cat src/ReviewScreen.jsx | ollama run qwen3:32b \\\"QA audit: find layout bugs. BUG: [P1/P2/P3] [line] [description]\\\"'"

@@ -113,7 +113,7 @@ export default function CustomHtmlOverlay() {
         onClick={dismiss}
         style={{
           position: 'absolute', top: 12, right: 16, zIndex: 1,
-          background: 'var(--bk-white-12, rgba(255,255,255,0.12))', border: '1px solid var(--bk-white-15, rgba(255,255,255,0.15))',
+          background: 'var(--bk-white-12)', border: '1px solid var(--bk-white-15)',
           borderRadius: 20, color: 'var(--bk-text-primary)', fontSize: 13,
           padding: '4px 12px', cursor: 'pointer', fontFamily: 'var(--bk-font)',
         }}

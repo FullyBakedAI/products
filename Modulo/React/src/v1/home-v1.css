@@ -127,7 +127,7 @@
 
 .time-btn.active {
   background: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
 }
 
 .time-btn[data-focus-visible] {
@@ -307,17 +307,17 @@
   font-family: var(--bk-font);
   font-size: 11px;
   font-weight: 600;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   transition: filter 0.1s;
 }
 
 .swipe-action:hover { filter: brightness(1.1); }
 
-.swipe-stake   { background: var(--bk-brand-primary); }
-.swipe-trade   { background: #3b82f6; }
-.swipe-lending { background: #6d28d9; }
-.swipe-swap    { background: #7c3aed; }
-.swipe-manage  { background: #4f6ef7; }
+.swipe-stake   { background: var(--bk-action-swap); }
+.swipe-trade   { background: var(--bk-action-trade); }
+.swipe-lending { background: var(--bk-action-lend); }
+.swipe-swap    { background: var(--bk-brand-primary); }
+.swipe-manage  { background: var(--bk-brand-primary); }
 
 /* Icon pinned to left — stays visible while row slides */
 .token-icon-anchor {
@@ -442,7 +442,7 @@
 .token-yield-track {
   flex: 1;
   height: 3px;
-  background: rgba(255,255,255,0.08);
+  background: var(--bk-white-08);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -510,7 +510,7 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1.5;
-  color: #fff;
+  color: var(--bk-text-on-brand);
   background: var(--bk-brand-primary);
   border: none;
   border-radius: 14px;

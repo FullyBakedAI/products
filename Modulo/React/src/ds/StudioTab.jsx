@@ -59,7 +59,7 @@ function LoadingButton({ brand }) {
     >
       {state === 'loading' && (
         <svg width="13" height="13" viewBox="0 0 14 14" className="ds-ai-spin">
-          <circle cx="7" cy="7" r="5" stroke="rgba(255,255,255,0.4)" strokeWidth="2" fill="none" />
+          <circle cx="7" cy="7" r="5" stroke="var(--bk-white-35)" strokeWidth="2" fill="none" />
           <circle cx="7" cy="7" r="5" stroke="#fff" strokeWidth="2" fill="none" strokeDasharray="16 16" />
         </svg>
       )}
@@ -520,7 +520,7 @@ function ComponentDemoStage({ comp, controls }) {
           </div>
           <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: 5 }}>
             {[{ label: 'You pay', token: 'ETH', amount: '0.5000', usd: '$921.25', i: 0 }, { label: 'You receive', token: 'USDC', amount: '921.25', usd: '≈ $921.25', i: 1 }].map(({ label, token, amount, usd, i }) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 9px', background: i === 0 ? 'rgba(255,255,255,0.03)' : `${success}08`, borderRadius: 7, border: `1px solid ${i === 0 ? border : `${success}20`}` }}>
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 9px', background: i === 0 ? 'var(--bk-white-03)' : `${success}08`, borderRadius: 7, border: `1px solid ${i === 0 ? border : `${success}20`}` }}>
                 <div>
                   <div style={{ fontSize: 10, color: textM }}>{label}</div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: i === 1 ? success : textP, marginTop: 1 }}>{amount} {token}</div>

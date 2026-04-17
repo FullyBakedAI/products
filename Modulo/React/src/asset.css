@@ -610,7 +610,7 @@
 .asset-sheet-pill {
   width: 36px;
   height: 4px;
-  background: var(--bk-border-card, rgba(255,255,255,0.12));
+  background: var(--bk-border-card);
   border-radius: 2px;
 }
 

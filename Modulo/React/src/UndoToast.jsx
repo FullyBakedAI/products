@@ -84,7 +84,7 @@ export default function UndoToast() {
                 <circle
                   cx="20" cy="20" r={RING_R}
                   fill="none"
-                  stroke="rgba(255,255,255,0.12)"
+                  stroke="var(--bk-white-12)"
                   strokeWidth="2.5"
                 />
                 {/* Depleting progress ring */}

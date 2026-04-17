@@ -152,7 +152,7 @@
 .bk-preset-pill.is-active {
   background: var(--bk-brand-primary);
   border-color: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
 }
 
 /* Toggle sections */
@@ -258,7 +258,7 @@
 
 .bk-segment-btn.is-active {
   background: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
 }
 
 .bk-segment-btn:not(.is-active):hover {
@@ -304,7 +304,7 @@
 
 .bk-builder-btn.is-primary:hover {
   background: var(--bk-brand-primary);
-  color: #fff;
+  color: var(--bk-text-on-brand);
 }
 
 /* ── Responsive ─────────────────────────────────────────────────── */

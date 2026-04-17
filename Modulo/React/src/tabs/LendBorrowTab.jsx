@@ -232,7 +232,7 @@ export default function LendBorrowTab() {
                 </Switch>
               </div>
             </div>
-            <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid var(--bk-white-05, rgba(255,255,255,0.05))', paddingTop: 10, marginTop: 8 }}>
+            <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid var(--bk-white-05)', paddingTop: 10, marginTop: 8 }}>
               {f.defi.healthFactor && (
               <>
               <Button

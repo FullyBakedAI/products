@@ -193,7 +193,7 @@ function TxDetailSheet({ tx, onClose }) {
           !tx.pending && { label: 'Block',   value: MOCK_BLOCK },
           !tx.pending && { label: 'Tx hash', value: MOCK_HASH  },
         ].filter(Boolean).map(({ label, value, highlight }) => (
-          <div key={label} className="card-bottom" style={{ borderTop: '1px solid var(--bk-white-05, rgba(255,255,255,0.05))', padding: '10px 0', margin: 0 }}>
+          <div key={label} className="card-bottom" style={{ borderTop: '1px solid var(--bk-white-05)', padding: '10px 0', margin: 0 }}>
             <span className="card-label" style={{ margin: 0 }}>{label}</span>
             <span style={{
               fontSize: 13, fontWeight: 500,

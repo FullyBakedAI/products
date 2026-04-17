@@ -240,7 +240,7 @@ export default function BrandTab() {
                 {letterSpacing !== '0' && (
                   <span className="ds-brand-type-meta-item">ls {letterSpacing}</span>
                 )}
-                <span className="ds-brand-type-meta-item" style={{ color: 'rgba(255,255,255,0.3)' }}>{usage}</span>
+                <span className="ds-brand-type-meta-item" style={{ color: 'var(--bk-white-30)' }}>{usage}</span>
               </div>
             </div>
           ))}
@@ -286,7 +286,7 @@ export default function BrandTab() {
             <span style={{ fontSize: 11, color: 'var(--bk-text-muted)' }}>Primary wordmark — white on dark</span>
           </div>
           {LOGO_RULES.map(({ rule, detail }) => (
-            <div key={rule} style={{ display: 'flex', gap: 12, padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+            <div key={rule} style={{ display: 'flex', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--bk-white-04)' }}>
               <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--bk-text-primary)', minWidth: 130, flexShrink: 0 }}>{rule}</span>
               <span style={{ fontSize: 12, color: 'var(--bk-text-muted)' }}>{detail}</span>
             </div>
@@ -315,13 +315,13 @@ export default function BrandTab() {
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--bk-success)', marginBottom: 10 }}>✓ Do</div>
             {DOS_DONTS.map(({ do: d }) => (
-              <div key={d} style={{ fontSize: 12, color: 'var(--bk-text-secondary)', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>{d}</div>
+              <div key={d} style={{ fontSize: 12, color: 'var(--bk-text-secondary)', padding: '6px 0', borderBottom: '1px solid var(--bk-white-04)' }}>{d}</div>
             ))}
           </div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--bk-error)', marginBottom: 10 }}>✗ Don't</div>
             {DOS_DONTS.map(({ dont }) => (
-              <div key={dont} style={{ fontSize: 12, color: 'var(--bk-text-muted)', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>{dont}</div>
+              <div key={dont} style={{ fontSize: 12, color: 'var(--bk-text-muted)', padding: '6px 0', borderBottom: '1px solid var(--bk-white-04)' }}>{dont}</div>
             ))}
           </div>
         </div>
