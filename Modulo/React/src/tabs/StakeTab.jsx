@@ -86,8 +86,8 @@ export default function StakeTab() {
 
   return (
     <div className="actions-tab-stack">
-      <div className="actions-tab-scroll">
       <AssetHeader tok={tok} tokenKey={tokenKey} returnTab="stake" />
+      <div className="actions-tab-scroll">
 
       {/* Validator / protocol selector */}
       <div className="portfolio-label">Select validator</div>

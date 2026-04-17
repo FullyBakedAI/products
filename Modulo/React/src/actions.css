@@ -107,16 +107,15 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  container-type: block-size;
 }
 
-/* Scrollable upper section inside each tab.
-   Content above the Numpad scrolls here — TransactionPath, FeeBreakdown,
-   and any conditional rows grow freely without pushing the CTA off screen. */
+/* Non-scrolling upper section — clips content rather than scrolling.
+   Shrinks when the numpad needs space; cannot grow past its content. */
 .actions-tab-scroll {
-  flex: 1;
-  height: 0;          /* Safari flex scroll fix — forces browser to respect flex:1 constraint */
+  flex: 0 1 auto;
   min-height: 0;
-  overflow-y: auto;   /* scroll if content overflows — never clip */
+  overflow: hidden;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
@@ -124,13 +123,34 @@
   padding-bottom: 4px;
 }
 
-/* Numpad: scales to fill available space below the scroll area.
-   Capped so it never dominates the screen on tall viewports. */
+/* Numpad: scales to fill available space below the content area.
+   Never gets smaller than 4 compressed rows. */
 .actions-tab-stack .numpad {
   flex: 1 1 0;
-  min-height: 0;
+  min-height: 160px;
   grid-template-rows: repeat(4, 1fr);
   padding: 8px 16px 0;
+}
+
+/* ── Compact mode — horizontal chip list when stack height is cramped ── */
+
+@container (max-block-size: 460px) {
+  .actions-tab-stack .asset-opp-list {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+
+  .actions-tab-stack .asset-opp-list .asset-opp-row {
+    flex-direction: column;
+    min-width: 90px;
+    padding: 6px 10px;
+    align-items: flex-start;
+    flex-shrink: 0;
+  }
 }
 
 .actions-tab-stack .numpad-key-btn {
