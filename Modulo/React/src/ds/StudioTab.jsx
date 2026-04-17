@@ -904,6 +904,157 @@ function ComponentDemoStage({ comp, controls }) {
         </div>
       );
 
+    // ── Screens group — iframe mini-preview ───────────────────────────────────
+    case 'home-screen':
+    case 'activity-screen':
+    case 'explore-screen':
+    case 'asset-screen':
+    case 'manage-screen':
+    case 'swap-screen':
+    case 'swap-select-screen':
+    case 'send-screen':
+    case 'send-amount-screen':
+    case 'review-screen':
+    case 'settings-screen':
+    case 'actions-screen':
+    case 'success-screen':
+    case 'optimise-screen':
+    case 'autopilot-screen':
+    case 'token-select-sheet':
+    case 'connect-wallet-screen':
+    case 'splash-screen': {
+      const SCREEN_ROUTES = {
+        'home-screen':           '/',
+        'activity-screen':       '/activity',
+        'explore-screen':        '/explore',
+        'asset-screen':          '/asset/eth',
+        'manage-screen':         '/manage',
+        'swap-screen':           '/swap',
+        'swap-select-screen':    '/swap/select/pay',
+        'send-screen':           '/send',
+        'send-amount-screen':    '/send/amount',
+        'review-screen':         '/review',
+        'settings-screen':       '/settings',
+        'actions-screen':        '/actions',
+        'success-screen':        '/success',
+        'optimise-screen':       '/optimise',
+        'autopilot-screen':      '/autopilot',
+        'token-select-sheet':    '/swap/select/pay',
+        'connect-wallet-screen': '/',
+        'splash-screen':         '/',
+      };
+      const SCALE = 0.72;
+      const iframeW = 390;
+      const iframeH = 844;
+      const wrapperH = 120;
+      const route = SCREEN_ROUTES[comp.id] || '/';
+      const src = typeof window !== 'undefined'
+        ? window.location.origin + window.location.pathname + '#' + route
+        : '#' + route;
+      return (
+        <div style={{ width: '100%', height: wrapperH, overflow: 'hidden', borderRadius: 8, border: `1px solid ${border}`, position: 'relative', background: bgBase }}>
+          <iframe
+            src={src}
+            title={comp.name}
+            loading="lazy"
+            style={{
+              width: iframeW,
+              height: iframeH,
+              border: 'none',
+              pointerEvents: 'none',
+              transform: `scale(${SCALE})`,
+              transformOrigin: 'top left',
+              display: 'block',
+            }}
+          />
+        </div>
+      );
+    }
+
+    // ── Layout group — structural diagrams ────────────────────────────────────
+    case 'desktop-layout':
+      return (
+        <div style={{ display: 'flex', gap: 3, width: '100%', maxWidth: 260, height: 90, borderRadius: 8, overflow: 'hidden', border: `1px solid ${border}` }}>
+          <div style={{ width: '30%', background: bgCard, borderRight: `1px solid ${border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly', padding: '6px 0' }}>
+            {[0, 1, 2, 3].map(i => (
+              <div key={i} style={{ width: 18, height: 4, borderRadius: 2, background: i === 0 ? brand : `${textM}40` }} />
+            ))}
+          </div>
+          <div style={{ flex: 1, background: bgBase, display: 'flex', flexDirection: 'column', gap: 5, padding: 8, justifyContent: 'center' }}>
+            <div style={{ height: 8, borderRadius: 3, background: `${textM}25`, width: '80%' }} />
+            <div style={{ height: 5, borderRadius: 2, background: `${textM}15`, width: '60%' }} />
+            <div style={{ height: 5, borderRadius: 2, background: `${textM}15`, width: '70%' }} />
+          </div>
+        </div>
+      );
+
+    case 'sidebar-nav':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: 44, height: 90, background: bgCard, borderRadius: 8, border: `1px solid ${border}`, padding: '10px 0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+            {[brand, `${textM}50`, `${textM}50`, `${textM}50`].map((c, i) => (
+              <div key={i} style={{ width: 20, height: 20, borderRadius: 5, background: i === 0 ? `${brand}20` : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: c }} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: `${textM}40` }} />
+          </div>
+        </div>
+      );
+
+    case 'status-bar':
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: 280, padding: '5px 12px', background: bgCard, borderRadius: 8, border: `1px solid ${border}`, height: 28 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: textP, fontFamily: 'monospace' }}>9:41</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {/* Signal bars */}
+            <svg width="14" height="10" viewBox="0 0 14 10">
+              {[0, 1, 2, 3].map(i => (
+                <rect key={i} x={i * 3.5} y={10 - (i + 1) * 2.5} width="2.5" height={(i + 1) * 2.5} rx="0.5" fill={i < 3 ? textP : `${textM}40`} />
+              ))}
+            </svg>
+            {/* Battery */}
+            <svg width="18" height="10" viewBox="0 0 18 10">
+              <rect x="0" y="1" width="15" height="8" rx="1.5" stroke={textP} strokeWidth="1" fill="none" />
+              <rect x="15.5" y="3.5" width="2" height="3" rx="0.5" fill={textP} />
+              <rect x="1.5" y="2.5" width="9" height="5" rx="0.5" fill={brand} />
+            </svg>
+          </div>
+        </div>
+      );
+
+    case 'modal-backdrop':
+      return (
+        <div style={{ position: 'relative', width: '100%', maxWidth: 260, height: 90, borderRadius: 8, overflow: 'hidden', border: `1px solid ${border}` }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 52, background: bgCard, borderRadius: '10px 10px 0 0', borderTop: `1px solid ${border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px 14px', gap: 6 }}>
+            <div style={{ width: 32, height: 3, borderRadius: 2, background: `${textM}50` }} />
+            <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+              <div style={{ height: 5, borderRadius: 2, background: `${textM}25`, flex: 1 }} />
+              <div style={{ height: 5, borderRadius: 2, background: `${textM}15`, width: '40%' }} />
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'scroll-content':
+      return (
+        <div style={{ position: 'relative', width: '100%', maxWidth: 260, height: 90, borderRadius: 8, border: `1px solid ${border}`, overflow: 'hidden', background: bgBase }}>
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {[100, 80, 90, 70, 85].map((w, i) => (
+              <div key={i} style={{ height: 5, borderRadius: 2, background: `${textM}25`, width: `${w}%` }} />
+            ))}
+          </div>
+          {/* Scroll fade + bar */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 28, background: `linear-gradient(to bottom, transparent, ${bgBase})`, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 8, right: 3, width: 3, height: 60, borderRadius: 2, background: `${textM}30` }}>
+            <div style={{ width: '100%', height: 22, borderRadius: 2, background: `${textM}60`, marginTop: 8 }} />
+          </div>
+        </div>
+      );
+
     default: {
       const tokens = comp.tokens || [];
       return (
