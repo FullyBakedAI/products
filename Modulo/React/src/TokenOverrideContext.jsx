@@ -36,8 +36,8 @@ export const TOKEN_DEFINITIONS = [
   { key: '--bk-text-muted',     label: 'Muted',          default: '#87878C', group: 'Text',     type: 'color' },
 
   // Semantic
-  { key: '--bk-success',        label: 'Success',        default: '#22C55E', group: 'Semantic', type: 'color' },
-  { key: '--bk-error',          label: 'Error',          default: '#F04348', group: 'Semantic', type: 'color' },
+  { key: '--bk-success',        label: 'Success',        default: '#34D974', group: 'Semantic', type: 'color' },
+  { key: '--bk-error',          label: 'Error',          default: '#F5565A', group: 'Semantic', type: 'color' },
 
   // Motion
   { key: '--bk-motion-fast',     label: 'Fast',          default: '150ms',   group: 'Motion',   type: 'duration', min: 50,  max: 600 },

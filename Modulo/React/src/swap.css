@@ -85,7 +85,7 @@
   border-radius: 10px;
   background: var(--bk-bg-elevated);
   border: 1px solid var(--bk-border-subtle) !important;
-  transition: background 0.15s ease;
+  transition: background var(--bk-motion-fast) ease;
   flex-shrink: 0;
 }
 
@@ -196,7 +196,7 @@
   padding: 6px 10px 6px 6px !important;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s ease;
+  transition: background var(--bk-motion-fast) ease;
   flex-shrink: 0;
 }
 
@@ -253,7 +253,7 @@
   height: 41px;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s ease;
+  transition: all var(--bk-motion-fast) ease;
   flex-shrink: 0;
   min-width: 124px;
   font-size: 14px;
@@ -302,7 +302,7 @@
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s ease;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background var(--bk-motion-fast) ease;
   flex-shrink: 0;
 }
 
@@ -338,7 +338,7 @@
   font-weight: 500;
   color: var(--bk-text-secondary);
   font-family: var(--bk-font);
-  transition: all 0.15s ease;
+  transition: all var(--bk-motion-fast) ease;
 }
 
 .pct-pill-btn[data-hovered] {
@@ -385,7 +385,7 @@
   font-family: var(--bk-font);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  transition: background 0.1s ease, transform 0.1s ease;
+  transition: background 0.1s ease, transform var(--bk-motion-fast) ease;
 }
 
 .numpad-key-btn[data-hovered] {
@@ -415,7 +415,7 @@
   font-weight: 600;
   text-align: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--bk-motion-fast) ease;
   border: 1px solid var(--bk-border-subtle) !important;
   flex-shrink: 0;
   display: flex !important;

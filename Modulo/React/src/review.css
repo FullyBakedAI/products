@@ -101,7 +101,7 @@
   padding: 0 0 20px;
   cursor: pointer;
   font-family: var(--bk-font);
-  transition: color 0.12s ease;
+  transition: color var(--bk-motion-fast) ease;
 }
 
 .review-cancel:hover { color: var(--bk-text-secondary); }

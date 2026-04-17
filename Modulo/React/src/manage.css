@@ -39,7 +39,7 @@
   border-radius: 10px;
   cursor: pointer;
   color: var(--bk-text-muted);
-  transition: color 0.15s;
+  transition: color var(--bk-motion-fast);
 }
 
 .manage-settings-btn[data-hovered] {
@@ -86,7 +86,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   text-align: left;
-  transition: background 0.15s ease;
+  transition: background var(--bk-motion-fast) ease;
   -webkit-tap-highlight-color: transparent;
 }
 

@@ -110,7 +110,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   text-align: left;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 
 .contact-row:last-child {

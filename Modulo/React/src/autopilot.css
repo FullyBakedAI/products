@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color var(--bk-motion-standard) ease, box-shadow var(--bk-motion-standard) ease;
 }
 
 .autopilot-status-card.active {

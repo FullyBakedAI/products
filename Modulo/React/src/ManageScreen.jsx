@@ -44,10 +44,10 @@ import './manage.css';
 const CARDS = [
   {
     id: 'deposit',
-    label: 'Receive',
+    label: 'Deposit',
     sub: 'Add funds via crypto or bank transfer',
     Icon: IconArrowDownToLine,
-    ariaLabel: 'Receive funds',
+    ariaLabel: 'Deposit funds',
   },
   {
     id: 'withdraw',

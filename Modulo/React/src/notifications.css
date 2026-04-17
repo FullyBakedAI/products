@@ -108,7 +108,7 @@
   gap: 12px;
   padding: 12px 20px;
   border-bottom: 1px solid var(--bk-border-subtle);
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 
 .notif-row:last-child {

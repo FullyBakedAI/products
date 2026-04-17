@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 
 .undo-ring-btn:hover {

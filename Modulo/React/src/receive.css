@@ -177,7 +177,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   padding: 0 20px;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 .exchange-row-btn.selected {
   color: var(--bk-success);

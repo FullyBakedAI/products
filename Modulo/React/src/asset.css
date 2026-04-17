@@ -37,7 +37,7 @@
   border-radius: 10px;
   cursor: pointer;
   color: var(--bk-text-muted);
-  transition: color 0.2s, background 0.15s;
+  transition: color var(--bk-motion-standard), background var(--bk-motion-fast);
 }
 
 .asset-fav-btn[data-hovered] {
@@ -296,7 +296,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.12s;
+  transition: background var(--bk-motion-fast);
 }
 
 .asset-news-row[data-hovered],
@@ -383,7 +383,7 @@
   font-family: var(--bk-font);
   text-align: left;
   width: 100%;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 
 .asset-opp-row:hover                  { background: var(--bk-bg-card); }
@@ -438,7 +438,7 @@
   font-family: var(--bk-font);
   padding: 0;
   opacity: 0.7;
-  transition: opacity 0.12s ease;
+  transition: opacity var(--bk-motion-fast) ease;
 }
 
 .asset-contract-btn:hover { opacity: 1; }
@@ -447,7 +447,7 @@
 .asset-opp-row {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.12s ease, transform 0.1s ease;
+  transition: background var(--bk-motion-fast) ease, transform var(--bk-motion-fast) ease;
 }
 .asset-opp-row:active {
   background: var(--bk-bg-card);
@@ -458,7 +458,7 @@
 .asset-news-row {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 .asset-news-row:active {
   background: var(--bk-bg-elevated);
@@ -467,7 +467,7 @@
 .asset-manage-btn {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.1s ease, opacity 0.1s !important;
+  transition: transform var(--bk-motion-fast) ease, opacity var(--bk-motion-fast) !important;
 }
 .asset-manage-btn:active {
   transform: scale(0.97) !important;
@@ -497,7 +497,7 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   border-radius: 12px;
-  transition: background 0.12s ease;
+  transition: background var(--bk-motion-fast) ease;
 }
 
 .asset-bar-btn:active {
@@ -545,7 +545,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  transition: color 0.15s;
+  transition: color var(--bk-motion-fast);
 }
 
 .chain-breakdown-toggle[data-hovered] { color: var(--bk-text-secondary); }
@@ -574,7 +574,7 @@
   cursor: pointer;
   font-family: var(--bk-font);
   padding: 0;
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 
 .chain-breakdown-bridge-btn[data-hovered] { opacity: 0.75; }
@@ -668,7 +668,7 @@
   color: var(--bk-text-secondary);
   font-family: var(--bk-font);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--bk-motion-fast);
 }
 
 .price-alert-dir-btn.active {
@@ -740,7 +740,7 @@
   color: var(--bk-text-on-brand);
   font-family: var(--bk-font);
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity var(--bk-motion-fast);
 }
 
 .price-alert-cta[data-disabled] {

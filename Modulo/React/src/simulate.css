@@ -47,7 +47,7 @@
   font-family: var(--bk-font);
   position: relative;
   text-align: center;
-  transition: color 0.15s;
+  transition: color var(--bk-motion-fast);
 }
 
 .simulate-tab.active {

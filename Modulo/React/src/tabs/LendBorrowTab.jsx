@@ -232,7 +232,7 @@ export default function LendBorrowTab() {
                 </Switch>
               </div>
             </div>
-            <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10, marginTop: 8 }}>
+            <div className="card-bottom card-bottom-mt" style={{ borderTop: '1px solid var(--bk-white-05, rgba(255,255,255,0.05))', paddingTop: 10, marginTop: 8 }}>
               {f.defi.healthFactor && (
               <>
               <Button
@@ -271,8 +271,8 @@ export default function LendBorrowTab() {
               current={Math.min(85, Math.round(42 + (parseFloat(amount || 0) / 3300) * 43))}
               warning={75}
               liquidation={85}
-              borrowAmount={amount ? `$${parseFloat(amount).toLocaleString()}` : '$8,400'}
-              collateralAmount="$20,000"
+              borrowAmount={amount ? `$${parseFloat(amount).toLocaleString()}` : '$1,854'}
+              collateralAmount="$4,412"
             />
           )}
 

@@ -43,6 +43,8 @@ export default function ReviewScreen() {
   const { state } = location;
   // MOD-118: No DEFAULT_STATE — if no real route state, redirect to root
   const hasRealState = !!(state && state.from && state.from.usd);
+  // MOD-110: Return to originating context on cancel/close
+  const returnTo = state?.returnTo || '/';
   const { action, from, to, fee, rate, warning } = state || {};
   const isEarnOnly = !to || action === 'stake' || action === 'lend';
   const [feesOpen, setFeesOpen] = useState(false);
@@ -94,7 +96,7 @@ export default function ReviewScreen() {
         <h1 className="swap-title" style={{ textAlign: 'center', flex: 1 }}>
           Review {capitalize(action)}
         </h1>
-        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate('/')}>
+        <Button className="close-btn-shared" aria-label="Close" onPress={() => navigate(returnTo)}>
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
@@ -269,7 +271,7 @@ export default function ReviewScreen() {
         >
           {needsApproval ? `Confirm (approve first)` : `Confirm ${capitalize(action)}`}
         </Button>
-        <Button className="review-cancel" onPress={() => navigate('/')} aria-label="Cancel">
+        <Button className="review-cancel" onPress={() => navigate(returnTo)} aria-label="Cancel">
           Cancel
         </Button>
       </div>
