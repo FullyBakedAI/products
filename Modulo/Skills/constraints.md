@@ -22,6 +22,7 @@
 - **Minimum 44×44px touch target on every interactive element.**
 - **Never show a destructive action without a confirmation step.**
 - **Never navigate back using `navigate(-1)`.** Use explicit paths. History is unreliable.
+- **ActionsScreen content must never scroll.** The numpad expands/contracts to fill remaining space (`flex: 1 1 0; min-height: 160px`). When content above the numpad is too tall, switch the platform/validator list to a compact horizontal chip layout via CSS container query — never let content push the numpad off screen.
 
 ### Content
 - **Never truncate financial values.** If a number is too wide, reduce font size. Never round `$5,342.98` to `$5,343`.
