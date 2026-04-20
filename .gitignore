@@ -7,3 +7,6 @@ dist/
 .env.local
 .vercel/
 test-results/
+
+# Kite snapshots (557MB of prior code versions, reference only)
+Kite/references/
