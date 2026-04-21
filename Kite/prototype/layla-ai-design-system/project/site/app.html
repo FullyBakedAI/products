@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kite · Your trip</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  .app-shell { height: 100vh; display: grid; grid-template-columns: 240px 1fr 480px; }
+  .app-side { background: var(--ink); color:#fff; padding:20px; display:flex; flex-direction:column; gap:4px; }
+  .app-side h4 { color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; margin:20px 0 8px; font-family: var(--font-body); font-weight:600;}
+  .app-side .item { padding:10px 12px; border-radius:10px; font-size:14px; cursor:pointer; color:rgba(255,255,255,0.8); display:flex; align-items:center; gap:10px; }
+  .app-side .item:hover { background: rgba(255,255,255,0.06); }
+  .app-side .item.active { background: rgba(255,255,255,0.12); color:#fff; }
+  .app-chat { display:flex; flex-direction:column; background:var(--bone); }
+  .app-chat-head { padding:16px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; background:#fff; }
+  .chat-body { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:14px; }
+  .composer { padding:16px 24px; border-top:1px solid var(--line); background:#fff; }
+  .composer-inner { display:flex; gap:8px; align-items:center; background: var(--bg-sunken); border-radius:20px; padding:6px; }
+  .composer-inner input { flex:1; border:none; background:transparent; padding:12px 14px; font-size:15px; outline:none; font-family:var(--font-body); }
+  .it-panel { background:#fff; border-left:1px solid var(--line); overflow-y:auto; }
+  .it-head { padding:20px 24px; border-bottom:1px solid var(--line); position:sticky; top:0; background:#fff; z-index:5;}
+  .day-card { padding: 20px 24px; border-bottom: 1px solid var(--line); }
+  .tl-item { display:grid; grid-template-columns: 60px 1fr; gap:16px; padding: 10px 0; }
+  .tl-time { font-size:13px; color:var(--muted-ink); font-variant-numeric: tabular-nums; padding-top:4px;}
+  .tl-card { background:var(--bone); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+  .pill-mini { display:inline-block; background:var(--sky-soft); color:var(--ink); font-size:11px; font-weight:600; padding:2px 8px; border-radius:9999px; text-transform:uppercase; letter-spacing:0.06em;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="TweaksPanel.jsx"></script>
+
+<script type="text/babel">
+const TRIPS = [
+  { name: 'Tokyo + Kyoto', dates: 'May 4 – May 14' , active:true},
+  { name: 'Lisbon weekend', dates: 'Jun 20 – Jun 23' },
+  { name: 'Patagonia', dates: 'Oct 8 – Oct 20' },
+];
+
+const MESSAGES = [
+  { from:'ai', text:"Morning! I've drafted your Tokyo + Kyoto trip. 10 days, mid-range budget, foodie lean with one splurge night. Want me to walk you through it?" },
+  { from:'user', text:"Yes — and can we add one day trip outside Kyoto?" },
+  { from:'ai', text:"Added Nara for day 7 — deer, Tōdai-ji, the mochi place with the pounding guys. Wrapping by 17:00 so you're back in Kyoto for dinner at Giro Giro." },
+  { from:'user', text:"Perfect. Any hotels I should swap?" },
+  { from:'ai', text:"Your Tokyo hotel (Hotel K5) is solid — but if you want a splurge, Trunk Yoyogi opened in March and is stunning. +€140/night. Want me to compare?" },
+];
+
+const DAYS = [
+  { n:1, title:'Arrival · Tokyo', date:'Mon May 4', items:[
+    { t:'14:40', c:'Flight LH716 · FRA → HND', meta:'Business class · Seat 4A', tag:'Flight' },
+    { t:'16:30', c:'Check-in: Hotel K5, Nihonbashi', meta:'Heritage suite · 4 nights', tag:'Hotel' },
+    { t:'19:00', c:'Dinner: Ahiru Store (wine bar)', meta:'Shibuya · Reserved', tag:'Dinner' },
+  ]},
+  { n:2, title:'Old Tokyo', date:'Tue May 5', items:[
+    { t:'08:30', c:'Tsukiji Outer Market walk', meta:'With local guide Yumi', tag:'Activity' },
+    { t:'12:00', c:'Lunch: Sushi Dai', meta:'Book by 07:00 · queue ~45m', tag:'Lunch' },
+    { t:'15:00', c:'Asakusa + Sensō-ji', meta:'Free time', tag:'Walk' },
+    { t:'19:30', c:'Izakaya hop: Omoide Yokochō', meta:'Self-guided list · 5 spots', tag:'Evening' },
+  ]},
+  { n:3, title:'Modern Tokyo', date:'Wed May 6', items:[
+    { t:'10:00', c:'teamLab Borderless', meta:'Tickets held · 10:30 entry', tag:'Experience' },
+    { t:'13:30', c:'Daikanyama walk + T-Site', meta:'Book-hunting', tag:'Shopping' },
+    { t:'20:00', c:'Dinner: Den', meta:'One-Michelin · splurge night', tag:'Dinner' },
+  ]},
+];
+
+function AppShell() {
+  const [msg, setMsg] = React.useState('');
+  return (
+    <div data-screen-label="App — Chat + Itinerary">
+      <div className="app-shell">
+        {/* Sidebar */}
+        <aside className="app-side">
+          <div style={{display:'flex', alignItems:'center', gap:10, fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:26, color:'#fff', marginBottom:20}}>
+            <span style={{width:28, height:28, borderRadius:'50%', background:'#fff', color:'var(--ink)', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:16}}>k</span>
+            kite
+          </div>
+          <div className="item"><span>✨</span> New trip</div>
+          <div className="item"><span>🗺️</span> Explore</div>
+          <div className="item"><span>📚</span> Saved</div>
+
+          <h4>Your trips</h4>
+          {TRIPS.map(t => (
+            <div key={t.name} className={'item' + (t.active?' active':'')} style={{flexDirection:'column', alignItems:'flex-start', gap:2}}>
+              <div style={{fontWeight:500}}>{t.name}</div>
+              <div style={{fontSize:11, color:'rgba(255,255,255,0.5)'}}>{t.dates}</div>
+            </div>
+          ))}
+          <div style={{marginTop:'auto', paddingTop:16, borderTop:'1px solid rgba(255,255,255,0.1)'}}>
+            <div className="item" style={{display:'flex', alignItems:'center', gap:10}}>
+              <div style={{width:28, height:28, borderRadius:'50%', background:'var(--coral)', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--ink)', fontSize:12, fontWeight:600}}>AM</div>
+              <div>
+                <div style={{fontSize:13, color:'#fff'}}>Ana M.</div>
+                <div style={{fontSize:11, color:'rgba(255,255,255,0.5)'}}>Kite Plus</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Chat */}
+        <section className="app-chat">
+          <div className="app-chat-head">
+            <div>
+              <div style={{fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:24}}>Tokyo + Kyoto</div>
+              <div style={{fontSize:13, color:'var(--muted-ink)'}}>10 days · 2 travelers · €4,800 budget</div>
+            </div>
+            <div style={{display:'flex', gap:8}}>
+              <button className="btn btn-ghost btn-sm">Share</button>
+              <button className="btn btn-primary btn-sm">Book all €3,940</button>
+            </div>
+          </div>
+          <div className="chat-body">
+            {MESSAGES.map((m,i) => (
+              <div key={i} className={'bubble ' + (m.from==='user'?'bubble-user':'bubble-ai')}>{m.text}</div>
+            ))}
+            <div className="bubble bubble-ai" style={{padding:0, overflow:'hidden', maxWidth:'78%'}}>
+              <div style={{display:'flex', gap:10, padding:14}}>
+                <div className="ph ph-tokyo" style={{width:80, height:80, borderRadius:12, flexShrink:0}}/>
+                <div>
+                  <div style={{fontWeight:600, fontSize:14}}>Trunk Yoyogi</div>
+                  <div style={{fontSize:12, color:'var(--muted-ink)', marginBottom:6}}>4.8★ · Boutique · Shibuya</div>
+                  <div style={{fontSize:13}}>€310/night · +€140 vs. K5</div>
+                  <div style={{display:'flex', gap:6, marginTop:8}}>
+                    <button className="btn btn-primary btn-sm">Swap</button>
+                    <button className="btn btn-ghost btn-sm">Not now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="composer">
+            <div className="composer-inner">
+              <input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Ask Kite anything about this trip…"/>
+              <button className="btn btn-primary btn-sm" style={{borderRadius:14}}>↑</button>
+            </div>
+            <div style={{display:'flex', gap:6, marginTop:10, fontSize:12}}>
+              <span className="badge">🍜 More food</span>
+              <span className="badge">⛩️ Swap an activity</span>
+              <span className="badge">💶 Cheaper hotel</span>
+              <span className="badge">🗓️ Re-pace</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Itinerary */}
+        <aside className="it-panel">
+          <div className="it-head">
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+              <div style={{fontSize:12, color:'var(--muted-ink)', textTransform:'uppercase', letterSpacing:'0.1em', fontWeight:600}}>Itinerary</div>
+              <div style={{display:'flex', gap:4}}>
+                <button className="btn btn-ghost btn-sm">Map</button>
+                <button className="btn btn-ghost btn-sm">Export</button>
+              </div>
+            </div>
+            <div style={{display:'flex', gap:8, marginTop:14, fontSize:12}}>
+              <div style={{flex:1, background:'var(--sky-soft)', padding:'8px 12px', borderRadius:10}}>
+                <div style={{color:'var(--muted-ink)'}}>Flights</div>
+                <div style={{fontWeight:600, color:'var(--ink)'}}>€1,240</div>
+              </div>
+              <div style={{flex:1, background:'var(--coral-soft)', padding:'8px 12px', borderRadius:10}}>
+                <div style={{color:'var(--muted-ink)'}}>Stays</div>
+                <div style={{fontWeight:600, color:'var(--ink)'}}>€2,100</div>
+              </div>
+              <div style={{flex:1, background:'var(--warning-soft)', padding:'8px 12px', borderRadius:10}}>
+                <div style={{color:'var(--muted-ink)'}}>Extras</div>
+                <div style={{fontWeight:600, color:'var(--ink)'}}>€600</div>
+              </div>
+            </div>
+          </div>
+          {DAYS.map(d => (
+            <div key={d.n} className="day-card">
+              <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between', marginBottom:14}}>
+                <div>
+                  <div style={{fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:24}}>Day {d.n}</div>
+                  <div style={{fontSize:14, fontWeight:500}}>{d.title}</div>
+                </div>
+                <div style={{fontSize:12, color:'var(--muted-ink)'}}>{d.date}</div>
+              </div>
+              {d.items.map((it,i) => (
+                <div key={i} className="tl-item">
+                  <div className="tl-time">{it.t}</div>
+                  <div className="tl-card">
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8}}>
+                      <div style={{fontWeight:600, fontSize:14}}>{it.c}</div>
+                      <span className="pill-mini">{it.tag}</span>
+                    </div>
+                    <div style={{fontSize:12, color:'var(--muted-ink)', marginTop:4}}>{it.meta}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+          <div style={{padding:24, textAlign:'center', color:'var(--muted-ink)', fontSize:13}}>+ 7 more days · tap to view</div>
+        </aside>
+      </div>
+      <TweaksPanel/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AppShell/>);
+</script>
+</body>
+</html>

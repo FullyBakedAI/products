@@ -1,7 +1,7 @@
 # Kite — Status
 
-**Last updated**: 2026-04-20 20:55 GMT+1
-**Phase**: Build → **Rebuild** (clean slate, narrow scope) — agreed in #kite this evening
+**Last updated**: 2026-04-21 11:55 GMT+1
+**Phase**: **Discovery (Partial)** + Rebuild scaffolding in parallel. Discovery gaps flagged 2026-04-21 — see `DISCOVERY.md` → Discovery Gaps.
 **Status**: Standalone product at **kite.red** (domain reserved, no content yet)
 **Code**: `~/.openclaw/workspace/Products/Kite/` — single canonical tree, cloned from `FullyBakedAI/travel-planner-next` (Next.js 16 / React 19). Builds clean as of 2026-04-20 21:00.
 **Discord**: `#kite` — Sonnet agent with full Kite + Fully Baked context

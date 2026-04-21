@@ -1,0 +1,45 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px;background:var(--bone);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{width:644px;background:var(--paper);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:14px}
+  .row{display:flex;align-items:center;gap:14px;padding:12px;background:var(--bone);border-radius:var(--radius-md)}
+  .air{width:36px;height:36px;background:var(--ink);border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+  .leg{display:flex;align-items:center;gap:10px;flex:1}
+  .time{font-family:var(--font-body);font-weight:600;font-size:16px;color:var(--ink)}
+  .code{font-size:11px;color:var(--muted-ink);font-family:var(--font-mono);letter-spacing:.04em}
+  .line{flex:1;height:1px;background:var(--line);position:relative}
+  .line::after{content:"✈";position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted-ink)}
+  .dur{font-size:11px;color:var(--muted-ink);text-align:center;margin-top:2px}
+  .price{font-family:var(--font-display);font-size:22px;color:var(--ink)}
+</style></head>
+<body><div class="card">
+  <div class="row">
+    <div class="air">LH</div>
+    <div class="leg">
+      <div>
+        <div class="time">08:40</div>
+        <div class="code">BER</div>
+      </div>
+      <div style="flex:1">
+        <div class="line"></div>
+        <div class="dur">2h 15m · direct</div>
+      </div>
+      <div style="text-align:right">
+        <div class="time">10:55</div>
+        <div class="code">FCO</div>
+      </div>
+    </div>
+    <div class="price">€124</div>
+  </div>
+  <div class="row" style="background:var(--coral-soft)">
+    <div class="air" style="background:var(--coral-strong)">AZ</div>
+    <div class="leg">
+      <div><div class="time">14:20</div><div class="code">BER</div></div>
+      <div style="flex:1"><div class="line"></div><div class="dur">4h 10m · 1 stop</div></div>
+      <div style="text-align:right"><div class="time">18:30</div><div class="code">FCO</div></div>
+    </div>
+    <div class="price">€89</div>
+  </div>
+</div></body></html>

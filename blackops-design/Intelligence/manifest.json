@@ -1,0 +1,189 @@
+{
+  "$schema": "https://openclaw.dev/schemas/intelligence-manifest-v1.json",
+  "engagement": {
+    "slug": "blackops-design",
+    "name": "BlackOps Stage 01 — Intelligence on Ourselves",
+    "mode": "delta",
+    "started": "2026-04-21",
+    "target_artefact": "Intelligence Report for NY May 2026 pitch",
+    "doctrine_language": "BlackOps"
+  },
+  "framework": {
+    "name": "Alpha Suite — Discovery v2",
+    "version": "v2-locked-2026-04-21",
+    "phase": "Intelligence",
+    "notes": "Substrate is filesystem-as-source-of-truth; atoms live in atoms/; heterogeneous sources live in corpus/; URIs below can resolve to any format and any backend — resolver is viewer-side. Supported schemes include file://, https://, gdrive://, dropbox://, s3://, sharepoint://, miro://, figjam://, figma://, loom://, notion://, youtube://. Non-markdown is first-class: images, video, audio, PDFs, spreadsheets, board exports, and external-tool canvases all live in corpus/ subdirectories and are registered here."
+  },
+  "atom_prefix": "BO",
+  "atom_types": {
+    "A-problem-market": ["PROBLEM", "MARKET", "WHY-NOW"],
+    "B-people": ["PERSONA", "JTBD", "PAIN", "TRIGGER", "ANTI-PERSONA", "INTERVIEW"],
+    "C-landscape": ["COMP", "DIST", "PRICING", "PARTNER"],
+    "D-brand-design": ["POSITION", "AESTHETIC", "VOICE", "NAMING"],
+    "E-differentiation": ["AI-OPP", "GAP", "MOAT"],
+    "F-feasibility": ["TECH", "REG", "TEAM", "RISK"],
+    "G-business": ["MONEY", "GTM", "METRIC"]
+  },
+  "atoms": [
+    {
+      "id": "BO-PROBLEM-001",
+      "title": "Core Problem — Founder execution gap and fund-level Adoption Alpha loss",
+      "area": "A-problem-market",
+      "type": "PROBLEM",
+      "path": "atoms/A-problem-market/BO-PROBLEM-001-core-problem.md",
+      "state": "draft-v0.1",
+      "confidence": "medium",
+      "triangulated": false,
+      "sources": [
+        {"uri": "file://../context-blackops.md", "role": "seed"},
+        {"uri": "file://./alpha-suite-reframe-2026-04-21.md", "role": "supporting"}
+      ]
+    },
+    {
+      "id": "BO-COMP-001",
+      "title": "Antler — Day-zero talent-first venture studio; closest structural comparable to BlackOps",
+      "area": "C-landscape",
+      "type": "COMP",
+      "path": "atoms/C-landscape/BO-COMP-001-antler.md",
+      "state": "draft-v0.1",
+      "confidence": "medium",
+      "triangulated": false,
+      "sources": [
+        {"uri": "file://./corpus/competitors/antler/sources.md", "role": "primary"},
+        {"uri": "https://techcrunch.com/2021/10/13/company-builder-vc-antler-says-it-can-back-startups-to-series-c-but-what-are-its-terms/", "role": "external"},
+        {"uri": "https://medium.com/@martijn.nanne/antler-amsterdam-my-startup-generator-experience-813970198a50", "role": "external"},
+        {"uri": "https://en.wikipedia.org/wiki/Antler_(venture_capital_firm)", "role": "external"}
+      ],
+      "relates_to": ["BO-PROBLEM-001"]
+    },
+    {
+      "id": "BO-COMP-002",
+      "title": "a16z — Full-service VC platform; proves execution-layer gap at the top of the market",
+      "area": "C-landscape",
+      "type": "COMP",
+      "path": "atoms/C-landscape/BO-COMP-002-a16z.md",
+      "state": "draft-v0.1",
+      "confidence": "medium-low",
+      "triangulated": false,
+      "sources": [
+        {"uri": "file://./corpus/competitors/a16z/sources.md", "role": "primary"},
+        {"uri": "https://a16z.com/portfolio/", "role": "external"},
+        {"uri": "https://en.wikipedia.org/wiki/Andreessen_Horowitz", "role": "external"}
+      ],
+      "relates_to": ["BO-PROBLEM-001", "BO-COMP-001"]
+    },
+    {
+      "id": "BO-PROBLEM-002",
+      "title": "Scattergun-Slither — founder thinks they know, spreads thin, drifts to slop",
+      "area": "A-problem-market",
+      "type": "PROBLEM",
+      "path": "atoms/A-problem-market/BO-PROBLEM-002-scattergun-slither.md",
+      "state": "draft-v0.1",
+      "confidence": "medium-high",
+      "triangulated": false,
+      "altitude": "company-level",
+      "sources": [
+        {"uri": "file://./corpus/interviews/2026-04-21-founder-discovery.md", "role": "primary"}
+      ],
+      "relates_to": ["BO-PROBLEM-001"]
+    },
+    {
+      "id": "BO-POSITION-001",
+      "title": "Compelling Differentiation — BlackOps' core positioning move",
+      "area": "D-brand-design",
+      "type": "POSITION",
+      "path": "atoms/D-brand-design/BO-POSITION-001-compelling-differentiation.md",
+      "state": "stub-v0.1",
+      "confidence": "low-medium",
+      "triangulated": false,
+      "sources": [
+        {"uri": "file://./corpus/interviews/2026-04-21-founder-discovery.md", "role": "primary"}
+      ],
+      "relates_to": ["BO-PROBLEM-002", "BO-PERSONA-OPERATOR-001"],
+      "open_probe": "Definition of 'compelling' — tell vs. bundle. Load-bearing; interview paused here for substrate setup."
+    },
+    {
+      "id": "BO-PERSONA-OPERATOR-001",
+      "title": "Ant Ludlow — BlackOps operator / founder",
+      "area": "B-people",
+      "type": "PERSONA",
+      "persona_role": "operator",
+      "path": "atoms/B-people/BO-PERSONA-OPERATOR-001-ant-ludlow.md",
+      "state": "draft-v0.1",
+      "confidence": "medium",
+      "triangulated": false,
+      "sources": [
+        {"uri": "file://./corpus/interviews/2026-04-21-founder-discovery.md", "role": "primary"}
+      ],
+      "relates_to": ["BO-PROBLEM-002", "BO-POSITION-001"]
+    }
+  ],
+  "hypotheses": [
+    {"id": "H-COMP-001", "source_atom": "BO-COMP-001", "claim": "Funds who have engaged with Antler will have a more sceptical 'another-one-of-those' reaction — segment NY pitch list accordingly"},
+    {"id": "H-COMP-002", "source_atom": "BO-COMP-002", "claim": "Mid-tier VCs (Fund II/III, $100M–$500M AUM) are the primary BlackOps customer — cannot build a16z-scale platform but feel the gap acutely"}
+  ],
+  "corpus": {
+    "pitch-deck": {
+      "purpose": "The April 2026 deck and supporting narrative. Canonical text lives in ../context-blackops.md.",
+      "inventory": [
+        {"uri": "file://../context-blackops.md", "type": "strategy-doc", "role": "canonical"}
+      ]
+    },
+    "brand-assets": {
+      "purpose": "Holding page source, preview renders. Deployed to blackops.design.",
+      "inventory": [
+        {"uri": "file://../index.html", "type": "html"},
+        {"uri": "file://../preview.png", "type": "image"},
+        {"uri": "file://../preview_clean.png", "type": "image"},
+        {"uri": "file://../preview_new.png", "type": "image"}
+      ]
+    },
+    "competitors": {
+      "purpose": "Teardowns of fund-embedded studios and adjacent models (Antler, EF, a16z, Atomic, Pioneer Square Labs, Betaworks, High Alpha).",
+      "inventory": [
+        {"uri": "file://./corpus/competitors/antler/sources.md", "type": "research", "feeds": ["BO-COMP-001"]},
+        {"uri": "file://./corpus/competitors/a16z/sources.md", "type": "research", "feeds": ["BO-COMP-002"]}
+      ],
+      "status": "partial — 2 of ~7 teardowns drafted (Antler, a16z); remaining: EF, Atomic, Pioneer Square Labs, Betaworks, High Alpha; all single-model, triangulation upgrade pending"
+    },
+    "interviews": {
+      "purpose": "VC partner interviews + operator/founder Discovery sessions. Load-bearing for BO-PROBLEM-001 validation; operator session feeds BO-PERSONA-OPERATOR-001, BO-PROBLEM-002, BO-POSITION-001.",
+      "inventory": [
+        {"uri": "file://./corpus/interviews/2026-04-21-founder-discovery.md", "type": "interview-transcript", "feeds": ["BO-PERSONA-OPERATOR-001", "BO-PROBLEM-002", "BO-POSITION-001"], "status": "live, in-progress"}
+      ],
+      "status": "1 operator Discovery in progress; 0 VC partner interviews — VC side remains highest priority for Section 7, must be booked before NY"
+    },
+    "market": {
+      "purpose": "TAM/SAM/SOM for fund-embedded studio category; Startup Genome, McKinsey Design Index, CB Insights data.",
+      "inventory": [],
+      "status": "empty"
+    },
+    "regulatory": {
+      "purpose": "Fund structuring, SPV rules, equity-in-round legal constraints. Gemini long-context candidate.",
+      "inventory": [],
+      "status": "empty"
+    },
+    "why-now": {
+      "purpose": "Post-2023 VC power-law compression, AI-native tooling surge, fund platform fatigue.",
+      "inventory": [],
+      "status": "empty"
+    },
+    "context": {
+      "purpose": "Supporting thinking that informs atoms but isn't itself a deliverable source.",
+      "inventory": [
+        {"uri": "file://./alpha-suite-reframe-2026-04-21.md", "type": "note", "role": "supporting"},
+        {"uri": "file://./_exhaust.md", "type": "note", "role": "meta"}
+      ]
+    }
+  },
+  "gate": {
+    "name": "Intelligence-to-Architecture Gate",
+    "questions": [
+      "Does the pitch's primary message deliver on the core pain identified here?",
+      "Does the monetization model (equity-in-round) match what VCs actually sign up for?",
+      "Does the positioning honour what already works (track record, Talos intros) without leaning on it as the whole story?",
+      "Have we checked our own bias — building what Intelligence says to build, or what we find interesting to build?"
+    ],
+    "passed": false
+  }
+}

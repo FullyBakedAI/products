@@ -1,0 +1,219 @@
+.nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: var(--bk-text-on-dark);
+}
+
+/* ── Header ── */
+.header {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.logo {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.tripName {
+  font-family: var(--bk-font-display);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--bk-text-on-dark);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.tripDates {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em;
+}
+
+/* ── Day tabs ── */
+.tabs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  scrollbar-width: none;
+}
+
+.tab {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--bk-dur-fast), color var(--bk-dur-fast), border-color var(--bk-dur-fast);
+}
+
+.tab:hover {
+  background: var(--bk-bg-sidebar-hover);
+  color: rgba(255,255,255,0.85);
+}
+
+.tabActive {
+  background: var(--bk-bg-sidebar-active);
+  border-left-color: var(--bk-brand-primary);
+  color: var(--bk-text-on-dark);
+}
+
+.tabBadge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: background var(--bk-dur-fast), border-color var(--bk-dur-fast);
+}
+
+.tabBadgeActive {
+  background: var(--bk-brand-primary);
+  border-color: var(--bk-brand-primary);
+  color: #fff;
+}
+
+.tabInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tabLabel {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.tabSub {
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.3;
+}
+
+.tabCount {
+  font-size: 11px;
+  opacity: 0.45;
+  margin-top: 1px;
+}
+
+/* ── Checklist ── */
+.checklist {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 16px 0 20px;
+  flex-shrink: 0;
+}
+
+.checklistHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.checklistBadge {
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--bk-radius-pill);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+
+.checklistBadgeDone {
+  background: var(--bk-success);
+  color: #fff;
+}
+
+.checklistItems {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.checklistItem {
+  display: flex;
+}
+
+.checklistBtn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: rgba(255,255,255,0.6);
+  transition: background var(--bk-dur-fast), color var(--bk-dur-fast);
+}
+
+.checklistBtn:hover {
+  background: var(--bk-bg-sidebar-hover);
+  color: rgba(255,255,255,0.85);
+}
+
+.checklistBtnDone {
+  color: rgba(255,255,255,0.35);
+}
+
+.checklistTick {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--bk-success);
+}
+
+.checklistBtnDone .checklistTick {
+  background: rgba(95, 165, 116, 0.2);
+  border-color: var(--bk-success);
+}
+
+.checklistText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.checklistMain {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.checklistBtnDone .checklistMain {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.checklistSub {
+  font-size: 11px;
+  opacity: 0.5;
+}

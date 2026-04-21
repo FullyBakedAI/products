@@ -565,7 +565,7 @@
   font-family: var(--bk-font);
   transition: background 0.15s;
 }
-.ds-phone-theme-btn:hover { background: rgba(255, 255, 255, 0.05); }
+.ds-phone-theme-btn:hover { background: var(--bk-white-05); }
 .ds-phone-theme-btn.active { background: var(--bk-bg-card); }
 
 /* ── Phone frame wrapper ─────────────────────────────────────────────── */
@@ -581,7 +581,7 @@
 .ds-phone-frame {
   transform-origin: top center;
   transform: scale(0.88);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 32px 80px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 0 1px var(--bk-white-06), 0 32px 80px var(--bk-black-70);
 }
 
 /* Override shared.css desktop media query — DS layout controls positioning */
@@ -640,19 +640,19 @@
   overflow-x: hidden;
   padding: 28px 32px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+  scrollbar-color: var(--bk-white-06) transparent;
 }
 
 /* Right: always-visible spec / token panel */
 .ds-studio-right-panel {
   width: 320px;
   flex-shrink: 0;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 1px solid var(--bk-white-05);
   overflow-y: auto;
   overflow-x: hidden;
   background: rgba(10, 10, 16, 0.5);
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+  scrollbar-color: var(--bk-white-05) transparent;
 }
 
 /* ── ComponentStack ──────────────────────────────────────────────────── */
@@ -687,8 +687,8 @@
   width: 100%;
   min-width: 0;
   text-align: left;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bk-white-02);
+  border: 1px solid var(--bk-white-06);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -697,7 +697,7 @@
 }
 
 .ds-comp-stack-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bk-white-04);
 }
 
 .ds-comp-stack-item.is-selected {
@@ -709,7 +709,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 18px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
 }
 
 .ds-comp-stack-name {
@@ -741,7 +741,7 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 18px 16px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   flex-shrink: 0;
 }
 
@@ -773,7 +773,7 @@
 
 .ds-spec-panel-demo {
   padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -783,7 +783,7 @@
 
 .ds-spec-panel-controls {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -792,7 +792,7 @@
 
 .ds-spec-panel-info {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -800,7 +800,7 @@
 
 .ds-spec-panel-tokens {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
 }
 
 .ds-spec-panel-jsx {
@@ -820,25 +820,25 @@
   overflow-x: hidden;
   padding: 24px 28px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+  scrollbar-color: var(--bk-white-06) transparent;
 }
 
 .ds-studio-sidebar {
   width: 256px;
   flex-shrink: 0;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 1px solid var(--bk-white-05);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   background: rgba(10, 10, 16, 0.5);
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+  scrollbar-color: var(--bk-white-05) transparent;
 }
 
 .ds-sidebar-section {
   padding: 18px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   flex-shrink: 0;
 }
 
@@ -847,7 +847,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--bk-white-20);
   margin-bottom: 12px;
 }
 
@@ -878,7 +878,7 @@
   width: 40px;
   height: 26px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--bk-white-10);
   overflow: hidden;
   display: flex;
 }
@@ -904,7 +904,7 @@
   align-items: center;
   gap: 8px;
   padding: 7px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--bk-white-04);
 }
 .ds-sidebar-token-row:last-child { border-bottom: none; }
 .ds-sidebar-token-row.modified { background: rgba(88, 75, 235, 0.04); margin: 0 -4px; padding: 7px 4px; border-radius: 4px; }
@@ -913,7 +913,7 @@
   width: 22px;
   height: 22px;
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--bk-white-10);
   flex-shrink: 0;
 }
 
@@ -951,7 +951,7 @@
   flex-shrink: 0;
 }
 .ds-sidebar-colour-picker::-webkit-color-swatch-wrapper { padding: 0; border-radius: 4px; }
-.ds-sidebar-colour-picker::-webkit-color-swatch { border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; }
+.ds-sidebar-colour-picker::-webkit-color-swatch { border: 1px solid var(--bk-white-12); border-radius: 4px; }
 
 .ds-sidebar-reset-btn {
   width: 16px;
@@ -1010,9 +1010,9 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   padding: 0 0 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   margin-bottom: 10px;
 }
 
@@ -1036,9 +1036,9 @@
   gap: 0;
   padding: 0;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--bk-white-06);
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bk-white-02);
   font-family: var(--bk-font);
   text-align: left;
   width: 100%;
@@ -1046,7 +1046,7 @@
   transition: background 0.12s, border-color 0.12s, transform 0.12s;
 }
 .ds-comp-card:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bk-white-05);
   border-color: var(--bk-border-subtle);
   transform: translateY(-1px);
 }
@@ -1056,7 +1056,7 @@
   min-height: 72px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--bk-white-05);
   overflow: hidden;
   pointer-events: none;
 }
@@ -1147,7 +1147,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bk-white-06);
   border: 1px solid var(--bk-border-subtle);
   color: var(--bk-text-muted);
   cursor: pointer;
@@ -1159,7 +1159,7 @@
   transition: background 0.15s;
   flex-shrink: 0;
 }
-.ds-comp-overlay-close:hover { background: rgba(255, 255, 255, 0.1); color: var(--bk-text-primary); }
+.ds-comp-overlay-close:hover { background: var(--bk-white-10); color: var(--bk-text-primary); }
 
 .ds-comp-overlay-body {
   flex: 1;
@@ -1241,7 +1241,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
 }
 
 .ds-comp-info-text {
@@ -1264,7 +1264,7 @@
   font-size: 10px;
   font-family: 'SF Mono', monospace;
   color: var(--bk-text-muted);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bk-white-04);
   border: 1px solid var(--bk-border-subtle);
   border-radius: 5px;
   padding: 3px 8px;
@@ -1337,7 +1337,7 @@ pre.ds-comp-overlay-pre {
   transition: opacity 0.15s;
 }
 .ds-ex-btn:hover { opacity: 0.85; }
-.ds-ex-btn-primary { color: #fff; border: none; }
+.ds-ex-btn-primary { color: var(--bk-text-on-brand); border: none; }
 .ds-ex-btn-secondary { background: transparent; }
 
 .ds-ex-card {
@@ -1405,7 +1405,7 @@ pre.ds-comp-overlay-pre {
   100% { background-position: calc(200px + 100%) 0; }
 }
 .ds-skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+  background: linear-gradient(90deg, var(--bk-white-04) 25%, var(--bk-white-08) 50%, var(--bk-white-04) 75%);
   background-size: 200px 100%;
   animation: ds-shimmer 1.4s ease-in-out infinite;
 }
@@ -1521,7 +1521,7 @@ pre.ds-comp-overlay-pre {
   transition: border-color 0.2s, transform 0.2s;
 }
 .ds-rule-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--bk-white-12);
   transform: translateY(-2px);
 }
 
@@ -1568,7 +1568,7 @@ pre.ds-comp-overlay-pre {
 /* Accessibility standards table */
 .ds-a11y-section {
   margin-top: 52px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--bk-white-05);
   padding-top: 48px;
 }
 
@@ -1577,7 +1577,7 @@ pre.ds-comp-overlay-pre {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   margin-bottom: 20px;
 }
 
@@ -1671,9 +1671,9 @@ pre.ds-comp-overlay-pre {
 
 .ds-agent-benefit-card {
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--bk-white-06);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bk-white-02);
   transition: border-color 0.2s;
 }
 .ds-agent-benefit-card:hover { border-color: rgba(88, 75, 235, 0.3); }
@@ -1701,7 +1701,7 @@ pre.ds-comp-overlay-pre {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   margin-bottom: 16px;
 }
 
@@ -1721,7 +1721,7 @@ pre.ds-comp-overlay-pre {
   align-items: center;
   padding: 10px 14px;
   border-bottom: 1px solid var(--bk-border-subtle);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bk-white-02);
 }
 
 .ds-copy-block-label {
@@ -1782,7 +1782,7 @@ pre.ds-comp-overlay-pre {
   text-align: left;
   transition: background 0.12s;
 }
-.ds-comp-skill-header:hover { background: rgba(255, 255, 255, 0.02); }
+.ds-comp-skill-header:hover { background: var(--bk-white-02); }
 
 .ds-comp-skill-name {
   font-size: 13px;
@@ -1814,7 +1814,7 @@ pre.ds-comp-overlay-pre {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
 }
 
 .ds-comp-skill-field-text {
@@ -1851,31 +1851,31 @@ pre.ds-comp-overlay-pre {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--bk-white-20);
   padding: 8px 12px;
   text-align: left;
   border-bottom: 1px solid var(--bk-border-subtle);
 }
 .ds-token-table td {
   padding: 8px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--bk-white-04);
   vertical-align: middle;
 }
 .ds-token-table tr:last-child td { border-bottom: none; }
-.ds-token-table tbody tr:hover td { background: rgba(255, 255, 255, 0.02); }
+.ds-token-table tbody tr:hover td { background: var(--bk-white-02); }
 
 .ds-token-table-swatch {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--bk-white-10);
   display: inline-block;
   vertical-align: middle;
 }
 .ds-token-table-key { font-family: 'SF Mono', monospace; color: var(--bk-brand-primary); font-size: 11px; }
 .ds-token-table-val { font-family: 'SF Mono', monospace; color: var(--bk-text-muted); font-size: 11px; }
 .ds-token-table-group { font-size: 10px; color: var(--bk-text-muted); }
-.ds-token-table-default { font-family: 'SF Mono', monospace; color: rgba(255, 255, 255, 0.3); font-size: 10px; }
+.ds-token-table-default { font-family: 'SF Mono', monospace; color: var(--bk-white-30); font-size: 10px; }
 
 .ds-token-contract-wrap {
   border: 1px solid var(--bk-border-subtle);

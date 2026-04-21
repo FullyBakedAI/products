@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px;background:var(--bone);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{width:644px;background:var(--paper);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-md);display:flex;gap:12px;flex-wrap:wrap}
+  .btn{font-family:var(--font-body);font-weight:600;font-size:15px;border-radius:var(--radius-pill);padding:14px 24px;cursor:pointer;border:0;transition:all .2s}
+  .primary{background:var(--ink);color:#fff}
+  .primary:hover{background:var(--ink-hover)}
+  .secondary{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink)}
+  .sky{background:var(--sky);color:var(--ink)}
+  .ghost{background:transparent;color:var(--ink);text-decoration:underline;text-decoration-color:var(--sky-strong);text-underline-offset:4px}
+  .coral{background:var(--coral);color:var(--ink)}
+  .sm{padding:8px 16px;font-size:13px}
+  .chip{background:var(--sand);color:var(--ink);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;font-weight:500;border:0;cursor:pointer}
+  .chip-active{background:var(--ink);color:#fff}
+</style></head>
+<body><div class="card">
+  <button class="btn primary">Create a new trip</button>
+  <button class="btn secondary">Inspire me</button>
+  <button class="btn sky">Plan a road trip</button>
+  <button class="btn coral">Try Layla Prime</button>
+  <button class="btn ghost">Learn more →</button>
+  <button class="btn primary sm">Book now</button>
+  <button class="chip">Family</button>
+  <button class="chip chip-active">Couples ✓</button>
+  <button class="chip">Solo</button>
+  <button class="chip">Road trip</button>
+</div></body></html>

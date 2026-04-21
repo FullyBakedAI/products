@@ -1,0 +1,14 @@
+.mainContent {
+  min-height: 100%;
+  padding-bottom: 40px;
+}
+
+.stopList {
+  padding: 20px 0 0;
+}
+
+@media (max-width: 767px) {
+  .stopList {
+    padding: 16px 16px 0;
+  }
+}

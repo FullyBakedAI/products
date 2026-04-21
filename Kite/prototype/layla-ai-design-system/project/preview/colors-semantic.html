@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--bone);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{width:652px;background:var(--paper);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-md)}
+  .row{display:flex;gap:10px}
+  .pair{flex:1;min-width:0}
+  .swatch{height:64px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;margin-bottom:6px}
+  .meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-ink);font-family:var(--font-mono)}
+</style></head>
+<body><div class="card">
+  <div class="row">
+    <div class="pair">
+      <div class="swatch" style="background:var(--success);color:#fff">Success</div>
+      <div class="swatch" style="background:var(--success-soft);color:var(--success)">✓ Booked</div>
+      <div class="meta"><span>#5FA574</span><span>#E3F1E7</span></div>
+    </div>
+    <div class="pair">
+      <div class="swatch" style="background:var(--warning);color:var(--ink)">Warning</div>
+      <div class="swatch" style="background:var(--warning-soft);color:#9A7B2D">! Price rising</div>
+      <div class="meta"><span>#E8B961</span><span>#FAEFD5</span></div>
+    </div>
+    <div class="pair">
+      <div class="swatch" style="background:var(--danger);color:#fff">Danger</div>
+      <div class="swatch" style="background:var(--danger-soft);color:var(--danger)">✕ Unavailable</div>
+      <div class="meta"><span>#C9553D</span><span>#F8E1DA</span></div>
+    </div>
+    <div class="pair">
+      <div class="swatch" style="background:var(--info);color:#fff">Info</div>
+      <div class="swatch" style="background:var(--info-soft);color:var(--ink)">ℹ Tip from Layla</div>
+      <div class="meta"><span>#7DBFD6</span><span>#E6F3F8</span></div>
+    </div>
+  </div>
+</div></body></html>

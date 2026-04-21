@@ -1,0 +1,44 @@
+.drive {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  color: var(--bk-text-muted);
+  font-size: 12px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--bk-border-subtle);
+  display: block;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.text {
+  font-size: 12px;
+}
+
+.content i {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+@media (max-width: 767px) {
+  .drive {
+    padding: 10px 20px;
+  }
+}

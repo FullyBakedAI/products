@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kite · About</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="SiteNav.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="TweaksPanel.jsx"></script>
+
+<script type="text/babel">
+const VALUES = [
+  { t: 'Trip-first, not tool-first', d: 'Software should dissolve into the background. The trip is the point.' },
+  { t: 'Local knowledge scales', d: 'We work with guides, writers, and hoteliers in 60+ cities. AI + real humans, not AI alone.' },
+  { t: 'Plan less, travel more', d: 'The best trips are decided in minutes, not spreadsheets. Speed is a feature.' },
+  { t: 'Leave it better', d: 'We route travelers away from over-touristed hotspots and toward places that benefit from visitors.' },
+];
+
+const TEAM = [
+  { n: 'Mira Alvarez', r: 'Co-founder, CEO', cls: 'ph-lisbon' },
+  { n: 'Jonas Weber', r: 'Co-founder, CTO', cls: 'ph-oslo' },
+  { n: 'Priya Shah', r: 'Head of Design', cls: 'ph-bali' },
+  { n: 'Tomás Rocha', r: 'Head of Travel', cls: 'ph-morocco' },
+];
+
+function AboutPage() {
+  return (
+    <div data-screen-label="About">
+      <SiteNav current="about" />
+
+      <section style={{padding:'96px 24px 48px', maxWidth:960, margin:'0 auto', textAlign:'center'}}>
+        <div className="eyebrow-pill" style={{marginBottom:16}}>Made in Berlin · Founded 2023</div>
+        <h1 className="display">The fastest way from<br/><em>"we should go somewhere"</em><br/>to packed.</h1>
+      </section>
+
+      <section style={{padding:'48px 24px'}}>
+        <div className="container" style={{maxWidth:760}}>
+          <p style={{fontSize:22, lineHeight:1.55, color:'var(--ink)', fontFamily:'var(--font-body)'}}>
+            Kite started after a three-hour group chat that ended with nobody booking anything.
+            We thought: surely the best travel advisor on Earth is one that knows a million destinations, doesn't sleep, and remembers every preference you've ever mentioned.
+          </p>
+          <p style={{fontSize:18, lineHeight:1.7, color:'var(--muted-ink)', marginTop:24}}>
+            Two years and 2 million trips later, Kite is the AI travel companion we always wanted.
+            It plans your trip in minutes, books the pieces that are actually worth paying for, and travels alongside you — handling the disruptions, the last-minute dinner reservations, and the "where does the bus actually leave from?" moments.
+          </p>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="section-tight">
+        <div className="container" style={{maxWidth:1080}}>
+          <div className="grid grid-4" style={{textAlign:'center'}}>
+            {[
+              { n: '2M+', l: 'Trips planned' },
+              { n: '190', l: 'Countries covered' },
+              { n: '4.9', l: 'App Store rating' },
+              { n: '60+', l: 'Local partners' },
+            ].map(s => (
+              <div key={s.l}>
+                <div style={{fontFamily:'var(--font-display)', fontSize:'clamp(56px, 7vw, 96px)', lineHeight:1, color:'var(--ink)'}}>{s.n}</div>
+                <div style={{marginTop:8, fontSize:14, color:'var(--muted-ink)', textTransform:'uppercase', letterSpacing:'0.1em'}}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="section" style={{background:'var(--bone)'}}>
+        <div className="container">
+          <div style={{display:'grid', gridTemplateColumns:'1fr 2fr', gap:64, alignItems:'start'}}>
+            <div>
+              <div className="eyebrow-pill" style={{marginBottom:16}}>What we believe</div>
+              <h2 style={{margin:0}}>Four <em className="display-italic">principles,</em> everything else we'll argue about.</h2>
+            </div>
+            <div className="grid grid-2">
+              {VALUES.map(v => (
+                <div key={v.t}>
+                  <h3 style={{fontSize:24, margin:'0 0 8px'}}>{v.t}</h3>
+                  <p style={{margin:0, fontSize:15}}>{v.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="section">
+        <div className="container">
+          <div style={{textAlign:'center', marginBottom:48}}>
+            <div className="eyebrow-pill" style={{marginBottom:16}}>Team</div>
+            <h2 style={{margin:0}}>The humans <em className="display-italic">behind Kite.</em></h2>
+          </div>
+          <div className="grid grid-4">
+            {TEAM.map(p => (
+              <div key={p.n}>
+                <div className={'ph ' + p.cls} style={{aspectRatio:'1/1', borderRadius:20, marginBottom:16}}/>
+                <div style={{fontFamily:'var(--font-display)', fontSize:22}}>{p.n}</div>
+                <div style={{fontSize:14, color:'var(--muted-ink)'}}>{p.r}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{textAlign:'center', marginTop:48}}>
+            <a href="#" className="btn btn-ghost">We're hiring — 12 open roles →</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Investors / press */}
+      <section className="section-tight" style={{background:'var(--ink)', color:'#fff'}}>
+        <div className="container" style={{textAlign:'center'}}>
+          <div style={{fontSize:12, letterSpacing:'0.12em', textTransform:'uppercase', opacity:0.6, marginBottom:24}}>Backed by · Featured in</div>
+          <div style={{display:'flex', gap:48, justifyContent:'center', flexWrap:'wrap', opacity:0.8, fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:28}}>
+            <span>Sequoia</span><span>Index</span><span>Point Nine</span><span>NYT</span><span>Monocle</span><span>Condé Nast</span>
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter/>
+      <TweaksPanel/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AboutPage/>);
+</script>
+</body>
+</html>

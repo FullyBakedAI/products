@@ -1,0 +1,248 @@
+/* ============================================================
+ * Layla.ai Design System — colors, type, and semantic tokens
+ * ============================================================
+ *
+ * Fonts are loaded from Google Fonts as SUBSTITUTES for the
+ * real Layla typefaces (the marketing wordmark is custom).
+ *   Display →  DM Serif Display  (warm editorial, stand-in)
+ *   Body    →  Inter             (neutral humanist grotesque)
+ * Replace with real files in fonts/ once the user supplies them.
+ * ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---------- Brand palette ---------- */
+  --ink:            #2A182E;  /* dark plum-black — from wordmark */
+  --ink-hover:      #3B2440;
+  --ink-press:      #1A0E1D;
+
+  --bone:           #FAF7F2;  /* warm off-white page bg */
+  --paper:          #FFFFFF;
+  --sand:           #E8DFD3;  /* subtle neutral surface */
+  --line:           #EDE7DD;  /* borders & dividers */
+
+  --muted-ink:      #6B5B6E;  /* secondary text */
+  --faint-ink:      #A39AA5;  /* tertiary / placeholders */
+
+  /* ---------- Accents ---------- */
+  --sky:            #A8D8E8;  /* the 🩵 from "Made with 🩵 in Berlin" */
+  --sky-strong:     #7DBFD6;
+  --sky-soft:       #E6F3F8;
+
+  --coral:          #E20000;  /* Kite red */
+  --coral-strong:   #B80000;
+  --coral-soft:     #FFE8E8;
+
+  --gold:           #E8B961;  /* star / premium ratings */
+
+  /* ---------- Semantic status ---------- */
+  --success:        #5FA574;
+  --success-soft:   #E3F1E7;
+  --warning:        #E8B961;
+  --warning-soft:   #FAEFD5;
+  --danger:         #C9553D;
+  --danger-soft:    #F8E1DA;
+  --info:           #7DBFD6;
+  --info-soft:      #E6F3F8;
+
+  /* ---------- Foreground layers ---------- */
+  --fg-1:           var(--ink);
+  --fg-2:           var(--muted-ink);
+  --fg-3:           var(--faint-ink);
+  --fg-on-ink:      #FFFFFF;
+  --fg-on-sky:      var(--ink);
+
+  /* ---------- Surfaces ---------- */
+  --bg-page:        var(--bone);
+  --bg-surface:     var(--paper);
+  --bg-raised:      var(--paper);
+  --bg-sunken:      var(--sand);
+  --bg-ink:         var(--ink);
+
+  /* ---------- Type families ---------- */
+  --font-display:   'DM Serif Display', 'Fraunces', Georgia, serif;
+  --font-body:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:      ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  /* ---------- Type scale ---------- */
+  --text-xs:        12px;
+  --text-sm:        14px;
+  --text-base:      16px;
+  --text-md:        18px;
+  --text-lg:        20px;
+  --text-xl:        24px;
+  --text-2xl:       32px;
+  --text-3xl:       44px;
+  --text-4xl:       60px;
+  --text-5xl:       80px;
+
+  /* ---------- Line heights ---------- */
+  --leading-tight:  1.08;
+  --leading-snug:   1.25;
+  --leading-normal: 1.5;
+  --leading-loose:  1.7;
+
+  /* ---------- Weights ---------- */
+  --w-regular:      400;
+  --w-medium:       500;
+  --w-semibold:     600;
+  --w-bold:         700;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-1:        4px;
+  --space-2:        8px;
+  --space-3:        12px;
+  --space-4:        16px;
+  --space-5:        20px;
+  --space-6:        24px;
+  --space-8:        32px;
+  --space-10:       40px;
+  --space-12:       48px;
+  --space-16:       64px;
+  --space-20:       80px;
+  --space-24:       96px;
+  --space-32:       128px;
+
+  /* ---------- Radii ---------- */
+  --radius-xs:      4px;
+  --radius-sm:      6px;
+  --radius-md:      12px;
+  --radius-lg:      20px;
+  --radius-xl:      28px;
+  --radius-pill:    9999px;
+
+  /* ---------- Shadows ---------- */
+  --shadow-sm:      0 1px 2px rgba(42, 24, 46, 0.06);
+  --shadow-md:      0 4px 16px rgba(42, 24, 46, 0.08);
+  --shadow-lg:      0 12px 40px rgba(42, 24, 46, 0.12);
+  --shadow-hero:    0 24px 64px rgba(42, 24, 46, 0.18);
+  --shadow-focus:   0 0 0 3px rgba(168, 216, 232, 0.5);
+
+  /* ---------- Motion ---------- */
+  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:       150ms;
+  --dur-base:       250ms;
+  --dur-slow:       450ms;
+
+  /* ---------- Layout ---------- */
+  --container:      1200px;
+  --container-sm:   720px;
+  --nav-height:     72px;
+}
+
+/* ============================================================
+ * Semantic element styles — apply to raw HTML, or reference in
+ * components via e.g. `font: var(--type-h2);` patterns.
+ * ============================================================ */
+
+body {
+  background: var(--bg-page);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, .h1 {
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+}
+
+h2, .h2 {
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  font-size: clamp(32px, 4vw, 60px);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+}
+
+h3, .h3 {
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  font-size: clamp(24px, 2.5vw, 32px);
+  line-height: var(--leading-snug);
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+
+h4, .h4 {
+  font-family: var(--font-body);
+  font-weight: var(--w-semibold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: -0.005em;
+  color: var(--fg-1);
+}
+
+h5, .h5 {
+  font-family: var(--font-body);
+  font-weight: var(--w-semibold);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  color: var(--fg-1);
+}
+
+p, .p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-loose);
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.lead {
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--fg-2);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: var(--w-semibold);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-ink);
+}
+
+small, .small {
+  font-size: var(--text-sm);
+  color: var(--fg-2);
+}
+
+code, .code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-sunken);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+/* Links */
+a {
+  color: var(--fg-1);
+  text-decoration: underline;
+  text-decoration-color: var(--sky-strong);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-base) var(--ease-out);
+}
+a:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* Utility: italic display (Layla's display face has a beautiful italic) */
+.display-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--w-regular);
+}

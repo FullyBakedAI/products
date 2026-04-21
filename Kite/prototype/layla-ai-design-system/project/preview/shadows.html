@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px;background:var(--bone);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{width:644px;background:var(--paper);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-md);display:flex;gap:18px;align-items:center;justify-content:space-around}
+  .box{background:var(--paper);width:96px;height:96px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--muted-ink)}
+  .sm{box-shadow:var(--shadow-sm)}
+  .md{box-shadow:var(--shadow-md)}
+  .lg{box-shadow:var(--shadow-lg)}
+  .hero{box-shadow:var(--shadow-hero)}
+  .group{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .caption{font-size:11px;color:var(--muted-ink);font-family:var(--font-mono)}
+</style></head>
+<body><div class="card">
+  <div class="group"><div class="box sm">sm</div><div class="caption">inputs</div></div>
+  <div class="group"><div class="box md">md</div><div class="caption">cards</div></div>
+  <div class="group"><div class="box lg">lg</div><div class="caption">hover</div></div>
+  <div class="group"><div class="box hero">hero</div><div class="caption">floating</div></div>
+</div></body></html>

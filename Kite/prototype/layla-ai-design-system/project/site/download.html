@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kite · Get the app</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="SiteNav.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="TweaksPanel.jsx"></script>
+
+<script type="text/babel">
+function Phone({ children, rotate = 0, z = 1 }) {
+  return (
+    <div style={{
+      position: 'relative', width: 280, height: 560,
+      borderRadius: 38, background: '#0C0610', padding: 9,
+      transform: `rotate(${rotate}deg)`,
+      boxShadow: '0 40px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08)',
+      zIndex: z,
+    }}>
+      <div style={{ background: 'var(--bone)', borderRadius: 30, height: '100%', overflow: 'hidden', display:'flex', flexDirection:'column' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function DownloadPage() {
+  return (
+    <div data-screen-label="Download">
+      <SiteNav current="download" />
+
+      {/* Hero */}
+      <section style={{padding:'72px 24px 32px', textAlign:'center', maxWidth:1040, margin:'0 auto'}}>
+        <div className="eyebrow-pill" style={{marginBottom:16}}>4.9 ★ · 380,000 reviews</div>
+        <h1 className="display">The trip planner<br/><em>you actually bring along.</em></h1>
+        <p className="lead" style={{maxWidth:560, margin:'16px auto 0'}}>Download Kite and get flight changes handled, dinner reservations made, and the next train platform — all without asking twice.</p>
+
+        <div style={{display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap', marginTop:32}}>
+          <a href="#" className="btn btn-primary btn-lg" style={{padding:'16px 32px'}}>
+            <span style={{fontSize:22}}></span>
+            <div style={{textAlign:'left', lineHeight:1.1}}>
+              <div style={{fontSize:10, opacity:0.7}}>Download on the</div>
+              <div style={{fontSize:16, fontWeight:600}}>App Store</div>
+            </div>
+          </a>
+          <a href="#" className="btn btn-ghost btn-lg" style={{padding:'16px 32px', background:'#fff'}}>
+            <span style={{fontSize:22}}>▶</span>
+            <div style={{textAlign:'left', lineHeight:1.1}}>
+              <div style={{fontSize:10, opacity:0.7}}>Get it on</div>
+              <div style={{fontSize:16, fontWeight:600}}>Google Play</div>
+            </div>
+          </a>
+        </div>
+
+        {/* QR / scan to download */}
+        <div style={{marginTop:32, display:'inline-flex', gap:16, alignItems:'center', background:'#fff', padding:12, borderRadius:16, border:'1px solid var(--line)'}}>
+          <div style={{width:72, height:72, background:`
+            repeating-linear-gradient(0deg, var(--ink) 0 6px, #fff 6px 12px),
+            repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px)`, borderRadius:8}}/>
+          <div style={{textAlign:'left'}}>
+            <div style={{fontSize:13, color:'var(--muted-ink)'}}>Scan on your phone</div>
+            <div style={{fontWeight:600}}>kite.app/get</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Phone lineup */}
+      <section style={{padding:'64px 24px 120px', overflow:'hidden'}}>
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', gap:-40, flexWrap:'wrap'}}>
+          <div style={{margin:'0 -24px'}}>
+            <Phone rotate={-4} z={1}>
+              <div className="ph ph-bali" style={{flex:1, position:'relative'}}>
+                <div style={{position:'absolute', inset:0, background:'linear-gradient(180deg, transparent 40%, rgba(42,24,46,0.8) 100%)'}}/>
+                <div style={{position:'absolute', left:20, right:20, bottom:24, color:'#fff'}}>
+                  <div style={{fontSize:12, opacity:0.8}}>Today · Day 3</div>
+                  <div style={{fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:34, marginTop:4}}>Ubud</div>
+                  <div style={{marginTop:16, background:'rgba(255,255,255,0.15)', backdropFilter:'blur(10px)', padding:12, borderRadius:14, fontSize:13}}>
+                    <div style={{fontWeight:600, marginBottom:2}}>🌧️ Rain at 14:00</div>
+                    <div style={{opacity:0.85}}>I've moved the rice-terrace walk to tomorrow morning.</div>
+                  </div>
+                </div>
+              </div>
+            </Phone>
+          </div>
+          <div style={{margin:'0 -24px', marginTop:-40}}>
+            <Phone rotate={0} z={3}>
+              <div style={{padding:'48px 16px 16px', flex:1, display:'flex', flexDirection:'column', gap:10}}>
+                <div className="bubble bubble-ai" style={{fontSize:13, maxWidth:'92%'}}>Your flight LH716 is delayed 2 hours.</div>
+                <div className="bubble bubble-ai" style={{fontSize:13, maxWidth:'92%'}}>I've pushed your hotel check-in and moved dinner at Ahiru Store to 21:30. You still have the table.</div>
+                <div className="bubble bubble-user" style={{fontSize:13, maxWidth:'60%'}}>legend</div>
+                <div style={{marginTop:'auto', background:'#fff', border:'1px solid var(--line)', borderRadius:20, padding:10, display:'flex', gap:6, fontSize:12, color:'var(--faint-ink)'}}>
+                  <div style={{flex:1, padding:6}}>Ask Kite…</div>
+                  <div style={{width:28, height:28, borderRadius:'50%', background:'var(--ink)', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center'}}>↑</div>
+                </div>
+              </div>
+            </Phone>
+          </div>
+          <div style={{margin:'0 -24px'}}>
+            <Phone rotate={4} z={1}>
+              <div style={{flex:1, padding:'48px 16px 16px', display:'flex', flexDirection:'column', gap:10}}>
+                <div style={{fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:26}}>Tomorrow</div>
+                <div style={{fontSize:12, color:'var(--muted-ink)'}}>Wed · Kyoto</div>
+                <div style={{background:'#fff', border:'1px solid var(--line)', borderRadius:14, padding:12}}>
+                  <div style={{fontSize:11, color:'var(--muted-ink)'}}>08:00</div>
+                  <div style={{fontWeight:600, fontSize:14}}>Fushimi Inari (early)</div>
+                  <div style={{fontSize:12, color:'var(--muted-ink)'}}>Before the crowd</div>
+                </div>
+                <div style={{background:'#fff', border:'1px solid var(--line)', borderRadius:14, padding:12}}>
+                  <div style={{fontSize:11, color:'var(--muted-ink)'}}>12:30</div>
+                  <div style={{fontWeight:600, fontSize:14}}>Lunch · Giro Giro</div>
+                  <div style={{fontSize:12, color:'var(--muted-ink)'}}>Reserved · kaiseki</div>
+                </div>
+                <div style={{background:'var(--sky-soft)', borderRadius:14, padding:12, fontSize:12}}>
+                  <div style={{fontWeight:600}}>🎒 Pack light today</div>
+                  <div style={{color:'var(--muted-ink)'}}>2.8km walking · some stairs</div>
+                </div>
+              </div>
+            </Phone>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature strip */}
+      <section className="section" style={{background:'var(--bone)'}}>
+        <div className="container">
+          <div className="grid grid-3">
+            {[
+              { t:'Offline, everywhere', d:'Your trip, maps, and confirmations work without signal.', icon:'📡' },
+              { t:'Day-of intelligence', d:'Flight delays, rainstorms, closed museums — we re-plan before you notice.', icon:'⚡' },
+              { t:'Works with your stack', d:'Apple Wallet, Google Maps, Gmail confirmations — Kite plugs in quietly.', icon:'🧩' },
+            ].map(f => (
+              <div key={f.t}>
+                <div style={{fontSize:36, marginBottom:12}}>{f.icon}</div>
+                <h3 style={{margin:'0 0 8px', fontSize:24}}>{f.t}</h3>
+                <p style={{margin:0}}>{f.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter/>
+      <TweaksPanel/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<DownloadPage/>);
+</script>
+</body>
+</html>

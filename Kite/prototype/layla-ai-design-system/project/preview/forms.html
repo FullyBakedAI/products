@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px;background:var(--bone);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .card{width:644px;background:var(--paper);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:14px}
+  .field{position:relative}
+  .field input, .field textarea{width:100%;box-sizing:border-box;font-family:var(--font-body);font-size:16px;padding:14px 16px;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:var(--radius-md);outline:0;transition:.2s}
+  .field input:focus{border-color:var(--sky-strong);box-shadow:var(--shadow-focus)}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted-ink);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+  .composer{display:flex;gap:8px;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-pill);padding:6px 6px 6px 20px;align-items:center;box-shadow:var(--shadow-sm)}
+  .composer input{flex:1;border:0;outline:0;font-size:15px;font-family:var(--font-body);background:transparent}
+  .send{background:var(--ink);color:#fff;border:0;width:40px;height:40px;border-radius:var(--radius-pill);cursor:pointer;font-size:18px}
+</style></head>
+<body><div class="card">
+  <div class="field">
+    <label>Destination</label>
+    <input type="text" placeholder="Where are you dreaming of?" value="Kyoto, Japan">
+  </div>
+  <div class="composer">
+    <input placeholder="Ask Layla to plan a 5-day trip…">
+    <button class="send">↑</button>
+  </div>
+</div></body></html>

@@ -30,6 +30,7 @@ All Fully Baked rules apply here. This is not a detached build:
 
 - **Design system**: canonical BakeKit lives at `~/.openclaw/workspace/Products/Modulo/BakeKit/` (React ARIA + `--bk-*` tokens). White-label requires themeable primitives from day one — brand tokens, swappable logos/copy, no hardcoded Kite branding in components. Same pattern as Modulo's white-label work.
 - **Phase mindsets**: Discovery = empathy/research; Ideation = innovation; Definition = architectural rigor; Construction = craft. See `memory/feedback_phase_mindsets.md`.
+- **MOBILE FIRST — ALWAYS**: every component and every QA pass starts on mobile. Never declare work done without a mobile screenshot QA pass. Reference design for mobile: `~/.openclaw/Products/Kite/references/travel-planner/index.html` line 1083. Set 2026-04-21 — no exceptions.
 - **Visual QA at every stage**: mandatory visual+code checks at every handoff. No skipping.
 - **TDD mindset**: tests before implementation on every build. From line 1 of the rebuild.
 - **Enterprise quality**: no AI slop. Robust, enterprise-grade, ready for tour operators to put their name on.

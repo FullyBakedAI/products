@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kite · Journal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="SiteNav.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="TweaksPanel.jsx"></script>
+
+<script type="text/babel">
+const POSTS = [
+  { title: 'Why we stopped recommending the "top 10" lists', cat: 'Philosophy', date: 'Apr 12, 2026', read: '6 min', cls: 'ph-kyoto', author: 'Mira Alvarez' },
+  { title: 'Japan in shoulder season is a cheat code', cat: 'Destinations', date: 'Apr 8, 2026', read: '8 min', cls: 'ph-tokyo', author: 'Tomás Rocha' },
+  { title: 'How Kite re-routes 40,000 flights a month', cat: 'Engineering', date: 'Mar 28, 2026', read: '10 min', cls: 'ph-oslo', author: 'Jonas Weber' },
+  { title: 'The anti-itinerary: what to leave unplanned', cat: 'Philosophy', date: 'Mar 21, 2026', read: '5 min', cls: 'ph-bali', author: 'Mira Alvarez' },
+  { title: 'Lisbon, but not the Lisbon you\'ve already seen', cat: 'Destinations', date: 'Mar 14, 2026', read: '7 min', cls: 'ph-lisbon', author: 'Priya Shah' },
+  { title: 'Group trips without the group chat', cat: 'Product', date: 'Mar 3, 2026', read: '4 min', cls: 'ph-morocco', author: 'Priya Shah' },
+  { title: 'Our favorite hotels under €150 a night, globally', cat: 'Guides', date: 'Feb 24, 2026', read: '12 min', cls: 'ph-rome', author: 'Tomás Rocha' },
+  { title: 'Patagonia: when, where, and what to bring', cat: 'Guides', date: 'Feb 17, 2026', read: '9 min', cls: 'ph-patagonia', author: 'Tomás Rocha' },
+  { title: 'Announcing Kite for Teams (private beta)', cat: 'Product', date: 'Feb 10, 2026', read: '3 min', cls: 'ph-nyc', author: 'Mira Alvarez' },
+];
+
+const CATS = ['All', 'Destinations', 'Guides', 'Philosophy', 'Product', 'Engineering'];
+
+function BlogPage() {
+  const [cat, setCat] = React.useState('All');
+  const filtered = cat === 'All' ? POSTS : POSTS.filter(p => p.cat === cat);
+  const [featured, ...rest] = filtered;
+
+  return (
+    <div data-screen-label="Journal">
+      <SiteNav current="blog" />
+
+      <section style={{padding:'72px 24px 32px', maxWidth:1200, margin:'0 auto'}}>
+        <div className="eyebrow-pill" style={{marginBottom:16}}>The Kite Journal</div>
+        <h1 className="display" style={{fontSize:'clamp(44px, 6vw, 80px)', maxWidth:900}}>Field notes on<br/><em>travel, done well.</em></h1>
+      </section>
+
+      {/* Categories */}
+      <div className="container" style={{display:'flex', gap:8, padding:'0 24px 32px', overflowX:'auto', flexWrap:'wrap'}}>
+        {CATS.map(c => (
+          <button key={c} onClick={()=>setCat(c)} style={{
+            padding:'8px 16px', borderRadius:9999, whiteSpace:'nowrap',
+            border:'1px solid ' + (cat===c?'var(--ink)':'var(--line)'),
+            background: cat===c?'var(--ink)':'#fff',
+            color: cat===c?'#fff':'var(--ink)',
+            fontSize:13, fontWeight:500, cursor:'pointer', fontFamily:'var(--font-body)',
+          }}>{c}</button>
+        ))}
+      </div>
+
+      {/* Featured */}
+      {featured && (
+        <section style={{padding:'0 24px 64px'}}>
+          <div className="container">
+            <a href="#" style={{display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:48, alignItems:'center', textDecoration:'none', color:'inherit'}}>
+              <div className={'ph ' + featured.cls} style={{aspectRatio:'4/3', borderRadius:28}}/>
+              <div>
+                <span className="badge badge-coral">Featured · {featured.cat}</span>
+                <h2 style={{marginTop:16, fontSize:'clamp(32px, 4vw, 52px)'}}>{featured.title}</h2>
+                <div style={{marginTop:20, display:'flex', alignItems:'center', gap:16, color:'var(--muted-ink)', fontSize:14}}>
+                  <span>By {featured.author}</span>
+                  <span>·</span>
+                  <span>{featured.date}</span>
+                  <span>·</span>
+                  <span>{featured.read} read</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </section>
+      )}
+
+      {/* Grid */}
+      <section style={{padding:'0 24px 96px'}}>
+        <div className="container">
+          <div className="grid grid-3">
+            {rest.map(p => (
+              <a key={p.title} href="#" style={{textDecoration:'none', color:'inherit'}}>
+                <div className={'ph ' + p.cls} style={{aspectRatio:'4/3', borderRadius:20, marginBottom:16}}/>
+                <div style={{fontSize:12, color:'var(--muted-ink)', textTransform:'uppercase', letterSpacing:'0.1em', fontWeight:600}}>{p.cat}</div>
+                <h3 style={{margin:'8px 0', fontSize:24}}>{p.title}</h3>
+                <div style={{fontSize:13, color:'var(--muted-ink)'}}>{p.author} · {p.date} · {p.read}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="section" style={{background:'var(--sand)'}}>
+        <div className="container-sm" style={{textAlign:'center'}}>
+          <h2 style={{margin:0}}>The <em className="display-italic">Sunday</em> dispatch.</h2>
+          <p className="lead" style={{marginTop:12}}>One destination, one idea, one surprisingly-good hotel. Every Sunday morning.</p>
+          <div style={{display:'flex', gap:8, maxWidth:440, margin:'28px auto 0', background:'#fff', borderRadius:9999, padding:5, border:'1px solid var(--line)'}}>
+            <input placeholder="your@email.com" style={{flex:1, border:'none', outline:'none', padding:'12px 16px', fontSize:15, background:'transparent', fontFamily:'var(--font-body)'}}/>
+            <button className="btn btn-primary btn-sm">Subscribe</button>
+          </div>
+          <div style={{fontSize:12, color:'var(--muted-ink)', marginTop:12}}>280,000+ travelers · No spam, unsubscribe anytime</div>
+        </div>
+      </section>
+
+      <SiteFooter/>
+      <TweaksPanel/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<BlogPage/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+.hero {
+  margin-bottom: 0;
+}
+
+.photoWrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: var(--bk-bg-sidebar);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gradientBand {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #3B1E42 0%, #2A182E 60%, #1A0E1D 100%);
+}
+
+/* Gradient overlay on top of photo */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(42, 24, 46, 0.15) 0%,
+    transparent 30%,
+    rgba(42, 24, 46, 0.75) 100%
+  );
+  pointer-events: none;
+}
+
+/* Title block overlaid at bottom of hero */
+.meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 24px 20px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bk-brand-primary);
+  margin-bottom: 6px;
+}
+
+.title {
+  font-family: var(--bk-font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+}
+
+.label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 767px) {
+  .photoWrap {
+    height: 180px;
+  }
+
+  .meta {
+    padding: 16px 20px 16px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}

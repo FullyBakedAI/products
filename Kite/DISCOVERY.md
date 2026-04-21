@@ -2,9 +2,11 @@
 
 > **Note (2026-04-20 evening)**: This document captures discovery-phase intent. Stack/monetisation references to **Firebase** are superseded by the rebuild decision — Firebase BYO is dropped, backend-we-own replaces it. See `memory/decisions/2026-04-20-drop-firebase.md` and `STATUS.md`. Product intent below is preserved and still guides the rebuild.
 
-**Date**: 2026-04-20  
-**Status**: Complete  
-**Next**: Definition → Bake Sheets
+> **Note (2026-04-21)**: Re-scoped — this is **not** a complete Discovery by the Framework checklist. Personas and vision exist; deep market research, competitor teardowns, real interviews, GTM metrics, "why now" thesis, and technical architecture exploration are still owed. See **Discovery Gaps** at the end of this doc. Rebuild may proceed with localStorage SF test, but the Framework Discovery Gate is not yet passed — flag before any external/commercial commitments.
+
+**Date**: 2026-04-20 (initial) · 2026-04-21 (gap review)
+**Status**: **Partial** — vision/users/pain captured; research depth outstanding
+**Next**: Close gaps (see bottom), then Definition → Bake Sheets
 
 ---
 
@@ -174,3 +176,54 @@ If this works, the product is real.
 4. Album Output (printable, beautiful)
 
 These go to the user for sign-off before any code changes.
+
+---
+
+## Discovery Gaps (owed — 2026-04-21)
+
+Flagged by Ant 2026-04-21: Discovery as written is thin against the Framework checklist. The following must be filled before this phase is truly complete (Framework/Discovery/README.md sections 7–11 are newly added).
+
+### 1. Deep Market Research
+- Global boutique/adventurous family travel market sizing (TAM/SAM/SOM with sources)
+- Growth trends, post-COVID shifts, luxury travel segments
+- Segment spend per trip, frequency, decision-making dynamics
+- Tour-operator market (Pura Aventura tier): size, consolidation, white-label appetite
+
+### 2. Competitor Teardowns (each)
+Direct: **TripIt, Wanderlog, Polarsteps, Roadtrippers, Mindtrip, Roam Around, Layla, Kayak Trips, Google Trips (historical), Hopper, Out of Office**. Adjacent: **Notion/Day One trip templates, Pura Aventura's own web quote, Airbnb Guidebooks**.
+
+For each: positioning, feature set, pricing, user sentiment (App Store + Reddit + review mining), moat, fragility, AI posture.
+
+### 3. Real User Interviews
+Target: 5–8 per persona. Minimum first wave:
+- 3× Organiser families (Pura Aventura / Jacada / Abercrombie tier) — **wave 1 starts with Ant himself as test subject for Organiser archetype** (agreed 2026-04-21 in #kite); Lorena follows for Visual Planner
+- 3× Visual Planner partners (Lorena archetype)
+- 2× Multi-Gen Coordinators
+- 2× Tour operators (for white-label appetite)
+Record, synthesise quotes, cite in Spec.
+
+### 4. GTM Strategy & Metrics
+- Phase 1 white-label: partner targets, outreach motion, expected CAC/close cycle, pricing model, per-operator revenue modelling
+- Phase 2 B2C: community seeding strategy, acquisition channels (referral, SEO, Instagram), CAC/LTV ranges with assumptions, retention model
+- Sequence: which operator partner first, which geography first, why
+
+### 5. "Why Now" Thesis
+- LLM affordability → itinerary parsing at <£0.01 per import (quantify)
+- Remote-work families staying longer, more trips
+- Instagram/Pinterest visual-planning behaviour entrenched
+- PWA tech now viable offline-first without native
+- What would have killed this in 2022? What might commoditise it by 2028?
+
+### 6. Technical Architecture Exploration
+- Offline-first PWA vs Expo React Native — decision criteria
+- Backend-we-own: Supabase vs Cloudflare Workers+D1/R2 (ADR deferred — needs decision before v1.0)
+- AI layer: which models for which tasks (itinerary parse, album gen, suggestion), cost per action, cache strategy
+- Media storage scaling (photos, QR codes) — cost model for 10/100/1000 active trips
+- Sync model: CRDT vs last-write-wins vs per-trip owner
+- Security/privacy: family data, booking refs, QR codes — threat model
+- Third-party dependencies + build-vs-buy line (auth, email parsing, Google Places, Instagram share extension)
+
+### 7. Pain-Point Evidence
+Current pains are Ant+Lorena observed. Needs evidencing from interviews — which pains are universal in the segment, which are Ludlow-specific, which we've invented.
+
+Until these are closed, Kite Discovery is **Partial** and the Discovery-to-Spec Gate is not formally passed.

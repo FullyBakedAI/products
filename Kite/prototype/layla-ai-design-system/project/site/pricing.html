@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kite · Pricing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="SiteNav.jsx"></script>
+<script type="text/babel" src="SiteFooter.jsx"></script>
+<script type="text/babel" src="TweaksPanel.jsx"></script>
+
+<script type="text/babel">
+const TIERS = [
+  {
+    name: 'Explorer', price: '€0', cadence: 'forever',
+    tagline: 'Your first trip, on us.',
+    features: ['1 complete trip per month', 'AI chat planning', 'Shareable itineraries', 'Web + mobile app'],
+    cta: 'Start planning', highlight: false,
+  },
+  {
+    name: 'Plus', price: '€9', cadence: 'per month',
+    tagline: 'For the always-planning-the-next-one crowd.',
+    features: ['Unlimited trips', 'Offline maps & itineraries', 'Real-time disruption re-routing', 'Priority booking support', 'Group trip mode (up to 8)', 'Early access to new features'],
+    cta: 'Start 14-day trial', highlight: true,
+  },
+  {
+    name: 'Teams', price: 'Custom', cadence: 'contact us',
+    tagline: 'Travel management, minus the TMC.',
+    features: ['Everything in Plus', 'Policy enforcement', 'Centralized billing & expense export', 'Admin dashboard', 'SSO + SCIM', 'Dedicated success manager'],
+    cta: 'Talk to sales', highlight: false,
+  },
+];
+
+const COMPARE = [
+  { label: 'AI trip planning', ex: '1/mo', plus: 'Unlimited', teams: 'Unlimited' },
+  { label: 'Offline maps', ex: '—', plus: '✓', teams: '✓' },
+  { label: 'Real-time re-routing', ex: '—', plus: '✓', teams: '✓' },
+  { label: 'Group trip mode', ex: '—', plus: 'Up to 8', teams: 'Unlimited' },
+  { label: 'Travel policy', ex: '—', plus: '—', teams: '✓' },
+  { label: 'SSO & SCIM', ex: '—', plus: '—', teams: '✓' },
+  { label: 'Support', ex: 'Community', plus: 'Priority', teams: 'Dedicated CSM' },
+];
+
+function PricingPage() {
+  const [annual, setAnnual] = React.useState(false);
+  return (
+    <div data-screen-label="Pricing">
+      <SiteNav current="pricing" />
+
+      <section style={{padding:'72px 24px 48px', textAlign:'center', maxWidth:960, margin:'0 auto'}}>
+        <div className="eyebrow-pill" style={{marginBottom:16}}>Simple pricing</div>
+        <h1 className="display" style={{fontSize:'clamp(44px, 6vw, 80px)'}}>Free to start.<br/><em>Worth every cent after.</em></h1>
+        <p className="lead" style={{maxWidth:540, margin:'16px auto 0'}}>Plan your first trip free. Upgrade when you're ready to travel the way you want, every time.</p>
+
+        <div style={{display:'inline-flex', background:'var(--sand)', padding:4, borderRadius:9999, marginTop:32}}>
+          <button onClick={()=>setAnnual(false)} style={{padding:'8px 20px', borderRadius:9999, border:'none', background: !annual?'#fff':'transparent', fontWeight:600, fontSize:14, cursor:'pointer', fontFamily:'var(--font-body)', color:'var(--ink)'}}>Monthly</button>
+          <button onClick={()=>setAnnual(true)} style={{padding:'8px 20px', borderRadius:9999, border:'none', background: annual?'#fff':'transparent', fontWeight:600, fontSize:14, cursor:'pointer', fontFamily:'var(--font-body)', color:'var(--ink)'}}>Annual <span className="badge badge-coral" style={{marginLeft:6, fontSize:11}}>−20%</span></button>
+        </div>
+      </section>
+
+      <section style={{padding:'32px 24px 96px'}}>
+        <div className="container" style={{maxWidth:1080}}>
+          <div className="grid grid-3">
+            {TIERS.map(t => {
+              const display = t.name === 'Plus' && annual ? '€7.20' : t.price;
+              return (
+                <div key={t.name} className="card" style={{
+                  padding:32,
+                  background: t.highlight ? 'var(--ink)' : '#fff',
+                  color: t.highlight ? '#fff' : 'var(--ink)',
+                  border: t.highlight ? '1px solid var(--ink)' : '1px solid var(--line)',
+                  position: 'relative',
+                }}>
+                  {t.highlight && <div style={{position:'absolute', top:-12, left:32, background:'var(--coral)', color:'var(--ink)', padding:'4px 12px', borderRadius:9999, fontSize:12, fontWeight:600}}>Most loved</div>}
+                  <div style={{fontFamily:'var(--font-display)', fontStyle:'italic', fontSize:32, marginBottom:4}}>{t.name}</div>
+                  <div style={{fontSize:14, color: t.highlight?'rgba(255,255,255,0.7)':'var(--muted-ink)', marginBottom:24}}>{t.tagline}</div>
+                  <div style={{display:'flex', alignItems:'baseline', gap:8, marginBottom:24}}>
+                    <span style={{fontFamily:'var(--font-display)', fontSize:56, lineHeight:1, letterSpacing:'-0.02em'}}>{display}</span>
+                    <span style={{fontSize:14, color: t.highlight?'rgba(255,255,255,0.7)':'var(--muted-ink)'}}>{t.cadence}</span>
+                  </div>
+                  <button className={'btn ' + (t.highlight ? 'btn-white' : 'btn-primary')} style={{width:'100%', justifyContent:'center'}}>{t.cta}</button>
+                  <div style={{height:1, background: t.highlight?'rgba(255,255,255,0.15)':'var(--line)', margin:'24px 0'}}/>
+                  <ul style={{listStyle:'none', margin:0, padding:0, display:'flex', flexDirection:'column', gap:12}}>
+                    {t.features.map(f => (
+                      <li key={f} style={{display:'flex', gap:10, fontSize:14, lineHeight:1.5}}>
+                        <span style={{color: t.highlight?'var(--sky)':'var(--success)', fontWeight:700}}>✓</span>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Compare table */}
+      <section className="section" style={{background:'var(--bone)'}}>
+        <div className="container" style={{maxWidth:1080}}>
+          <h2 style={{textAlign:'center', marginBottom:48}}>Compare <em className="display-italic">plans.</em></h2>
+          <div style={{background:'#fff', borderRadius:20, border:'1px solid var(--line)', overflow:'hidden'}}>
+            <div style={{display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', padding:'20px 28px', borderBottom:'1px solid var(--line)', fontWeight:600, fontSize:14}}>
+              <div>Feature</div><div>Explorer</div><div>Plus</div><div>Teams</div>
+            </div>
+            {COMPARE.map((r,i) => (
+              <div key={r.label} style={{display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', padding:'18px 28px', borderBottom: i<COMPARE.length-1?'1px solid var(--line)':'none', fontSize:14, alignItems:'center'}}>
+                <div style={{fontWeight:500}}>{r.label}</div>
+                <div style={{color:'var(--muted-ink)'}}>{r.ex}</div>
+                <div style={{color:'var(--ink)', fontWeight:500}}>{r.plus}</div>
+                <div style={{color:'var(--ink)', fontWeight:500}}>{r.teams}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter/>
+      <TweaksPanel/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<PricingPage/>);
+</script>
+</body>
+</html>
