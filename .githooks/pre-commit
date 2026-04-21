@@ -1,0 +1,38 @@
+#!/bin/bash
+# Products repo path-guard pre-commit hook
+# Enforces single canonical working tree to prevent the two-clone divergence
+# that caused the 2026-04-21 merge incident.
+set -e
+
+CANONICAL="/Users/Frank/.openclaw/workspace/Products"
+CURRENT_TOPLEVEL=$(git rev-parse --show-toplevel)
+
+# Resolve symlinks on both sides (macOS has no -f for readlink in older versions,
+# but does on 10.14+; realpath exists since coreutils/BSD in recent macOS)
+resolve() {
+  if command -v realpath >/dev/null 2>&1; then
+    realpath "$1"
+  else
+    # Fallback: python one-liner
+    python3 -c "import os, sys; print(os.path.realpath(sys.argv[1]))" "$1"
+  fi
+}
+
+CANONICAL_REAL=$(resolve "$CANONICAL")
+CURRENT_REAL=$(resolve "$CURRENT_TOPLEVEL")
+
+if [ "$CURRENT_REAL" != "$CANONICAL_REAL" ]; then
+  echo "" >&2
+  echo "ERROR: Products repo commits must come from the canonical working tree." >&2
+  echo "" >&2
+  echo "  Canonical: $CANONICAL" >&2
+  echo "  You are at: $CURRENT_REAL" >&2
+  echo "" >&2
+  echo "Reason: two-clone divergence incident 2026-04-21. Only one clone." >&2
+  echo "If this is a legitimate new clone, delete it and work in the canonical" >&2
+  echo "location. Override with --no-verify if you truly know what you're doing." >&2
+  echo "" >&2
+  exit 1
+fi
+
+exit 0
