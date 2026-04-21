@@ -1,0 +1,3 @@
+[submodule "FullyBaked"]
+	path = FullyBaked
+	url = git@github.com:FullyBakedAI/fullybaked-site.git
